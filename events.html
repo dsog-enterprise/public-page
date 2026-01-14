@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=0.95, maximum-scale=5.0, user-scalable=yes">
     
     <!-- SEO Meta Tags -->
-    <meta name="description" content="DSOG Events - Research-based business education events for entrepreneurs and business professionals. Learn how to establish, expand, and engage in business effectively.">
-    <meta name="keywords" content="DSOG events, business education, entrepreneurship workshops, market expansion, client engagement, business research, entrepreneur training">
+    <meta name="description" content="DSOG Events - Transformative business and spiritual events for entrepreneurs. Join our bootcamp, inspiration summit, and spiritual workshops to transform your life and business.">
+    <meta name="keywords" content="DSOG events, entrepreneurship bootcamp, business inspiration, spiritual purpose, startup training, business events, personal development">
     
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#C21807">
@@ -18,13 +18,13 @@
     <meta name="msapplication-TileColor" content="#C21807">
     
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="DSOG Events | Research-Based Business Education for Entrepreneurs">
-    <meta property="og:description" content="Transform your business knowledge with our research-based events. Learn establishment strategies, market expansion techniques, and client engagement methods backed by real data.">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80">
+    <meta property="og:title" content="DSOG Events | Transform Your Business & Purpose">
+    <meta property="og:description" content="Join our transformative events: Bootcamp, Become What You Believe, and The Making of an Icon. Elevate your business and discover your divine purpose.">
+    <meta property="og:image" content="https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp">
     <meta property="og:url" content="https://dsog.org/events">
     <meta property="og:type" content="website">
     
-    <title>DSOG Events | Research-Based Business Education for Entrepreneurs</title>
+    <title>DSOG Events | Transform Your Business & Purpose</title>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -32,7 +32,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Events Page Styles -->
     <style>
@@ -46,6 +46,7 @@
             --secondary-dark: #2D2D2D;
             --accent-blue: #2C5282;
             --accent-green: #2D7D46;
+            --accent-purple: #6B46C1;
             
             /* Neutral Colors */
             --white: #FFFFFF;
@@ -79,6 +80,8 @@
             --gradient-dark: linear-gradient(135deg, #1A1A1A 0%, #2D2D2D 100%);
             --gradient-light: linear-gradient(135deg, var(--white) 0%, #F8F9FA 100%);
             --gradient-card: linear-gradient(145deg, var(--white) 0%, #F8F9FA 100%);
+            --gradient-spiritual: linear-gradient(135deg, #6B46C1 0%, #9F7AEA 100%);
+            --gradient-inspiration: linear-gradient(135deg, #D4AF37 0%, #F6E05E 100%);
             
             /* Animation Properties */
             --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -106,6 +109,7 @@
             /* Professional Typography */
             --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
             --font-heading: 'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-spiritual: 'Playfair Display', serif;
             
             /* Layout Variables */
             --header-height: 72px;
@@ -373,53 +377,28 @@
             text-transform: uppercase;
         }
 
-        .research-stats {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--space-xl);
-            justify-content: center;
-            margin: var(--space-2xl) 0;
-            max-width: 1000px;
-            margin-left: auto;
-            margin-right: auto;
+        /* ===== TRANSFORMATIVE EVENTS ===== */
+        .transformative-events {
+            background: var(--bg-primary);
+            padding: var(--space-4xl) 0;
         }
 
-        .stat-box {
+        .events-intro {
             text-align: center;
-            padding: var(--space-lg);
-            background: var(--gradient-card);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-color);
-            min-width: 180px;
-            transition: var(--transition-smooth);
+            max-width: 800px;
+            margin: 0 auto var(--space-3xl);
         }
 
-        .stat-box:hover {
-            transform: translateY(-4px);
-            border-color: var(--primary-red);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 800;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            line-height: 1;
-            margin-bottom: var(--space-xs);
+        .events-intro p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
         }
 
         /* ===== EVENT CATEGORIES ===== */
-        .categories-section {
-            padding: var(--space-4xl) 0;
-            background: var(--bg-primary);
-        }
-
-        .categories-grid {
+        .event-categories {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: var(--space-xl);
             margin-top: var(--space-2xl);
         }
@@ -433,34 +412,31 @@
             transition: var(--transition-smooth);
             position: relative;
             overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
-        .category-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--gradient-primary);
-            transform: scaleX(0);
-            transition: transform 0.4s var(--transition-smooth);
+        .category-card.bootcamp {
+            border-top: 4px solid var(--primary-red);
+        }
+
+        .category-card.inspiration {
+            border-top: 4px solid #D4AF37;
+        }
+
+        .category-card.spiritual {
+            border-top: 4px solid var(--accent-purple);
         }
 
         .category-card:hover {
             transform: translateY(-8px);
             box-shadow: var(--shadow-xl);
-            border-color: var(--primary-red);
-        }
-
-        .category-card:hover::before {
-            transform: scaleX(1);
         }
 
         .category-icon {
             width: 70px;
             height: 70px;
-            background: var(--gradient-primary);
             border-radius: var(--radius-md);
             display: flex;
             align-items: center;
@@ -470,60 +446,56 @@
             color: var(--white);
         }
 
-        .knowledge-source {
+        .bootcamp .category-icon {
+            background: var(--gradient-primary);
+        }
+
+        .inspiration .category-icon {
+            background: var(--gradient-gold);
+        }
+
+        .spiritual .category-icon {
+            background: var(--gradient-spiritual);
+        }
+
+        .category-tag {
             display: inline-block;
-            background: rgba(45, 125, 70, 0.1);
-            color: var(--accent-green);
             padding: var(--space-xs) var(--space-md);
             border-radius: var(--radius-full);
             font-size: 0.75rem;
             font-weight: 600;
-            margin-top: var(--space-md);
-            border: 1px solid rgba(45, 125, 70, 0.2);
+            margin-bottom: var(--space-md);
         }
 
-        /* ===== UPCOMING EVENTS ===== */
+        .bootcamp .category-tag {
+            background: rgba(194, 24, 7, 0.1);
+            color: var(--primary-red);
+            border: 1px solid rgba(194, 24, 7, 0.2);
+        }
+
+        .inspiration .category-tag {
+            background: rgba(212, 175, 55, 0.1);
+            color: #B8860B;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .spiritual .category-tag {
+            background: rgba(107, 70, 193, 0.1);
+            color: var(--accent-purple);
+            border: 1px solid rgba(107, 70, 193, 0.2);
+        }
+
+        /* ===== UPCOMING EVENTS DETAILS ===== */
         .upcoming-events {
             background: var(--bg-secondary);
             padding: var(--space-4xl) 0;
-        }
-
-        .events-tabs {
-            display: flex;
-            justify-content: center;
-            gap: var(--space-md);
-            flex-wrap: wrap;
-            margin-bottom: var(--space-2xl);
-        }
-
-        .tab-btn {
-            padding: var(--space-sm) var(--space-xl);
-            background: var(--gradient-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-full);
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-        }
-
-        .tab-btn:hover,
-        .tab-btn.active {
-            background: var(--gradient-primary);
-            color: var(--white);
-            border-color: var(--primary-red);
-            transform: translateY(-2px);
         }
 
         .events-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: var(--space-xl);
-            margin-top: var(--space-xl);
+            margin-top: var(--space-2xl);
         }
 
         .event-card {
@@ -533,24 +505,21 @@
             border: 1px solid var(--border-color);
             transition: var(--transition-smooth);
             position: relative;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
-        .event-card.featured {
-            border: 2px solid var(--primary-red);
-            box-shadow: var(--shadow-lg);
+        .event-card.bootcamp {
+            border-color: rgba(194, 24, 7, 0.3);
         }
 
-        .featured-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: var(--gradient-primary);
-            color: var(--white);
-            padding: var(--space-xs) var(--space-md);
-            border-radius: var(--radius-full);
-            font-size: 0.7rem;
-            font-weight: 600;
-            z-index: 2;
+        .event-card.inspiration {
+            border-color: rgba(212, 175, 55, 0.3);
+        }
+
+        .event-card.spiritual {
+            border-color: rgba(107, 70, 193, 0.3);
         }
 
         .event-card:hover {
@@ -560,128 +529,214 @@
 
         .event-image {
             width: 100%;
-            height: 200px;
+            height: 220px;
             object-fit: cover;
         }
 
+        .event-date-badge {
+            position: absolute;
+            top: var(--space-md);
+            left: var(--space-md);
+            padding: var(--space-xs) var(--space-md);
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            z-index: var(--z-normal);
+            color: var(--white);
+        }
+
+        .bootcamp .event-date-badge {
+            background: var(--gradient-primary);
+        }
+
+        .inspiration .event-date-badge {
+            background: var(--gradient-gold);
+            color: var(--primary-dark);
+        }
+
+        .spiritual .event-date-badge {
+            background: var(--gradient-spiritual);
+        }
+
         .event-content {
-            padding: var(--space-lg);
+            padding: var(--space-xl);
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event-details {
+            flex-grow: 1;
+        }
+
+        .event-details h3 {
+            margin-bottom: var(--space-sm);
+            line-height: 1.3;
+        }
+
+        .spiritual .event-details h3 {
+            font-family: var(--font-spiritual);
+            font-weight: 700;
+        }
+
+        .slogan {
+            font-family: var(--font-spiritual);
+            font-style: italic;
+            color: var(--text-tertiary);
+            font-size: 1.1rem;
+            margin-top: calc(var(--space-sm) * -1);
+            margin-bottom: var(--space-md);
+            position: relative;
+            padding-left: var(--space-lg);
+        }
+
+        .slogan::before {
+            content: '"';
+            position: absolute;
+            left: 0;
+            top: -5px;
+            font-size: 2rem;
+            color: var(--accent-purple);
+            font-family: serif;
         }
 
         .event-meta {
             display: flex;
-            align-items: center;
-            gap: var(--space-md);
-            margin-bottom: var(--space-md);
             flex-wrap: wrap;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+            padding-top: var(--space-md);
+            border-top: 1px solid var(--border-color);
         }
 
-        .event-date, .event-location, .event-format {
+        .meta-item {
             display: flex;
             align-items: center;
             gap: var(--space-xs);
-            color: var(--primary-red);
-            font-weight: 600;
+            color: var(--text-tertiary);
             font-size: 0.85rem;
         }
 
-        .event-tags {
-            display: flex;
-            gap: var(--space-xs);
-            flex-wrap: wrap;
-            margin-top: var(--space-md);
+        .meta-item i {
+            width: 16px;
         }
 
-        .event-tag {
-            background: rgba(194, 24, 7, 0.1);
+        .bootcamp .meta-item i {
             color: var(--primary-red);
-            padding: var(--space-2xs) var(--space-sm);
+        }
+
+        .inspiration .meta-item i {
+            color: #B8860B;
+        }
+
+        .spiritual .meta-item i {
+            color: var(--accent-purple);
+        }
+
+        .duration-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: var(--space-2xs) var(--space-md);
             border-radius: var(--radius-full);
-            font-size: 0.7rem;
-            font-weight: 500;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: var(--space-sm);
         }
 
-        /* ===== RESEARCH BASIS ===== */
-        .research-section {
-            padding: var(--space-4xl) 0;
+        .bootcamp .duration-badge {
+            background: rgba(194, 24, 7, 0.08);
+            color: var(--primary-red);
+        }
+
+        .duration-badge i {
+            font-size: 0.8rem;
+        }
+
+        /* ===== REGISTRATION INFO ===== */
+        .registration-info {
             background: var(--bg-primary);
+            padding: var(--space-4xl) 0;
         }
 
-        .research-container {
+        .registration-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: var(--space-2xl);
             align-items: center;
         }
 
-        .research-visual {
-            position: relative;
-            padding: var(--space-xl);
+        .registration-visual {
+            text-align: center;
         }
 
-        .research-chart {
-            width: 100%;
-            height: 400px;
-            background: var(--gradient-card);
-            border-radius: var(--radius-xl);
-            padding: var(--space-xl);
-            border: 1px solid var(--border-color);
-            position: relative;
-            overflow: hidden;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .chart-bar {
-            position: absolute;
-            bottom: 50px;
+        .registration-icon {
+            width: 150px;
+            height: 150px;
             background: var(--gradient-primary);
-            border-radius: var(--radius-md);
-            width: 40px;
-            transition: height 1s var(--transition-smooth);
+            border-radius: 50%;
             display: flex;
-            align-items: flex-end;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            font-size: 3rem;
+            color: var(--white);
+            margin-bottom: var(--space-lg);
+        }
+
+        .registration-steps {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-lg);
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-md);
+            padding: var(--space-lg);
+            background: var(--gradient-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            transition: var(--transition-smooth);
+        }
+
+        .step-item:hover {
+            transform: translateX(5px);
+            border-color: var(--primary-red);
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
             justify-content: center;
             color: var(--white);
-            font-weight: 600;
-            font-size: 0.875rem;
-            padding-bottom: var(--space-xs);
+            font-weight: 700;
+            flex-shrink: 0;
         }
 
-        .bar-1 { left: 20%; height: 60%; }
-        .bar-2 { left: 35%; height: 80%; }
-        .bar-3 { left: 50%; height: 95%; }
-        .bar-4 { left: 65%; height: 70%; }
-        .bar-5 { left: 80%; height: 85%; }
-
-        .chart-label {
-            position: absolute;
-            bottom: 20px;
-            text-align: center;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            width: 40px;
-        }
-
-        .label-1 { left: 20%; }
-        .label-2 { left: 35%; }
-        .label-3 { left: 50%; }
-        .label-4 { left: 65%; }
-        .label-5 { left: 80%; }
-
-        /* ===== EVENT FORMATS ===== */
-        .formats-section {
+        /* ===== EVENT BENEFITS ===== */
+        .benefits-section {
             background: var(--bg-secondary);
             padding: var(--space-4xl) 0;
         }
 
-        .formats-grid {
+        .benefits-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: var(--space-xl);
             margin-top: var(--space-2xl);
         }
 
-        .format-card {
+        .benefit-card {
             text-align: center;
             padding: var(--space-xl);
             background: var(--gradient-card);
@@ -690,16 +745,15 @@
             transition: var(--transition-smooth);
         }
 
-        .format-card:hover {
+        .benefit-card:hover {
             transform: translateY(-4px);
             border-color: var(--primary-red);
             box-shadow: var(--shadow-lg);
         }
 
-        .format-icon {
+        .benefit-icon {
             width: 60px;
             height: 60px;
-            background: var(--gradient-primary);
             border-radius: var(--radius-md);
             display: flex;
             align-items: center;
@@ -709,70 +763,20 @@
             color: var(--white);
         }
 
-        /* ===== TESTIMONIALS ===== */
-        .testimonials-section {
-            padding: var(--space-4xl) 0;
-            background: var(--bg-primary);
+        .benefit-1 .benefit-icon {
+            background: var(--gradient-primary);
         }
 
-        .testimonials-slider {
-            max-width: 800px;
-            margin: var(--space-2xl) auto;
-            position: relative;
-            overflow: hidden;
+        .benefit-2 .benefit-icon {
+            background: var(--gradient-gold);
         }
 
-        .testimonial-slide {
-            background: var(--gradient-card);
-            border-radius: var(--radius-xl);
-            padding: var(--space-2xl);
-            border: 1px solid var(--border-color);
-            text-align: center;
-            transition: var(--transition-smooth);
+        .benefit-3 .benefit-icon {
+            background: var(--gradient-spiritual);
         }
 
-        .testimonial-quote {
-            font-size: 3rem;
-            color: var(--primary-red);
-            opacity: 0.2;
-            margin-bottom: var(--space-lg);
-        }
-
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--space-md);
-            margin-top: var(--space-lg);
-        }
-
-        .author-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--primary-red);
-        }
-
-        .slider-controls {
-            display: flex;
-            justify-content: center;
-            gap: var(--space-md);
-            margin-top: var(--space-xl);
-        }
-
-        .slider-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--border-color);
-            cursor: pointer;
-            transition: var(--transition-smooth);
-        }
-
-        .slider-dot.active {
-            background: var(--primary-red);
-            transform: scale(1.2);
+        .benefit-4 .benefit-icon {
+            background: linear-gradient(135deg, #2D7D46 0%, #4CAF50 100%);
         }
 
         /* ===== REGISTRATION CTA ===== */
@@ -797,26 +801,25 @@
                 radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%);
         }
 
-        .benefits-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: var(--space-xl);
-            margin-top: var(--space-2xl);
+        .cta-content {
+            position: relative;
+            z-index: var(--z-normal);
         }
 
-        .benefit-item {
-            text-align: center;
-            padding: var(--space-lg);
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-lg);
+        .urgency-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            padding: var(--space-sm) var(--space-lg);
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--space-xl);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-
-        .benefit-icon {
-            font-size: 2rem;
-            margin-bottom: var(--space-md);
-            color: var(--primary-gold);
         }
 
         /* ===== FOOTER ===== */
@@ -922,6 +925,22 @@
             display: inline-block;
         }
 
+        .text-gradient-gold {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        .text-gradient-spiritual {
+            background: var(--gradient-spiritual);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
         .lead {
             font-size: clamp(1.125rem, 2vw, 1.25rem);
             color: var(--text-secondary);
@@ -960,6 +979,29 @@
             box-shadow: var(--shadow-xl);
         }
 
+        .btn-gold {
+            background: var(--gradient-gold);
+            color: var(--primary-dark) !important;
+            border: none;
+            font-weight: 700;
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-spiritual {
+            background: var(--gradient-spiritual);
+            color: var(--white) !important;
+            border: none;
+        }
+
+        .btn-spiritual:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(107, 70, 193, 0.3);
+        }
+
         .btn-secondary {
             background: transparent;
             color: var(--primary-red);
@@ -975,6 +1017,11 @@
         .btn-large {
             padding: var(--space-lg) var(--space-2xl);
             font-size: 1rem;
+        }
+
+        .btn-block {
+            width: 100%;
+            display: flex;
         }
 
         /* ===== CONTAINER ===== */
@@ -1075,10 +1122,6 @@
                 display: flex;
                 margin-left: auto;
             }
-
-            .research-chart {
-                height: 300px;
-            }
         }
 
         @media (max-width: 768px) {
@@ -1087,9 +1130,8 @@
                 --logo-size: 36px;
             }
 
-            .categories-grid,
+            .event-categories,
             .events-grid,
-            .formats-grid,
             .benefits-grid {
                 grid-template-columns: 1fr;
                 max-width: 500px;
@@ -1097,22 +1139,8 @@
                 margin-right: auto;
             }
 
-            .research-container {
+            .registration-container {
                 grid-template-columns: 1fr;
-            }
-
-            .events-tabs {
-                overflow-x: auto;
-                flex-wrap: nowrap;
-                justify-content: flex-start;
-                padding-bottom: var(--space-sm);
-                margin: var(--space-lg) calc(var(--space-lg) * -1);
-                padding-left: var(--space-lg);
-            }
-
-            .tab-btn {
-                flex-shrink: 0;
-                white-space: nowrap;
             }
         }
 
@@ -1140,13 +1168,12 @@
                 font-size: 0.9rem;
             }
 
-            .stat-box {
-                min-width: 140px;
-                padding: var(--space-md);
+            .event-image {
+                height: 180px;
             }
 
-            .stat-number {
-                font-size: 1.5rem;
+            .event-content {
+                padding: var(--space-lg);
             }
         }
 
@@ -1186,7 +1213,7 @@
                 <li><a href="enterprise.html" class="nav-link">Enterprise</a></li>
                 <li><a href="events.html" class="nav-link active">Events</a></li>
                 <li><a href="training.html" class="nav-link">Training</a></li>
-                <li><a href="startups.html" class="nav-link">Startups</a></li>
+                <li><a href="bootcamp.html" class="nav-link">Bootcamp</a></li>
                 <li><a href="contact.html" class="btn btn-primary">Contact Us</a></li>
             </ul>
 
@@ -1201,93 +1228,80 @@
         <div class="container">
             <div class="events-hero-content">
                 <div class="events-badge">
-                    <i class="fas fa-chart-line"></i> RESEARCH-BASED BUSINESS EDUCATION
+                    <i class="fas fa-calendar-star"></i> TRANSFORMATIVE EVENTS
                 </div>
                 
-                <h1>Transform Your <span class="text-gradient">Business Knowledge</span> Through Data-Driven Events</h1>
-                <p class="lead">Our events are built on fervent research and statistics from our operations, providing proven strategies for business establishment, market expansion, and client engagement.</p>
+                <h1>Transform Your <span class="text-gradient">Business & Purpose</span></h1>
+                <p class="lead">Join our exclusive events designed to empower entrepreneurs, ignite passion, and discover divine purpose through practical training and spiritual guidance.</p>
                 
-                <div class="research-stats">
-                    <div class="stat-box">
-                        <div class="stat-number">500+</div>
-                        <div class="text-small">Hours of Research</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-number">2000+</div>
-                        <div class="text-small">Businesses Analyzed</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-number">85%</div>
-                        <div class="text-small">Success Rate</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-number">50+</div>
-                        <div class="text-small">Events Hosted</div>
-                    </div>
-                </div>
-                
-                <div class="hero-buttons">
+                <div class="hero-buttons" style="margin-top: var(--space-2xl);">
                     <a href="#upcoming" class="btn btn-primary btn-large">
-                        <i class="fas fa-calendar-alt"></i> View Upcoming Events
+                        <i class="fas fa-calendar-alt"></i> View All Events
                     </a>
-                    <a href="#research" class="btn btn-secondary btn-large">
-                        <i class="fas fa-search"></i> Explore Our Research
+                    <a href="#registration" class="btn btn-secondary btn-large">
+                        <i class="fas fa-ticket-alt"></i> Register Now
                     </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Event Categories Section -->
-    <section class="categories-section">
+    <!-- Transformative Events Section -->
+    <section class="transformative-events">
         <div class="container">
             <div class="section-header">
-                <span class="section-subtitle">Our Focus Areas</span>
-                <h2>Research-Driven <span class="text-gradient">Event Categories</span></h2>
-                <p class="lead">Each event category is built on extensive research and real-world data from successful businesses we've analyzed and supported.</p>
+                <span class="section-subtitle">Our Event Portfolio</span>
+                <h2>Three Pillars of <span class="text-gradient">Transformation</span></h2>
             </div>
             
-            <div class="categories-grid">
-                <div class="category-card animate-on-scroll">
+            <div class="events-intro">
+                <p>At DSOG, we believe in holistic transformation. Our events are carefully designed to address the complete entrepreneur - from practical business skills to personal inspiration and spiritual purpose.</p>
+            </div>
+            
+            <div class="event-categories">
+                <!-- Bootcamp Card -->
+                <div class="category-card bootcamp animate-on-scroll">
                     <div class="category-icon">
-                        <i class="fas fa-store"></i>
+                        <i class="fas fa-graduation-cap"></i>
                     </div>
-                    <h3>Business Establishment</h3>
-                    <p>Learn the right ways to establish your business based on our research of 500+ successful startups and their critical success factors.</p>
-                    <div class="knowledge-source">
-                        <i class="fas fa-database"></i> Based on 500+ Startup Analysis
+                    <span class="category-tag">3-MONTH INTENSIVE</span>
+                    <h3>Startup Bootcamp</h3>
+                    <p>A comprehensive 3-month program transforming aspiring entrepreneurs into successful franchise business owners through hands-on training and mentorship.</p>
+                    <div style="margin-top: auto; padding-top: var(--space-md);">
+                        <a href="#bootcamp-details" class="btn btn-primary" style="width: 100%;">
+                            <i class="fas fa-info-circle"></i> Learn More
+                        </a>
                     </div>
-                    <a href="#upcoming" class="btn btn-primary" style="margin-top: var(--space-md);">
-                        View Events <i class="fas fa-arrow-right"></i>
-                    </a>
                 </div>
                 
-                <div class="category-card animate-on-scroll">
+                <!-- Inspiration Card -->
+                <div class="category-card inspiration animate-on-scroll">
                     <div class="category-icon">
-                        <i class="fas fa-expand-arrows-alt"></i>
+                        <i class="fas fa-fire"></i>
                     </div>
-                    <h3>Market Expansion</h3>
-                    <p>Discover proven strategies for expanding your market reach, backed by statistics from businesses that successfully scaled.</p>
-                    <div class="knowledge-source">
-                        <i class="fas fa-chart-bar"></i> 200+ Expansion Case Studies
+                    <span class="category-tag">MONTHLY INSPIRATION</span>
+                    <h3 class="text-gradient-gold">Become What You Believe</h3>
+                    <p>Monthly inspiration summit for startups and established businesses to ignite passion, break through limits, and find renewed energy for sustainable growth.</p>
+                    <div style="margin-top: auto; padding-top: var(--space-md);">
+                        <a href="#inspiration-details" class="btn btn-gold" style="width: 100%;">
+                            <i class="fas fa-fire"></i> Get Inspired
+                        </a>
                     </div>
-                    <a href="#upcoming" class="btn btn-primary" style="margin-top: var(--space-md);">
-                        View Events <i class="fas fa-arrow-right"></i>
-                    </a>
                 </div>
                 
-                <div class="category-card animate-on-scroll">
+                <!-- Spiritual Card -->
+                <div class="category-card spiritual animate-on-scroll">
                     <div class="category-icon">
-                        <i class="fas fa-users"></i>
+                        <i class="fas fa-hands-praying"></i>
                     </div>
-                    <h3>Client Engagement</h3>
-                    <p>Master the art of client interaction with techniques validated by customer satisfaction data and retention statistics.</p>
-                    <div class="knowledge-source">
-                        <i class="fas fa-star"></i> 1000+ Client Feedback Analysis
+                    <span class="category-tag">SPIRITUAL WORKSHOP</span>
+                    <h3 class="text-gradient-spiritual">The Making of an Icon</h3>
+                    <p>God-based workshop to discover divine purpose and align your business with God's plan. Transform into the icon you were created to be.</p>
+                    <div style="margin-top: auto; padding-top: var(--space-md);">
+                        <a href="#spiritual-details" class="btn btn-spiritual" style="width: 100%;">
+                            <i class="fas fa-star"></i> Discover Purpose
+                        </a>
                     </div>
-                    <a href="#upcoming" class="btn btn-primary" style="margin-top: var(--space-md);">
-                        View Events <i class="fas fa-arrow-right"></i>
-                    </a>
                 </div>
             </div>
         </div>
@@ -1297,189 +1311,183 @@
     <section id="upcoming" class="upcoming-events">
         <div class="container">
             <div class="section-header">
-                <span class="section-subtitle">Join Our Next Sessions</span>
-                <h2>Upcoming <span class="text-gradient">Research Events</span></h2>
-                <p class="lead">Participate in our data-driven events that translate research findings into actionable business strategies.</p>
-            </div>
-            
-            <div class="events-tabs">
-                <button class="tab-btn active" data-category="all">
-                    <i class="fas fa-calendar"></i> All Events
-                </button>
-                <button class="tab-btn" data-category="establishment">
-                    <i class="fas fa-store"></i> Establishment
-                </button>
-                <button class="tab-btn" data-category="expansion">
-                    <i class="fas fa-expand-arrows-alt"></i> Expansion
-                </button>
-                <button class="tab-btn" data-category="engagement">
-                    <i class="fas fa-users"></i> Engagement
-                </button>
-                <button class="tab-btn" data-category="workshop">
-                    <i class="fas fa-chalkboard-teacher"></i> Workshops
-                </button>
+                <span class="section-subtitle">Upcoming Sessions</span>
+                <h2>Join Our Next <span class="text-gradient">Transformative Events</span></h2>
+                <p class="lead">Each event is carefully designed to provide maximum value and transformation. Limited seats available for intimate experiences.</p>
             </div>
             
             <div class="events-grid">
-                <!-- Featured Event -->
-                <div class="event-card featured animate-on-scroll" data-category="establishment">
-                    <div class="featured-badge">FEATURED EVENT</div>
-                    <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-                         alt="Business Establishment Masterclass" 
+                <!-- Bootcamp Event -->
+                <div id="bootcamp-details" class="event-card bootcamp animate-on-scroll">
+                    <img src="https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp" 
+                         alt="DSOG Franchise Startup Bootcamp" 
                          class="event-image">
+                    <div class="event-date-badge">
+                        <i class="fas fa-calendar"></i> Feb 01, 2026
+                    </div>
                     <div class="event-content">
-                        <div class="event-meta">
-                            <div class="event-date">
-                                <i class="fas fa-calendar"></i> March 20, 2024
-                            </div>
-                            <div class="event-location">
-                                <i class="fas fa-map-marker-alt"></i> Nairobi & Online
-                            </div>
-                            <div class="event-format">
-                                <i class="fas fa-video"></i> Hybrid
+                        <div class="duration-badge">
+                            <i class="fas fa-clock"></i> 3-Month Intensive Program
+                        </div>
+                        <div class="event-details">
+                            <h3>DSOG Franchise Startup Bootcamp</h3>
+                            <p>Transform from aspiring entrepreneur to successful franchise owner. This 3-month intensive program provides hands-on training, mentorship, and practical experience in starting and scaling a franchise business.</p>
+                            <p><strong>What you'll gain:</strong> Complete business planning, franchise selection guidance, funding strategies, marketing plans, and ongoing mentorship.</p>
+                            <div class="event-meta">
+                                <div class="meta-item">
+                                    <i class="fas fa-users"></i>
+                                    <span>Limited to 12 Participants</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>Hybrid: Virtual & On-site</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-clock"></i>
+                                    <span>Flexible Schedule</span>
+                                </div>
                             </div>
                         </div>
-                        <h3>Business Establishment Masterclass</h3>
-                        <p>Based on our analysis of 500+ startups, learn the 7 critical success factors for establishing a sustainable business in today's market.</p>
-                        
-                        <div class="event-tags">
-                            <span class="event-tag">Research-Based</span>
-                            <span class="event-tag">Startup Strategy</span>
-                            <span class="event-tag">Market Analysis</span>
+                        <div class="event-action" style="margin-top: auto;">
+                            <a href="bootcamp.html" class="btn btn-primary btn-block">
+                                <i class="fas fa-graduation-cap"></i> Enroll in Bootcamp
+                            </a>
                         </div>
-                        
-                        <a href="#register" class="btn btn-primary" style="margin-top: var(--space-md); width: 100%;">
-                            <i class="fas fa-ticket-alt"></i> Register Now - KES 2,500
-                        </a>
                     </div>
                 </div>
                 
-                <!-- Expansion Event -->
-                <div class="event-card animate-on-scroll" data-category="expansion">
-                    <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-                         alt="Market Expansion Strategies" 
+                <!-- Inspiration Event -->
+                <div id="inspiration-details" class="event-card inspiration animate-on-scroll">
+                    <img src="https://i.postimg.cc/sgNRzKbd/20260114_1543_Image_Generation_simple_compose_01key8g91re75trpnnjn6j42z5_1.webp" 
+                         alt="Become What You Believe" 
                          class="event-image">
+                    <div class="event-date-badge">
+                        <i class="fas fa-calendar"></i> First Saturday Monthly
+                    </div>
                     <div class="event-content">
-                        <div class="event-meta">
-                            <div class="event-date">
-                                <i class="fas fa-calendar"></i> April 5, 2024
-                            </div>
-                            <div class="event-location">
-                                <i class="fas fa-map-marker-alt"></i> Online
-                            </div>
-                            <div class="event-format">
-                                <i class="fas fa-laptop"></i> Virtual
+                        <div class="event-details">
+                            <h3 class="text-gradient-gold">Become What You Believe</h3>
+                            <p><strong>Annual Monthly Event - For Startups & Established Business Leaders</strong></p>
+                            <p>An electrifying monthly summit designed to ignite the entrepreneurial fire within. For new entrepreneurs: break through your limits and launch with confidence. For established business leaders: rediscover your passion and find renewed energy to keep pushing forward.</p>
+                            <p><strong>Transformative Outcomes:</strong> Renewed vision, breakthrough strategies, sustainable energy, and practical growth techniques.</p>
+                            <div class="event-meta">
+                                <div class="meta-item">
+                                    <i class="fas fa-users"></i>
+                                    <span>Unlimited Participants</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>Multiple Locations</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span>Every First Saturday</span>
+                                </div>
                             </div>
                         </div>
-                        <h3>Market Expansion Strategies Workshop</h3>
-                        <p>Learn data-driven expansion techniques from our analysis of 200+ businesses that successfully scaled their operations.</p>
-                        
-                        <div class="event-tags">
-                            <span class="event-tag">Growth Strategy</span>
-                            <span class="event-tag">Market Research</span>
-                            <span class="event-tag">Scaling</span>
+                        <div class="event-action" style="margin-top: auto;">
+                            <a href="contact.html?event=become-what-you-believe" class="btn btn-gold btn-block">
+                                <i class="fas fa-fire"></i> Ignite Your Journey
+                            </a>
                         </div>
-                        
-                        <a href="#register" class="btn btn-primary" style="margin-top: var(--space-md); width: 100%;">
-                            <i class="fas fa-ticket-alt"></i> Register Now - KES 1,800
-                        </a>
                     </div>
                 </div>
                 
-                <!-- Engagement Event -->
-                <div class="event-card animate-on-scroll" data-category="engagement">
-                    <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-                         alt="Client Engagement Excellence" 
+                <!-- Spiritual Event -->
+                <div id="spiritual-details" class="event-card spiritual animate-on-scroll">
+                    <img src="https://i.postimg.cc/kXw6d695/20260114-1617-Image-Generation-simple-compose-01keyad7jyf15rcfk3tz16wdbq-1.webp" 
+                         alt="The Making of an Icon" 
                          class="event-image">
+                    <div class="event-date-badge">
+                        <i class="fas fa-calendar"></i> Last Weekend, Feb
+                    </div>
                     <div class="event-content">
-                        <div class="event-meta">
-                            <div class="event-date">
-                                <i class="fas fa-calendar"></i> April 15, 2024
-                            </div>
-                            <div class="event-location">
-                                <i class="fas fa-map-marker-alt"></i> Nairobi
-                            </div>
-                            <div class="event-format">
-                                <i class="fas fa-users"></i> In-Person
+                        <div class="event-details">
+                            <h3 class="text-gradient-spiritual">The Making of an Icon</h3>
+                            <div class="slogan">"Search within me O Lord"</div>
+                            <p>A God-based discussion workshop designed to help individuals discover and understand their divine purpose from the mind of God the Creator. This transformative session combines spiritual wisdom with practical application to help you align your business and personal life with God's plan.</p>
+                            <p><strong>Key Focus:</strong> Divine purpose discovery, spiritual-business alignment, character development, and icon creation through faith.</p>
+                            <div class="event-meta">
+                                <div class="meta-item">
+                                    <i class="fas fa-users"></i>
+                                    <span>Limited to 20 Participants</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>Intimate Venue</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-clock"></i>
+                                    <span>Weekend Retreat</span>
+                                </div>
                             </div>
                         </div>
-                        <h3>Client Engagement Excellence Summit</h3>
-                        <p>Transform your client interactions using insights from 1000+ customer feedback analysis and proven engagement frameworks.</p>
-                        
-                        <div class="event-tags">
-                            <span class="event-tag">Customer Service</span>
-                            <span class="event-tag">Relationship Building</span>
-                            <span class="event-tag">Retention</span>
+                        <div class="event-action" style="margin-top: auto;">
+                            <a href="contact.html?event=making-of-an-icon" class="btn btn-spiritual btn-block">
+                                <i class="fas fa-hands-praying"></i> Discover Your Purpose
+                            </a>
                         </div>
-                        
-                        <a href="#register" class="btn btn-primary" style="margin-top: var(--space-md); width: 100%;">
-                            <i class="fas fa-ticket-alt"></i> Register Now - KES 3,000
-                        </a>
                     </div>
                 </div>
-            </div>
-            
-            <div class="text-center" style="margin-top: var(--space-2xl);">
-                <a href="contact.html" class="btn btn-secondary btn-large">
-                    <i class="fas fa-calendar-plus"></i> Request Custom Event
-                </a>
             </div>
         </div>
     </section>
 
-    <!-- Research Basis Section -->
-    <section id="research" class="research-section">
+    <!-- Registration Info Section -->
+    <section id="registration" class="registration-info">
         <div class="container">
             <div class="section-header">
-                <span class="section-subtitle">Our Knowledge Foundation</span>
-                <h2>Events Built on <span class="text-gradient">Fervent Research</span></h2>
-                <p class="lead">Every strategy we teach is backed by rigorous analysis of real business data collected through our operations and research initiatives.</p>
+                <span class="section-subtitle">How to Join</span>
+                <h2>Simple <span class="text-gradient">Registration Process</span></h2>
+                <p class="lead">Securing your spot in our transformative events is quick and easy. Follow these simple steps to begin your journey.</p>
             </div>
             
-            <div class="research-container">
-                <div class="research-visual">
-                    <div class="research-chart">
-                        <div class="chart-bar bar-1">60%</div>
-                        <div class="chart-bar bar-2">80%</div>
-                        <div class="chart-bar bar-3">95%</div>
-                        <div class="chart-bar bar-4">70%</div>
-                        <div class="chart-bar bar-5">85%</div>
-                        
-                        <div class="chart-label label-1">Planning</div>
-                        <div class="chart-label label-2">Research</div>
-                        <div class="chart-label label-3">Implementation</div>
-                        <div class="chart-label label-4">Evaluation</div>
-                        <div class="chart-label label-5">Success Rate</div>
+            <div class="registration-container">
+                <div class="registration-visual">
+                    <div class="registration-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3>Ready to Transform?</h3>
+                    <p>Take the first step toward your entrepreneurial and personal transformation today.</p>
+                    <div style="margin-top: var(--space-lg);">
+                        <a href="https://wa.me/254733737983?text=I'm%20interested%20in%20joining%20a%20DSOG%20event" 
+                           target="_blank" 
+                           class="btn btn-primary btn-large">
+                            <i class="fab fa-whatsapp"></i> WhatsApp Registration
+                        </a>
                     </div>
                 </div>
                 
-                <div>
-                    <h3>Data-Driven Business Education</h3>
-                    <p>Our events are unique because they're built on actual business data, not just theory. We analyze real cases from our operations to provide actionable insights.</p>
+                <div class="registration-steps">
+                    <div class="step-item animate-on-scroll">
+                        <div class="step-number">1</div>
+                        <div>
+                            <h4>Choose Your Event</h4>
+                            <p>Select from our three transformative events based on your needs and schedule.</p>
+                        </div>
+                    </div>
                     
-                    <div style="margin-top: var(--space-xl);">
-                        <div style="display: flex; align-items: flex-start; gap: var(--space-md); margin-bottom: var(--space-md);">
-                            <i class="fas fa-chart-pie" style="color: var(--primary-red); font-size: 1.25rem;"></i>
-                            <div>
-                                <h4 style="margin-bottom: var(--space-xs);">Statistical Analysis</h4>
-                                <p>We analyze success patterns from hundreds of businesses to identify what truly works in the market.</p>
-                            </div>
+                    <div class="step-item animate-on-scroll">
+                        <div class="step-number">2</div>
+                        <div>
+                            <h4>Contact Registration</h4>
+                            <p>Reach out via WhatsApp or email to confirm availability and receive payment details.</p>
                         </div>
-                        
-                        <div style="display: flex; align-items: flex-start; gap: var(--space-md); margin-bottom: var(--space-md);">
-                            <i class="fas fa-database" style="color: var(--primary-red); font-size: 1.25rem;"></i>
-                            <div>
-                                <h4 style="margin-bottom: var(--space-xs);">Operational Data</h4>
-                                <p>Real data from our enterprise operations provides insights into market trends and customer behavior.</p>
-                            </div>
+                    </div>
+                    
+                    <div class="step-item animate-on-scroll">
+                        <div class="step-number">3</div>
+                        <div>
+                            <h4>Secure Your Spot</h4>
+                            <p>Complete your registration with payment confirmation and receive event details.</p>
                         </div>
-                        
-                        <div style="display: flex; align-items: flex-start; gap: var(--space-md);">
-                            <i class="fas fa-check-circle" style="color: var(--primary-red); font-size: 1.25rem;"></i>
-                            <div>
-                                <h4 style="margin-bottom: var(--space-xs);">Proven Strategies</h4>
-                                <p>Every technique we teach has been validated through implementation and measured for results.</p>
-                            </div>
+                    </div>
+                    
+                    <div class="step-item animate-on-scroll">
+                        <div class="step-number">4</div>
+                        <div>
+                            <h4>Prepare for Transformation</h4>
+                            <p>Receive pre-event materials and prepare for your life-changing experience.</p>
                         </div>
                     </div>
                 </div>
@@ -1487,180 +1495,76 @@
         </div>
     </section>
 
-    <!-- Event Formats Section -->
-    <section class="formats-section">
+    <!-- Benefits Section -->
+    <section class="benefits-section">
         <div class="container">
             <div class="section-header">
-                <span class="section-subtitle">How We Deliver Knowledge</span>
-                <h2>Interactive <span class="text-gradient">Event Formats</span></h2>
-                <p class="lead">Choose from various formats designed to maximize learning and engagement based on our research of effective educational methods.</p>
+                <span class="section-subtitle">Why Join Our Events</span>
+                <h2>Life-Changing <span class="text-gradient">Benefits</span></h2>
+                <p class="lead">Our events are designed to provide holistic transformation that impacts every area of your life and business.</p>
             </div>
             
-            <div class="formats-grid">
-                <div class="format-card animate-on-scroll">
-                    <div class="format-icon">
-                        <i class="fas fa-chalkboard-teacher"></i>
+            <div class="benefits-grid">
+                <div class="benefit-card benefit-1 animate-on-scroll">
+                    <div class="benefit-icon">
+                        <i class="fas fa-briefcase"></i>
                     </div>
-                    <h4>Interactive Workshops</h4>
-                    <p>Hands-on sessions where you apply research findings to your specific business challenges with expert guidance.</p>
-                    <div class="text-small" style="margin-top: var(--space-md); color: var(--primary-red);">
-                        <i class="fas fa-clock"></i> 3-4 hours
-                    </div>
+                    <h4>Practical Business Skills</h4>
+                    <p>Learn actionable strategies and techniques that you can implement immediately in your business.</p>
                 </div>
                 
-                <div class="format-card animate-on-scroll">
-                    <div class="format-icon">
+                <div class="benefit-card benefit-2 animate-on-scroll">
+                    <div class="benefit-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h4>Mindset Transformation</h4>
+                    <p>Develop the entrepreneurial mindset needed to overcome challenges and achieve success.</p>
+                </div>
+                
+                <div class="benefit-card benefit-3 animate-on-scroll">
+                    <div class="benefit-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h4>Purpose Discovery</h4>
+                    <p>Align your business with your divine purpose for greater fulfillment and impact.</p>
+                </div>
+                
+                <div class="benefit-card benefit-4 animate-on-scroll">
+                    <div class="benefit-icon">
                         <i class="fas fa-users"></i>
                     </div>
-                    <h4>Mastermind Groups</h4>
-                    <p>Small group sessions focused on solving specific business problems using collective intelligence and data insights.</p>
-                    <div class="text-small" style="margin-top: var(--space-md); color: var(--primary-red);">
-                        <i class="fas fa-user-friends"></i> 8-12 participants
-                    </div>
-                </div>
-                
-                <div class="format-card animate-on-scroll">
-                    <div class="format-icon">
-                        <i class="fas fa-video"></i>
-                    </div>
-                    <h4>Virtual Summits</h4>
-                    <p>Online events featuring multiple experts sharing research-backed strategies for business growth and development.</p>
-                    <div class="text-small" style="margin-top: var(--space-md); color: var(--primary-red);">
-                        <i class="fas fa-globe"></i> Global access
-                    </div>
-                </div>
-                
-                <div class="format-card animate-on-scroll">
-                    <div class="format-icon">
-                        <i class="fas fa-network-wired"></i>
-                    </div>
-                    <h4>Networking Events</h4>
-                    <p>Structured networking sessions based on our research of effective business relationship building techniques.</p>
-                    <div class="text-small" style="margin-top: var(--space-md); color: var(--primary-red);">
-                        <i class="fas fa-handshake"></i> Strategic connections
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials Section -->
-    <section class="testimonials-section">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-subtitle">Success Stories</span>
-                <h2>What <span class="text-gradient">Participants Say</span></h2>
-                <p class="lead">Hear from business owners and entrepreneurs who have transformed their operations using our research-based strategies.</p>
-            </div>
-            
-            <div class="testimonials-slider">
-                <div class="testimonial-slide active">
-                    <div class="testimonial-quote">"</div>
-                    <p>"The business establishment masterclass changed everything for us. The research-backed strategies helped us avoid common pitfalls and establish a solid foundation. Our revenue grew by 40% in the first quarter after implementation."</p>
-                    <div class="testimonial-author">
-                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" 
-                             alt="John Kamau" 
-                             class="author-avatar">
-                        <div>
-                            <h4>John Kamau</h4>
-                            <p class="text-small">Founder, TechSolutions Kenya</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="testimonial-slide">
-                    <div class="testimonial-quote">"</div>
-                    <p>"The market expansion workshop provided data-driven insights that helped us identify new opportunities. Using their research methodology, we expanded to two new counties with 60% customer acquisition success."</p>
-                    <div class="testimonial-author">
-                        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" 
-                             alt="Sarah Achieng" 
-                             class="author-avatar">
-                        <div>
-                            <h4>Sarah Achieng</h4>
-                            <p class="text-small">CEO, EcoProducts Ltd</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="testimonial-slide">
-                    <div class="testimonial-quote">"</div>
-                    <p>"The client engagement strategies transformed our customer relationships. Our retention rate improved from 65% to 92% within three months. The research-based approach made all the difference."</p>
-                    <div class="testimonial-author">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" 
-                             alt="David Omondi" 
-                             class="author-avatar">
-                        <div>
-                            <h4>David Omondi</h4>
-                            <p class="text-small">Managing Director, ServicePro</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="slider-controls">
-                    <div class="slider-dot active" data-slide="0"></div>
-                    <div class="slider-dot" data-slide="1"></div>
-                    <div class="slider-dot" data-slide="2"></div>
+                    <h4>Community Support</h4>
+                    <p>Join a network of like-minded entrepreneurs who support and encourage each other's growth.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Registration CTA Section -->
-    <section id="register" class="registration-cta">
+    <section class="registration-cta">
         <div class="container">
-            <div class="section-header">
-                <span class="section-subtitle">Join Our Next Event</span>
-                <h2>Transform Your <span class="text-gradient">Business Strategy</span></h2>
-                <p class="lead">Register for our next research-based event and gain access to proven strategies backed by real business data and statistics.</p>
-            </div>
-            
-            <div class="benefits-grid">
-                <div class="benefit-item">
-                    <div class="benefit-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h4>Data-Driven Insights</h4>
-                    <p>Learn from actual business statistics, not just theory</p>
+            <div class="cta-content">
+                <div class="urgency-badge">
+                    <i class="fas fa-exclamation-circle"></i> LIMITED SPACES AVAILABLE
                 </div>
                 
-                <div class="benefit-item">
-                    <div class="benefit-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <h4>Networking Opportunities</h4>
-                    <p>Connect with like-minded entrepreneurs and experts</p>
+                <h2 style="color: var(--white);">Don't Miss Your <span style="color: var(--primary-gold);">Transformation Opportunity</span></h2>
+                <p class="lead">Join hundreds of entrepreneurs who have transformed their businesses and lives through our events. Your journey to success starts here.</p>
+                
+                <div class="hero-buttons" style="margin-top: var(--space-2xl);">
+                    <a href="https://wa.me/254733737983?text=I%20want%20to%20register%20for%20a%20DSOG%20event" 
+                       target="_blank" 
+                       class="btn btn-gold btn-large">
+                        <i class="fab fa-whatsapp"></i> Register on WhatsApp
+                    </a>
+                    <a href="contact.html" class="btn btn-secondary btn-large" style="background: rgba(255,255,255,0.1); color: var(--white); border-color: rgba(255,255,255,0.3);">
+                        <i class="fas fa-phone-alt"></i> Call for Inquiry
+                    </a>
                 </div>
                 
-                <div class="benefit-item">
-                    <div class="benefit-icon">
-                        <i class="fas fa-tools"></i>
-                    </div>
-                    <h4>Actionable Tools</h4>
-                    <p>Receive templates and frameworks you can implement immediately</p>
+                <div style="margin-top: var(--space-xl); font-size: 0.9rem; opacity: 0.9; color: rgba(255,255,255,0.9);">
+                    <p><i class="fas fa-check-circle"></i> All events include materials, certification, and post-event support</p>
                 </div>
-                
-                <div class="benefit-item">
-                    <div class="benefit-icon">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <h4>Expert Guidance</h4>
-                    <p>Learn from professionals with proven track records</p>
-                </div>
-            </div>
-            
-            <div class="hero-buttons" style="margin-top: var(--space-2xl);">
-                <a href="https://wa.me/254733737983?text=I%20want%20to%20register%20for%20a%20DSOG%20event" 
-                   target="_blank" 
-                   class="btn btn-primary btn-large">
-                    <i class="fab fa-whatsapp"></i> WhatsApp Registration
-                </a>
-                <a href="contact.html" class="btn btn-secondary btn-large">
-                    <i class="fas fa-calendar-check"></i> Schedule Consultation
-                </a>
-            </div>
-            
-            <div style="margin-top: var(--space-xl); font-size: 0.9rem; opacity: 0.9;">
-                <p><i class="fas fa-info-circle"></i> All events include research materials, networking access, and 30-day follow-up support</p>
             </div>
         </div>
     </section>
@@ -1673,21 +1577,21 @@
                     <img src="https://i.postimg.cc/kMZ1jTww/Untitled-design-4-removebg-preview.png" 
                          alt="DSOG" 
                          class="footer-logo">
-                    <p>Empowering businesses through research-based education events focused on establishment, expansion, and client engagement strategies.</p>
+                    <p>Empowering entrepreneurs through transformative events that combine practical business training, inspirational guidance, and spiritual purpose discovery.</p>
                     <div class="events-badge" style="margin-top: var(--space-md); background: rgba(255,255,255,0.1); color: white;">
-                        <i class="fas fa-chart-line"></i> DATA-DRIVEN EVENTS
+                        <i class="fas fa-calendar-star"></i> TRANSFORMATIVE EVENTS
                     </div>
                 </div>
                 
                 <div class="footer-section">
-                    <h3>Event Categories</h3>
+                    <h3>Our Events</h3>
                     <ul>
-                        <li><a href="#upcoming">Business Establishment</a></li>
-                        <li><a href="#upcoming">Market Expansion</a></li>
-                        <li><a href="#upcoming">Client Engagement</a></li>
-                        <li><a href="#upcoming">Research Workshops</a></li>
-                        <li><a href="#upcoming">Networking Events</a></li>
-                        <li><a href="#upcoming">Mastermind Groups</a></li>
+                        <li><a href="#bootcamp-details">Startup Bootcamp (3-Month)</a></li>
+                        <li><a href="#inspiration-details">Become What You Believe</a></li>
+                        <li><a href="#spiritual-details">The Making of an Icon</a></li>
+                        <li><a href="#registration">Event Registration</a></li>
+                        <li><a href="bootcamp.html">Bootcamp Details</a></li>
+                        <li><a href="contact.html">Custom Events</a></li>
                     </ul>
                 </div>
                 
@@ -1710,15 +1614,15 @@
                         <li><i class="fas fa-envelope"></i> events@dsog.org</li>
                         <li><i class="fab fa-whatsapp"></i> Event Registration</li>
                         <li><i class="fas fa-map-marker-alt"></i> Nairobi, Kenya</li>
-                        <li><i class="fas fa-calendar-alt"></i> Monthly Events</li>
-                        <li><i class="fas fa-chart-bar"></i> Research-Based Content</li>
+                        <li><i class="fas fa-calendar-alt"></i> Multiple Dates</li>
+                        <li><i class="fas fa-user-check"></i> Limited Seats</li>
                     </ul>
                 </div>
             </div>
             
             <div class="copyright">
-                <p>&copy; <span id="currentYear"></span> DSOG Events - Research-Based Business Education. All rights reserved.</p>
-                <p style="margin-top: var(--space-sm); font-size: 0.85rem;">Business Establishment • Market Expansion • Client Engagement • Data-Driven Strategies • Entrepreneur Education</p>
+                <p>&copy; <span id="currentYear"></span> DSOG Events - Transformative Business & Purpose Events. All rights reserved.</p>
+                <p style="margin-top: var(--space-sm); font-size: 0.85rem;">Startup Bootcamp • Business Inspiration • Spiritual Purpose • Entrepreneur Training • Life Transformation</p>
             </div>
         </div>
     </footer>
@@ -1820,64 +1724,6 @@
                 }
             });
 
-            // Event Tabs Filtering
-            const tabBtns = document.querySelectorAll('.tab-btn');
-            const eventCards = document.querySelectorAll('.event-card');
-            
-            tabBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    // Remove active class from all buttons
-                    tabBtns.forEach(b => b.classList.remove('active'));
-                    // Add active class to clicked button
-                    btn.classList.add('active');
-                    
-                    const category = btn.getAttribute('data-category');
-                    
-                    // Filter cards
-                    eventCards.forEach(card => {
-                        if (category === 'all' || card.getAttribute('data-category') === category) {
-                            card.style.display = 'block';
-                            setTimeout(() => {
-                                card.style.opacity = '1';
-                                card.style.transform = 'translateY(0)';
-                            }, 10);
-                        } else {
-                            card.style.opacity = '0';
-                            card.style.transform = 'translateY(20px)';
-                            setTimeout(() => {
-                                card.style.display = 'none';
-                            }, 300);
-                        }
-                    });
-                });
-            });
-
-            // Testimonial Slider
-            const slides = document.querySelectorAll('.testimonial-slide');
-            const dots = document.querySelectorAll('.slider-dot');
-            let currentSlide = 0;
-            
-            function showSlide(n) {
-                slides.forEach(slide => slide.classList.remove('active'));
-                dots.forEach(dot => dot.classList.remove('active'));
-                
-                currentSlide = (n + slides.length) % slides.length;
-                
-                slides[currentSlide].classList.add('active');
-                dots[currentSlide].classList.add('active');
-            }
-            
-            dots.forEach((dot, index) => {
-                dot.addEventListener('click', () => {
-                    showSlide(index);
-                });
-            });
-            
-            // Auto-advance slides
-            setInterval(() => {
-                showSlide(currentSlide + 1);
-            }, 5000);
-
             // Smooth scroll for anchor links
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function(e) {
@@ -1930,26 +1776,23 @@
                 observer.observe(element);
             });
 
-            // Animate chart bars
-            const chartBars = document.querySelectorAll('.chart-bar');
-            const chartObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        chartBars.forEach(bar => {
-                            const height = bar.style.height;
-                            bar.style.height = '0';
-                            setTimeout(() => {
-                                bar.style.height = height;
-                            }, 300);
-                        });
-                        chartObserver.unobserve(entry.target);
+            // WhatsApp Registration with event-specific message
+            document.querySelectorAll('a[href*="whatsapp"]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    if (href.includes('whatsapp')) {
+                        // Track which event they're interested in
+                        const eventType = this.closest('.event-card') ? 
+                            this.closest('.event-card').classList.contains('bootcamp') ? 'Bootcamp' :
+                            this.closest('.event-card').classList.contains('inspiration') ? 'Become What You Believe' :
+                            this.closest('.event-card').classList.contains('spiritual') ? 'The Making of an Icon' : 'DSOG Event' : 'DSOG Event';
+                        
+                        // Update the WhatsApp message to include event type
+                        const newHref = href.replace('DSOG%20event', encodeURIComponent(eventType));
+                        this.setAttribute('href', newHref);
                     }
                 });
-            }, {
-                threshold: 0.1
             });
-
-            chartObserver.observe(document.querySelector('.research-chart'));
         });
     </script>
 </body>
