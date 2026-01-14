@@ -440,6 +440,12 @@
             letter-spacing: 0.01em;
         }
 
+        .text-medium {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
         .text-center { text-align: center; }
         .text-left { text-align: left; }
         .text-right { text-align: right; }
@@ -840,9 +846,55 @@
             flex-shrink: 0;
         }
 
-        /* ===== UPCOMING EVENTS SECTION ===== */
+        /* ===== UPDATED EVENTS SECTION ===== */
         .events-section {
             background: var(--bg-primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .events-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--gradient-primary);
+            opacity: 0.1;
+        }
+
+        .events-header {
+            text-align: center;
+            margin-bottom: var(--space-3xl);
+        }
+
+        .events-subtitle {
+            color: var(--text-tertiary);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: var(--space-sm);
+            display: block;
+            font-weight: 600;
+        }
+
+        .events-header h2 {
+            position: relative;
+            display: inline-block;
+            margin-bottom: var(--space-lg);
+        }
+
+        .events-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
         }
 
         .events-grid {
@@ -858,30 +910,117 @@
             overflow: hidden;
             border: 1px solid var(--border-color);
             transition: var(--transition-smooth);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
         .event-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
             box-shadow: var(--shadow-xl);
+            border-color: var(--primary-red);
+        }
+
+        .event-image-container {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
         }
 
         .event-image {
             width: 100%;
-            height: 200px;
+            height: 100%;
             object-fit: cover;
+            transition: var(--transition-smooth);
+        }
+
+        .event-card:hover .event-image {
+            transform: scale(1.05);
+        }
+
+        .event-date-badge {
+            position: absolute;
+            top: var(--space-md);
+            left: var(--space-md);
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: var(--space-xs) var(--space-md);
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            z-index: var(--z-normal);
         }
 
         .event-content {
-            padding: var(--space-lg);
+            padding: var(--space-xl);
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
 
-        .event-date {
+        .event-category {
+            display: inline-block;
+            background: rgba(194, 24, 7, 0.1);
+            color: var(--primary-red);
+            padding: var(--space-2xs) var(--space-md);
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: var(--space-md);
+            letter-spacing: 0.05em;
+            align-self: flex-start;
+        }
+
+        .event-details {
+            flex-grow: 1;
+        }
+
+        .event-details h4 {
+            margin-bottom: var(--space-sm);
+            line-height: 1.3;
+        }
+
+        .event-details p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: var(--space-lg);
+        }
+
+        .event-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+            padding-top: var(--space-md);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .meta-item {
             display: flex;
             align-items: center;
-            gap: var(--space-sm);
+            gap: var(--space-xs);
+            color: var(--text-tertiary);
+            font-size: 0.85rem;
+        }
+
+        .meta-item i {
             color: var(--primary-red);
-            font-weight: 600;
-            margin-bottom: var(--space-sm);
+            width: 16px;
+        }
+
+        .event-action {
+            margin-top: auto;
+        }
+
+        .events-cta {
+            text-align: center;
+            margin-top: var(--space-3xl);
         }
 
         /* ===== ABOUT DSOG SECTION ===== */
@@ -1313,6 +1452,21 @@
                 height: 48px;
                 font-size: 1rem;
             }
+
+            /* Updated Events Responsive */
+            .event-image-container {
+                height: 200px;
+            }
+
+            .event-meta {
+                flex-direction: column;
+                gap: var(--space-sm);
+            }
+
+            .event-date-badge {
+                font-size: 0.8rem;
+                padding: var(--space-2xs) var(--space-sm);
+            }
         }
 
         /* Mobile */
@@ -1372,6 +1526,21 @@
             .stats-grid {
                 grid-template-columns: 1fr;
             }
+
+            /* Updated Events Responsive */
+            .event-image-container {
+                height: 180px;
+            }
+
+            .event-content {
+                padding: var(--space-lg);
+            }
+
+            .event-date-badge {
+                top: var(--space-sm);
+                left: var(--space-sm);
+                font-size: 0.75rem;
+            }
         }
 
         /* Small Mobile */
@@ -1401,6 +1570,15 @@
             .btn {
                 padding: var(--space-sm) var(--space-md);
                 font-size: 0.85rem;
+            }
+
+            /* Updated Events Responsive */
+            .events-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .event-image-container {
+                height: 160px;
             }
         }
 
@@ -1497,6 +1675,14 @@
             .nav-link:active {
                 transform: scale(0.98);
             }
+
+            .event-card:hover {
+                transform: none;
+            }
+
+            .event-card:active {
+                transform: scale(0.98);
+            }
         }
     </style>
 </head>
@@ -1541,7 +1727,7 @@
                     <i class="fas fa-bullseye"></i> EMPOWERING BUSINESSES & ENTREPRENEURS
                 </div>
                 
-                <h1>Become <span class="text-gradient"> What You </span> Believe!</h1>
+                <h1>Become <span class="text-gradient">What You</span> Believe!</h1>
                 <p class="lead">DSOG empowers businesses, startups, and young entrepreneurs through transformative training, impactful events, and real startup opportunities that turn learning into successful enterprises.</p>
                 
                 <div class="category-tags">
@@ -1648,7 +1834,7 @@
                         <li><i class="fas fa-check"></i> Expert Workshop Series</li>
                         <li><i class="fas fa-check"></i> Annual Entrepreneurship Summit</li>
                     </ul>
-                    <a href="events.html" class="btn btn-secondary btn-small" style="margin-top: var(--space-md);">
+                    <a href="#events" class="btn btn-secondary btn-small" style="margin-top: var(--space-md);">
                         See Upcoming Events <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
@@ -1667,7 +1853,7 @@
                         <li><i class="fas fa-check"></i> Funding & Investment Connections</li>
                         <li><i class="fas fa-check"></i> Market Access & Partnerships</li>
                     </ul>
-                    <a href="startups.html" class="btn btn-secondary btn-small" style="margin-top: var(--space-md);">
+                    <a href="bootcamp.html" class="btn btn-secondary btn-small" style="margin-top: var(--space-md);">
                         Explore Opportunities <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
@@ -1675,50 +1861,134 @@
         </div>
     </section>
 
-    <!-- Upcoming Events Section -->
-    <section class="events-section">
+    <!-- Updated Upcoming Events Section -->
+    <section id="events" class="events-section">
         <div class="container">
-            <div class="section-header">
-                <span class="section-subtitle">Get Involved</span>
+            <div class="events-header">
+                <span class="events-subtitle">Get Involved</span>
                 <h2>Upcoming <span class="text-gradient">Events & Workshops</span></h2>
                 <p class="lead">Join our transformative events designed to shape your business acuity and connect with like-minded entrepreneurs.</p>
             </div>
             
             <div class="events-grid">
+                <!-- Event 1 -->
                 <div class="event-card animate-on-scroll">
-                    <img src="https://i.postimg.cc/ZYwcqgKh/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2.webp" 
-                         alt="Entrepreneurship Summit" 
-                         class="event-image">
-                    <div class="event-content">
-                        <div class="event-date">
+                    <div class="event-image-container">
+                        <img src="https://i.postimg.cc/ZYwcqgKh/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2.webp" 
+                             alt="DSOG Franchise Startup Bootcamp" 
+                             class="event-image">
+                        <div class="event-date-badge">
                             <i class="fas fa-calendar"></i> Feb 01, 2026
                         </div>
-                        <h4>DSOG Franchise Startup Bootcamp</h4>
-                        <p>Join our inspirational training that feeds you business hunger and quenches your entrepreurial thirst.</p>
-                        <a href="bootcamp.html#sum" class="btn btn-primary btn-small" style="margin-top: var(--space-md);">
-                            Register Now <i class="fas fa-arrow-right"></i>
-                        </a>
                     </div>
-                    <div class="event-card animate-on-scroll">
-                    <img src="https://i.postimg.cc/ZYwcqgKh/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2.webp" 
-                         alt="Entrepreneurship Summit" 
-                         class="event-image">
                     <div class="event-content">
-                        <div class="event-date">
-                            <i class="fas fa-calendar"></i> Feb 01, 2026
+                        <span class="event-category">BOOTCAMP</span>
+                        <div class="event-details">
+                            <h4>DSOG Franchise Startup Bootcamp</h4>
+                            <p>Join our inspirational training that feeds your business hunger and quenches your entrepreneurial thirst. Learn how to start and scale a successful franchise business.</p>
+                            <div class="event-meta">
+                                <div class="meta-item">
+                                    <i class="fas fa-clock"></i>
+                                    <span>9:00 AM - 5:00 PM</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>Virtual & On-site</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-users"></i>
+                                    <span>Limited Seats</span>
+                                </div>
+                            </div>
                         </div>
-                        <h4>DSOG Franchise Startup Bootcamp</h4>
-                        <p>Join our inspirational training that feeds you business hunger and quenches your entrepreurial thirst.</p>
-                        <a href="bootcamp.html#sum" class="btn btn-primary btn-small" style="margin-top: var(--space-md);">
-                            Register Now <i class="fas fa-arrow-right"></i>
-                        </a>
+                        <div class="event-action">
+                            <a href="bootcamp.html" class="btn btn-primary btn-block">
+                                <i class="fas fa-ticket-alt"></i> Register Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Event 2 -->
+                <div class="event-card animate-on-scroll">
+                    <div class="event-image-container">
+                        <img src="https://i.postimg.cc/7ZPwCvZB/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-1.webp" 
+                             alt="Business Networking Mixer" 
+                             class="event-image">
+                        <div class="event-date-badge">
+                            <i class="fas fa-calendar"></i> Feb 15, 2026
+                        </div>
+                    </div>
+                    <div class="event-content">
+                        <span class="event-category">NETWORKING</span>
+                        <div class="event-details">
+                            <h4>Entrepreneurs Networking Mixer</h4>
+                            <p>Connect with fellow entrepreneurs, investors, and industry experts. Build valuable relationships and explore collaboration opportunities in a relaxed setting.</p>
+                            <div class="event-meta">
+                                <div class="meta-item">
+                                    <i class="fas fa-clock"></i>
+                                    <span>6:00 PM - 9:00 PM</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>Nairobi, Kenya</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-users"></i>
+                                    <span>50+ Entrepreneurs</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event-action">
+                            <a href="contact.html" class="btn btn-primary btn-block">
+                                <i class="fas fa-handshake"></i> Join Event
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Event 3 -->
+                <div class="event-card animate-on-scroll">
+                    <div class="event-image-container">
+                        <img src="https://i.postimg.cc/rsKYKWfQ/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c.webp" 
+                             alt="Digital Marketing Workshop" 
+                             class="event-image">
+                        <div class="event-date-badge">
+                            <i class="fas fa-calendar"></i> Mar 05, 2026
+                        </div>
+                    </div>
+                    <div class="event-content">
+                        <span class="event-category">WORKSHOP</span>
+                        <div class="event-details">
+                            <h4>Digital Marketing Masterclass</h4>
+                            <p>Learn how to leverage digital platforms to grow your business. From social media marketing to SEO, this workshop covers essential strategies for online success.</p>
+                            <div class="event-meta">
+                                <div class="meta-item">
+                                    <i class="fas fa-clock"></i>
+                                    <span>10:00 AM - 4:00 PM</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>Virtual Session</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-users"></i>
+                                    <span>Interactive Session</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event-action">
+                            <a href="training.html" class="btn btn-primary btn-block">
+                                <i class="fas fa-graduation-cap"></i> Enroll Now
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
             
-            <div class="text-center" style="margin-top: var(--space-2xl);">
-                <a href="events.html" class="btn btn-outline btn-large">
-                    View All Events <i class="fas fa-calendar-alt"></i>
+            <div class="events-cta">
+                <a href="contact.html" class="btn btn-outline btn-large">
+                    <i class="fas fa-calendar-plus"></i> Propose an Event
                 </a>
             </div>
         </div>
@@ -1832,7 +2102,7 @@
                 <a href="https://wa.me/254733737983" target="_blank" class="btn btn-primary btn-large">
                     <i class="fab fa-whatsapp"></i> WhatsApp Inquiry
                 </a>
-                <a href="events.html" class="btn btn-secondary btn-large">
+                <a href="#events" class="btn btn-secondary btn-large">
                     <i class="fas fa-calendar-alt"></i> Join Next Event
                 </a>
             </div>
@@ -1891,9 +2161,9 @@
                         <li><a href="index.html">Home</a></li>
                         <li><a href="about.html">About Us</a></li>
                         <li><a href="enterprise.html">Enterprise</a></li>
-                        <li><a href="events.html">Events</a></li>
+                        <li><a href="#events">Events</a></li>
                         <li><a href="training.html">Training</a></li>
-                        <li><a href="startups.html">Startup Opportunities</a></li>
+                        <li><a href="bootcamp.html">Startup Bootcamp</a></li>
                     </ul>
                 </div>
                 
