@@ -34,6 +34,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+    
     <!-- Training Page Styles -->
     <style>
         /* ===== CSS CUSTOM PROPERTIES ===== */
@@ -1265,14 +1269,14 @@
     <section class="training-hero">
         <div class="container">
             <div class="training-hero-content">
-                <div class="training-badge">
+                <div class="training-badge" id="heroBadge">
                     <i class="fas fa-graduation-cap"></i> STRUCTURED BUSINESS EDUCATION
                 </div>
                 
-                <h1>Master Your <span class="text-gradient">Business Skills</span> with DSOG Training</h1>
-                <p class="lead">Comprehensive training programs with clear objectives, structured schedules, and measurable outcomes designed for sustainable business growth and professional development.</p>
+                <h1 id="heroTitle">Master Your <span class="text-gradient">Business Skills</span> with DSOG Training</h1>
+                <p class="lead" id="heroSubtitle">Comprehensive training programs with clear objectives, structured schedules, and measurable outcomes designed for sustainable business growth and professional development.</p>
                 
-                <div class="training-highlights">
+                <div class="training-highlights" id="trainingHighlights">
                     <div class="highlight-item">
                         <i class="fas fa-calendar-alt"></i>
                         <span>Structured Schedules</span>
@@ -1312,75 +1316,8 @@
                 <p class="lead">Each program is designed with specific objectives, durations, and measurable outcomes to ensure tangible results.</p>
             </div>
             
-            <div class="programs-grid">
-                <!-- Business Fundamentals -->
-                <div class="program-card animate-on-scroll">
-                    <div class="program-icon">
-                        <i class="fas fa-briefcase"></i>
-                    </div>
-                    <span class="program-duration">8 WEEKS</span>
-                    <h3>Business Fundamentals</h3>
-                    <p>Core business principles and practical skills for establishing and managing successful enterprises from the ground up.</p>
-                    
-                    <h4>Program Objectives</h4>
-                    <ul class="program-outcomes">
-                        <li><i class="fas fa-check"></i> Master business planning and strategy development</li>
-                        <li><i class="fas fa-check"></i> Understand financial management and budgeting</li>
-                        <li><i class="fas fa-check"></i> Learn market analysis and competitive positioning</li>
-                        <li><i class="fas fa-check"></i> Develop operational management skills</li>
-                    </ul>
-                    
-                    <div class="long-term-results">
-                        <h4>Long-term Results</h4>
-                        <p>Participants establish sustainable businesses with proper operational frameworks, financial controls, and growth strategies.</p>
-                    </div>
-                </div>
-                
-                <!-- Market Expansion -->
-                <div class="program-card animate-on-scroll">
-                    <div class="program-icon">
-                        <i class="fas fa-expand-arrows-alt"></i>
-                    </div>
-                    <span class="program-duration">6 WEEKS</span>
-                    <h3>Market Expansion Strategies</h3>
-                    <p>Advanced techniques for growing your business reach, scaling operations, and capturing new market opportunities.</p>
-                    
-                    <h4>Program Objectives</h4>
-                    <ul class="program-outcomes">
-                        <li><i class="fas fa-check"></i> Master market research methodologies</li>
-                        <li><i class="fas fa-check"></i> Develop effective expansion strategies</li>
-                        <li><i class="fas fa-check"></i> Learn customer acquisition techniques</li>
-                        <li><i class="fas fa-check"></i> Understand scaling challenges and solutions</li>
-                    </ul>
-                    
-                    <div class="long-term-results">
-                        <h4>Long-term Results</h4>
-                        <p>Businesses achieve sustainable growth, increased market share, and develop systematic expansion capabilities.</p>
-                    </div>
-                </div>
-                
-                <!-- Client Engagement -->
-                <div class="program-card animate-on-scroll">
-                    <div class="program-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <span class="program-duration">4 WEEKS</span>
-                    <h3>Client Engagement Excellence</h3>
-                    <p>Master the art of building strong client relationships, delivering exceptional service, and maximizing customer lifetime value.</p>
-                    
-                    <h4>Program Objectives</h4>
-                    <ul class="program-outcomes">
-                        <li><i class="fas fa-check"></i> Develop effective communication skills</li>
-                        <li><i class="fas fa-check"></i> Learn customer retention strategies</li>
-                        <li><i class="fas fa-check"></i> Master conflict resolution techniques</li>
-                        <li><i class="fas fa-check"></i> Understand customer psychology</li>
-                    </ul>
-                    
-                    <div class="long-term-results">
-                        <h4>Long-term Results</h4>
-                        <p>Improved customer loyalty, increased repeat business, and enhanced brand reputation through superior client relationships.</p>
-                    </div>
-                </div>
+            <div class="programs-grid" id="programsGrid">
+                <!-- Programs will be loaded dynamically -->
             </div>
         </div>
     </section>
@@ -1394,217 +1331,12 @@
                 <p class="lead">Choose from our structured training schedules designed for different learning preferences and availability.</p>
             </div>
             
-            <div class="schedule-tabs">
-                <button class="schedule-tab active" data-schedule="q1">
-                    <i class="fas fa-calendar"></i> Quarter 1 (Jan-Mar)
-                </button>
-                <button class="schedule-tab" data-schedule="q2">
-                    <i class="fas fa-calendar"></i> Quarter 2 (Apr-Jun)
-                </button>
-                <button class="schedule-tab" data-schedule="q3">
-                    <i class="fas fa-calendar"></i> Quarter 3 (Jul-Sep)
-                </button>
-                <button class="schedule-tab" data-schedule="q4">
-                    <i class="fas fa-calendar"></i> Quarter 4 (Oct-Dec)
-                </button>
-                <button class="schedule-tab" data-schedule="online">
-                    <i class="fas fa-laptop"></i> Online Programs
-                </button>
+            <div class="schedule-tabs" id="scheduleTabs">
+                <!-- Tabs will be loaded dynamically -->
             </div>
             
-            <!-- Quarter 1 Schedule -->
-            <div class="schedule-content active" id="schedule-q1">
-                <table class="schedule-table">
-                    <thead>
-                        <tr>
-                            <th>Program</th>
-                            <th>Start Date</th>
-                            <th>Duration</th>
-                            <th>Schedule</th>
-                            <th>Enrollment</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <strong>Business Fundamentals</strong>
-                                <div class="text-small">Comprehensive business management</div>
-                            </td>
-                            <td>January 15, 2024</td>
-                            <td>8 Weeks</td>
-                            <td>Mon & Wed, 6-8 PM</td>
-                            <td><a href="#register" class="btn btn-primary btn-small">Enroll Now</a></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <strong>Market Expansion</strong>
-                                <div class="text-small">Growth and scaling strategies</div>
-                            </td>
-                            <td>February 5, 2024</td>
-                            <td>6 Weeks</td>
-                            <td>Tue & Thu, 6-8 PM</td>
-                            <td><a href="#register" class="btn btn-primary btn-small">Enroll Now</a></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <strong>Client Engagement</strong>
-                                <div class="text-small">Customer relationship mastery</div>
-                            </td>
-                            <td>March 10, 2024</td>
-                            <td>4 Weeks</td>
-                            <td>Saturday, 9 AM-1 PM</td>
-                            <td><a href="#register" class="btn btn-primary btn-small">Enroll Now</a></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            
-            <!-- Quarter 2 Schedule -->
-            <div class="schedule-content" id="schedule-q2">
-                <table class="schedule-table">
-                    <thead>
-                        <tr>
-                            <th>Program</th>
-                            <th>Start Date</th>
-                            <th>Duration</th>
-                            <th>Schedule</th>
-                            <th>Enrollment</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <strong>Business Fundamentals</strong>
-                                <div class="text-small">Comprehensive business management</div>
-                            </td>
-                            <td>April 8, 2024</td>
-                            <td>8 Weeks</td>
-                            <td>Mon & Wed, 6-8 PM</td>
-                            <td><a href="#register" class="btn btn-primary btn-small">Enroll Now</a></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <strong>Market Expansion</strong>
-                                <div class="text-small">Growth and scaling strategies</div>
-                            </td>
-                            <td>May 6, 2024</td>
-                            <td>6 Weeks</td>
-                            <td>Tue & Thu, 6-8 PM</td>
-                            <td><a href="#register" class="btn btn-primary btn-small">Enroll Now</a></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            
-            <!-- Quarter 3 Schedule -->
-            <div class="schedule-content" id="schedule-q3">
-                <table class="schedule-table">
-                    <thead>
-                        <tr>
-                            <th>Program</th>
-                            <th>Start Date</th>
-                            <th>Duration</th>
-                            <th>Schedule</th>
-                            <th>Enrollment</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <strong>Business Fundamentals</strong>
-                                <div class="text-small">Comprehensive business management</div>
-                            </td>
-                            <td>July 10, 2024</td>
-                            <td>8 Weeks</td>
-                            <td>Mon & Wed, 6-8 PM</td>
-                            <td><a href="#register" class="btn btn-primary btn-small">Enroll Now</a></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <strong>Client Engagement</strong>
-                                <div class="text-small">Customer relationship mastery</div>
-                            </td>
-                            <td>August 5, 2024</td>
-                            <td>4 Weeks</td>
-                            <td>Saturday, 9 AM-1 PM</td>
-                            <td><a href="#register" class="btn btn-primary btn-small">Enroll Now</a></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            
-            <!-- Quarter 4 Schedule -->
-            <div class="schedule-content" id="schedule-q4">
-                <table class="schedule-table">
-                    <thead>
-                        <tr>
-                            <th>Program</th>
-                            <th>Start Date</th>
-                            <th>Duration</th>
-                            <th>Schedule</th>
-                            <th>Enrollment</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <strong>Business Fundamentals</strong>
-                                <div class="text-small">Comprehensive business management</div>
-                            </td>
-                            <td>October 7, 2024</td>
-                            <td>8 Weeks</td>
-                            <td>Mon & Wed, 6-8 PM</td>
-                            <td><a href="#register" class="btn btn-primary btn-small">Enroll Now</a></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <strong>Market Expansion</strong>
-                                <div class="text-small">Growth and scaling strategies</div>
-                            </td>
-                            <td>November 4, 2024</td>
-                            <td>6 Weeks</td>
-                            <td>Tue & Thu, 6-8 PM</td>
-                            <td><a href="#register" class="btn btn-primary btn-small">Enroll Now</a></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            
-            <!-- Online Programs -->
-            <div class="schedule-content" id="schedule-online">
-                <table class="schedule-table">
-                    <thead>
-                        <tr>
-                            <th>Program</th>
-                            <th>Start Date</th>
-                            <th>Duration</th>
-                            <th>Format</th>
-                            <th>Enrollment</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <strong>Business Fundamentals (Online)</strong>
-                                <div class="text-small">Self-paced comprehensive training</div>
-                            </td>
-                            <td>Rolling Admission</td>
-                            <td>8 Weeks</td>
-                            <td>Self-paced with weekly live sessions</td>
-                            <td><a href="#register" class="btn btn-primary btn-small">Enroll Now</a></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <strong>Market Expansion (Online)</strong>
-                                <div class="text-small">Virtual growth strategies</div>
-                            </td>
-                            <td>Rolling Admission</td>
-                            <td>6 Weeks</td>
-                            <td>Self-paced with mentor support</td>
-                            <td><a href="#register" class="btn btn-primary btn-small">Enroll Now</a></td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="schedule-content" id="scheduleContent">
+                <!-- Schedule content will be loaded dynamically -->
             </div>
         </div>
     </section>
@@ -1618,30 +1350,8 @@
                 <p class="lead">Our training programs deliver tangible results with clear metrics for success and long-term impact.</p>
             </div>
             
-            <div class="outcomes-grid">
-                <div class="outcome-card animate-on-scroll">
-                    <div class="outcome-number">95%</div>
-                    <h3>Completion Rate</h3>
-                    <p>High program completion rates indicating engaging, valuable, and well-structured content.</p>
-                </div>
-                
-                <div class="outcome-card animate-on-scroll">
-                    <div class="outcome-number">85%</div>
-                    <h3>Business Growth</h3>
-                    <p>Participants report measurable business growth and improvement within 6 months of program completion.</p>
-                </div>
-                
-                <div class="outcome-card animate-on-scroll">
-                    <div class="outcome-number">90%</div>
-                    <h3>Satisfaction Rate</h3>
-                    <p>Consistently high satisfaction scores from program participants across all training modules.</p>
-                </div>
-                
-                <div class="outcome-card animate-on-scroll">
-                    <div class="outcome-number">70%</div>
-                    <h3>Career Advancement</h3>
-                    <p>Participants experience career advancement or business expansion within one year of training.</p>
-                </div>
+            <div class="outcomes-grid" id="outcomesGrid">
+                <!-- Outcomes will be loaded dynamically -->
             </div>
         </div>
     </section>
@@ -1651,8 +1361,8 @@
         <div class="container">
             <div class="section-header">
                 <span class="section-subtitle">Start Your Journey</span>
-                <h2>Enroll in <span class="text-gradient">DSOG Training</span></h2>
-                <p class="lead">Take the next step in your professional development with our structured, results-driven training programs.</p>
+                <h2 id="registrationTitle">Enroll in <span class="text-gradient">DSOG Training</span></h2>
+                <p class="lead" id="registrationSubtitle">Take the next step in your professional development with our structured, results-driven training programs.</p>
             </div>
             
             <div class="benefits-details">
@@ -1758,40 +1468,578 @@
 
     <!-- JavaScript -->
     <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDb5ZFHbo7lGM8ph0oBxFVTHRF5C5C_DWU",
+            authDomain: "dsog-events.firebaseapp.com",
+            databaseURL: "https://dsog-events-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "dsog-events",
+            storageBucket: "dsog-events.firebasestorage.app",
+            messagingSenderId: "1075977932287",
+            appId: "1:1075977932287:web:b2bf4d1c0083d2dac8ebca"
+        };
+
+        // Initialize Firebase
+        let db;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.database();
+            console.log('Firebase initialized successfully');
+        } catch (error) {
+            console.error('Firebase initialization error:', error);
+            db = null;
+        }
+
+        // Cache management
+        const CACHE_KEY = 'dsog_training_cache';
+        const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes
+
+        // Initialize the website
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 DSOG Training Page Loaded');
             
-            // Theme Toggle
+            // Initialize all components
+            initializeTheme();
+            initializeNavigation();
+            initializeScheduleTabs();
+            initializeAnimations();
+            
+            // Set current year
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            // Load static content first
+            loadStaticContent();
+            
+            // Then load from cache for faster display
+            setTimeout(() => {
+                loadFromCache();
+            }, 100);
+            
+            // Then fetch from Firebase in the background (delayed)
+            setTimeout(() => {
+                fetchFromFirebase();
+            }, 2000); // 2 second delay to let user start browsing
+            
+            console.log('Training page initialized');
+        });
+
+        // ==================== STATIC CONTENT ====================
+        function loadStaticContent() {
+            // Static content as fallback
+            const staticContent = {
+                hero: {
+                    badge: "STRUCTURED BUSINESS EDUCATION",
+                    title: "Master Your Business Skills with DSOG Training",
+                    subtitle: "Comprehensive training programs with clear objectives, structured schedules, and measurable outcomes designed for sustainable business growth and professional development.",
+                    highlights: ["Structured Schedules", "Clear Objectives", "Measurable Outcomes", "Certification"]
+                },
+                programs: [
+                    {
+                        id: "program_001",
+                        name: "Business Fundamentals",
+                        description: "Core business principles and practical skills for establishing and managing successful enterprises from the ground up.",
+                        duration: "8 WEEKS",
+                        objectives: [
+                            "Master business planning and strategy development",
+                            "Understand financial management and budgeting",
+                            "Learn market analysis and competitive positioning",
+                            "Develop operational management skills"
+                        ],
+                        longTermResults: "Participants establish sustainable businesses with proper operational frameworks, financial controls, and growth strategies.",
+                        icon: "fas fa-briefcase"
+                    },
+                    {
+                        id: "program_002",
+                        name: "Market Expansion Strategies",
+                        description: "Advanced techniques for growing your business reach, scaling operations, and capturing new market opportunities.",
+                        duration: "6 WEEKS",
+                        objectives: [
+                            "Master market research methodologies",
+                            "Develop effective expansion strategies",
+                            "Learn customer acquisition techniques",
+                            "Understand scaling challenges and solutions"
+                        ],
+                        longTermResults: "Businesses achieve sustainable growth, increased market share, and develop systematic expansion capabilities.",
+                        icon: "fas fa-expand-arrows-alt"
+                    },
+                    {
+                        id: "program_003",
+                        name: "Client Engagement Excellence",
+                        description: "Master the art of building strong client relationships, delivering exceptional service, and maximizing customer lifetime value.",
+                        duration: "4 WEEKS",
+                        objectives: [
+                            "Develop effective communication skills",
+                            "Learn customer retention strategies",
+                            "Master conflict resolution techniques",
+                            "Understand customer psychology"
+                        ],
+                        longTermResults: "Improved customer loyalty, increased repeat business, and enhanced brand reputation through superior client relationships.",
+                        icon: "fas fa-users"
+                    }
+                ],
+                schedules: {
+                    q1: {
+                        quarter: "q1",
+                        name: "Quarter 1 (Jan-Mar)",
+                        programs: [
+                            {
+                                programName: "Business Fundamentals",
+                                startDate: "2024-01-15",
+                                duration: "8 Weeks",
+                                schedule: "Mon & Wed, 6-8 PM"
+                            },
+                            {
+                                programName: "Market Expansion",
+                                startDate: "2024-02-05",
+                                duration: "6 Weeks",
+                                schedule: "Tue & Thu, 6-8 PM"
+                            },
+                            {
+                                programName: "Client Engagement",
+                                startDate: "2024-03-10",
+                                duration: "4 Weeks",
+                                schedule: "Saturday, 9 AM-1 PM"
+                            }
+                        ]
+                    },
+                    q2: {
+                        quarter: "q2",
+                        name: "Quarter 2 (Apr-Jun)",
+                        programs: [
+                            {
+                                programName: "Business Fundamentals",
+                                startDate: "2024-04-08",
+                                duration: "8 Weeks",
+                                schedule: "Mon & Wed, 6-8 PM"
+                            },
+                            {
+                                programName: "Market Expansion",
+                                startDate: "2024-05-06",
+                                duration: "6 Weeks",
+                                schedule: "Tue & Thu, 6-8 PM"
+                            }
+                        ]
+                    }
+                },
+                outcomes: [
+                    { percentage: 95, title: "Completion Rate", description: "High program completion rates indicating engaging, valuable, and well-structured content." },
+                    { percentage: 85, title: "Business Growth", description: "Participants report measurable business growth and improvement within 6 months of program completion." },
+                    { percentage: 90, title: "Satisfaction Rate", description: "Consistently high satisfaction scores from program participants across all training modules." },
+                    { percentage: 70, title: "Career Advancement", description: "Participants experience career advancement or business expansion within one year of training." }
+                ]
+            };
+
+            // Display static content
+            displayHeroContent(staticContent.hero);
+            displayPrograms(staticContent.programs);
+            displaySchedules(staticContent.schedules);
+            displayOutcomes(staticContent.outcomes);
+        }
+
+        // ==================== CACHE MANAGEMENT ====================
+        function getCachedData() {
+            try {
+                const cached = localStorage.getItem(CACHE_KEY);
+                return cached ? JSON.parse(cached) : null;
+            } catch (error) {
+                console.error('Error reading cache:', error);
+                return null;
+            }
+        }
+
+        function saveToCache(data) {
+            try {
+                const cacheData = {
+                    data: data,
+                    timestamp: Date.now()
+                };
+                localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
+                console.log('Data saved to cache');
+            } catch (error) {
+                console.error('Error saving to cache:', error);
+            }
+        }
+
+        function isCacheExpired(timestamp) {
+            return Date.now() - timestamp > CACHE_DURATION;
+        }
+
+        function loadFromCache() {
+            const cached = getCachedData();
+            if (cached && !isCacheExpired(cached.timestamp)) {
+                console.log('Loading training data from cache');
+                updateContentFromCache(cached.data);
+            }
+        }
+
+        function updateContentFromCache(data) {
+            // Update training page content from cache
+            if (data.trainingPageContent) {
+                displayHeroContent(data.trainingPageContent.hero);
+                displayOutcomes(data.trainingPageContent.outcomes);
+            }
+            
+            if (data.trainingPrograms) {
+                displayPrograms(Object.values(data.trainingPrograms));
+            }
+            
+            if (data.trainingSchedules) {
+                displaySchedules(data.trainingSchedules);
+            }
+            
+            if (data.stats) {
+                displayStatsInFooter(data.stats);
+            }
+        }
+
+        // ==================== FIREBASE DATA FETCHING ====================
+        function fetchFromFirebase() {
+            if (!db) {
+                console.log('Firebase not available, using cached data only');
+                return;
+            }
+
+            console.log('Fetching training data from Firebase in background...');
+            
+            // Fetch training page content
+            db.ref('trainingPageContent').once('value').then(snapshot => {
+                const data = snapshot.val();
+                if (data) {
+                    console.log('Training page content loaded from Firebase');
+                    displayHeroContent(data.hero);
+                    displayOutcomes(data.outcomes);
+                    savePartialToCache('trainingPageContent', data);
+                }
+            }).catch(error => {
+                console.error('Error loading training page content:', error);
+            });
+            
+            // Fetch training programs
+            db.ref('trainingPrograms').once('value').then(snapshot => {
+                const data = snapshot.val();
+                if (data) {
+                    console.log('Training programs loaded from Firebase');
+                    displayPrograms(Object.values(data).filter(p => p.active !== false));
+                    savePartialToCache('trainingPrograms', data);
+                }
+            }).catch(error => {
+                console.error('Error loading training programs:', error);
+            });
+            
+            // Fetch training schedules
+            db.ref('trainingSchedules').once('value').then(snapshot => {
+                const data = snapshot.val();
+                if (data) {
+                    console.log('Training schedules loaded from Firebase');
+                    displaySchedules(data);
+                    savePartialToCache('trainingSchedules', data);
+                }
+            }).catch(error => {
+                console.error('Error loading training schedules:', error);
+            });
+            
+            // Fetch stats for footer
+            db.ref('stats').once('value').then(snapshot => {
+                const data = snapshot.val();
+                if (data) {
+                    console.log('Stats loaded from Firebase');
+                    displayStatsInFooter(data);
+                    savePartialToCache('stats', data);
+                }
+            }).catch(error => {
+                console.error('Error loading stats:', error);
+            });
+            
+            // Fetch app settings for contact info
+            db.ref('appSettings').once('value').then(snapshot => {
+                const data = snapshot.val();
+                if (data) {
+                    console.log('App settings loaded from Firebase');
+                    updateContactInfo(data);
+                    savePartialToCache('appSettings', data);
+                }
+            }).catch(error => {
+                console.error('Error loading app settings:', error);
+            });
+        }
+
+        function savePartialToCache(key, data) {
+            try {
+                const cached = getCachedData() || { timestamp: Date.now(), data: {} };
+                cached.data[key] = data;
+                cached.timestamp = Date.now();
+                localStorage.setItem(CACHE_KEY, JSON.stringify(cached));
+            } catch (error) {
+                console.error('Error saving partial cache:', error);
+            }
+        }
+
+        // ==================== CONTENT DISPLAY FUNCTIONS ====================
+        function displayHeroContent(content) {
+            if (content.badge) {
+                document.getElementById('heroBadge').innerHTML = `
+                    <i class="fas fa-graduation-cap"></i> ${content.badge}
+                `;
+            }
+            
+            if (content.title) {
+                document.getElementById('heroTitle').innerHTML = content.title;
+            }
+            
+            if (content.subtitle) {
+                document.getElementById('heroSubtitle').textContent = content.subtitle;
+            }
+            
+            if (content.highlights && Array.isArray(content.highlights)) {
+                const highlightsContainer = document.getElementById('trainingHighlights');
+                if (highlightsContainer) {
+                    highlightsContainer.innerHTML = '';
+                    content.highlights.forEach(highlight => {
+                        const iconMap = {
+                            'Structured Schedules': 'fa-calendar-alt',
+                            'Clear Objectives': 'fa-bullseye',
+                            'Measurable Outcomes': 'fa-chart-line',
+                            'Certification': 'fa-certificate'
+                        };
+                        
+                        const iconClass = iconMap[highlight] || 'fa-check-circle';
+                        
+                        const highlightItem = document.createElement('div');
+                        highlightItem.className = 'highlight-item';
+                        highlightItem.innerHTML = `
+                            <i class="fas ${iconClass}"></i>
+                            <span>${highlight}</span>
+                        `;
+                        highlightsContainer.appendChild(highlightItem);
+                    });
+                }
+            }
+        }
+
+        function displayPrograms(programs) {
+            const programsGrid = document.getElementById('programsGrid');
+            if (!programsGrid) return;
+            
+            programsGrid.innerHTML = '';
+            
+            programs.forEach((program, index) => {
+                const programCard = document.createElement('div');
+                programCard.className = 'program-card animate-on-scroll';
+                programCard.dataset.delay = index * 100;
+                
+                programCard.innerHTML = `
+                    <div class="program-icon">
+                        <i class="${program.icon || 'fas fa-briefcase'}"></i>
+                    </div>
+                    <span class="program-duration">${program.duration || 'DURATION TBD'}</span>
+                    <h3>${program.name || 'Training Program'}</h3>
+                    <p>${program.description || 'Comprehensive training program designed for professional development.'}</p>
+                    
+                    <h4>Program Objectives</h4>
+                    <ul class="program-outcomes">
+                        ${(program.objectives || []).map(obj => `
+                            <li><i class="fas fa-check"></i> ${obj}</li>
+                        `).join('')}
+                    </ul>
+                    
+                    <div class="long-term-results">
+                        <h4>Long-term Results</h4>
+                        <p>${program.longTermResults || 'Participants achieve measurable results and sustainable growth.'}</p>
+                    </div>
+                `;
+                
+                programsGrid.appendChild(programCard);
+            });
+            
+            // Re-initialize animations
+            setTimeout(() => {
+                initializeAnimations();
+            }, 100);
+        }
+
+        function displaySchedules(schedules) {
+            const tabsContainer = document.getElementById('scheduleTabs');
+            const contentContainer = document.getElementById('scheduleContent');
+            
+            if (!tabsContainer || !contentContainer) return;
+            
+            // Clear existing content
+            tabsContainer.innerHTML = '';
+            contentContainer.innerHTML = '';
+            
+            // Convert schedules object to array and filter active ones
+            const scheduleArray = Object.values(schedules).filter(schedule => schedule.active !== false);
+            
+            if (scheduleArray.length === 0) {
+                contentContainer.innerHTML = `
+                    <div class="schedule-content active">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th>Program</th>
+                                    <th>Start Date</th>
+                                    <th>Duration</th>
+                                    <th>Schedule</th>
+                                    <th>Enrollment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="5" style="text-align: center; padding: var(--space-2xl); color: var(--text-tertiary);">
+                                        No training schedules available at the moment. Please check back soon!
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Create tabs and content
+            scheduleArray.forEach((schedule, index) => {
+                // Create tab
+                const tab = document.createElement('button');
+                tab.className = `schedule-tab ${index === 0 ? 'active' : ''}`;
+                tab.dataset.schedule = schedule.quarter || schedule.name.toLowerCase().replace(/[^a-z0-9]/g, '_');
+                tab.innerHTML = `
+                    <i class="fas ${schedule.quarter === 'online' ? 'fa-laptop' : 'fa-calendar'}"></i> ${schedule.name}
+                `;
+                tabsContainer.appendChild(tab);
+                
+                // Create content
+                const content = document.createElement('div');
+                content.className = `schedule-content ${index === 0 ? 'active' : ''}`;
+                content.id = `schedule-${schedule.quarter || schedule.name.toLowerCase().replace(/[^a-z0-9]/g, '_')}`;
+                
+                // Build table rows for programs
+                const programRows = Object.values(schedule.programs || {})
+                    .filter(program => program.active !== false)
+                    .map(program => {
+                        const enrollmentUrl = program.enrollmentUrl || `https://wa.me/254733737983?text=I'm%20interested%20in%20${encodeURIComponent(program.programName || 'Training')}`;
+                        
+                        return `
+                            <tr>
+                                <td>
+                                    <strong>${program.programName || 'Training Program'}</strong>
+                                    <div class="text-small">${program.description || 'Professional development training'}</div>
+                                </td>
+                                <td>${program.startDate || 'Start Date TBD'}</td>
+                                <td>${program.duration || 'Duration TBD'}</td>
+                                <td>${program.schedule || 'Schedule TBD'}</td>
+                                <td><a href="${enrollmentUrl}" target="_blank" class="btn btn-primary btn-small">Enroll Now</a></td>
+                            </tr>
+                        `;
+                    }).join('');
+                
+                content.innerHTML = `
+                    <table class="schedule-table">
+                        <thead>
+                            <tr>
+                                <th>Program</th>
+                                <th>Start Date</th>
+                                <th>Duration</th>
+                                <th>${schedule.quarter === 'online' ? 'Format' : 'Schedule'}</th>
+                                <th>Enrollment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${programRows || '<tr><td colspan="5" style="text-align: center; padding: var(--space-xl); color: var(--text-tertiary);">No programs scheduled for this period.</td></tr>'}
+                        </tbody>
+                    </table>
+                `;
+                
+                contentContainer.appendChild(content);
+            });
+            
+            // Add tab click handlers
+            document.querySelectorAll('.schedule-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const scheduleId = tab.getAttribute('data-schedule');
+                    
+                    // Update active tab
+                    document.querySelectorAll('.schedule-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    // Show corresponding content
+                    document.querySelectorAll('.schedule-content').forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === `schedule-${scheduleId}`) {
+                            content.classList.add('active');
+                        }
+                    });
+                });
+            });
+        }
+
+        function displayOutcomes(outcomes) {
+            const outcomesGrid = document.getElementById('outcomesGrid');
+            if (!outcomesGrid) return;
+            
+            outcomesGrid.innerHTML = '';
+            
+            outcomes.forEach((outcome, index) => {
+                const outcomeCard = document.createElement('div');
+                outcomeCard.className = 'outcome-card animate-on-scroll';
+                outcomeCard.dataset.delay = index * 100;
+                
+                outcomeCard.innerHTML = `
+                    <div class="outcome-number">${outcome.percentage || 0}%</div>
+                    <h3>${outcome.title || 'Outcome'}</h3>
+                    <p>${outcome.description || 'Measurable training outcome.'}</p>
+                `;
+                
+                outcomesGrid.appendChild(outcomeCard);
+            });
+            
+            // Re-initialize animations
+            setTimeout(() => {
+                initializeAnimations();
+            }, 100);
+        }
+
+        function displayStatsInFooter(stats) {
+            // Update any stats in the footer if needed
+            if (stats.entrepreneursTrained) {
+                // You could add stats to footer if desired
+            }
+        }
+
+        function updateContactInfo(settings) {
+            // Update WhatsApp link with phone number from settings
+            const whatsappLink = document.querySelector('a[href*="wa.me"]');
+            if (whatsappLink && settings.whatsappNumber) {
+                const phoneNumber = settings.whatsappNumber.replace(/\D/g, '');
+                whatsappLink.href = `https://wa.me/${phoneNumber}?text=I'm%20interested%20in%20DSOG%20training%20programs`;
+            }
+        }
+
+        // ==================== CORE FUNCTIONS ====================
+        function initializeTheme() {
             const themeToggle = document.getElementById('themeToggle');
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
             
-            // Get saved theme or system preference
             const savedTheme = localStorage.getItem('theme');
             const systemTheme = prefersDark.matches ? 'dark' : 'light';
             const initialTheme = savedTheme || systemTheme;
             
-            // Set initial theme
             document.documentElement.setAttribute('data-theme', initialTheme);
             updateThemeIcon(initialTheme);
             
-            // Toggle theme on button click
             themeToggle.addEventListener('click', () => {
                 const currentTheme = document.documentElement.getAttribute('data-theme');
                 const newTheme = currentTheme === 'light' ? 'dark' : 'light';
                 
-                // Apply theme transition
                 document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
                 document.documentElement.setAttribute('data-theme', newTheme);
                 localStorage.setItem('theme', newTheme);
                 updateThemeIcon(newTheme);
                 
-                // Remove transition after animation
                 setTimeout(() => {
                     document.body.style.transition = '';
                 }, 300);
             });
             
-            // Listen for system theme changes
             prefersDark.addEventListener('change', (e) => {
                 if (!localStorage.getItem('theme')) {
                     const newTheme = e.matches ? 'dark' : 'light';
@@ -1800,7 +2048,6 @@
                 }
             });
             
-            // Update theme icon
             function updateThemeIcon(theme) {
                 const icon = themeToggle.querySelector('i');
                 if (theme === 'dark') {
@@ -1811,8 +2058,9 @@
                     themeToggle.setAttribute('aria-label', 'Switch to dark theme');
                 }
             }
+        }
 
-            // Mobile Menu Toggle
+        function initializeNavigation() {
             const mobileMenuBtn = document.getElementById('mobileMenuBtn');
             const navLinks = document.getElementById('navLinks');
             
@@ -1824,7 +2072,6 @@
                     icon.className = navLinks.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
                     this.setAttribute('aria-expanded', navLinks.classList.contains('active'));
                     
-                    // Prevent body scroll when menu is open
                     if (navLinks.classList.contains('active')) {
                         document.body.style.overflow = 'hidden';
                     } else {
@@ -1832,7 +2079,6 @@
                     }
                 });
 
-                // Close menu when clicking outside
                 document.addEventListener('click', function(event) {
                     if (!navLinks.contains(event.target) && !mobileMenuBtn.contains(event.target) && navLinks.classList.contains('active')) {
                         navLinks.classList.remove('active');
@@ -1842,7 +2088,6 @@
                     }
                 });
 
-                // Close menu when clicking a link
                 navLinks.querySelectorAll('a').forEach(link => {
                     link.addEventListener('click', () => {
                         if (window.innerWidth <= 1024) {
@@ -1854,7 +2099,6 @@
                     });
                 });
                 
-                // Handle window resize
                 window.addEventListener('resize', () => {
                     if (window.innerWidth > 1024) {
                         navLinks.classList.remove('active');
@@ -1875,29 +2119,38 @@
                 }
             });
 
-            // Schedule Tabs
-            const scheduleTabs = document.querySelectorAll('.schedule-tab');
-            const scheduleContents = document.querySelectorAll('.schedule-content');
-            
-            scheduleTabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const scheduleId = tab.getAttribute('data-schedule');
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
                     
-                    // Update active tab
-                    scheduleTabs.forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    
-                    // Show corresponding content
-                    scheduleContents.forEach(content => {
-                        content.classList.remove('active');
-                        if (content.id === `schedule-${scheduleId}`) {
-                            content.classList.add('active');
+                    if (href.startsWith('#') && href !== '#') {
+                        e.preventDefault();
+                        
+                        const targetId = href.substring(1);
+                        const targetElement = document.getElementById(targetId);
+                        
+                        if (targetElement) {
+                            const headerHeight = document.getElementById('header').offsetHeight;
+                            const targetPosition = targetElement.offsetTop - headerHeight - 20;
+                            
+                            window.scrollTo({
+                                top: targetPosition,
+                                behavior: 'smooth'
+                            });
+                            
+                            history.pushState(null, '', href);
                         }
-                    });
+                    }
                 });
             });
+        }
 
-            // Scroll animations
+        function initializeScheduleTabs() {
+            // Already handled in displaySchedules function
+        }
+
+        function initializeAnimations() {
             const animatedElements = document.querySelectorAll('.animate-on-scroll');
             
             const observer = new IntersectionObserver((entries) => {
@@ -1916,51 +2169,22 @@
             });
             
             animatedElements.forEach((element, index) => {
-                element.dataset.delay = index * 100;
+                if (!element.dataset.delay) {
+                    element.dataset.delay = index * 100;
+                }
                 observer.observe(element);
             });
+        }
 
-            // Smooth scroll for same-page anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    const href = this.getAttribute('href');
-                    
-                    // Only handle same-page anchors
-                    if (href.startsWith('#') && href !== '#') {
-                        e.preventDefault();
-                        
-                        const targetId = href.substring(1);
-                        const targetElement = document.getElementById(targetId);
-                        
-                        if (targetElement) {
-                            const headerHeight = document.getElementById('header').offsetHeight;
-                            const targetPosition = targetElement.offsetTop - headerHeight - 20;
-                            
-                            window.scrollTo({
-                                top: targetPosition,
-                                behavior: 'smooth'
-                            });
-                            
-                            // Update URL without page reload
-                            history.pushState(null, '', href);
-                        }
-                    }
-                });
-            });
-
-            // Set current year in footer
-            document.getElementById('currentYear').textContent = new Date().getFullYear();
-
-            // Touch optimizations
-            let lastTouchEnd = 0;
-            document.addEventListener('touchend', (event) => {
-                const now = Date.now();
-                if (now - lastTouchEnd <= 300) {
-                    event.preventDefault();
-                }
-                lastTouchEnd = now;
-            }, false);
-        });
+        // Touch optimizations
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', (event) => {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
     </script>
 </body>
 </html>
