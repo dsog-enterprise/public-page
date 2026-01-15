@@ -75,12 +75,177 @@
             background: var(--bg-secondary);
             color: var(--text-primary);
             min-height: 100vh;
-            transition: background-color 0.3s ease;
         }
 
-        /* Admin Layout */
-        .admin-container {
+        /* Login Container */
+        .login-container {
+            min-height: 100vh;
             display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-secondary);
+            padding: var(--space-xl);
+        }
+
+        .login-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: var(--space-2xl);
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .login-header img {
+            height: 60px;
+            margin-bottom: var(--space-lg);
+        }
+
+        .login-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .login-header p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .form-group {
+            margin-bottom: var(--space-lg);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: var(--space-sm);
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: var(--space-md);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-family: var(--font-primary);
+            font-size: 0.9rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-red);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) var(--space-xl);
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: var(--font-primary);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #C21807, #E53935);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(194, 24, 7, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-small {
+            padding: var(--space-sm) var(--space-lg);
+            font-size: 0.85rem;
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: var(--space-xl);
+            padding-top: var(--space-xl);
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .error-message {
+            background: rgba(220, 53, 69, 0.1);
+            border: 1px solid rgba(220, 53, 69, 0.3);
+            color: var(--danger);
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-lg);
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .success-message {
+            background: rgba(40, 167, 69, 0.1);
+            border: 1px solid rgba(40, 167, 69, 0.3);
+            color: var(--success);
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-lg);
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        /* Admin Panel */
+        .admin-container {
+            display: none;
             min-height: 100vh;
         }
 
@@ -92,7 +257,6 @@
             position: fixed;
             height: 100vh;
             overflow-y: auto;
-            transition: transform 0.3s ease;
             z-index: 1000;
         }
 
@@ -141,6 +305,7 @@
             text-decoration: none;
             transition: all 0.2s ease;
             border-left: 3px solid transparent;
+            cursor: pointer;
         }
 
         .nav-link:hover {
@@ -157,18 +322,6 @@
         .nav-link i {
             width: 20px;
             text-align: center;
-        }
-
-        .version-badge {
-            position: absolute;
-            bottom: var(--space-xl);
-            left: 0;
-            right: 0;
-            text-align: center;
-            padding: var(--space-md);
-            color: var(--text-secondary);
-            font-size: 0.8rem;
-            border-top: 1px solid var(--border-color);
         }
 
         /* Main Content */
@@ -244,7 +397,7 @@
         .user-avatar {
             width: 40px;
             height: 40px;
-            background: var(--gradient-primary);
+            background: linear-gradient(135deg, #C21807, #E53935);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -275,12 +428,6 @@
 
         .content-section.active {
             display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Dashboard */
@@ -316,8 +463,8 @@
             color: white;
         }
 
-        .stat-icon.blue { background: linear-gradient(135deg, #2C5282, #4299E1); }
         .stat-icon.red { background: linear-gradient(135deg, #C21807, #E53935); }
+        .stat-icon.blue { background: linear-gradient(135deg, #2C5282, #4299E1); }
         .stat-icon.green { background: linear-gradient(135deg, #2D7D46, #48BB78); }
         .stat-icon.purple { background: linear-gradient(135deg, #6B46C1, #9F7AEA); }
 
@@ -333,7 +480,7 @@
             font-size: 0.9rem;
         }
 
-        /* Form Styles */
+        /* Form Sections */
         .form-section {
             background: var(--card-bg);
             border-radius: var(--radius-lg);
@@ -358,104 +505,9 @@
 
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: var(--space-lg);
-            margin-bottom: var(--space-xl);
-        }
-
-        .form-group {
             margin-bottom: var(--space-lg);
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: var(--space-sm);
-            font-weight: 500;
-            color: var(--text-primary);
-            font-size: 0.9rem;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: var(--space-md);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            font-family: var(--font-primary);
-            font-size: 0.9rem;
-            transition: border-color 0.2s ease;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--primary-red);
-        }
-
-        .form-group textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-        }
-
-        .checkbox-group input[type="checkbox"] {
-            width: auto;
-        }
-
-        /* Button Styles */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--space-sm);
-            padding: var(--space-md) var(--space-xl);
-            border-radius: var(--radius-md);
-            font-weight: 600;
-            font-size: 0.9rem;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: var(--font-primary);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #C21807, #E53935);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(194, 24, 7, 0.3);
-        }
-
-        .btn-secondary {
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-        }
-
-        .btn-secondary:hover {
-            background: var(--bg-tertiary);
-        }
-
-        .btn-small {
-            padding: var(--space-sm) var(--space-lg);
-            font-size: 0.85rem;
-        }
-
-        .btn-block {
-            width: 100%;
-            display: flex;
         }
 
         .form-actions {
@@ -466,14 +518,23 @@
             border-top: 1px solid var(--border-color);
         }
 
-        /* Table Styles */
-        .data-table {
-            width: 100%;
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            margin-top: var(--space-md);
+        }
+
+        .checkbox-group input {
+            width: auto;
+        }
+
+        /* Data Tables */
+        .data-table-container {
             background: var(--card-bg);
             border-radius: var(--radius-lg);
-            overflow: hidden;
             border: 1px solid var(--border-color);
-            margin-bottom: var(--space-xl);
+            overflow: hidden;
         }
 
         .data-table-header {
@@ -575,63 +636,17 @@
             color: white;
         }
 
-        /* Login Form */
-        .login-container {
-            min-height: 100vh;
+        /* Quick Actions */
+        .quick-actions {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--bg-secondary);
-            padding: var(--space-xl);
+            gap: var(--space-md);
+            flex-wrap: wrap;
+            margin: var(--space-xl) 0;
         }
 
-        .login-card {
-            background: var(--card-bg);
-            border-radius: var(--radius-lg);
-            padding: var(--space-2xl);
-            width: 100%;
-            max-width: 400px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-        }
-
-        .login-header {
-            text-align: center;
-            margin-bottom: var(--space-2xl);
-        }
-
-        .login-header img {
-            height: 60px;
-            margin-bottom: var(--space-lg);
-        }
-
-        .login-header h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: var(--space-xs);
-        }
-
-        .login-header p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .login-footer {
-            text-align: center;
-            margin-top: var(--space-xl);
-            padding-top: var(--space-xl);
-            border-top: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-        }
-
-        /* Loading State */
+        /* Loading */
         .loading {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            text-align: center;
             padding: var(--space-2xl);
             color: var(--text-secondary);
         }
@@ -643,50 +658,62 @@
             border-top-color: var(--primary-red);
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin-bottom: var(--space-md);
+            margin: 0 auto var(--space-md);
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
 
-        /* Error Messages */
-        .error-message {
-            background: rgba(220, 53, 69, 0.1);
-            border: 1px solid rgba(220, 53, 69, 0.3);
-            color: var(--danger);
-            padding: var(--space-md);
+        /* Message */
+        .message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: var(--space-md) var(--space-lg);
             border-radius: var(--radius-md);
-            margin-bottom: var(--space-lg);
-            font-size: 0.9rem;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            animation: slideIn 0.3s ease;
         }
 
-        .success-message {
-            background: rgba(40, 167, 69, 0.1);
-            border: 1px solid rgba(40, 167, 69, 0.3);
-            color: var(--success);
-            padding: var(--space-md);
-            border-radius: var(--radius-md);
-            margin-bottom: var(--space-lg);
-            font-size: 0.9rem;
+        .message.success {
+            background: var(--success);
+            color: white;
         }
 
-        /* Responsive Design */
+        .message.error {
+            background: var(--danger);
+            color: white;
+        }
+
+        .message.info {
+            background: var(--info);
+            color: white;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
         @media (max-width: 1024px) {
             .admin-sidebar {
-                transform: translateX(-100%);
-            }
-            
-            .admin-sidebar.active {
-                transform: translateX(0);
+                display: none;
             }
             
             .admin-main {
                 margin-left: 0;
-            }
-            
-            .mobile-menu-btn {
-                display: flex;
             }
         }
 
@@ -695,15 +722,19 @@
                 padding: var(--space-md);
             }
             
-            .topbar-left h2 {
-                font-size: 1.25rem;
-            }
-            
-            .stats-grid {
+            .form-grid {
                 grid-template-columns: 1fr;
             }
             
-            .form-grid {
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .quick-actions {
+                flex-direction: column;
+            }
+            
+            .stats-grid {
                 grid-template-columns: 1fr;
             }
             
@@ -712,40 +743,19 @@
                 overflow-x: auto;
             }
         }
-
-        /* Mobile Menu Button */
-        .mobile-menu-btn {
-            display: none;
-            align-items: center;
-            justify-content: center;
-            width: 44px;
-            height: 44px;
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            cursor: pointer;
-            font-size: 1.2rem;
-        }
-
-        @media (max-width: 1024px) {
-            .mobile-menu-btn {
-                display: flex;
-            }
-        }
     </style>
 </head>
 <body>
-    <!-- Login Screen (Initial State) -->
+    <!-- Login Screen -->
     <div id="loginScreen" class="login-container">
         <div class="login-card">
             <div class="login-header">
                 <img src="https://i.postimg.cc/kMZ1jTww/Untitled-design-4-removebg-preview.png" alt="DSOG Admin">
                 <h2>DSOG Admin Panel</h2>
-                <p>Sign in to manage your website content</p>
+                <p>Sign in to manage your website</p>
             </div>
             
-            <div id="loginError" class="error-message" style="display: none;"></div>
+            <div id="loginError" class="error-message"></div>
             
             <div class="form-group">
                 <label for="adminEmail">Email Address</label>
@@ -768,9 +778,9 @@
     </div>
 
     <!-- Admin Panel (Hidden until login) -->
-    <div id="adminPanel" class="admin-container" style="display: none;">
+    <div id="adminPanel" class="admin-container">
         <!-- Sidebar -->
-        <div class="admin-sidebar" id="sidebar">
+        <div class="admin-sidebar">
             <div class="sidebar-header">
                 <img src="https://i.postimg.cc/kMZ1jTww/Untitled-design-4-removebg-preview.png" alt="DSOG">
                 <h1>DSOG Admin</h1>
@@ -779,64 +789,44 @@
             <nav class="sidebar-nav">
                 <div class="nav-section">
                     <h3>Dashboard</h3>
-                    <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                    <div class="nav-link active" data-section="dashboard">
                         <i class="fas fa-tachometer-alt"></i>
                         <span>Overview</span>
-                    </a>
+                    </div>
                 </div>
                 
                 <div class="nav-section">
                     <h3>Content Management</h3>
-                    <a href="#events" class="nav-link" data-section="events">
+                    <div class="nav-link" data-section="events">
                         <i class="fas fa-calendar-alt"></i>
                         <span>Events</span>
-                    </a>
-                    <a href="#training" class="nav-link" data-section="training">
+                    </div>
+                    <div class="nav-link" data-section="training">
                         <i class="fas fa-graduation-cap"></i>
                         <span>Training Programs</span>
-                    </a>
-                    <a href="#team" class="nav-link" data-section="team">
+                    </div>
+                    <div class="nav-link" data-section="team">
                         <i class="fas fa-users"></i>
                         <span>Team Members</span>
-                    </a>
-                    <a href="#testimonials" class="nav-link" data-section="testimonials">
+                    </div>
+                    <div class="nav-link" data-section="testimonials">
                         <i class="fas fa-comment"></i>
                         <span>Testimonials</span>
-                    </a>
+                    </div>
                 </div>
                 
                 <div class="nav-section">
-                    <h3>Website Settings</h3>
-                    <a href="#settings" class="nav-link" data-section="settings">
-                        <i class="fas fa-cog"></i>
-                        <span>App Settings</span>
-                    </a>
-                    <a href="#stats" class="nav-link" data-section="stats">
+                    <h3>Settings</h3>
+                    <div class="nav-link" data-section="stats">
                         <i class="fas fa-chart-bar"></i>
                         <span>Statistics</span>
-                    </a>
-                    <a href="#faq" class="nav-link" data-section="faq">
+                    </div>
+                    <div class="nav-link" data-section="faq">
                         <i class="fas fa-question-circle"></i>
                         <span>FAQs</span>
-                    </a>
-                </div>
-                
-                <div class="nav-section">
-                    <h3>User Management</h3>
-                    <a href="#users" class="nav-link" data-section="users">
-                        <i class="fas fa-user-shield"></i>
-                        <span>Admin Users</span>
-                    </a>
-                    <a href="#backup" class="nav-link" data-section="backup">
-                        <i class="fas fa-database"></i>
-                        <span>Backup & Restore</span>
-                    </a>
+                    </div>
                 </div>
             </nav>
-            
-            <div class="version-badge">
-                Version 7.0.0
-            </div>
         </div>
 
         <!-- Main Content -->
@@ -845,7 +835,7 @@
             <div class="admin-topbar">
                 <div class="topbar-left">
                     <h2 id="pageTitle">Dashboard Overview</h2>
-                    <p id="pageSubtitle">Welcome back, Admin</p>
+                    <p id="pageSubtitle">Welcome back</p>
                 </div>
                 
                 <div class="topbar-right">
@@ -853,15 +843,11 @@
                         <i class="fas fa-moon"></i>
                     </button>
                     
-                    <button class="mobile-menu-btn" id="mobileMenuBtn">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    
                     <div class="user-profile" id="userProfile">
                         <div class="user-avatar" id="userAvatar">A</div>
                         <div class="user-info">
-                            <span class="user-name" id="userName">Admin User</span>
-                            <span class="user-role">Super Admin</span>
+                            <span class="user-name" id="userName">Admin</span>
+                            <span class="user-role">Administrator</span>
                         </div>
                     </div>
                 </div>
@@ -905,7 +891,7 @@
 
                 <div class="form-section">
                     <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
-                    <div class="form-grid">
+                    <div class="quick-actions">
                         <button class="btn btn-secondary" onclick="switchSection('events')">
                             <i class="fas fa-plus"></i> Add New Event
                         </button>
@@ -920,25 +906,6 @@
                         </button>
                     </div>
                 </div>
-
-                <div class="form-section">
-                    <h3><i class="fas fa-history"></i> Recent Activity</h3>
-                    <div class="data-table">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Time</th>
-                                    <th>Action</th>
-                                    <th>User</th>
-                                    <th>Details</th>
-                                </tr>
-                            </thead>
-                            <tbody id="activityLog">
-                                <!-- Activity log will be populated here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
             </div>
 
             <!-- Events Section -->
@@ -948,12 +915,12 @@
                     
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="eventTitle">Event Title</label>
+                            <label for="eventTitle">Event Title *</label>
                             <input type="text" id="eventTitle" placeholder="Enter event title">
                         </div>
                         
                         <div class="form-group">
-                            <label for="eventCategory">Category</label>
+                            <label for="eventCategory">Category *</label>
                             <select id="eventCategory">
                                 <option value="bootcamp">Startup Bootcamp</option>
                                 <option value="inspiration">Become What You Believe</option>
@@ -962,21 +929,50 @@
                         </div>
                     </div>
                     
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="eventDate">Date *</label>
+                            <input type="date" id="eventDate">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="eventDuration">Duration</label>
+                            <input type="text" id="eventDuration" placeholder="e.g., 3 Months Intensive Program">
+                        </div>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="eventVenue">Venue</label>
+                            <input type="text" id="eventVenue" placeholder="Enter venue">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="eventMaxParticipants">Max Participants</label>
+                            <input type="number" id="eventMaxParticipants" placeholder="e.g., 30">
+                        </div>
+                    </div>
+                    
                     <div class="form-group">
-                        <label for="eventDescription">Description</label>
+                        <label for="eventDescription">Description *</label>
                         <textarea id="eventDescription" placeholder="Enter event description"></textarea>
                     </div>
                     
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="eventDate">Date</label>
-                            <input type="date" id="eventDate">
+                            <label for="eventImageUrl">Image URL</label>
+                            <input type="text" id="eventImageUrl" placeholder="Enter image URL">
                         </div>
                         
                         <div class="form-group">
-                            <label for="eventVenue">Venue</label>
-                            <input type="text" id="eventVenue" placeholder="Enter venue">
+                            <label for="eventRegistrationUrl">Registration URL</label>
+                            <input type="text" id="eventRegistrationUrl" placeholder="Enter registration URL">
                         </div>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="eventActive" checked>
+                        <label for="eventActive">Event is active</label>
                     </div>
                     
                     <div class="form-actions">
@@ -986,13 +982,16 @@
                         <button class="btn btn-secondary" onclick="clearEventForm()">
                             <i class="fas fa-times"></i> Clear Form
                         </button>
+                        <button class="btn btn-secondary" onclick="switchSection('dashboard')">
+                            <i class="fas fa-arrow-left"></i> Back to Dashboard
+                        </button>
                     </div>
                 </div>
 
-                <div class="data-table">
+                <div class="data-table-container">
                     <div class="data-table-header">
                         <h3>Current Events</h3>
-                        <button class="btn btn-small btn-secondary" onclick="refreshEvents()">
+                        <button class="btn btn-small btn-secondary" onclick="loadEvents()">
                             <i class="fas fa-sync-alt"></i> Refresh
                         </button>
                     </div>
@@ -1015,79 +1014,372 @@
 
             <!-- Training Programs Section -->
             <div id="training" class="content-section">
-                <!-- Similar structure as Events section -->
-                <div class="loading">
-                    <div class="loading-spinner"></div>
-                    <p>Loading Training Programs...</p>
+                <div class="form-section">
+                    <h3><i class="fas fa-graduation-cap"></i> Manage Training Programs</h3>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="trainingName">Program Name *</label>
+                            <input type="text" id="trainingName" placeholder="Enter program name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="trainingDuration">Duration</label>
+                            <input type="text" id="trainingDuration" placeholder="e.g., 8 WEEKS">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="trainingDescription">Description *</label>
+                        <textarea id="trainingDescription" placeholder="Enter program description"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="trainingObjectives">Objectives (one per line)</label>
+                        <textarea id="trainingObjectives" placeholder="Enter objectives, one per line"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="trainingResults">Long-term Results</label>
+                        <textarea id="trainingResults" placeholder="Enter long-term results"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="trainingIcon">Icon Class (Font Awesome)</label>
+                        <input type="text" id="trainingIcon" placeholder="e.g., fas fa-briefcase">
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="trainingActive" checked>
+                        <label for="trainingActive">Program is active</label>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="saveTrainingProgram()">
+                            <i class="fas fa-save"></i> Save Program
+                        </button>
+                        <button class="btn btn-secondary" onclick="clearTrainingForm()">
+                            <i class="fas fa-times"></i> Clear Form
+                        </button>
+                    </div>
+                </div>
+
+                <div class="data-table-container">
+                    <div class="data-table-header">
+                        <h3>Training Programs</h3>
+                        <button class="btn btn-small btn-secondary" onclick="loadTrainingPrograms()">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Duration</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="trainingTable">
+                            <!-- Training programs will be populated here -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
             <!-- Team Members Section -->
             <div id="team" class="content-section">
-                <!-- Similar structure -->
-                <div class="loading">
-                    <div class="loading-spinner"></div>
-                    <p>Loading Team Members...</p>
+                <div class="form-section">
+                    <h3><i class="fas fa-users"></i> Manage Team Members</h3>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="teamName">Full Name *</label>
+                            <input type="text" id="teamName" placeholder="Enter full name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="teamRole">Role *</label>
+                            <input type="text" id="teamRole" placeholder="e.g., Founder & CEO">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="teamBio">Bio/Description *</label>
+                        <textarea id="teamBio" placeholder="Enter bio/description"></textarea>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="teamImageUrl">Image URL</label>
+                            <input type="text" id="teamImageUrl" placeholder="Enter image URL">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="teamLinkedin">LinkedIn URL</label>
+                            <input type="text" id="teamLinkedin" placeholder="Enter LinkedIn URL">
+                        </div>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="teamActive" checked>
+                        <label for="teamActive">Member is active</label>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="saveTeamMember()">
+                            <i class="fas fa-save"></i> Save Team Member
+                        </button>
+                        <button class="btn btn-secondary" onclick="clearTeamForm()">
+                            <i class="fas fa-times"></i> Clear Form
+                        </button>
+                    </div>
+                </div>
+
+                <div class="data-table-container">
+                    <div class="data-table-header">
+                        <h3>Team Members</h3>
+                        <button class="btn btn-small btn-secondary" onclick="loadTeamMembers()">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teamTable">
+                            <!-- Team members will be populated here -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
             <!-- Testimonials Section -->
             <div id="testimonials" class="content-section">
-                <!-- Similar structure -->
-                <div class="loading">
-                    <div class="loading-spinner"></div>
-                    <p>Loading Testimonials...</p>
+                <div class="form-section">
+                    <h3><i class="fas fa-comment"></i> Manage Testimonials</h3>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="testimonialName">Name *</label>
+                            <input type="text" id="testimonialName" placeholder="Enter name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="testimonialRole">Role</label>
+                            <input type="text" id="testimonialRole" placeholder="e.g., Startup Founder">
+                        </div>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="testimonialCompany">Company</label>
+                            <input type="text" id="testimonialCompany" placeholder="Enter company name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="testimonialEvent">Event/Program</label>
+                            <input type="text" id="testimonialEvent" placeholder="e.g., Bootcamp">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="testimonialContent">Testimonial Content *</label>
+                        <textarea id="testimonialContent" placeholder="Enter testimonial"></textarea>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="testimonialRating">Rating (1-5)</label>
+                            <select id="testimonialRating">
+                                <option value="5">5 Stars</option>
+                                <option value="4">4 Stars</option>
+                                <option value="3">3 Stars</option>
+                                <option value="2">2 Stars</option>
+                                <option value="1">1 Star</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="testimonialDate">Date</label>
+                            <input type="date" id="testimonialDate">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="testimonialImageUrl">Image URL</label>
+                        <input type="text" id="testimonialImageUrl" placeholder="Enter image URL">
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="testimonialActive" checked>
+                        <label for="testimonialActive">Testimonial is active</label>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="saveTestimonial()">
+                            <i class="fas fa-save"></i> Save Testimonial
+                        </button>
+                        <button class="btn btn-secondary" onclick="clearTestimonialForm()">
+                            <i class="fas fa-times"></i> Clear Form
+                        </button>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Settings Section -->
-            <div id="settings" class="content-section">
-                <!-- Settings form -->
-                <div class="loading">
-                    <div class="loading-spinner"></div>
-                    <p>Loading Settings...</p>
+                <div class="data-table-container">
+                    <div class="data-table-header">
+                        <h3>Testimonials</h3>
+                        <button class="btn btn-small btn-secondary" onclick="loadTestimonials()">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Role</th>
+                                <th>Rating</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="testimonialsTable">
+                            <!-- Testimonials will be populated here -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
             <!-- Statistics Section -->
             <div id="stats" class="content-section">
-                <!-- Statistics management -->
-                <div class="loading">
-                    <div class="loading-spinner"></div>
-                    <p>Loading Statistics...</p>
+                <div class="form-section">
+                    <h3><i class="fas fa-chart-bar"></i> Update Statistics</h3>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="statsEntrepreneursTrained">Entrepreneurs Trained</label>
+                            <input type="number" id="statsEntrepreneursTrained" placeholder="e.g., 500">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="statsEventsHosted">Events Hosted</label>
+                            <input type="number" id="statsEventsHosted" placeholder="e.g., 50">
+                        </div>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="statsStartupsSupported">Startups Supported</label>
+                            <input type="number" id="statsStartupsSupported" placeholder="e.g., 30">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="statsCompletionRate">Completion Rate (%)</label>
+                            <input type="number" id="statsCompletionRate" placeholder="e.g., 95">
+                        </div>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="statsBusinessGrowthRate">Business Growth Rate (%)</label>
+                            <input type="number" id="statsBusinessGrowthRate" placeholder="e.g., 85">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="statsSatisfactionRate">Satisfaction Rate (%)</label>
+                            <input type="number" id="statsSatisfactionRate" placeholder="e.g., 90">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="statsCareerAdvancement">Career Advancement (%)</label>
+                        <input type="number" id="statsCareerAdvancement" placeholder="e.g., 70">
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="saveStatistics()">
+                            <i class="fas fa-save"></i> Update Statistics
+                        </button>
+                        <button class="btn btn-secondary" onclick="loadStatistics()">
+                            <i class="fas fa-sync-alt"></i> Load Current Stats
+                        </button>
+                    </div>
                 </div>
             </div>
 
             <!-- FAQ Section -->
             <div id="faq" class="content-section">
-                <!-- FAQ management -->
-                <div class="loading">
-                    <div class="loading-spinner"></div>
-                    <p>Loading FAQs...</p>
+                <div class="form-section">
+                    <h3><i class="fas fa-question-circle"></i> Manage FAQs</h3>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="faqQuestion">Question *</label>
+                            <input type="text" id="faqQuestion" placeholder="Enter question">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="faqCategory">Category</label>
+                            <select id="faqCategory">
+                                <option value="registration">Registration</option>
+                                <option value="bootcamp">Bootcamp</option>
+                                <option value="training">Training</option>
+                                <option value="general">General</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="faqAnswer">Answer *</label>
+                        <textarea id="faqAnswer" placeholder="Enter answer"></textarea>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="faqActive" checked>
+                        <label for="faqActive">FAQ is active</label>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="saveFAQ()">
+                            <i class="fas fa-save"></i> Save FAQ
+                        </button>
+                        <button class="btn btn-secondary" onclick="clearFAQForm()">
+                            <i class="fas fa-times"></i> Clear Form
+                        </button>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Users Section -->
-            <div id="users" class="content-section">
-                <!-- User management -->
-                <div class="loading">
-                    <div class="loading-spinner"></div>
-                    <p>Loading Users...</p>
-                </div>
-            </div>
-
-            <!-- Backup Section -->
-            <div id="backup" class="content-section">
-                <!-- Backup/Restore -->
-                <div class="loading">
-                    <div class="loading-spinner"></div>
-                    <p>Loading Backup Tools...</p>
+                <div class="data-table-container">
+                    <div class="data-table-header">
+                        <h3>Frequently Asked Questions</h3>
+                        <button class="btn btn-small btn-secondary" onclick="loadFAQs()">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Question</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="faqTable">
+                            <!-- FAQs will be populated here -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 
-        <script>
+    <script>
         // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDb5ZFHbo7lGM8ph0oBxFVTHRF5C5C_DWU",
@@ -1101,373 +1393,164 @@
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
         const auth = firebase.auth();
+        const db = firebase.database();
 
         // Global variables
         let currentUser = null;
+        let currentEditingId = null;
 
         // DOM Elements
         const loginScreen = document.getElementById('loginScreen');
         const adminPanel = document.getElementById('adminPanel');
         const loginBtn = document.getElementById('loginBtn');
         const loginError = document.getElementById('loginError');
-        const themeToggle = document.getElementById('themeToggle');
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const sidebar = document.getElementById('sidebar');
-        const userAvatar = document.getElementById('userAvatar');
-        const userName = document.getElementById('userName');
 
-        // Check authentication state on page load
-        auth.onAuthStateChanged((user) => {
-            console.log('Auth state changed:', user ? 'User logged in' : 'No user');
+        // Check authentication state
+        auth.onAuthStateChanged(user => {
             if (user) {
-                // User is signed in
                 currentUser = user;
-                console.log('User signed in:', user.email);
-                showLoginScreen(false);
-                initAdminPanel();
-                updateUserProfile(user);
+                showAdminPanel(user);
             } else {
-                // User is signed out
-                console.log('User signed out');
-                showLoginScreen(true);
+                showLoginScreen();
             }
         });
 
-        // Initialize the admin panel
-        function initAdminPanel() {
-            console.log('Initializing admin panel...');
-            setupTheme();
-            setupNavigation();
-            setupEventListeners();
-            loadDashboardStats();
-            loadEvents();
+        // Login function
+        loginBtn.onclick = async function() {
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+            
+            if (!email || !password) {
+                showMessage('Please enter email and password', 'error');
+                return;
+            }
+            
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
+            loginBtn.disabled = true;
+            
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+            } catch (error) {
+                showMessage('Login failed: ' + error.message, 'error');
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
+                loginBtn.disabled = false;
+            }
+        };
+
+        // Show/hide screens
+        function showLoginScreen() {
+            loginScreen.style.display = 'flex';
+            adminPanel.style.display = 'none';
+            document.getElementById('adminEmail').value = '';
+            document.getElementById('adminPassword').value = '';
         }
 
-        // Setup theme toggle
-        function setupTheme() {
+        function showAdminPanel(user) {
+            loginScreen.style.display = 'none';
+            adminPanel.style.display = 'flex';
+            
+            // Update user info
+            document.getElementById('userName').textContent = user.email.split('@')[0];
+            document.getElementById('userAvatar').textContent = user.email.charAt(0).toUpperCase();
+            document.getElementById('pageSubtitle').textContent = `Welcome back, ${user.email}`;
+            
+            // Setup admin panel
+            setupAdminPanel();
+            loadDashboardData();
+        }
+
+        // Setup admin panel
+        function setupAdminPanel() {
+            // Theme toggle
             const savedTheme = localStorage.getItem('theme') || 'light';
             document.documentElement.setAttribute('data-theme', savedTheme);
             updateThemeIcon(savedTheme);
-
-            themeToggle.addEventListener('click', () => {
-                const currentTheme = document.documentElement.getAttribute('data-theme');
-                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            document.getElementById('themeToggle').onclick = function() {
+                const current = document.documentElement.getAttribute('data-theme');
+                const newTheme = current === 'light' ? 'dark' : 'light';
                 document.documentElement.setAttribute('data-theme', newTheme);
                 localStorage.setItem('theme', newTheme);
                 updateThemeIcon(newTheme);
-            });
-        }
-
-        function updateThemeIcon(theme) {
-            const icon = themeToggle.querySelector('i');
-            icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-        }
-
-        // Update user profile display
-        function updateUserProfile(user) {
-            console.log('Updating profile for:', user.email);
-            userName.textContent = user.email.split('@')[0];
-            userAvatar.textContent = user.email.charAt(0).toUpperCase();
-        }
-
-        // Setup navigation
-        function setupNavigation() {
-            console.log('Setting up navigation...');
+            };
             
-            // Navigation links
+            // Navigation
             document.querySelectorAll('.nav-link').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const section = link.getAttribute('data-section');
-                    console.log('Navigating to section:', section);
-                    switchSection(section);
-                    
-                    // Update active state
+                link.onclick = function() {
                     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                    link.classList.add('active');
-                    
-                    // Close mobile menu if open
-                    if (window.innerWidth <= 1024) {
-                        sidebar.classList.remove('active');
-                    }
-                });
+                    this.classList.add('active');
+                    const section = this.getAttribute('data-section');
+                    switchSection(section);
+                };
             });
-
-            // Mobile menu toggle
-            mobileMenuBtn.addEventListener('click', () => {
-                sidebar.classList.toggle('active');
-                console.log('Mobile menu toggled');
-            });
-
-            // Close mobile menu when clicking outside
-            document.addEventListener('click', (e) => {
-                if (window.innerWidth <= 1024 && 
-                    !sidebar.contains(e.target) && 
-                    !mobileMenuBtn.contains(e.target)) {
-                    sidebar.classList.remove('active');
+            
+            // Logout
+            document.getElementById('userProfile').onclick = function() {
+                if (confirm('Are you sure you want to logout?')) {
+                    auth.signOut();
                 }
+            };
+            
+            // Enter key for login
+            document.getElementById('adminPassword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') loginBtn.click();
             });
         }
 
-        // Switch between sections
+        // Switch section
         function switchSection(sectionId) {
-            console.log('Switching to section:', sectionId);
-            
-            // Hide all sections
             document.querySelectorAll('.content-section').forEach(section => {
                 section.classList.remove('active');
             });
-
-            // Show selected section
-            const targetSection = document.getElementById(sectionId);
-            if (targetSection) {
-                targetSection.classList.add('active');
-                updatePageTitle(sectionId);
-                loadSectionData(sectionId);
-            }
-        }
-
-        function updatePageTitle(sectionId) {
+            document.getElementById(sectionId).classList.add('active');
+            
             const titles = {
                 'dashboard': 'Dashboard Overview',
                 'events': 'Events Management',
                 'training': 'Training Programs',
                 'team': 'Team Members',
                 'testimonials': 'Testimonials',
-                'settings': 'App Settings',
                 'stats': 'Statistics',
-                'faq': 'FAQs Management',
-                'users': 'User Management',
-                'backup': 'Backup & Restore'
+                'faq': 'FAQs Management'
             };
-
             document.getElementById('pageTitle').textContent = titles[sectionId] || 'Admin Panel';
-            if (currentUser) {
-                document.getElementById('pageSubtitle').textContent = `Welcome back, ${currentUser.email}`;
-            }
+            
+            // Load section data
+            if (sectionId === 'events') loadEvents();
+            else if (sectionId === 'training') loadTrainingPrograms();
+            else if (sectionId === 'team') loadTeamMembers();
+            else if (sectionId === 'testimonials') loadTestimonials();
+            else if (sectionId === 'stats') loadStatistics();
+            else if (sectionId === 'faq') loadFAQs();
         }
 
-        // Load section data
-        function loadSectionData(sectionId) {
-            console.log('Loading data for section:', sectionId);
-            
-            switch(sectionId) {
-                case 'dashboard':
-                    loadDashboardStats();
-                    break;
-                case 'events':
-                    loadEvents();
-                    break;
-                default:
-                    // For other sections, remove loading state
-                    const section = document.getElementById(sectionId);
-                    const loading = section?.querySelector('.loading');
-                    if (loading) {
-                        loading.style.display = 'none';
-                    }
-                    break;
-            }
+        // Update theme icon
+        function updateThemeIcon(theme) {
+            const icon = document.getElementById('themeToggle').querySelector('i');
+            icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
         }
 
-        // Setup event listeners
-        function setupEventListeners() {
-            console.log('Setting up event listeners...');
+        // Show message
+        function showMessage(text, type) {
+            const message = document.createElement('div');
+            message.className = `message ${type}`;
+            message.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                ${text}
+            `;
+            document.body.appendChild(message);
             
-            // Login button - FIXED: Ensure it's attached properly
-            if (loginBtn) {
-                loginBtn.addEventListener('click', handleLogin);
-                console.log('Login button event listener attached');
-            } else {
-                console.error('Login button not found!');
-            }
-            
-            // Enter key for login
-            const adminPassword = document.getElementById('adminPassword');
-            if (adminPassword) {
-                adminPassword.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') {
-                        console.log('Enter key pressed');
-                        handleLogin();
-                    }
-                });
-            }
-
-            // User profile click (logout)
-            const userProfile = document.getElementById('userProfile');
-            if (userProfile) {
-                userProfile.addEventListener('click', () => {
-                    console.log('User profile clicked');
-                    if (confirm('Are you sure you want to logout?')) {
-                        logout();
-                    }
-                });
-            }
+            setTimeout(() => {
+                message.remove();
+            }, 3000);
         }
 
-        // Handle login with Firebase Authentication
-        async function handleLogin() {
-            console.log('Login button clicked - handleLogin called');
-            
-            const email = document.getElementById('adminEmail').value.trim();
-            const password = document.getElementById('adminPassword').value;
-
-            console.log('Login attempt with email:', email);
-
-            // Show loading state
-            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
-            loginBtn.disabled = true;
-
-            // Clear any previous errors
-            loginError.style.display = 'none';
-            loginError.textContent = '';
-
-            // Basic validation
-            if (!email || !password) {
-                showError('Please enter both email and password');
-                resetLoginButton();
-                return;
-            }
-
-            if (!email.includes('@') || !email.includes('.')) {
-                showError('Please enter a valid email address');
-                resetLoginButton();
-                return;
-            }
-
+        // Load dashboard data
+        async function loadDashboardData() {
             try {
-                console.log('Attempting Firebase sign in...');
-                
-                // Sign in with Firebase Auth
-                const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
-                
-                console.log('Firebase sign in successful:', userCredential.user.email);
-                
-                // Login successful - auth listener will handle the navigation
-                
-            } catch (error) {
-                console.error('Login error:', error);
-                
-                // Handle specific Firebase Auth errors
-                let errorMessage = 'Login failed. ';
-                
-                switch(error.code) {
-                    case 'auth/invalid-email':
-                        errorMessage = 'Invalid email address format.';
-                        break;
-                    case 'auth/user-disabled':
-                        errorMessage = 'This account has been disabled.';
-                        break;
-                    case 'auth/user-not-found':
-                        errorMessage = 'No account found with this email.';
-                        break;
-                    case 'auth/wrong-password':
-                        errorMessage = 'Incorrect password.';
-                        break;
-                    case 'auth/too-many-requests':
-                        errorMessage = 'Too many failed attempts. Please try again later.';
-                        break;
-                    case 'auth/network-request-failed':
-                        errorMessage = 'Network error. Please check your connection.';
-                        break;
-                    default:
-                        errorMessage = 'Login failed. Please try again.';
-                }
-                
-                showError(errorMessage);
-                resetLoginButton();
-            }
-        }
-
-        // Reset login button to original state
-        function resetLoginButton() {
-            loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
-            loginBtn.disabled = false;
-        }
-
-        // Show error message
-        function showError(message) {
-            console.error('Showing error:', message);
-            loginError.textContent = message;
-            loginError.style.display = 'block';
-        }
-
-        // Show/hide login screen
-        function showLoginScreen(show) {
-            console.log('Show login screen:', show);
-            
-            if (show) {
-                loginScreen.style.display = 'flex';
-                adminPanel.style.display = 'none';
-                
-                // Clear form fields
-                document.getElementById('adminEmail').value = '';
-                document.getElementById('adminPassword').value = '';
-                resetLoginButton();
-            } else {
-                loginScreen.style.display = 'none';
-                adminPanel.style.display = 'block';
-                
-                // Show welcome message
-                showMessage('Login successful! Welcome to DSOG Admin Panel.', 'success');
-            }
-        }
-
-        // Show message in admin panel
-        function showMessage(message, type) {
-            console.log('Showing message:', { message, type });
-            
-            const messageDiv = document.createElement('div');
-            messageDiv.className = type === 'error' ? 'error-message' : 'success-message';
-            messageDiv.innerHTML = `<i class="fas fa-${type === 'error' ? 'exclamation-circle' : 'check-circle'}"></i> ${message}`;
-            
-            const container = document.querySelector('.admin-main');
-            if (container) {
-                if (container.firstChild) {
-                    container.insertBefore(messageDiv, container.firstChild);
-                } else {
-                    container.appendChild(messageDiv);
-                }
-                
-                // Auto-remove after 5 seconds
-                setTimeout(() => {
-                    if (messageDiv.parentNode) {
-                        messageDiv.remove();
-                    }
-                }, 5000);
-            }
-        }
-
-        // Logout
-        async function logout() {
-            console.log('Logging out...');
-            
-            try {
-                await auth.signOut();
-                console.log('Logout successful');
-                
-                // Clear any data
-                currentUser = null;
-                
-                // Show login screen
-                showLoginScreen(true);
-                
-            } catch (error) {
-                console.error('Logout error:', error);
-                showMessage('Logout failed: ' + error.message, 'error');
-            }
-        }
-
-        // Load dashboard statistics
-        async function loadDashboardStats() {
-            console.log('Loading dashboard stats...');
-            
-            try {
-                const snapshot = await database.ref('/').once('value');
+                const snapshot = await db.ref('/').once('value');
                 const data = snapshot.val();
-                
-                console.log('Dashboard data loaded:', data);
                 
                 if (data) {
                     document.getElementById('totalEvents').textContent = 
@@ -1479,249 +1562,709 @@
                     document.getElementById('totalTestimonials').textContent = 
                         Object.keys(data.testimonials || {}).length;
                 }
-                
-                // Load activity log
-                loadActivityLog();
-                
             } catch (error) {
-                console.error('Error loading dashboard stats:', error);
-                showMessage('Error loading dashboard statistics', 'error');
+                console.error('Error loading dashboard:', error);
             }
         }
 
-        // Load activity log
-        async function loadActivityLog() {
-            try {
-                const snapshot = await database.ref('adminActivities').limitToLast(10).once('value');
-                const activities = snapshot.val();
-                const logTable = document.getElementById('activityLog');
-                
-                if (logTable) {
-                    logTable.innerHTML = '';
-                    
-                    if (activities) {
-                        Object.entries(activities).forEach(([id, activity]) => {
-                            const row = document.createElement('tr');
-                            const time = new Date(activity.timestamp);
-                            row.innerHTML = `
-                                <td>${time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</td>
-                                <td>${activity.action || 'Unknown action'}</td>
-                                <td>${activity.user || 'Unknown user'}</td>
-                                <td>${activity.details || '-'}</td>
-                            `;
-                            logTable.appendChild(row);
-                        });
-                    } else {
-                        logTable.innerHTML = '<tr><td colspan="4" style="text-align: center;">No recent activity</td></tr>';
-                    }
-                }
-            } catch (error) {
-                console.error('Error loading activity log:', error);
-            }
-        }
-
-        // Log activity
-        function logActivity(action, details = '') {
-            if (!currentUser) return;
-            
-            const activity = {
-                timestamp: new Date().toISOString(),
-                user: currentUser.email,
-                action: action,
-                details: details
-            };
-
-            // Save to Firebase
-            database.ref('adminActivities').push(activity);
-        }
-
-        // Load events
+        // ==================== EVENTS MANAGEMENT ====================
         async function loadEvents() {
-            console.log('Loading events...');
-            
             try {
-                const snapshot = await database.ref('upcomingEvents').once('value');
+                const snapshot = await db.ref('upcomingEvents').once('value');
                 const events = snapshot.val();
                 const table = document.getElementById('eventsTable');
+                table.innerHTML = '';
                 
-                if (table) {
-                    table.innerHTML = '';
-                    
-                    if (events) {
-                        Object.entries(events).forEach(([id, event]) => {
-                            const row = document.createElement('tr');
-                            row.innerHTML = `
-                                <td>${event.title || 'No title'}</td>
-                                <td>${event.category || 'No category'}</td>
-                                <td>${event.date || 'No date'}</td>
-                                <td>
-                                    <span class="status-badge ${event.active ? 'status-active' : 'status-inactive'}">
-                                        <i class="fas fa-circle"></i>
-                                        ${event.active ? 'Active' : 'Inactive'}
-                                    </span>
-                                </td>
-                                <td>
-                                    <div class="table-actions">
-                                        <button class="action-btn edit" onclick="editEvent('${id}')">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="action-btn delete" onclick="deleteEvent('${id}')">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            `;
-                            table.appendChild(row);
-                        });
-                    } else {
-                        table.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 2rem;">No events found. Add your first event above!</td></tr>';
-                    }
-                    
-                    console.log('Events loaded:', Object.keys(events || {}).length);
+                if (events) {
+                    Object.entries(events).forEach(([id, event]) => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${event.title || 'No title'}</td>
+                            <td>${event.category || 'No category'}</td>
+                            <td>${event.date || 'No date'}</td>
+                            <td>
+                                <span class="status-badge ${event.active ? 'status-active' : 'status-inactive'}">
+                                    ${event.active ? 'Active' : 'Inactive'}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="table-actions">
+                                    <button class="action-btn edit" onclick="editEvent('${id}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn delete" onclick="deleteEvent('${id}')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        `;
+                        table.appendChild(row);
+                    });
+                } else {
+                    table.innerHTML = '<tr><td colspan="5" style="text-align: center;">No events found</td></tr>';
                 }
-                
             } catch (error) {
-                console.error('Error loading events:', error);
                 showMessage('Error loading events: ' + error.message, 'error');
             }
         }
 
-        // Save event
         async function saveEvent() {
-            const eventTitle = document.getElementById('eventTitle').value.trim();
-            const eventCategory = document.getElementById('eventCategory').value;
-            const eventDescription = document.getElementById('eventDescription').value.trim();
-            const eventDate = document.getElementById('eventDate').value;
-            const eventVenue = document.getElementById('eventVenue').value.trim();
+            const eventData = {
+                title: document.getElementById('eventTitle').value.trim(),
+                category: document.getElementById('eventCategory').value,
+                date: document.getElementById('eventDate').value,
+                duration: document.getElementById('eventDuration').value.trim(),
+                venue: document.getElementById('eventVenue').value.trim(),
+                maxParticipants: parseInt(document.getElementById('eventMaxParticipants').value) || 0,
+                description: document.getElementById('eventDescription').value.trim(),
+                imageUrl: document.getElementById('eventImageUrl').value.trim(),
+                registrationUrl: document.getElementById('eventRegistrationUrl').value.trim(),
+                active: document.getElementById('eventActive').checked,
+                lastUpdated: new Date().toISOString()
+            };
 
-            console.log('Saving event:', { eventTitle, eventCategory, eventDate });
-
-            if (!eventTitle || !eventDate) {
-                showMessage('Please fill in required fields (Title and Date)', 'error');
+            if (!eventData.title || !eventData.date || !eventData.description) {
+                showMessage('Please fill in required fields (Title, Date, Description)', 'error');
                 return;
             }
 
-            const eventData = {
-                title: eventTitle,
-                category: eventCategory,
-                description: eventDescription,
-                date: eventDate,
-                venue: eventVenue,
-                active: true,
-                lastUpdated: new Date().toISOString(),
-                updatedBy: currentUser.email
-            };
-
-            const isEditing = window.isEditing;
-            const editId = window.editId;
-
             try {
-                if (isEditing && editId) {
+                if (currentEditingId) {
                     // Update existing event
-                    await database.ref(`upcomingEvents/${editId}`).update(eventData);
+                    await db.ref(`upcomingEvents/${currentEditingId}`).update(eventData);
                     showMessage('Event updated successfully!', 'success');
-                    logActivity('Event updated', eventTitle);
+                    currentEditingId = null;
                 } else {
                     // Create new event
                     const newId = 'event_' + Date.now();
                     eventData.id = newId;
-                    await database.ref(`upcomingEvents/${newId}`).set(eventData);
+                    await db.ref(`upcomingEvents/${newId}`).set(eventData);
                     showMessage('Event created successfully!', 'success');
-                    logActivity('Event created', eventTitle);
                 }
 
                 clearEventForm();
                 loadEvents();
-                
+                loadDashboardData();
             } catch (error) {
-                console.error('Error saving event:', error);
                 showMessage('Error saving event: ' + error.message, 'error');
             }
         }
 
-        // Edit event
-        function editEvent(eventId) {
-            console.log('Editing event:', eventId);
-            
-            database.ref(`upcomingEvents/${eventId}`).once('value').then(snapshot => {
+        async function editEvent(eventId) {
+            try {
+                const snapshot = await db.ref(`upcomingEvents/${eventId}`).once('value');
                 const event = snapshot.val();
+                
                 if (event) {
                     document.getElementById('eventTitle').value = event.title || '';
                     document.getElementById('eventCategory').value = event.category || 'bootcamp';
-                    document.getElementById('eventDescription').value = event.description || '';
                     document.getElementById('eventDate').value = event.date || '';
+                    document.getElementById('eventDuration').value = event.duration || '';
                     document.getElementById('eventVenue').value = event.venue || '';
+                    document.getElementById('eventMaxParticipants').value = event.maxParticipants || '';
+                    document.getElementById('eventDescription').value = event.description || '';
+                    document.getElementById('eventImageUrl').value = event.imageUrl || '';
+                    document.getElementById('eventRegistrationUrl').value = event.registrationUrl || '';
+                    document.getElementById('eventActive').checked = event.active !== false;
                     
-                    window.isEditing = true;
-                    window.editId = eventId;
-                    
-                    showMessage(`Editing event: ${event.title}`, 'info');
-                    logActivity('Started editing event', event.title);
+                    currentEditingId = eventId;
+                    showMessage('Editing event: ' + event.title, 'info');
                 }
-            }).catch(error => {
-                console.error('Error loading event for editing:', error);
+            } catch (error) {
                 showMessage('Error loading event: ' + error.message, 'error');
-            });
-        }
-
-        // Delete event
-        function deleteEvent(eventId) {
-            console.log('Deleting event:', eventId);
-            
-            if (confirm('Are you sure you want to delete this event? This action cannot be undone.')) {
-                database.ref(`upcomingEvents/${eventId}`).once('value').then(snapshot => {
-                    const eventTitle = snapshot.val()?.title || 'Unknown event';
-                    
-                    database.ref(`upcomingEvents/${eventId}`).remove()
-                        .then(() => {
-                            showMessage('Event deleted successfully!', 'success');
-                            loadEvents();
-                            logActivity('Event deleted', eventTitle);
-                        })
-                        .catch(error => {
-                            console.error('Error deleting event:', error);
-                            showMessage('Error deleting event: ' + error.message, 'error');
-                        });
-                });
             }
         }
 
-        // Clear event form
+        async function deleteEvent(eventId) {
+            if (!confirm('Are you sure you want to delete this event?')) return;
+            
+            try {
+                await db.ref(`upcomingEvents/${eventId}`).remove();
+                showMessage('Event deleted successfully!', 'success');
+                loadEvents();
+                loadDashboardData();
+            } catch (error) {
+                showMessage('Error deleting event: ' + error.message, 'error');
+            }
+        }
+
         function clearEventForm() {
             document.getElementById('eventTitle').value = '';
             document.getElementById('eventCategory').value = 'bootcamp';
-            document.getElementById('eventDescription').value = '';
             document.getElementById('eventDate').value = '';
+            document.getElementById('eventDuration').value = '';
             document.getElementById('eventVenue').value = '';
-            window.isEditing = false;
-            window.editId = null;
-            
-            showMessage('Form cleared', 'info');
+            document.getElementById('eventMaxParticipants').value = '';
+            document.getElementById('eventDescription').value = '';
+            document.getElementById('eventImageUrl').value = '';
+            document.getElementById('eventRegistrationUrl').value = '';
+            document.getElementById('eventActive').checked = true;
+            currentEditingId = null;
         }
 
-        // Refresh events
-        function refreshEvents() {
-            console.log('Refreshing events...');
-            loadEvents();
-            showMessage('Events list refreshed', 'info');
+        // ==================== TRAINING PROGRAMS ====================
+        async function loadTrainingPrograms() {
+            try {
+                const snapshot = await db.ref('trainingPrograms').once('value');
+                const programs = snapshot.val();
+                const table = document.getElementById('trainingTable');
+                table.innerHTML = '';
+                
+                if (programs) {
+                    Object.entries(programs).forEach(([id, program]) => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${program.name || 'No name'}</td>
+                            <td>${program.duration || 'No duration'}</td>
+                            <td>
+                                <span class="status-badge ${program.active ? 'status-active' : 'status-inactive'}">
+                                    ${program.active ? 'Active' : 'Inactive'}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="table-actions">
+                                    <button class="action-btn edit" onclick="editTrainingProgram('${id}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn delete" onclick="deleteTrainingProgram('${id}')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        `;
+                        table.appendChild(row);
+                    });
+                } else {
+                    table.innerHTML = '<tr><td colspan="4" style="text-align: center;">No training programs found</td></tr>';
+                }
+            } catch (error) {
+                showMessage('Error loading training programs: ' + error.message, 'error');
+            }
         }
 
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('Admin page loaded - DOM ready');
+        async function saveTrainingProgram() {
+            const objectives = document.getElementById('trainingObjectives').value
+                .split('\n')
+                .filter(line => line.trim())
+                .map(line => line.trim());
+
+            const programData = {
+                name: document.getElementById('trainingName').value.trim(),
+                duration: document.getElementById('trainingDuration').value.trim(),
+                description: document.getElementById('trainingDescription').value.trim(),
+                objectives: objectives,
+                longTermResults: document.getElementById('trainingResults').value.trim(),
+                icon: document.getElementById('trainingIcon').value.trim() || 'fas fa-graduation-cap',
+                active: document.getElementById('trainingActive').checked,
+                lastUpdated: new Date().toISOString()
+            };
+
+            if (!programData.name || !programData.description) {
+                showMessage('Please fill in required fields (Name, Description)', 'error');
+                return;
+            }
+
+            try {
+                if (currentEditingId) {
+                    await db.ref(`trainingPrograms/${currentEditingId}`).update(programData);
+                    showMessage('Training program updated!', 'success');
+                    currentEditingId = null;
+                } else {
+                    const newId = 'program_' + Date.now();
+                    programData.id = newId;
+                    await db.ref(`trainingPrograms/${newId}`).set(programData);
+                    showMessage('Training program created!', 'success');
+                }
+
+                clearTrainingForm();
+                loadTrainingPrograms();
+                loadDashboardData();
+            } catch (error) {
+                showMessage('Error saving program: ' + error.message, 'error');
+            }
+        }
+
+        async function editTrainingProgram(programId) {
+            try {
+                const snapshot = await db.ref(`trainingPrograms/${programId}`).once('value');
+                const program = snapshot.val();
+                
+                if (program) {
+                    document.getElementById('trainingName').value = program.name || '';
+                    document.getElementById('trainingDuration').value = program.duration || '';
+                    document.getElementById('trainingDescription').value = program.description || '';
+                    document.getElementById('trainingObjectives').value = Array.isArray(program.objectives) 
+                        ? program.objectives.join('\n') 
+                        : '';
+                    document.getElementById('trainingResults').value = program.longTermResults || '';
+                    document.getElementById('trainingIcon').value = program.icon || 'fas fa-graduation-cap';
+                    document.getElementById('trainingActive').checked = program.active !== false;
+                    
+                    currentEditingId = programId;
+                    showMessage('Editing program: ' + program.name, 'info');
+                }
+            } catch (error) {
+                showMessage('Error loading program: ' + error.message, 'error');
+            }
+        }
+
+        async function deleteTrainingProgram(programId) {
+            if (!confirm('Delete this training program?')) return;
             
-            // Make functions globally available for onclick attributes
-            window.switchSection = switchSection;
-            window.saveEvent = saveEvent;
-            window.clearEventForm = clearEventForm;
-            window.editEvent = editEvent;
-            window.deleteEvent = deleteEvent;
-            window.refreshEvents = refreshEvents;
-            window.isEditing = false;
-            window.editId = null;
+            try {
+                await db.ref(`trainingPrograms/${programId}`).remove();
+                showMessage('Program deleted!', 'success');
+                loadTrainingPrograms();
+                loadDashboardData();
+            } catch (error) {
+                showMessage('Error deleting program: ' + error.message, 'error');
+            }
+        }
+
+        function clearTrainingForm() {
+            document.getElementById('trainingName').value = '';
+            document.getElementById('trainingDuration').value = '';
+            document.getElementById('trainingDescription').value = '';
+            document.getElementById('trainingObjectives').value = '';
+            document.getElementById('trainingResults').value = '';
+            document.getElementById('trainingIcon').value = '';
+            document.getElementById('trainingActive').checked = true;
+            currentEditingId = null;
+        }
+
+        // ==================== TEAM MEMBERS ====================
+        async function loadTeamMembers() {
+            try {
+                const snapshot = await db.ref('teamMembers').once('value');
+                const members = snapshot.val();
+                const table = document.getElementById('teamTable');
+                table.innerHTML = '';
+                
+                if (members) {
+                    Object.entries(members).forEach(([id, member]) => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${member.name || 'No name'}</td>
+                            <td>${member.role || 'No role'}</td>
+                            <td>
+                                <span class="status-badge ${member.active ? 'status-active' : 'status-inactive'}">
+                                    ${member.active ? 'Active' : 'Inactive'}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="table-actions">
+                                    <button class="action-btn edit" onclick="editTeamMember('${id}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn delete" onclick="deleteTeamMember('${id}')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        `;
+                        table.appendChild(row);
+                    });
+                } else {
+                    table.innerHTML = '<tr><td colspan="4" style="text-align: center;">No team members found</td></tr>';
+                }
+            } catch (error) {
+                showMessage('Error loading team: ' + error.message, 'error');
+            }
+        }
+
+        async function saveTeamMember() {
+            const teamData = {
+                name: document.getElementById('teamName').value.trim(),
+                role: document.getElementById('teamRole').value.trim(),
+                bio: document.getElementById('teamBio').value.trim(),
+                imageUrl: document.getElementById('teamImageUrl').value.trim(),
+                social: {
+                    linkedin: document.getElementById('teamLinkedin').value.trim()
+                },
+                active: document.getElementById('teamActive').checked,
+                lastUpdated: new Date().toISOString()
+            };
+
+            if (!teamData.name || !teamData.role || !teamData.bio) {
+                showMessage('Please fill in required fields (Name, Role, Bio)', 'error');
+                return;
+            }
+
+            try {
+                if (currentEditingId) {
+                    await db.ref(`teamMembers/${currentEditingId}`).update(teamData);
+                    showMessage('Team member updated!', 'success');
+                    currentEditingId = null;
+                } else {
+                    const newId = 'member_' + Date.now();
+                    teamData.id = newId;
+                    await db.ref(`teamMembers/${newId}`).set(teamData);
+                    showMessage('Team member added!', 'success');
+                }
+
+                clearTeamForm();
+                loadTeamMembers();
+                loadDashboardData();
+            } catch (error) {
+                showMessage('Error saving team member: ' + error.message, 'error');
+            }
+        }
+
+        async function editTeamMember(memberId) {
+            try {
+                const snapshot = await db.ref(`teamMembers/${memberId}`).once('value');
+                const member = snapshot.val();
+                
+                if (member) {
+                    document.getElementById('teamName').value = member.name || '';
+                    document.getElementById('teamRole').value = member.role || '';
+                    document.getElementById('teamBio').value = member.bio || '';
+                    document.getElementById('teamImageUrl').value = member.imageUrl || '';
+                    document.getElementById('teamLinkedin').value = member.social?.linkedin || '';
+                    document.getElementById('teamActive').checked = member.active !== false;
+                    
+                    currentEditingId = memberId;
+                    showMessage('Editing team member: ' + member.name, 'info');
+                }
+            } catch (error) {
+                showMessage('Error loading team member: ' + error.message, 'error');
+            }
+        }
+
+        async function deleteTeamMember(memberId) {
+            if (!confirm('Delete this team member?')) return;
             
-            console.log('Global functions initialized');
-        });
+            try {
+                await db.ref(`teamMembers/${memberId}`).remove();
+                showMessage('Team member deleted!', 'success');
+                loadTeamMembers();
+                loadDashboardData();
+            } catch (error) {
+                showMessage('Error deleting team member: ' + error.message, 'error');
+            }
+        }
+
+        function clearTeamForm() {
+            document.getElementById('teamName').value = '';
+            document.getElementById('teamRole').value = '';
+            document.getElementById('teamBio').value = '';
+            document.getElementById('teamImageUrl').value = '';
+            document.getElementById('teamLinkedin').value = '';
+            document.getElementById('teamActive').checked = true;
+            currentEditingId = null;
+        }
+
+        // ==================== TESTIMONIALS ====================
+        async function loadTestimonials() {
+            try {
+                const snapshot = await db.ref('testimonials').once('value');
+                const testimonials = snapshot.val();
+                const table = document.getElementById('testimonialsTable');
+                table.innerHTML = '';
+                
+                if (testimonials) {
+                    Object.entries(testimonials).forEach(([id, testimonial]) => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${testimonial.name || 'No name'}</td>
+                            <td>${testimonial.role || 'No role'}</td>
+                            <td>${'★'.repeat(testimonial.rating || 0)}</td>
+                            <td>
+                                <span class="status-badge ${testimonial.active ? 'status-active' : 'status-inactive'}">
+                                    ${testimonial.active ? 'Active' : 'Inactive'}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="table-actions">
+                                    <button class="action-btn edit" onclick="editTestimonial('${id}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn delete" onclick="deleteTestimonial('${id}')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        `;
+                        table.appendChild(row);
+                    });
+                } else {
+                    table.innerHTML = '<tr><td colspan="5" style="text-align: center;">No testimonials found</td></tr>';
+                }
+            } catch (error) {
+                showMessage('Error loading testimonials: ' + error.message, 'error');
+            }
+        }
+
+        async function saveTestimonial() {
+            const testimonialData = {
+                name: document.getElementById('testimonialName').value.trim(),
+                role: document.getElementById('testimonialRole').value.trim(),
+                company: document.getElementById('testimonialCompany').value.trim(),
+                content: document.getElementById('testimonialContent').value.trim(),
+                event: document.getElementById('testimonialEvent').value.trim(),
+                rating: parseInt(document.getElementById('testimonialRating').value) || 5,
+                imageUrl: document.getElementById('testimonialImageUrl').value.trim(),
+                date: document.getElementById('testimonialDate').value || new Date().toISOString().split('T')[0],
+                active: document.getElementById('testimonialActive').checked,
+                lastUpdated: new Date().toISOString()
+            };
+
+            if (!testimonialData.name || !testimonialData.content) {
+                showMessage('Please fill in required fields (Name, Content)', 'error');
+                return;
+            }
+
+            try {
+                if (currentEditingId) {
+                    await db.ref(`testimonials/${currentEditingId}`).update(testimonialData);
+                    showMessage('Testimonial updated!', 'success');
+                    currentEditingId = null;
+                } else {
+                    const newId = 'testimonial_' + Date.now();
+                    testimonialData.id = newId;
+                    await db.ref(`testimonials/${newId}`).set(testimonialData);
+                    showMessage('Testimonial added!', 'success');
+                }
+
+                clearTestimonialForm();
+                loadTestimonials();
+                loadDashboardData();
+            } catch (error) {
+                showMessage('Error saving testimonial: ' + error.message, 'error');
+            }
+        }
+
+        async function editTestimonial(testimonialId) {
+            try {
+                const snapshot = await db.ref(`testimonials/${testimonialId}`).once('value');
+                const testimonial = snapshot.val();
+                
+                if (testimonial) {
+                    document.getElementById('testimonialName').value = testimonial.name || '';
+                    document.getElementById('testimonialRole').value = testimonial.role || '';
+                    document.getElementById('testimonialCompany').value = testimonial.company || '';
+                    document.getElementById('testimonialContent').value = testimonial.content || '';
+                    document.getElementById('testimonialEvent').value = testimonial.event || '';
+                    document.getElementById('testimonialRating').value = testimonial.rating || 5;
+                    document.getElementById('testimonialImageUrl').value = testimonial.imageUrl || '';
+                    document.getElementById('testimonialDate').value = testimonial.date || '';
+                    document.getElementById('testimonialActive').checked = testimonial.active !== false;
+                    
+                    currentEditingId = testimonialId;
+                    showMessage('Editing testimonial: ' + testimonial.name, 'info');
+                }
+            } catch (error) {
+                showMessage('Error loading testimonial: ' + error.message, 'error');
+            }
+        }
+
+        async function deleteTestimonial(testimonialId) {
+            if (!confirm('Delete this testimonial?')) return;
+            
+            try {
+                await db.ref(`testimonials/${testimonialId}`).remove();
+                showMessage('Testimonial deleted!', 'success');
+                loadTestimonials();
+                loadDashboardData();
+            } catch (error) {
+                showMessage('Error deleting testimonial: ' + error.message, 'error');
+            }
+        }
+
+        function clearTestimonialForm() {
+            document.getElementById('testimonialName').value = '';
+            document.getElementById('testimonialRole').value = '';
+            document.getElementById('testimonialCompany').value = '';
+            document.getElementById('testimonialContent').value = '';
+            document.getElementById('testimonialEvent').value = '';
+            document.getElementById('testimonialRating').value = '5';
+            document.getElementById('testimonialImageUrl').value = '';
+            document.getElementById('testimonialDate').value = '';
+            document.getElementById('testimonialActive').checked = true;
+            currentEditingId = null;
+        }
+
+        // ==================== STATISTICS ====================
+        async function loadStatistics() {
+            try {
+                const snapshot = await db.ref('stats').once('value');
+                const stats = snapshot.val();
+                
+                if (stats) {
+                    document.getElementById('statsEntrepreneursTrained').value = stats.entrepreneursTrained || '';
+                    document.getElementById('statsEventsHosted').value = stats.eventsHosted || '';
+                    document.getElementById('statsStartupsSupported').value = stats.startupsSupported || '';
+                    document.getElementById('statsCompletionRate').value = stats.completionRate || '';
+                    document.getElementById('statsBusinessGrowthRate').value = stats.businessGrowthRate || '';
+                    document.getElementById('statsSatisfactionRate').value = stats.satisfactionRate || '';
+                    document.getElementById('statsCareerAdvancement').value = stats.careerAdvancement || '';
+                }
+            } catch (error) {
+                showMessage('Error loading statistics: ' + error.message, 'error');
+            }
+        }
+
+        async function saveStatistics() {
+            const statsData = {
+                entrepreneursTrained: parseInt(document.getElementById('statsEntrepreneursTrained').value) || 0,
+                eventsHosted: parseInt(document.getElementById('statsEventsHosted').value) || 0,
+                startupsSupported: parseInt(document.getElementById('statsStartupsSupported').value) || 0,
+                completionRate: parseInt(document.getElementById('statsCompletionRate').value) || 0,
+                businessGrowthRate: parseInt(document.getElementById('statsBusinessGrowthRate').value) || 0,
+                satisfactionRate: parseInt(document.getElementById('statsSatisfactionRate').value) || 0,
+                careerAdvancement: parseInt(document.getElementById('statsCareerAdvancement').value) || 0,
+                lastUpdated: new Date().toISOString()
+            };
+
+            try {
+                await db.ref('stats').set(statsData);
+                showMessage('Statistics updated successfully!', 'success');
+            } catch (error) {
+                showMessage('Error saving statistics: ' + error.message, 'error');
+            }
+        }
+
+        // ==================== FAQs ====================
+        async function loadFAQs() {
+            try {
+                const snapshot = await db.ref('faqs').once('value');
+                const faqs = snapshot.val();
+                const table = document.getElementById('faqTable');
+                table.innerHTML = '';
+                
+                if (faqs) {
+                    Object.entries(faqs).forEach(([id, faq]) => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${faq.question || 'No question'}</td>
+                            <td>${faq.category || 'No category'}</td>
+                            <td>
+                                <span class="status-badge ${faq.active ? 'status-active' : 'status-inactive'}">
+                                    ${faq.active ? 'Active' : 'Inactive'}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="table-actions">
+                                    <button class="action-btn edit" onclick="editFAQ('${id}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn delete" onclick="deleteFAQ('${id}')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        `;
+                        table.appendChild(row);
+                    });
+                } else {
+                    table.innerHTML = '<tr><td colspan="4" style="text-align: center;">No FAQs found</td></tr>';
+                }
+            } catch (error) {
+                showMessage('Error loading FAQs: ' + error.message, 'error');
+            }
+        }
+
+        async function saveFAQ() {
+            const faqData = {
+                question: document.getElementById('faqQuestion').value.trim(),
+                answer: document.getElementById('faqAnswer').value.trim(),
+                category: document.getElementById('faqCategory').value,
+                active: document.getElementById('faqActive').checked,
+                lastUpdated: new Date().toISOString()
+            };
+
+            if (!faqData.question || !faqData.answer) {
+                showMessage('Please fill in required fields (Question, Answer)', 'error');
+                return;
+            }
+
+            try {
+                if (currentEditingId) {
+                    await db.ref(`faqs/${currentEditingId}`).update(faqData);
+                    showMessage('FAQ updated!', 'success');
+                    currentEditingId = null;
+                } else {
+                    const newId = 'faq_' + Date.now();
+                    faqData.id = newId;
+                    await db.ref(`faqs/${newId}`).set(faqData);
+                    showMessage('FAQ added!', 'success');
+                }
+
+                clearFAQForm();
+                loadFAQs();
+            } catch (error) {
+                showMessage('Error saving FAQ: ' + error.message, 'error');
+            }
+        }
+
+        async function editFAQ(faqId) {
+            try {
+                const snapshot = await db.ref(`faqs/${faqId}`).once('value');
+                const faq = snapshot.val();
+                
+                if (faq) {
+                    document.getElementById('faqQuestion').value = faq.question || '';
+                    document.getElementById('faqAnswer').value = faq.answer || '';
+                    document.getElementById('faqCategory').value = faq.category || 'general';
+                    document.getElementById('faqActive').checked = faq.active !== false;
+                    
+                    currentEditingId = faqId;
+                    showMessage('Editing FAQ', 'info');
+                }
+            } catch (error) {
+                showMessage('Error loading FAQ: ' + error.message, 'error');
+            }
+        }
+
+        async function deleteFAQ(faqId) {
+            if (!confirm('Delete this FAQ?')) return;
+            
+            try {
+                await db.ref(`faqs/${faqId}`).remove();
+                showMessage('FAQ deleted!', 'success');
+                loadFAQs();
+            } catch (error) {
+                showMessage('Error deleting FAQ: ' + error.message, 'error');
+            }
+        }
+
+        function clearFAQForm() {
+            document.getElementById('faqQuestion').value = '';
+            document.getElementById('faqAnswer').value = '';
+            document.getElementById('faqCategory').value = 'registration';
+            document.getElementById('faqActive').checked = true;
+            currentEditingId = null;
+        }
+
+        // Make functions global
+        window.switchSection = switchSection;
+        window.saveEvent = saveEvent;
+        window.clearEventForm = clearEventForm;
+        window.editEvent = editEvent;
+        window.deleteEvent = deleteEvent;
+        window.loadEvents = loadEvents;
+        window.saveTrainingProgram = saveTrainingProgram;
+        window.clearTrainingForm = clearTrainingForm;
+        window.editTrainingProgram = editTrainingProgram;
+        window.deleteTrainingProgram = deleteTrainingProgram;
+        window.loadTrainingPrograms = loadTrainingPrograms;
+        window.saveTeamMember = saveTeamMember;
+        window.clearTeamForm = clearTeamForm;
+        window.editTeamMember = editTeamMember;
+        window.deleteTeamMember = deleteTeamMember;
+        window.loadTeamMembers = loadTeamMembers;
+        window.saveTestimonial = saveTestimonial;
+        window.clearTestimonialForm = clearTestimonialForm;
+        window.editTestimonial = editTestimonial;
+        window.deleteTestimonial = deleteTestimonial;
+        window.loadTestimonials = loadTestimonials;
+        window.saveStatistics = saveStatistics;
+        window.loadStatistics = loadStatistics;
+        window.saveFAQ = saveFAQ;
+        window.clearFAQForm = clearFAQForm;
+        window.editFAQ = editFAQ;
+        window.deleteFAQ = deleteFAQ;
+        window.loadFAQs = loadFAQs;
     </script>
 </body>
 </html>
