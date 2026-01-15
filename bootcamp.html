@@ -2,7 +2,7 @@
 <html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.95, maximum-scale=5.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     
     <!-- SEO Meta Tags -->
     <meta name="description" content="DSOG Franchise Builder Bootcamp - From scratch to owning your first DSOG store. 3-month intensive training for future franchise owners. Join Pioneer Cohort 1 at KSh 3,500.">
@@ -34,9 +34,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Bootcamp Page Styles -->
     <style>
-        /* Import CSS Variables from Enterprise Page */
+        /* ===== CSS VARIABLES ===== */
         :root {
             /* Professional Color Palette */
             --primary-red: #C21807;
@@ -121,8 +120,10 @@
             --z-negative: -1;
             --z-normal: 1;
             --z-dropdown: 100;
+            --z-sticky: 200;
             --z-fixed: 1000;
             --z-modal: 10000;
+            --z-top: 10001;
         }
 
         /* Dark Theme Variables */
@@ -145,7 +146,7 @@
             --medium-gray: #404040;
         }
 
-        /* ===== BASE STYLES ===== */
+        /* ===== BASE RESET ===== */
         *, *::before, *::after {
             margin: 0;
             padding: 0;
@@ -175,6 +176,54 @@
             font-weight: 400;
         }
 
+        /* ===== APPLICATION COUNTDOWN BANNER ===== */
+        .application-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--gradient-primary);
+            color: white;
+            padding: var(--space-sm) var(--space-xl);
+            text-align: center;
+            z-index: var(--z-top);
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-md);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .application-banner.show {
+            transform: translateY(0);
+        }
+
+        .countdown-timer {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            background: rgba(255, 255, 255, 0.2);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+        }
+
+        .countdown-number {
+            font-weight: 800;
+            font-size: 1rem;
+            min-width: 28px;
+            text-align: center;
+        }
+
+        .countdown-label {
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+
         /* ===== HEADER & NAVIGATION ===== */
         .header {
             position: fixed;
@@ -189,6 +238,10 @@
             z-index: var(--z-fixed);
             transition: var(--transition-smooth);
             box-shadow: var(--shadow-sm);
+        }
+
+        .header.with-banner {
+            top: 40px;
         }
 
         [data-theme="dark"] .header {
@@ -335,6 +388,10 @@
             overflow: hidden;
         }
 
+        .bootcamp-hero.with-banner {
+            padding-top: calc(var(--header-height) + 40px);
+        }
+
         .bootcamp-hero::before {
             content: '';
             position: absolute;
@@ -412,6 +469,12 @@
             border: 1px solid rgba(194, 24, 7, 0.15);
             min-width: 250px;
             justify-content: center;
+            transition: var(--transition-smooth);
+        }
+
+        .highlight-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
         }
 
         .highlight-item i {
@@ -770,7 +833,7 @@
             letter-spacing: 0.05em;
         }
 
-        /* ===== CUSTOM GOOGLE FORM EMBED ===== */
+        /* ===== GOOGLE FORM SECTION ===== */
         .google-form-section {
             background: var(--gradient-primary);
             color: var(--white);
@@ -823,25 +886,6 @@
             width: 100%;
             min-height: 800px;
             background: var(--white);
-        }
-
-        /* Style Google Form elements */
-        .form-container .freebirdFormviewerViewFormContent {
-            background: var(--white);
-            padding: 0;
-        }
-
-        .form-container .freebirdFormviewerViewHeaderHeader {
-            display: none;
-        }
-
-        .form-container .freebirdFormviewerViewCenteredContent {
-            margin: 0 auto;
-            max-width: 100%;
-        }
-
-        .form-container .freebirdFormviewerViewNavigationPasswordWarning {
-            display: none;
         }
 
         /* Custom form header */
@@ -1086,6 +1130,14 @@
             font-size: 1rem;
         }
 
+        .hero-buttons {
+            display: flex;
+            gap: var(--space-md);
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: var(--space-2xl);
+        }
+
         /* ===== CONTAINER ===== */
         .container {
             width: 100%;
@@ -1158,6 +1210,12 @@
         }
 
         /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 1200px) {
+            .container {
+                padding: 0 var(--space-lg);
+            }
+        }
+
         @media (max-width: 1024px) {
             .nav-links {
                 position: fixed;
@@ -1233,6 +1291,12 @@
             .form-container {
                 padding: var(--space-lg);
             }
+
+            .application-banner {
+                padding: var(--space-xs) var(--space-lg);
+                font-size: 0.85rem;
+                gap: var(--space-sm);
+            }
         }
 
         @media (max-width: 768px) {
@@ -1287,6 +1351,27 @@
             .form-container iframe {
                 min-height: 700px;
             }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: var(--space-md);
+            }
+
+            .hero-buttons .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .application-banner {
+                flex-direction: column;
+                gap: var(--space-xs);
+                padding: var(--space-sm);
+            }
+
+            .countdown-timer {
+                margin-top: var(--space-xs);
+            }
         }
 
         @media (max-width: 480px) {
@@ -1340,10 +1425,119 @@
             .form-container iframe {
                 min-height: 600px;
             }
+
+            .section-header h2::after {
+                width: 40px;
+                bottom: -8px;
+            }
+
+            .theme-toggle {
+                bottom: var(--space-lg);
+                right: var(--space-lg);
+                width: 48px;
+                height: 48px;
+                font-size: 1rem;
+            }
+
+            .application-banner {
+                font-size: 0.8rem;
+            }
+
+            .countdown-number {
+                font-size: 0.9rem;
+                min-width: 24px;
+            }
+
+            .countdown-label {
+                font-size: 0.7rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .logo-text {
+                font-size: 1.1rem;
+            }
+
+            h1 { font-size: 1.75rem; }
+            h2 { font-size: 1.5rem; }
+            h3 { font-size: 1.25rem; }
+
+            .pricing-badge {
+                flex-direction: column;
+                gap: var(--space-xs);
+                text-align: center;
+            }
+
+            .hero-highlights {
+                grid-template-columns: 1fr;
+                gap: var(--space-md);
+            }
+
+            .highlight-item {
+                min-width: auto;
+                padding: var(--space-md);
+            }
+
+            .journey-step {
+                max-width: 100px;
+                padding: var(--space-xs);
+                font-size: 0.7rem;
+            }
+
+            .timeline-month {
+                font-size: 0.9rem;
+            }
+
+            .theme-toggle {
+                bottom: var(--space-md);
+                right: var(--space-md);
+                width: 44px;
+                height: 44px;
+            }
+
+            .application-banner {
+                padding: var(--space-xs);
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .application-banner,
+            .theme-toggle,
+            .nav-links,
+            .hero-buttons,
+            .btn {
+                display: none !important;
+            }
+            
+            .bootcamp-hero {
+                padding-top: 0;
+                min-height: auto;
+            }
+            
+            .footer {
+                padding: var(--space-xl) 0;
+            }
+            
+            a {
+                color: black !important;
+                text-decoration: none;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Application Countdown Banner -->
+    <div class="application-banner" id="applicationBanner">
+        <span><i class="fas fa-clock"></i> Application closes in:</span>
+        <div class="countdown-timer">
+            <div><span class="countdown-number" id="countdownDays">00</span> <span class="countdown-label">Days</span></div>
+            <div><span class="countdown-number" id="countdownHours">00</span> <span class="countdown-label">Hours</span></div>
+            <div><span class="countdown-number" id="countdownMinutes">00</span> <span class="countdown-label">Mins</span></div>
+            <div><span class="countdown-number" id="countdownSeconds">00</span> <span class="countdown-label">Secs</span></div>
+        </div>
+    </div>
+
     <!-- Theme Toggle -->
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
         <i class="fas fa-moon"></i>
@@ -1362,9 +1556,7 @@
             <ul class="nav-links" id="navLinks">
                 <li><a href="index.html" class="nav-link">Home</a></li>
                 <li><a href="enterprise.html" class="nav-link">Enterprise</a></li>
-                <!--<li><a href="events.html" class="nav-link">Events</a></li>-->
                 <li><a href="training.html" class="nav-link">Training</a></li>
-                <!--<li><a href="startups.html" class="nav-link">Startup Opportunities</a></li>-->
                 <li><a href="bootcamp.html" class="nav-link active">Bootcamp</a></li>
                 <li><a href="about.html" class="nav-link">About Us</a></li>
                 <li><a href="contact.html" class="btn btn-primary">Contact Us</a></li>
@@ -1377,11 +1569,11 @@
     </header>
 
     <!-- Bootcamp Hero Section -->
-    <section class="bootcamp-hero">
+    <section class="bootcamp-hero" id="bootcampHero">
         <div class="container">
             <div class="bootcamp-hero-content">
                 <div class="bootcamp-badge">
-                    <i class="fas fa-crown"></i> PIONEER COHORT 1 • 12 SPOTS ONLY
+                    <i class="fas fa-crown"></i> PIONEER COHORT 1 • LIMITED SPOTS
                 </div>
                 
                 <h1>From Scratch to <span class="text-gradient">Owning Your First DSOG Store</span></h1>
@@ -1389,7 +1581,7 @@
                 
                 <div class="pricing-badge">
                     <i class="fas fa-gem"></i>
-                    <div>Founder's Price: <span>KSh 3,500</span> (Future Cohorts: KSh 25,000+)</div>
+                    <div>Special Pioneer Price: <span>KSh 3,500</span> (Future Cohorts: KSh 25,000+)</div>
                 </div>
                 
                 <div class="hero-highlights">
@@ -1413,7 +1605,7 @@
                 
                 <div class="hero-buttons">
                     <a href="#google-form" class="btn btn-primary btn-large">
-                        <i class="fas fa-user-plus"></i> Apply Now (12/12 Spots)
+                        <i class="fas fa-user-plus"></i> Apply for Pioneer Cohort
                     </a>
                     <a href="#tracks" class="btn btn-secondary btn-large">
                         <i class="fas fa-store-alt"></i> Choose Your Franchise Track
@@ -1581,7 +1773,7 @@
                         <li><i class="fas fa-check"></i> Team 1: Fashion & Accessories</li>
                         <li><i class="fas fa-check"></i> Team 2: Food & Grocery</li>
                         <li><i class="fas fa-check"></i> Team 3: Courier & Logistics</li>
-                        <li><i class="fas fa-check"></i> Each team = 4 future franchise owners</li>
+                        <li><i class="fas fa-check"></i> Each team = 4 future store owners</li>
                     </ul>
                 </div>
                 
@@ -1600,7 +1792,7 @@
                 <div class="team-card">
                     <div class="team-number">12</div>
                     <h3>Total Pioneers</h3>
-                    <p>Only 12 individuals will be accepted into Pioneer Cohort 1 at the founder's price.</p>
+                    <p>Only 12 individuals will be accepted into Pioneer Cohort 1 at the special pioneer price.</p>
                     <ul class="benefit-list">
                         <li><i class="fas fa-check"></i> Limited to ensure personalized attention</li>
                         <li><i class="fas fa-check"></i> Exclusive networking opportunities</li>
@@ -1764,7 +1956,7 @@
             
             <div class="pricing-badge" style="background: rgba(255,255,255,0.2); color: white; border-color: rgba(255,255,255,0.3); margin-top: var(--space-xl);">
                 <i class="fas fa-gem"></i>
-                <div>Founder's Price: <span style="color: var(--primary-gold);">KSh 3,500</span> (Save KSh 21,500)</div>
+                <div>Special Pioneer Price: <span style="color: var(--primary-gold);">KSh 3,500</span> (Save KSh 21,500)</div>
             </div>
             
             <div class="hero-buttons" style="margin-top: var(--space-2xl);">
@@ -1814,9 +2006,9 @@
                         <li><a href="index.html">Home</a></li>
                         <li><a href="about.html">About DSOG</a></li>
                         <li><a href="enterprise.html">Enterprise Solutions</a></li>
-                        <li><a href="events.html">Entrepreneurship Events</a></li>
                         <li><a href="training.html">Training Programs</a></li>
-                        <li><a href="startups.html">Startup Support</a></li>
+                        <li><a href="bootcamp.html">Bootcamp</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
                     </ul>
                 </div>
                 
@@ -1844,6 +2036,47 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 DSOG Franchise Bootcamp Page Loaded');
+            
+            // Initialize Countdown Timer
+            function initializeCountdown() {
+                // Set application deadline (7 days from now)
+                const deadline = new Date();
+                deadline.setDate(deadline.getDate() + 7);
+                deadline.setHours(23, 59, 59, 999);
+                
+                function updateCountdown() {
+                    const now = new Date();
+                    const difference = deadline - now;
+                    
+                    if (difference > 0) {
+                        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+                        
+                        document.getElementById('countdownDays').textContent = days.toString().padStart(2, '0');
+                        document.getElementById('countdownHours').textContent = hours.toString().padStart(2, '0');
+                        document.getElementById('countdownMinutes').textContent = minutes.toString().padStart(2, '0');
+                        document.getElementById('countdownSeconds').textContent = seconds.toString().padStart(2, '0');
+                        
+                        // Show banner if countdown is active
+                        document.getElementById('applicationBanner').classList.add('show');
+                        document.getElementById('header').classList.add('with-banner');
+                        document.getElementById('bootcampHero').classList.add('with-banner');
+                    } else {
+                        // Hide banner if countdown has passed
+                        document.getElementById('applicationBanner').classList.remove('show');
+                        document.getElementById('header').classList.remove('with-banner');
+                        document.getElementById('bootcampHero').classList.remove('with-banner');
+                    }
+                }
+                
+                // Initial update
+                updateCountdown();
+                
+                // Update every second
+                setInterval(updateCountdown, 1000);
+            }
             
             // Theme Toggle
             const themeToggle = document.getElementById('themeToggle');
@@ -2010,19 +2243,6 @@
                 });
             });
 
-            // Update spot counter (simulate decreasing spots)
-            let spots = 12;
-            const spotCounter = document.querySelector('.spot-counter');
-            if (spotCounter) {
-                // Simulate spots being taken (for demo purposes)
-                setInterval(() => {
-                    if (spots > 8) {
-                        spots--;
-                        spotCounter.textContent = `${spots}/12 SPOTS AVAILABLE`;
-                    }
-                }, 30000); // Every 30 seconds
-            }
-
             // Form iframe loading indicator
             const formIframe = document.querySelector('.form-container iframe');
             if (formIframe) {
@@ -2048,6 +2268,38 @@
 
             formSteps.forEach(step => {
                 formObserver.observe(step);
+            });
+
+            // Initialize countdown
+            initializeCountdown();
+
+            // Touch optimizations
+            document.addEventListener('touchstart', function() {}, {passive: true});
+            
+            // Prevent zoom on double tap
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', function(event) {
+                const now = Date.now();
+                if (now - lastTouchEnd <= 300) {
+                    event.preventDefault();
+                }
+                lastTouchEnd = now;
+            }, false);
+
+            // Performance optimization: Debounce scroll events
+            let scrollTimeout;
+            window.addEventListener('scroll', function() {
+                if (scrollTimeout) {
+                    window.cancelAnimationFrame(scrollTimeout);
+                }
+                scrollTimeout = window.requestAnimationFrame(function() {
+                    // Scroll handling code here
+                });
+            });
+
+            // Lazy loading for images
+            document.querySelectorAll('img').forEach(img => {
+                img.loading = 'lazy';
             });
         });
     </script>
