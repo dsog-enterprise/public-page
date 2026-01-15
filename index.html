@@ -33,12 +33,15 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Google Fonts for Professional Look -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Advanced Styling with Perfect Alignment -->
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+    
     <style>
         /* ===== CSS CUSTOM PROPERTIES ===== */
         :root {
@@ -102,25 +105,25 @@
             --radius-2xl: 22px;
             --radius-full: 9999px;
             
-            /* Spacing System - Consistent Units */
-            --space-3xs: 0.125rem;  /* 2px */
-            --space-2xs: 0.25rem;   /* 4px */
-            --space-xs: 0.5rem;     /* 8px */
-            --space-sm: 0.75rem;    /* 12px */
-            --space-md: 1rem;       /* 16px */
-            --space-lg: 1.5rem;     /* 24px */
-            --space-xl: 2rem;       /* 32px */
-            --space-2xl: 3rem;      /* 48px */
-            --space-3xl: 4rem;      /* 64px */
-            --space-4xl: 6rem;      /* 96px */
-            --space-5xl: 8rem;      /* 128px */
+            /* Spacing System */
+            --space-3xs: 0.125rem;
+            --space-2xs: 0.25rem;
+            --space-xs: 0.5rem;
+            --space-sm: 0.75rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --space-2xl: 3rem;
+            --space-3xl: 4rem;
+            --space-4xl: 6rem;
+            --space-5xl: 8rem;
             
             /* Professional Typography */
             --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
             --font-heading: 'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             --font-spiritual: 'Playfair Display', serif;
             
-            /* Layout Variables - Fixed Values */
+            /* Layout Variables */
             --header-height: 72px;
             --container-width: 1320px;
             --nav-item-spacing: 2.5rem;
@@ -187,7 +190,7 @@
             transition: var(--transition-smooth);
             position: relative;
             min-height: 100vh;
-            font-size: 0.9375rem; /* 15px */
+            font-size: 0.9375rem;
             font-weight: 400;
             letter-spacing: 0.01em;
         }
@@ -219,7 +222,7 @@
             color: var(--text-primary);
         }
 
-        /* ===== PERFECTLY ALIGNED HEADER ===== */
+        /* ===== HEADER ===== */
         .header {
             position: fixed;
             top: 0;
@@ -243,7 +246,7 @@
             box-shadow: var(--shadow-lg);
         }
 
-        /* Navbar Container with Perfect Alignment */
+        /* Navbar Container */
         .navbar {
             display: flex;
             align-items: center;
@@ -256,7 +259,7 @@
             gap: var(--space-xl);
         }
 
-        /* Logo with Perfect Alignment */
+        /* Logo */
         .logo {
             display: flex;
             align-items: center;
@@ -294,7 +297,7 @@
             font-weight: 700;
         }
 
-        /* Main Navigation - Perfectly Aligned */
+        /* Main Navigation */
         .nav-links {
             display: flex;
             align-items: center;
@@ -310,14 +313,13 @@
             color: var(--text-secondary);
             text-decoration: none;
             font-weight: 500;
-            font-size: 0.875rem; /* 14px */
+            font-size: 0.875rem;
             padding: 0;
             height: 100%;
             display: flex;
             align-items: center;
             transition: var(--transition-fast);
             letter-spacing: 0.01em;
-            text-transform: none;
             white-space: nowrap;
         }
 
@@ -350,7 +352,7 @@
             width: 100%;
         }
 
-        /* Contact Button Alignment */
+        /* Contact Button */
         .nav-links .btn-primary {
             font-size: 0.875rem;
             padding: var(--space-sm) var(--space-lg);
@@ -359,7 +361,7 @@
             flex-shrink: 0;
         }
 
-        /* Mobile Menu Button - Perfect Alignment */
+        /* Mobile Menu Button */
         .mobile-menu-btn {
             display: none;
             align-items: center;
@@ -382,7 +384,7 @@
             background: var(--bg-tertiary);
         }
 
-        /* ===== TYPOGRAPHY SYSTEM ===== */
+        /* ===== TYPOGRAPHY ===== */
         h1, h2, h3, h4, h5, h6 {
             font-family: var(--font-heading);
             font-weight: 700;
@@ -405,11 +407,6 @@
 
         h3 {
             font-size: clamp(1.5rem, 3vw, 2rem);
-            font-weight: 600;
-        }
-
-        h4 {
-            font-size: clamp(1.25rem, 2.5vw, 1.75rem);
             font-weight: 600;
         }
 
@@ -454,18 +451,6 @@
             font-weight: 400;
         }
 
-        .text-small {
-            font-size: 0.875rem;
-            color: var(--text-tertiary);
-            letter-spacing: 0.01em;
-        }
-
-        .text-medium {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
         .slogan {
             font-family: var(--font-spiritual);
             font-style: italic;
@@ -487,28 +472,12 @@
             font-family: serif;
         }
 
-        .text-center { text-align: center; }
-        .text-left { text-align: left; }
-        .text-right { text-align: right; }
-
-        .text-primary { color: var(--primary-red); }
-        .text-gold { color: var(--primary-gold); }
-        .text-accent { color: var(--accent-blue); }
-        .text-spiritual { color: var(--accent-purple); }
-
         /* ===== LAYOUT & CONTAINERS ===== */
         .container {
             width: 100%;
             max-width: var(--container-width);
             margin: 0 auto;
             padding: 0 var(--space-xl);
-        }
-
-        .container-wide {
-            width: 100%;
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 0 var(--space-2xl);
         }
 
         section {
@@ -552,7 +521,7 @@
             font-weight: 600;
         }
 
-        /* ===== BUTTON SYSTEM ===== */
+        /* ===== BUTTONS ===== */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -570,15 +539,6 @@
             overflow: hidden;
             white-space: nowrap;
             letter-spacing: 0.02em;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: inherit;
-            z-index: -1;
-            opacity: 0.9;
         }
 
         .btn-primary {
@@ -648,11 +608,6 @@
         .btn-large {
             padding: var(--space-lg) var(--space-2xl);
             font-size: 1rem;
-        }
-
-        .btn-block {
-            width: 100%;
-            display: flex;
         }
 
         /* ===== HERO SECTION ===== */
@@ -911,7 +866,7 @@
             flex-shrink: 0;
         }
 
-        /* ===== UPDATED EVENTS SECTION ===== */
+        /* ===== EVENTS SECTION ===== */
         .events-section {
             background: var(--bg-primary);
             position: relative;
@@ -942,24 +897,6 @@
             margin-bottom: var(--space-sm);
             display: block;
             font-weight: 600;
-        }
-
-        .events-header h2 {
-            position: relative;
-            display: inline-block;
-            margin-bottom: var(--space-lg);
-        }
-
-        .events-header h2::after {
-            content: '';
-            position: absolute;
-            bottom: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 3px;
-            background: var(--gradient-primary);
-            border-radius: 2px;
         }
 
         .events-grid {
@@ -1483,8 +1420,6 @@
         }
 
         /* ===== RESPONSIVE DESIGN ===== */
-        
-        /* Tablet */
         @media (max-width: 768px) {
             :root {
                 --header-height: 64px;
@@ -1572,7 +1507,6 @@
                 font-size: 1rem;
             }
 
-            /* Updated Events Responsive */
             .event-image-container {
                 height: 200px;
             }
@@ -1588,7 +1522,6 @@
             }
         }
 
-        /* Mobile */
         @media (max-width: 480px) {
             :root {
                 --header-height: 60px;
@@ -1646,7 +1579,6 @@
                 grid-template-columns: 1fr;
             }
 
-            /* Updated Events Responsive */
             .event-image-container {
                 height: 180px;
             }
@@ -1662,7 +1594,6 @@
             }
         }
 
-        /* Small Mobile */
         @media (max-width: 360px) {
             .logo-image {
                 height: 32px;
@@ -1691,7 +1622,6 @@
                 font-size: 0.85rem;
             }
 
-            /* Updated Events Responsive */
             .events-grid {
                 grid-template-columns: 1fr;
             }
@@ -1701,107 +1631,28 @@
             }
         }
 
-        /* Print Styles */
-        @media print {
-            .header,
-            .theme-toggle,
-            .mobile-menu-btn,
-            .hero-buttons,
-            .btn {
-                display: none !important;
-            }
-            
-            body {
-                background: white !important;
-                color: black !important;
-                font-size: 12pt !important;
-            }
-            
-            .hero {
-                min-height: auto;
-                padding: 2rem 0;
-            }
-            
-            section {
-                padding: 1.5rem 0;
-                break-inside: avoid;
-            }
-            
-            .service-card {
-                break-inside: avoid;
-                border: 1px solid #ddd;
-                box-shadow: none !important;
-                transform: none !important;
-            }
-            
-            a {
-                color: black !important;
-                text-decoration: underline;
-            }
+        /* Loading States */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-2xl);
+            color: var(--text-secondary);
         }
 
-        /* Reduced Motion */
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-            
-            .animate-on-scroll {
-                transition: none !important;
-            }
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--primary-red);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: var(--space-md);
         }
 
-        /* High Contrast Mode */
-        @media (prefers-contrast: high) {
-            :root {
-                --primary-red: #8B0000;
-                --primary-dark: #000000;
-                --primary-gold: #8B7500;
-                --text-primary: #000000;
-                --text-secondary: #333333;
-                --border-color: #000000;
-            }
-            
-            [data-theme="dark"] {
-                --text-primary: #FFFFFF;
-                --text-secondary: #CCCCCC;
-                --border-color: #FFFFFF;
-            }
-            
-            .btn {
-                border: 2px solid currentColor;
-            }
-            
-            .service-card {
-                border: 2px solid var(--border-color);
-            }
-        }
-
-        /* Touch Device Optimizations */
-        @media (hover: none) and (pointer: coarse) {
-            .service-card:hover,
-            .contact-item:hover,
-            .btn:hover,
-            .nav-link:hover {
-                transform: none;
-            }
-            
-            .btn:active,
-            .nav-link:active {
-                transform: scale(0.98);
-            }
-
-            .event-card:hover {
-                transform: none;
-            }
-
-            .event-card:active {
-                transform: scale(0.98);
-            }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -1811,7 +1662,7 @@
         <i class="fas fa-moon"></i>
     </button>
 
-    <!-- Perfectly Aligned Header -->
+    <!-- Header -->
     <header class="header" id="header">
         <nav class="navbar">
             <a href="index.html" class="logo">
@@ -1824,11 +1675,10 @@
             <ul class="nav-links" id="navLinks">
                 <li><a href="index.html" class="nav-link active">Home</a></li>
                 <li><a href="enterprise.html" class="nav-link">Enterprise</a></li>
-                <!--<li><a href="events.html" class="nav-link">Events</a></li>-->
                 <li><a href="training.html" class="nav-link">Training</a></li>
-                <!--<li><a href="startups.html" class="nav-link">Startup Opportunities</a></li>-->
                 <li><a href="bootcamp.html" class="nav-link">Bootcamp</a></li>
                 <li><a href="about.html" class="nav-link">About Us</a></li>
+                <li><a href="admin.html" class="nav-link">Admin</a></li>
                 <li><a href="contact.html" class="btn btn-primary">Contact Us</a></li>
             </ul>
 
@@ -1846,16 +1696,11 @@
                     <i class="fas fa-bullseye"></i> EMPOWERING BUSINESSES & ENTREPRENEURS
                 </div>
                 
-                <h1>Become <span class="text-gradient">What You</span> Believe!</h1>
-                <p class="lead">DSOG empowers businesses, startups, and young entrepreneurs through transformative training, impactful events, and real startup opportunities that turn learning into successful enterprises.</p>
+                <h1 id="heroTitle">Loading...</h1>
+                <p class="lead" id="heroSubtitle">Loading content...</p>
                 
-                <div class="category-tags">
-                    <span class="category-tag">Business Training</span>
-                    <span class="category-tag">Entrepreneurship Events</span>
-                    <span class="category-tag">Startup Opportunities</span>
-                    <span class="category-tag">Professional Development</span>
-                    <span class="category-tag">Enterprise Growth</span>
-                    <span class="category-tag">Young Entrepreneurs</span>
+                <div class="category-tags" id="categoryTags">
+                    <!-- Tags will be loaded dynamically -->
                 </div>
                 
                 <div class="hero-buttons">
@@ -1876,36 +1721,11 @@
             <div class="section-header">
                 <span class="section-subtitle">Our Methodology</span>
                 <h2>How We <span class="text-gradient">Empower Entrepreneurs</span></h2>
-                <p class="lead">We engage people through events aimed at shaping their business acuity, train professionals, and provide startup opportunities to practice what they've learned.</p>
+                <p class="lead" id="approachSubtitle">Loading approach content...</p>
             </div>
             
-            <div class="approach-grid">
-                <div class="approach-card animate-on-scroll">
-                    <div class="approach-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <span class="approach-tag">ENGAGEMENT</span>
-                    <h3>Transformative Events</h3>
-                    <p>We organize impactful events that engage entrepreneurs in hands-on experiences, networking opportunities, and practical business challenges that shape their business acuity.</p>
-                </div>
-                
-                <div class="approach-card animate-on-scroll">
-                    <div class="approach-icon">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <span class="approach-tag">DEVELOPMENT</span>
-                    <h3>Professional Training</h3>
-                    <p>Comprehensive training programs designed to equip professionals and entrepreneurs with the skills needed to thrive in today's competitive business landscape.</p>
-                </div>
-                
-                <div class="approach-card animate-on-scroll">
-                    <div class="approach-icon">
-                        <i class="fas fa-rocket"></i>
-                    </div>
-                    <span class="approach-tag">OPPORTUNITY</span>
-                    <h3>Startup Incubation</h3>
-                    <p>We provide real startup opportunities where entrepreneurs can practice what they've learned, turning theory into practice and ideas into successful enterprises.</p>
-                </div>
+            <div class="approach-grid" id="approachCards">
+                <!-- Cards will be loaded dynamically -->
             </div>
         </div>
     </section>
@@ -1980,7 +1800,7 @@
         </div>
     </section>
 
-    <!-- Updated Upcoming Events Section -->
+    <!-- Upcoming Events Section -->
     <section id="events" class="events-section">
         <div class="container">
             <div class="events-header">
@@ -1989,125 +1809,11 @@
                 <p class="lead">Join our transformative events designed to shape your business acuity, ignite your entrepreneurial fire, and connect you with divine purpose.</p>
             </div>
             
-            <div class="events-grid">
-                <!-- Event 1: DSOG Franchise Startup Bootcamp (3 Months) -->
-                <div class="event-card animate-on-scroll">
-                    <div class="event-image-container">
-                        <img src="https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp" 
-                             alt="DSOG Franchise Startup Bootcamp" 
-                             class="event-image">
-                        <div class="event-date-badge">
-                            <i class="fas fa-calendar"></i> Feb - Apr, 2026
-                        </div>
-                    </div>
-                    <div class="event-content">
-                        <span class="event-category bootcamp">3-MONTH BOOTCAMP</span>
-                        <div class="duration-badge">
-                            <i class="fas fa-clock"></i> 3 Months Intensive Program
-                        </div>
-                        <div class="event-details">
-                            <h4>DSOG Franchise Bootcamp</h4>
-                            <p>A comprehensive 3-month intensive program designed to transform aspiring entrepreneurs into successful franchise business owners. This bootcamp provides hands-on training, mentorship, and practical experience in starting and scaling a franchise business.</p>
-                            <div class="event-meta">
-                                <div class="meta-item">
-                                    <i class="fas fa-clock"></i>
-                                    <span>Flexible Schedule</span>
-                                </div>
-                                <div class="meta-item">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    <span>Hybrid: Virtual & On-site</span>
-                                </div>
-                                <div class="meta-item">
-                                    <i class="fas fa-users"></i>
-                                    <span>Limited to 30 Participants</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event-action">
-                            <a href="bootcamp.html" class="btn btn-primary btn-block">
-                                <i class="fas fa-graduation-cap"></i> Enroll in Bootcamp
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Event 2: Become What You Believe -->
-                <div class="event-card inspiration-event animate-on-scroll">
-                    <div class="event-image-container">
-                        <img src="https://i.postimg.cc/sgNRzKbd/20260114-1543-Image-Generation-simple-compose-01key8g91re75trpnnjn6j42z5-1.webp" 
-                             alt="Become What You Believe Event" 
-                             class="event-image">
-                        <div class="event-date-badge">
-                            <i class="fas fa-calendar"></i> Jan 31, 2026
-                        </div>
-                    </div>
-                    <div class="event-content">
-                        <span class="event-category inspiration">INSPIRATION SUMMIT</span>
-                        <div class="event-details">
-                            <h4 class="text-gradient-gold">Become What You Believe</h4>
-                            <p><strong>For Startups & Established Business Leaders</strong></p>
-                            <p>An electrifying event designed to ignite the entrepreneurial fire within. For new entrepreneurs: break through your limits and launch with confidence. For established business leaders: rediscover your passion and find renewed energy to keep pushing forward. This transformative experience will rekindle your business vision and provide practical strategies for sustainable growth.</p>
-                            <div class="event-meta">
-                                <div class="meta-item">
-                                    <i class="fas fa-fire"></i>
-                                    <span>Ignite Your Passion</span>
-                                </div>
-                                <div class="meta-item">
-                                    <i class="fas fa-bullseye"></i>
-                                    <span>Break Through Limits</span>
-                                </div>
-                                <div class="meta-item">
-                                    <i class="fas fa-heart"></i>
-                                    <span>Renew Your Purpose</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event-action">
-                            <a href="contact.html" class="btn btn-gold btn-block">
-                                <i class="fas fa-fire"></i> Ignite Your Journey
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Event 3: The Making of an Icon -->
-                <div class="event-card spiritual-event animate-on-scroll">
-                    <div class="event-image-container">
-                        <img src="https://i.postimg.cc/kXw6d695/20260114-1617-Image-Generation-simple-compose-01keyad7jyf15rcfk3tz16wdbq-1.webp" 
-                             alt="The Making of an Icon" 
-                             class="event-image">
-                        <div class="event-date-badge">
-                            <i class="fas fa-calendar"></i> Feb 28, 2026
-                        </div>
-                    </div>
-                    <div class="event-content">
-                        <span class="event-category spiritual">SPIRITUAL WORKSHOP</span>
-                        <div class="event-details">
-                            <h4 class="text-gradient-spiritual">The Making of an Icon</h4>
-                            <div class="slogan">"Search within me O Lord"</div>
-                            <p>A God-based discussion workshop designed to help individuals discover and understand their divine purpose from the mind of God the Creator. This transformative session combines spiritual wisdom with practical application to help you align your business and personal life with God's plan for you.</p>
-                            <p><strong>Discover your unique purpose and become the icon God created you to be.</strong></p>
-                            <div class="event-meta">
-                                <div class="meta-item">
-                                    <i class="fas fa-pray"></i>
-                                    <span>Spiritual Discovery</span>
-                                </div>
-                                <div class="meta-item">
-                                    <i class="fas fa-bible"></i>
-                                    <span>Divine Purpose</span>
-                                </div>
-                                <div class="meta-item">
-                                    <i class="fas fa-star"></i>
-                                    <span>Icon Development</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event-action">
-                            <a href="contact.html" class="btn btn-spiritual btn-block">
-                                <i class="fas fa-hands-praying"></i> Discover Your Purpose
-                            </a>
-                        </div>
-                    </div>
+            <div class="events-grid" id="eventsGrid">
+                <!-- Events will be loaded dynamically -->
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading events...</p>
                 </div>
             </div>
             
@@ -2134,18 +1840,11 @@
                     <p>DSOG exists to empower entrepreneurs with the knowledge, skills, and opportunities needed to build successful enterprises. We believe in transforming business ideas into reality through practical engagement and support.</p>
                     <p>Our vision is to create a thriving ecosystem where every entrepreneur has access to the training, events, and startup opportunities needed to succeed in today's competitive business environment.</p>
                     
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-number">500+</div>
-                            <div class="text-small">Entrepreneurs Trained</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">50+</div>
-                            <div class="text-small">Events Hosted</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">30+</div>
-                            <div class="text-small">Startups Supported</div>
+                    <div class="stats-grid" id="statsGrid">
+                        <!-- Stats will be loaded dynamically -->
+                        <div class="loading">
+                            <div class="loading-spinner"></div>
+                            <p>Loading statistics...</p>
                         </div>
                     </div>
                 </div>
@@ -2169,46 +1868,39 @@
         </div>
     </section>
 
-    <!-- Value Proposition -->
-    <section class="value-proposition">
+    <!-- Team Section -->
+    <section id="team" class="value-proposition">
         <div class="container">
             <div class="section-header">
-                <span class="section-subtitle">Why Choose Us</span>
-                <h2>What Makes <span class="text-gradient">DSOG Different</span></h2>
-                <p class="lead">We provide more than just training - we offer a complete entrepreneurial journey from learning to enterprise.</p>
+                <span class="section-subtitle">Our Team</span>
+                <h2>Meet Our <span class="text-gradient">Expert Team</span></h2>
+                <p class="lead">Learn from successful entrepreneurs and industry experts who have walked the path before you.</p>
             </div>
             
-            <div class="value-grid">
-                <div class="value-card animate-on-scroll">
-                    <div class="value-icon">
-                        <i class="fas fa-hands-helping"></i>
-                    </div>
-                    <h4>Hands-on Experience</h4>
-                    <p>We believe in learning by doing. Our events and opportunities provide practical, real-world business experience.</p>
+            <div class="value-grid" id="teamGrid">
+                <!-- Team members will be loaded dynamically -->
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading team members...</p>
                 </div>
-                
-                <div class="value-card animate-on-scroll">
-                    <div class="value-icon">
-                        <i class="fas fa-network-wired"></i>
-                    </div>
-                    <h4>Strong Community</h4>
-                    <p>Join a network of like-minded entrepreneurs, mentors, and industry experts who support each other's growth.</p>
-                </div>
-                
-                <div class="value-card animate-on-scroll">
-                    <div class="value-icon">
-                        <i class="fas fa-road"></i>
-                    </div>
-                    <h4>Clear Pathway</h4>
-                    <p>From training to startup opportunities, we provide a clear pathway to turn your entrepreneurial dreams into reality.</p>
-                </div>
-                
-                <div class="value-card animate-on-scroll">
-                    <div class="value-icon">
-                        <i class="fas fa-user-tie"></i>
-                    </div>
-                    <h4>Expert Guidance</h4>
-                    <p>Learn from successful entrepreneurs and industry experts who have walked the path before you.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="services-overview">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Success Stories</span>
+                <h2>What Our <span class="text-gradient">Clients Say</span></h2>
+                <p class="lead">Hear from entrepreneurs and businesses who have transformed their journeys with DSOG.</p>
+            </div>
+            
+            <div class="services-grid" id="testimonialsGrid">
+                <!-- Testimonials will be loaded dynamically -->
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading testimonials...</p>
                 </div>
             </div>
         </div>
@@ -2325,40 +2017,70 @@
 
     <!-- JavaScript -->
     <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDb5ZFHbo7lGM8ph0oBxFVTHRF5C5C_DWU",
+            authDomain: "dsog-events.firebaseapp.com",
+            databaseURL: "https://dsog-events-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "dsog-events",
+            storageBucket: "dsog-events.firebasestorage.app",
+            messagingSenderId: "1075977932287",
+            appId: "1:1075977932287:web:b2bf4d1c0083d2dac8ebca"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Initialize the website
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 DSOG - Empowering Entrepreneurs Version 7.0.0');
+            console.log('🚀 DSOG Website Version 7.0.0');
             
-            // Theme Toggle
+            // Initialize all components
+            initializeTheme();
+            initializeNavigation();
+            initializeAnimations();
+            initializeScrollEffects();
+            
+            // Load dynamic content from Firebase
+            loadHomePageContent();
+            loadEvents();
+            loadStatistics();
+            loadTeamMembers();
+            loadTestimonials();
+            
+            // Set current year
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            console.log('Website initialized successfully');
+        });
+
+        // Theme Toggle
+        function initializeTheme() {
             const themeToggle = document.getElementById('themeToggle');
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
             
-            // Get saved theme or system preference
             const savedTheme = localStorage.getItem('theme');
             const systemTheme = prefersDark.matches ? 'dark' : 'light';
             const initialTheme = savedTheme || systemTheme;
             
-            // Set initial theme
             document.documentElement.setAttribute('data-theme', initialTheme);
             updateThemeIcon(initialTheme);
             
-            // Toggle theme on button click
             themeToggle.addEventListener('click', () => {
                 const currentTheme = document.documentElement.getAttribute('data-theme');
                 const newTheme = currentTheme === 'light' ? 'dark' : 'light';
                 
-                // Apply theme transition
                 document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
                 document.documentElement.setAttribute('data-theme', newTheme);
                 localStorage.setItem('theme', newTheme);
                 updateThemeIcon(newTheme);
                 
-                // Remove transition after animation
                 setTimeout(() => {
                     document.body.style.transition = '';
                 }, 300);
             });
             
-            // Listen for system theme changes
             prefersDark.addEventListener('change', (e) => {
                 if (!localStorage.getItem('theme')) {
                     const newTheme = e.matches ? 'dark' : 'light';
@@ -2367,7 +2089,6 @@
                 }
             });
             
-            // Update theme icon
             function updateThemeIcon(theme) {
                 const icon = themeToggle.querySelector('i');
                 if (theme === 'dark') {
@@ -2378,8 +2099,10 @@
                     themeToggle.setAttribute('aria-label', 'Switch to dark theme');
                 }
             }
+        }
 
-            // Mobile Menu Toggle
+        // Navigation
+        function initializeNavigation() {
             const mobileMenuBtn = document.getElementById('mobileMenuBtn');
             const navLinks = document.getElementById('navLinks');
             
@@ -2391,7 +2114,6 @@
                     icon.className = navLinks.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
                     this.setAttribute('aria-expanded', navLinks.classList.contains('active'));
                     
-                    // Prevent body scroll when menu is open
                     if (navLinks.classList.contains('active')) {
                         document.body.style.overflow = 'hidden';
                     } else {
@@ -2399,7 +2121,6 @@
                     }
                 });
 
-                // Close menu when clicking outside
                 document.addEventListener('click', function(event) {
                     if (!navLinks.contains(event.target) && !mobileMenuBtn.contains(event.target) && navLinks.classList.contains('active')) {
                         navLinks.classList.remove('active');
@@ -2409,7 +2130,6 @@
                     }
                 });
 
-                // Close menu when clicking a link
                 navLinks.querySelectorAll('a').forEach(link => {
                     link.addEventListener('click', () => {
                         if (window.innerWidth <= 1024) {
@@ -2421,7 +2141,6 @@
                     });
                 });
                 
-                // Handle window resize
                 window.addEventListener('resize', () => {
                     if (window.innerWidth > 1024) {
                         navLinks.classList.remove('active');
@@ -2442,7 +2161,35 @@
                 }
             });
 
-            // Scroll animations
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    
+                    if (href.startsWith('#') && href !== '#') {
+                        e.preventDefault();
+                        
+                        const targetId = href.substring(1);
+                        const targetElement = document.getElementById(targetId);
+                        
+                        if (targetElement) {
+                            const headerHeight = document.getElementById('header').offsetHeight;
+                            const targetPosition = targetElement.offsetTop - headerHeight - 20;
+                            
+                            window.scrollTo({
+                                top: targetPosition,
+                                behavior: 'smooth'
+                            });
+                            
+                            history.pushState(null, '', href);
+                        }
+                    }
+                });
+            });
+        }
+
+        // Animations
+        function initializeAnimations() {
             const animatedElements = document.querySelectorAll('.animate-on-scroll');
             
             const observer = new IntersectionObserver((entries) => {
@@ -2464,48 +2211,404 @@
                 element.dataset.delay = index * 100;
                 observer.observe(element);
             });
+        }
 
-            // Smooth scroll for same-page anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    const href = this.getAttribute('href');
-                    
-                    // Only handle same-page anchors
-                    if (href.startsWith('#') && href !== '#') {
-                        e.preventDefault();
+        // Scroll Effects
+        function initializeScrollEffects() {
+            let lastScroll = 0;
+            window.addEventListener('scroll', () => {
+                const currentScroll = window.pageYOffset;
+                
+                // Add parallax effect to hero
+                const hero = document.querySelector('.hero');
+                if (hero) {
+                    const scrolled = window.pageYOffset;
+                    const rate = scrolled * -0.5;
+                    hero.style.transform = `translate3d(0, ${rate}px, 0)`;
+                }
+                
+                lastScroll = currentScroll;
+            });
+        }
+
+        // ==================== FIREBASE DATA LOADING ====================
+
+        // Load Home Page Content
+        async function loadHomePageContent() {
+            try {
+                const snapshot = await database.ref('homePageContent').once('value');
+                const content = snapshot.val();
+                
+                if (content) {
+                    // Update hero section
+                    if (content.hero) {
+                        document.getElementById('heroTitle').textContent = content.hero.mainTitle || 'Become What You Believe!';
+                        document.getElementById('heroSubtitle').textContent = content.hero.subtitle || 'DSOG empowers businesses, startups, and young entrepreneurs through transformative training, impactful events, and real startup opportunities that turn learning into successful enterprises.';
                         
-                        const targetId = href.substring(1);
-                        const targetElement = document.getElementById(targetId);
-                        
-                        if (targetElement) {
-                            const headerHeight = document.getElementById('header').offsetHeight;
-                            const targetPosition = targetElement.offsetTop - headerHeight - 20;
-                            
-                            window.scrollTo({
-                                top: targetPosition,
-                                behavior: 'smooth'
+                        // Update category tags
+                        const categoryTags = document.getElementById('categoryTags');
+                        if (content.hero.categoryTags && Array.isArray(content.hero.categoryTags)) {
+                            categoryTags.innerHTML = '';
+                            content.hero.categoryTags.forEach(tag => {
+                                const tagElement = document.createElement('span');
+                                tagElement.className = 'category-tag';
+                                tagElement.textContent = tag;
+                                categoryTags.appendChild(tagElement);
                             });
-                            
-                            // Update URL without page reload
-                            history.pushState(null, '', href);
                         }
                     }
-                });
-            });
-
-            // Set current year in footer
-            document.getElementById('currentYear').textContent = new Date().getFullYear();
-
-            // Touch optimizations
-            let lastTouchEnd = 0;
-            document.addEventListener('touchend', (event) => {
-                const now = Date.now();
-                if (now - lastTouchEnd <= 300) {
-                    event.preventDefault();
+                    
+                    // Update approach section
+                    if (content.approach) {
+                        document.getElementById('approachSubtitle').textContent = content.approach.subtitle || 'We engage people through events aimed at shaping their business acuity, train professionals, and provide startup opportunities to practice what they\'ve learned.';
+                        
+                        // Update approach cards
+                        const approachCards = document.getElementById('approachCards');
+                        if (content.approach.cards && Array.isArray(content.approach.cards)) {
+                            approachCards.innerHTML = '';
+                            content.approach.cards.forEach((card, index) => {
+                                const cardElement = document.createElement('div');
+                                cardElement.className = 'approach-card animate-on-scroll';
+                                cardElement.dataset.delay = index * 100;
+                                cardElement.innerHTML = `
+                                    <div class="approach-icon">
+                                        <i class="${card.icon || 'fas fa-users'}"></i>
+                                    </div>
+                                    <span class="approach-tag">${card.tag || 'ENGAGEMENT'}</span>
+                                    <h3>${card.title || 'Transformative Events'}</h3>
+                                    <p>${card.description || 'We organize impactful events that engage entrepreneurs in hands-on experiences, networking opportunities, and practical business challenges that shape their business acuity.'}</p>
+                                `;
+                                approachCards.appendChild(cardElement);
+                            });
+                            
+                            // Re-initialize animations for new elements
+                            setTimeout(() => {
+                                initializeAnimations();
+                            }, 100);
+                        }
+                    }
                 }
-                lastTouchEnd = now;
-            }, false);
-        });
+                
+                console.log('Home page content loaded');
+            } catch (error) {
+                console.error('Error loading home page content:', error);
+                showDefaultContent();
+            }
+        }
+
+        // Load Events
+        async function loadEvents() {
+            try {
+                const snapshot = await database.ref('upcomingEvents').orderByChild('active').equalTo(true).once('value');
+                const events = snapshot.val();
+                const eventsGrid = document.getElementById('eventsGrid');
+                
+                eventsGrid.innerHTML = '';
+                
+                if (events) {
+                    const eventEntries = Object.entries(events);
+                    
+                    // Sort events by date (ascending)
+                    eventEntries.sort(([, a], [, b]) => new Date(a.date || '9999-12-31') - new Date(b.date || '9999-12-31'));
+                    
+                    // Display only active events
+                    const activeEvents = eventEntries.filter(([, event]) => event.active !== false);
+                    
+                    if (activeEvents.length > 0) {
+                        activeEvents.forEach(([id, event], index) => {
+                            const eventCard = createEventCard(event, index);
+                            eventsGrid.appendChild(eventCard);
+                        });
+                    } else {
+                        eventsGrid.innerHTML = `
+                            <div class="event-card" style="grid-column: 1 / -1; text-align: center; padding: var(--space-2xl);">
+                                <div class="event-content">
+                                    <h3>No Upcoming Events</h3>
+                                    <p>Check back soon for our upcoming events and workshops!</p>
+                                    <a href="contact.html" class="btn btn-primary" style="margin-top: var(--space-lg);">
+                                        <i class="fas fa-calendar-plus"></i> Propose an Event
+                                    </a>
+                                </div>
+                            </div>
+                        `;
+                    }
+                } else {
+                    eventsGrid.innerHTML = `
+                        <div class="event-card" style="grid-column: 1 / -1; text-align: center; padding: var(--space-2xl);">
+                            <div class="event-content">
+                                <h3>No Events Available</h3>
+                                <p>We're currently planning our next events. Stay tuned!</p>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                console.log('Events loaded:', Object.keys(events || {}).length);
+            } catch (error) {
+                console.error('Error loading events:', error);
+                document.getElementById('eventsGrid').innerHTML = `
+                    <div class="event-card" style="grid-column: 1 / -1; text-align: center; padding: var(--space-2xl);">
+                        <div class="event-content">
+                            <h3>Error Loading Events</h3>
+                            <p>Please check your connection and try again.</p>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Create Event Card
+        function createEventCard(event, index) {
+            const card = document.createElement('div');
+            card.className = `event-card animate-on-scroll ${event.category}-event`;
+            card.dataset.delay = index * 100;
+            
+            // Format date
+            let dateText = 'Date TBD';
+            if (event.date) {
+                const eventDate = new Date(event.date);
+                dateText = eventDate.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            }
+            
+            // Get category name
+            const categoryNames = {
+                'bootcamp': 'Startup Bootcamp',
+                'inspiration': 'Become What You Believe',
+                'spiritual': 'The Making of an Icon'
+            };
+            
+            const categoryName = categoryNames[event.category] || event.category || 'Event';
+            
+            // Determine button style based on category
+            let btnClass = 'btn-primary';
+            if (event.category === 'inspiration') btnClass = 'btn-gold';
+            if (event.category === 'spiritual') btnClass = 'btn-spiritual';
+            
+            card.innerHTML = `
+                <div class="event-image-container">
+                    <img src="${event.imageUrl || 'https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp'}" 
+                         alt="${event.title || 'DSOG Event'}" 
+                         class="event-image">
+                    <div class="event-date-badge">
+                        <i class="fas fa-calendar"></i> ${dateText}
+                    </div>
+                </div>
+                <div class="event-content">
+                    <span class="event-category ${event.category}">${categoryName.toUpperCase()}</span>
+                    ${event.duration ? `<div class="duration-badge"><i class="fas fa-clock"></i> ${event.duration}</div>` : ''}
+                    <div class="event-details">
+                        <h4>${event.title || 'Upcoming Event'}</h4>
+                        ${event.subtitle ? `<p><strong>${event.subtitle}</strong></p>` : ''}
+                        <p>${event.description || 'Join us for this transformative event.'}</p>
+                        <div class="event-meta">
+                            ${event.venue ? `<div class="meta-item"><i class="fas fa-map-marker-alt"></i><span>${event.venue}</span></div>` : ''}
+                            ${event.maxParticipants ? `<div class="meta-item"><i class="fas fa-users"></i><span>Max: ${event.maxParticipants} Participants</span></div>` : ''}
+                        </div>
+                    </div>
+                    <div class="event-action">
+                        <a href="${event.registrationUrl || 'https://wa.me/254733737983'}" 
+                           target="_blank" 
+                           class="btn ${btnClass} btn-block">
+                            <i class="fas ${event.category === 'spiritual' ? 'fa-hands-praying' : event.category === 'inspiration' ? 'fa-fire' : 'fa-graduation-cap'}"></i> 
+                            ${event.category === 'spiritual' ? 'Discover Your Purpose' : event.category === 'inspiration' ? 'Ignite Your Journey' : 'Register Now'}
+                        </a>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        // Load Statistics
+        async function loadStatistics() {
+            try {
+                const snapshot = await database.ref('stats').once('value');
+                const stats = snapshot.val();
+                const statsGrid = document.getElementById('statsGrid');
+                
+                if (stats) {
+                    statsGrid.innerHTML = '';
+                    
+                    // Create stat items
+                    const statItems = [
+                        { key: 'entrepreneursTrained', label: 'Entrepreneurs Trained', value: stats.entrepreneursTrained || 0 },
+                        { key: 'eventsHosted', label: 'Events Hosted', value: stats.eventsHosted || 0 },
+                        { key: 'startupsSupported', label: 'Startups Supported', value: stats.startupsSupported || 0 },
+                        { key: 'completionRate', label: 'Completion Rate', value: stats.completionRate ? `${stats.completionRate}%` : '95%' },
+                        { key: 'businessGrowthRate', label: 'Business Growth', value: stats.businessGrowthRate ? `${stats.businessGrowthRate}%` : '85%' },
+                        { key: 'satisfactionRate', label: 'Satisfaction Rate', value: stats.satisfactionRate ? `${stats.satisfactionRate}%` : '90%' }
+                    ];
+                    
+                    statItems.forEach(stat => {
+                        if (stat.value) {
+                            const statItem = document.createElement('div');
+                            statItem.className = 'stat-item animate-on-scroll';
+                            statItem.innerHTML = `
+                                <div class="stat-number">${stat.value}</div>
+                                <div class="text-small">${stat.label}</div>
+                            `;
+                            statsGrid.appendChild(statItem);
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+                // Keep default stats
+            }
+        }
+
+        // Load Team Members
+        async function loadTeamMembers() {
+            try {
+                const snapshot = await database.ref('teamMembers').orderByChild('active').equalTo(true).once('value');
+                const team = snapshot.val();
+                const teamGrid = document.getElementById('teamGrid');
+                
+                teamGrid.innerHTML = '';
+                
+                if (team) {
+                    const teamEntries = Object.entries(team);
+                    
+                    if (teamEntries.length > 0) {
+                        teamEntries.forEach(([id, member], index) => {
+                            if (member.active !== false) {
+                                const memberCard = createTeamMemberCard(member, index);
+                                teamGrid.appendChild(memberCard);
+                            }
+                        });
+                    } else {
+                        teamGrid.innerHTML = `
+                            <div class="value-card" style="grid-column: 1 / -1; text-align: center;">
+                                <div class="value-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <h4>Our Team</h4>
+                                <p>Meet our expert team dedicated to empowering entrepreneurs.</p>
+                            </div>
+                        `;
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading team members:', error);
+            }
+        }
+
+        // Create Team Member Card
+        function createTeamMemberCard(member, index) {
+            const card = document.createElement('div');
+            card.className = 'value-card animate-on-scroll';
+            card.dataset.delay = index * 100;
+            
+            // Get first initial for avatar
+            const avatar = member.name ? member.name.charAt(0).toUpperCase() : 'T';
+            
+            card.innerHTML = `
+                <div class="value-icon">
+                    ${member.imageUrl ? 
+                        `<img src="${member.imageUrl}" alt="${member.name}" style="width: 70px; height: 70px; border-radius: var(--radius-lg); object-fit: cover;">` : 
+                        `<i class="fas fa-user-tie"></i>`
+                    }
+                </div>
+                <h4>${member.name || 'Team Member'}</h4>
+                <p><strong>${member.role || 'Team Member'}</strong></p>
+                <p style="font-size: 0.9rem; margin-top: var(--space-sm);">${member.bio || 'Expert in entrepreneurship and business development.'}</p>
+                ${member.social?.linkedin ? `
+                    <a href="${member.social.linkedin}" target="_blank" style="margin-top: var(--space-sm); color: var(--primary-red);">
+                        <i class="fab fa-linkedin"></i> LinkedIn
+                    </a>
+                ` : ''}
+            `;
+            
+            return card;
+        }
+
+        // Load Testimonials
+        async function loadTestimonials() {
+            try {
+                const snapshot = await database.ref('testimonials').orderByChild('active').equalTo(true).once('value');
+                const testimonials = snapshot.val();
+                const testimonialsGrid = document.getElementById('testimonialsGrid');
+                
+                testimonialsGrid.innerHTML = '';
+                
+                if (testimonials) {
+                    const testimonialEntries = Object.entries(testimonials);
+                    
+                    if (testimonialEntries.length > 0) {
+                        // Take only first 3 testimonials
+                        testimonialEntries.slice(0, 3).forEach(([id, testimonial], index) => {
+                            if (testimonial.active !== false) {
+                                const testimonialCard = createTestimonialCard(testimonial, index);
+                                testimonialsGrid.appendChild(testimonialCard);
+                            }
+                        });
+                    } else {
+                        testimonialsGrid.innerHTML = `
+                            <div class="service-card" style="grid-column: 1 / -1; text-align: center;">
+                                <div class="service-icon">
+                                    <i class="fas fa-comment"></i>
+                                </div>
+                                <h3>Success Stories</h3>
+                                <p>Hear from our successful entrepreneurs and clients.</p>
+                            </div>
+                        `;
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading testimonials:', error);
+            }
+        }
+
+        // Create Testimonial Card
+        function createTestimonialCard(testimonial, index) {
+            const card = document.createElement('div');
+            card.className = 'service-card animate-on-scroll';
+            card.dataset.delay = index * 100;
+            
+            // Create star rating
+            const rating = testimonial.rating || 5;
+            const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+            
+            card.innerHTML = `
+                <div class="service-icon">
+                    ${testimonial.imageUrl ? 
+                        `<img src="${testimonial.imageUrl}" alt="${testimonial.name}" style="width: 60px; height: 60px; border-radius: var(--radius-md); object-fit: cover;">` : 
+                        `<i class="fas fa-user"></i>`
+                    }
+                </div>
+                <span class="service-tag">TESTIMONIAL</span>
+                <h3>${testimonial.name || 'Client'}</h3>
+                <p><strong>${testimonial.role || 'Entrepreneur'}</strong></p>
+                ${testimonial.company ? `<p style="color: var(--text-tertiary); font-size: 0.9rem;">${testimonial.company}</p>` : ''}
+                <div style="color: #ffc107; margin: var(--space-sm) 0; font-size: 1.1rem;">
+                    ${stars}
+                </div>
+                <p style="font-style: italic; margin-top: var(--space-md);">"${testimonial.content || 'Great experience with DSOG!'}"</p>
+                ${testimonial.event ? `<p style="margin-top: var(--space-sm); font-size: 0.85rem; color: var(--primary-red);"><i class="fas fa-calendar"></i> ${testimonial.event}</p>` : ''}
+            `;
+            
+            return card;
+        }
+
+        // Show default content if Firebase fails
+        function showDefaultContent() {
+            document.getElementById('heroTitle').textContent = 'Become What You Believe!';
+            document.getElementById('heroSubtitle').textContent = 'DSOG empowers businesses, startups, and young entrepreneurs through transformative training, impactful events, and real startup opportunities that turn learning into successful enterprises.';
+        }
+
+        // Touch optimizations
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', (event) => {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
     </script>
 </body>
 </html>
