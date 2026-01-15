@@ -2,10 +2,10 @@
 <html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.95, maximum-scale=5.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     
     <!-- App Version -->
-    <meta name="app-version" content="7.0.0">
+    <meta name="app-version" content="8.0.0">
     
     <!-- SEO Meta Tags -->
     <meta name="description" content="DSOG - Empowering businesses, startups, and young entrepreneurs through training, events, and startup opportunities. Shape your business acuity with us.">
@@ -19,7 +19,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="DSOG">
     <meta name="msapplication-TileColor" content="#C21807">
-    <meta name="msapplication-starturl" content="/index.html?v=7.0.0">
+    <meta name="msapplication-starturl" content="/index.html?v=8.0.0">
     
     <!-- Updated Open Graph Meta Tags -->
     <meta property="og:title" content="DSOG | Empowering Businesses, Startups & Young Entrepreneurs">
@@ -221,6 +221,44 @@
             background: rgba(194, 24, 7, 0.2);
             color: var(--text-primary);
         }
+
+        /* ===== RESPONSIVE UTILITIES ===== */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .text-right { text-align: right; }
+
+        .d-block { display: block; }
+        .d-inline { display: inline; }
+        .d-inline-block { display: inline-block; }
+        .d-flex { display: flex; }
+        .d-none { display: none; }
+
+        .flex-column { flex-direction: column; }
+        .flex-wrap { flex-wrap: wrap; }
+        .justify-center { justify-content: center; }
+        .justify-between { justify-content: space-between; }
+        .align-center { align-items: center; }
+        .align-start { align-items: flex-start; }
+
+        .w-100 { width: 100%; }
+        .h-100 { height: 100%; }
+
+        .position-relative { position: relative; }
+        .position-absolute { position: absolute; }
+        .position-fixed { position: fixed; }
+        .position-sticky { position: sticky; }
 
         /* ===== HEADER ===== */
         .header {
@@ -608,6 +646,10 @@
         .btn-large {
             padding: var(--space-lg) var(--space-2xl);
             font-size: 1rem;
+        }
+
+        .btn-block {
+            width: 100%;
         }
 
         /* ===== HERO SECTION ===== */
@@ -1354,6 +1396,84 @@
             transform: translateY(0);
         }
 
+        /* ===== FIREBASE STATUS INDICATOR ===== */
+        .firebase-status {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            padding: 8px 12px;
+            border-radius: var(--radius-md);
+            font-size: 12px;
+            z-index: 9999;
+            background: #28a745;
+            color: white;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition-smooth);
+        }
+
+        .firebase-status.offline {
+            background: #dc3545;
+        }
+
+        .firebase-status i {
+            font-size: 10px;
+        }
+
+        /* ===== DATA UPDATE INDICATOR ===== */
+        .data-update-indicator {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            padding: 12px 16px;
+            background: var(--primary-red);
+            color: white;
+            border-radius: var(--radius-lg);
+            font-size: 14px;
+            z-index: 10000;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transform: translateX(120%);
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .data-update-indicator.show {
+            transform: translateX(0);
+        }
+
+        .data-update-indicator i {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== LOADING STATES ===== */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-2xl);
+            color: var(--text-secondary);
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--primary-red);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: var(--space-md);
+        }
+
         /* ===== MOBILE NAVIGATION ===== */
         @media (max-width: 1024px) {
             .nav-links {
@@ -1416,6 +1536,13 @@
             .navbar {
                 gap: var(--space-md);
                 padding: 0 var(--space-lg);
+            }
+
+            .data-update-indicator {
+                top: 80px;
+                right: 10px;
+                font-size: 12px;
+                padding: 8px 12px;
             }
         }
 
@@ -1520,6 +1647,13 @@
                 font-size: 0.8rem;
                 padding: var(--space-2xs) var(--space-sm);
             }
+
+            .firebase-status {
+                bottom: 10px;
+                left: 10px;
+                font-size: 10px;
+                padding: 6px 10px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1592,6 +1726,17 @@
                 left: var(--space-sm);
                 font-size: 0.75rem;
             }
+
+            .firebase-status {
+                display: none; /* Hide on very small screens */
+            }
+
+            .data-update-indicator {
+                top: 70px;
+                right: 5px;
+                font-size: 11px;
+                padding: 6px 10px;
+            }
         }
 
         @media (max-width: 360px) {
@@ -1629,34 +1774,57 @@
             .event-image-container {
                 height: 160px;
             }
+
+            .theme-toggle {
+                bottom: var(--space-sm);
+                right: var(--space-sm);
+                width: 40px;
+                height: 40px;
+                font-size: 0.9rem;
+            }
         }
 
-        /* Loading States */
-        .loading {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: var(--space-2xl);
-            color: var(--text-secondary);
-        }
-
-        .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--border-color);
-            border-top-color: var(--primary-red);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: var(--space-md);
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        /* Print Styles */
+        @media print {
+            .header,
+            .theme-toggle,
+            .firebase-status,
+            .data-update-indicator,
+            .hero-buttons,
+            .btn {
+                display: none !important;
+            }
+            
+            .hero {
+                min-height: auto;
+                padding-top: 0;
+            }
+            
+            section {
+                padding: var(--space-2xl) 0;
+                break-inside: avoid;
+            }
+            
+            a {
+                color: black !important;
+                text-decoration: none;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Firebase Status Indicator (Minimal) -->
+    <div class="firebase-status" id="firebaseStatus" role="status" aria-live="polite">
+        <i class="fas fa-circle"></i>
+        <span>Live</span>
+    </div>
+
+    <!-- Data Update Indicator (Hidden by default) -->
+    <div class="data-update-indicator" id="dataUpdateIndicator" role="alert" aria-live="polite">
+        <i class="fas fa-sync-alt"></i>
+        <span>Updating content...</span>
+    </div>
+
     <!-- Theme Toggle -->
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
         <i class="fas fa-moon"></i>
@@ -1696,11 +1864,15 @@
                     <i class="fas fa-bullseye"></i> EMPOWERING BUSINESSES & ENTREPRENEURS
                 </div>
                 
-                <h1 id="heroTitle">Loading...</h1>
-                <p class="lead" id="heroSubtitle">Loading content...</p>
+                <h1 id="heroTitle">Become What You Believe!</h1>
+                <p class="lead" id="heroSubtitle">DSOG empowers businesses, startups, and young entrepreneurs through transformative training, impactful events, and real startup opportunities that turn learning into successful enterprises.</p>
                 
                 <div class="category-tags" id="categoryTags">
-                    <!-- Tags will be loaded dynamically -->
+                    <span class="category-tag">Entrepreneurship</span>
+                    <span class="category-tag">Business Training</span>
+                    <span class="category-tag">Startup Opportunities</span>
+                    <span class="category-tag">Professional Events</span>
+                    <span class="category-tag">Enterprise Development</span>
                 </div>
                 
                 <div class="hero-buttons">
@@ -1721,11 +1893,36 @@
             <div class="section-header">
                 <span class="section-subtitle">Our Methodology</span>
                 <h2>How We <span class="text-gradient">Empower Entrepreneurs</span></h2>
-                <p class="lead" id="approachSubtitle">Loading approach content...</p>
+                <p class="lead" id="approachSubtitle">We engage people through events aimed at shaping their business acuity, train professionals, and provide startup opportunities to practice what they've learned.</p>
             </div>
             
             <div class="approach-grid" id="approachCards">
-                <!-- Cards will be loaded dynamically -->
+                <div class="approach-card animate-on-scroll">
+                    <div class="approach-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <span class="approach-tag">ENGAGEMENT</span>
+                    <h3>Transformative Events</h3>
+                    <p>We organize impactful events that engage entrepreneurs in hands-on experiences, networking opportunities, and practical business challenges that shape their business acuity.</p>
+                </div>
+                
+                <div class="approach-card animate-on-scroll">
+                    <div class="approach-icon">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <span class="approach-tag">TRAINING</span>
+                    <h3>Professional Training</h3>
+                    <p>Comprehensive training programs covering business fundamentals, leadership, digital skills, and industry-specific knowledge to prepare you for entrepreneurial success.</p>
+                </div>
+                
+                <div class="approach-card animate-on-scroll">
+                    <div class="approach-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <span class="approach-tag">PRACTICE</span>
+                    <h3>Startup Opportunities</h3>
+                    <p>Real startup opportunities with mentorship, resources, and support systems to help you launch and grow your business venture through practical application.</p>
+                </div>
             </div>
         </div>
     </section>
@@ -1810,7 +2007,6 @@
             </div>
             
             <div class="events-grid" id="eventsGrid">
-                <!-- Events will be loaded dynamically -->
                 <div class="loading">
                     <div class="loading-spinner"></div>
                     <p>Loading events...</p>
@@ -1841,7 +2037,6 @@
                     <p>Our vision is to create a thriving ecosystem where every entrepreneur has access to the training, events, and startup opportunities needed to succeed in today's competitive business environment.</p>
                     
                     <div class="stats-grid" id="statsGrid">
-                        <!-- Stats will be loaded dynamically -->
                         <div class="loading">
                             <div class="loading-spinner"></div>
                             <p>Loading statistics...</p>
@@ -1853,12 +2048,12 @@
                     <h3>Our Impact</h3>
                     <p>Through our comprehensive approach, we've helped numerous entrepreneurs and businesses achieve their goals:</p>
                     <ul class="service-features">
-                        <li><i class="fas fa-check text-primary"></i> Transformed business ideas into successful enterprises</li>
-                        <li><i class="fas fa-check text-primary"></i> Developed business acuity through hands-on events</li>
-                        <li><i class="fas fa-check text-primary"></i> Provided professional training to enhance skills</li>
-                        <li><i class="fas fa-check text-primary"></i> Created startup opportunities for practical experience</li>
-                        <li><i class="fas fa-check text-primary"></i> Built a supportive community of entrepreneurs</li>
-                        <li><i class="fas fa-check text-primary"></i> Facilitated networking and collaboration opportunities</li>
+                        <li><i class="fas fa-check"></i> Transformed business ideas into successful enterprises</li>
+                        <li><i class="fas fa-check"></i> Developed business acuity through hands-on events</li>
+                        <li><i class="fas fa-check"></i> Provided professional training to enhance skills</li>
+                        <li><i class="fas fa-check"></i> Created startup opportunities for practical experience</li>
+                        <li><i class="fas fa-check"></i> Built a supportive community of entrepreneurs</li>
+                        <li><i class="fas fa-check"></i> Facilitated networking and collaboration opportunities</li>
                     </ul>
                     <a href="about.html" class="btn btn-primary" style="margin-top: var(--space-md);">
                         Learn More About DSOG <i class="fas fa-arrow-right"></i>
@@ -1878,7 +2073,6 @@
             </div>
             
             <div class="value-grid" id="teamGrid">
-                <!-- Team members will be loaded dynamically -->
                 <div class="loading">
                     <div class="loading-spinner"></div>
                     <p>Loading team members...</p>
@@ -1897,7 +2091,6 @@
             </div>
             
             <div class="services-grid" id="testimonialsGrid">
-                <!-- Testimonials will be loaded dynamically -->
                 <div class="loading">
                     <div class="loading-spinner"></div>
                     <p>Loading testimonials...</p>
@@ -2017,896 +2210,879 @@
 
     <!-- JavaScript -->
     <script>
-    // Firebase Configuration
-    const firebaseConfig = {
-        apiKey: "AIzaSyDb5ZFHbo7lGM8ph0oBxFVTHRF5C5C_DWU",
-        authDomain: "dsog-events.firebaseapp.com",
-        databaseURL: "https://dsog-events-default-rtdb.europe-west1.firebasedatabase.app",
-        projectId: "dsog-events",
-        storageBucket: "dsog-events.firebasestorage.app",
-        messagingSenderId: "1075977932287",
-        appId: "1:1075977932287:web:b2bf4d1c0083d2dac8ebca"
-    };
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDb5ZFHbo7lGM8ph0oBxFVTHRF5C5C_DWU",
+            authDomain: "dsog-events.firebaseapp.com",
+            databaseURL: "https://dsog-events-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "dsog-events",
+            storageBucket: "dsog-events.firebasestorage.app",
+            messagingSenderId: "1075977932287",
+            appId: "1:1075977932287:web:b2bf4d1c0083d2dac8ebca"
+        };
 
-    // Initialize Firebase
-    let db;
-    let firebaseListeners = [];
-    try {
-        firebase.initializeApp(firebaseConfig);
-        db = firebase.database();
-        console.log('Firebase initialized successfully - REAL-TIME MODE');
-    } catch (error) {
-        console.error('Firebase initialization error:', error);
-        db = null;
-    }
+        // Initialize Firebase
+        let db;
+        let firebaseListeners = [];
+        let isFirebaseInitialized = false;
 
-    // Cache management
-    const CACHE_KEY = 'dsog_website_cache';
-    const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
-
-    // Initialize the website
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('🚀 DSOG Website Version 7.0.0 - REAL-TIME UPDATES');
-        
-        // Initialize all components
-        initializeTheme();
-        initializeNavigation();
-        initializeAnimations();
-        initializeScrollEffects();
-        
-        // Set current year
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
-        
-        // Try to load from cache first for faster display
-        const cachedData = getCachedData();
-        if (cachedData && !isCacheExpired(cachedData.timestamp)) {
-            console.log('Loading from cache for instant display');
-            displayCachedData(cachedData);
-        } else {
-            console.log('Cache empty or expired');
-        }
-        
-        // Setup REAL-TIME listeners (this is the key change)
-        setupRealtimeListeners();
-        
-        console.log('Website initialized with real-time updates');
-    });
-
-    // ==================== REAL-TIME LISTENERS ====================
-    function setupRealtimeListeners() {
-        if (!db) {
-            console.error('Firebase not available, using cached data only');
-            return;
-        }
-
-        console.log('Setting up real-time Firebase listeners...');
-        
-        // Remove any existing listeners
-        removeAllListeners();
-        
-        // 1. Home Page Content Listener
-        const homePageRef = db.ref('homePageContent');
-        const homePageListener = homePageRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                console.log('Home page content updated in real-time');
-                updateHomePageContent(data);
-                saveToCachePartial('homePageContent', data);
-            }
-        });
-        firebaseListeners.push({ ref: homePageRef, listener: homePageListener });
-        
-        // 2. Events Listener
-        const eventsRef = db.ref('upcomingEvents');
-        const eventsListener = eventsRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            console.log('Events updated in real-time');
-            displayEvents(data);
-            saveToCachePartial('upcomingEvents', data);
-        });
-        firebaseListeners.push({ ref: eventsRef, listener: eventsListener });
-        
-        // 3. Statistics Listener
-        const statsRef = db.ref('stats');
-        const statsListener = statsRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            console.log('Statistics updated in real-time');
-            displayStatistics(data);
-            saveToCachePartial('stats', data);
-        });
-        firebaseListeners.push({ ref: statsRef, listener: statsListener });
-        
-        // 4. Team Members Listener
-        const teamRef = db.ref('teamMembers');
-        const teamListener = teamRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            console.log('Team members updated in real-time');
-            displayTeamMembers(data);
-            saveToCachePartial('teamMembers', data);
-        });
-        firebaseListeners.push({ ref: teamRef, listener: teamListener });
-        
-        // 5. Testimonials Listener
-        const testimonialsRef = db.ref('testimonials');
-        const testimonialsListener = testimonialsRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            console.log('Testimonials updated in real-time');
-            displayTestimonials(data);
-            saveToCachePartial('testimonials', data);
-        });
-        firebaseListeners.push({ ref: testimonialsRef, listener: testimonialsListener });
-        
-        // 6. App Settings Listener (for contact info, etc.)
-        const settingsRef = db.ref('appSettings');
-        const settingsListener = settingsRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                console.log('App settings updated in real-time');
-                updateContactInfo(data);
-                saveToCachePartial('appSettings', data);
-            }
-        });
-        firebaseListeners.push({ ref: settingsRef, listener: settingsListener });
-        
-        console.log(`Setup ${firebaseListeners.length} real-time listeners`);
-    }
-
-    function removeAllListeners() {
-        firebaseListeners.forEach(({ ref, listener }) => {
-            ref.off('value', listener);
-        });
-        firebaseListeners = [];
-        console.log('Removed all Firebase listeners');
-    }
-
-    // ==================== CACHE MANAGEMENT ====================
-    function getCachedData() {
         try {
-            const cached = localStorage.getItem(CACHE_KEY);
-            return cached ? JSON.parse(cached) : null;
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.database();
+            isFirebaseInitialized = true;
+            console.log('Firebase initialized successfully');
         } catch (error) {
-            console.error('Error reading cache:', error);
-            return null;
+            console.error('Firebase initialization error:', error);
+            isFirebaseInitialized = false;
         }
-    }
 
-    function saveToCachePartial(key, data) {
-        try {
-            const cached = getCachedData() || { timestamp: Date.now(), data: {} };
-            cached.data[key] = data;
-            cached.timestamp = Date.now();
-            localStorage.setItem(CACHE_KEY, JSON.stringify(cached));
-        } catch (error) {
-            console.error('Error saving to cache:', error);
-        }
-    }
+        // Cache management
+        const CACHE_KEY = 'dsog_website_cache';
+        const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
-    function isCacheExpired(timestamp) {
-        return Date.now() - timestamp > CACHE_DURATION;
-    }
+        // Update management
+        let lastUpdateTime = 0;
+        const UPDATE_DEBOUNCE_TIME = 2000; // 2 seconds between updates
+        let updateTimeout = null;
 
-    function displayCachedData(cachedData) {
-        const data = cachedData.data;
-        
-        if (data.homePageContent) {
-            updateHomePageContent(data.homePageContent);
-        }
-        
-        if (data.upcomingEvents) {
-            displayEvents(data.upcomingEvents);
-        }
-        
-        if (data.stats) {
-            displayStatistics(data.stats);
-        }
-        
-        if (data.teamMembers) {
-            displayTeamMembers(data.teamMembers);
-        }
-        
-        if (data.testimonials) {
-            displayTestimonials(data.testimonials);
-        }
-        
-        if (data.appSettings) {
-            updateContactInfo(data.appSettings);
-        }
-    }
-
-    // ==================== UI UPDATES ====================
-    function updateHomePageContent(content) {
-        try {
-            // Update hero section
-            if (content.hero) {
-                document.getElementById('heroTitle').textContent = content.hero.mainTitle || 'Become What You Believe!';
-                document.getElementById('heroSubtitle').textContent = content.hero.subtitle || 'DSOG empowers businesses, startups, and young entrepreneurs through transformative training, impactful events, and real startup opportunities that turn learning into successful enterprises.';
-                
-                // Update category tags
-                const categoryTags = document.getElementById('categoryTags');
-                if (content.hero.categoryTags && Array.isArray(content.hero.categoryTags)) {
-                    categoryTags.innerHTML = '';
-                    content.hero.categoryTags.forEach(tag => {
-                        const tagElement = document.createElement('span');
-                        tagElement.className = 'category-tag';
-                        tagElement.textContent = tag;
-                        categoryTags.appendChild(tagElement);
-                    });
-                }
+        // Initialize the website
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 DSOG Website Version 8.0.0 - Professional Mode');
+            
+            // Initialize all components
+            initializeTheme();
+            initializeNavigation();
+            initializeAnimations();
+            initializeScrollEffects();
+            
+            // Set current year
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            // Load from cache first for instant display
+            const cachedData = getCachedData();
+            if (cachedData && !isCacheExpired(cachedData.timestamp)) {
+                console.log('Loading from cache for instant display');
+                displayCachedData(cachedData);
             }
             
-            // Update approach section
-            if (content.approach) {
-                const subtitleEl = document.getElementById('approachSubtitle');
-                if (subtitleEl) {
-                    subtitleEl.textContent = content.approach.subtitle || 'We engage people through events aimed at shaping their business acuity, train professionals, and provide startup opportunities to practice what they\'ve learned.';
+            // Initialize Firebase connection
+            if (isFirebaseInitialized) {
+                initializeFirebaseConnection();
+                setupRealtimeListeners();
+            } else {
+                showFirebaseStatus('offline');
+                console.warn('Firebase not available, using cached data only');
+            }
+            
+            console.log('Website initialized with silent real-time updates');
+        });
+
+        // ==================== FIREBASE INITIALIZATION ====================
+        function initializeFirebaseConnection() {
+            if (!isFirebaseInitialized) return;
+            
+            // Monitor connection status
+            const connectedRef = db.ref('.info/connected');
+            connectedRef.on('value', (snap) => {
+                if (snap.val() === true) {
+                    showFirebaseStatus('online');
+                    console.log('Connected to Firebase - Real-time updates active');
+                } else {
+                    showFirebaseStatus('offline');
+                    console.log('Disconnected from Firebase - Using cached data');
+                }
+            });
+        }
+
+        function showFirebaseStatus(status) {
+            const statusEl = document.getElementById('firebaseStatus');
+            if (!statusEl) return;
+            
+            if (status === 'online') {
+                statusEl.classList.remove('offline');
+                statusEl.innerHTML = '<i class="fas fa-circle"></i><span>Live</span>';
+                statusEl.setAttribute('aria-label', 'Connected to live updates');
+            } else {
+                statusEl.classList.add('offline');
+                statusEl.innerHTML = '<i class="fas fa-circle"></i><span>Offline</span>';
+                statusEl.setAttribute('aria-label', 'Using cached data - offline mode');
+            }
+        }
+
+        // ==================== SILENT REAL-TIME UPDATES ====================
+        function setupRealtimeListeners() {
+            if (!isFirebaseInitialized) return;
+            
+            console.log('Setting up silent real-time listeners...');
+            
+            // Remove any existing listeners
+            removeAllListeners();
+            
+            // Debounced update function
+            const debouncedUpdate = (type) => {
+                if (updateTimeout) clearTimeout(updateTimeout);
+                
+                updateTimeout = setTimeout(() => {
+                    showUpdateIndicator(type);
+                }, UPDATE_DEBOUNCE_TIME);
+            };
+            
+            // 1. Home Page Content Listener
+            const homePageRef = db.ref('homePageContent');
+            const homePageListener = homePageRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    updateHomePageContent(data);
+                    saveToCachePartial('homePageContent', data);
+                    debouncedUpdate('Content');
+                }
+            });
+            firebaseListeners.push({ ref: homePageRef, listener: homePageListener });
+            
+            // 2. Events Listener
+            const eventsRef = db.ref('upcomingEvents');
+            const eventsListener = eventsRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                displayEvents(data);
+                saveToCachePartial('upcomingEvents', data);
+                debouncedUpdate('Events');
+            });
+            firebaseListeners.push({ ref: eventsRef, listener: eventsListener });
+            
+            // 3. Statistics Listener
+            const statsRef = db.ref('stats');
+            const statsListener = statsRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                displayStatistics(data);
+                saveToCachePartial('stats', data);
+                debouncedUpdate('Statistics');
+            });
+            firebaseListeners.push({ ref: statsRef, listener: statsListener });
+            
+            // 4. Team Members Listener
+            const teamRef = db.ref('teamMembers');
+            const teamListener = teamRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                displayTeamMembers(data);
+                saveToCachePartial('teamMembers', data);
+                debouncedUpdate('Team');
+            });
+            firebaseListeners.push({ ref: teamRef, listener: teamListener });
+            
+            // 5. Testimonials Listener
+            const testimonialsRef = db.ref('testimonials');
+            const testimonialsListener = testimonialsRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                displayTestimonials(data);
+                saveToCachePartial('testimonials', data);
+                debouncedUpdate('Testimonials');
+            });
+            firebaseListeners.push({ ref: testimonialsRef, listener: testimonialsListener });
+            
+            // 6. App Settings Listener
+            const settingsRef = db.ref('appSettings');
+            const settingsListener = settingsRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    updateContactInfo(data);
+                    saveToCachePartial('appSettings', data);
+                    debouncedUpdate('Settings');
+                }
+            });
+            firebaseListeners.push({ ref: settingsRef, listener: settingsListener });
+            
+            console.log(`Setup ${firebaseListeners.length} silent real-time listeners`);
+        }
+
+        function removeAllListeners() {
+            firebaseListeners.forEach(({ ref, listener }) => {
+                if (ref && listener) {
+                    ref.off('value', listener);
+                }
+            });
+            firebaseListeners = [];
+        }
+
+        function showUpdateIndicator(type) {
+            const now = Date.now();
+            if (now - lastUpdateTime < UPDATE_DEBOUNCE_TIME) return;
+            
+            lastUpdateTime = now;
+            
+            const indicator = document.getElementById('dataUpdateIndicator');
+            if (!indicator) return;
+            
+            indicator.querySelector('span').textContent = `${type} updated`;
+            indicator.classList.add('show');
+            
+            // Auto-hide after 3 seconds
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 3000);
+        }
+
+        // ==================== CACHE MANAGEMENT ====================
+        function getCachedData() {
+            try {
+                const cached = localStorage.getItem(CACHE_KEY);
+                return cached ? JSON.parse(cached) : null;
+            } catch (error) {
+                console.error('Error reading cache:', error);
+                return null;
+            }
+        }
+
+        function saveToCachePartial(key, data) {
+            try {
+                const cached = getCachedData() || { timestamp: Date.now(), data: {} };
+                cached.data[key] = data;
+                cached.timestamp = Date.now();
+                localStorage.setItem(CACHE_KEY, JSON.stringify(cached));
+            } catch (error) {
+                console.error('Error saving to cache:', error);
+            }
+        }
+
+        function isCacheExpired(timestamp) {
+            return Date.now() - timestamp > CACHE_DURATION;
+        }
+
+        function displayCachedData(cachedData) {
+            const data = cachedData.data;
+            
+            if (data.homePageContent) {
+                updateHomePageContent(data.homePageContent);
+            }
+            
+            if (data.upcomingEvents) {
+                displayEvents(data.upcomingEvents);
+            }
+            
+            if (data.stats) {
+                displayStatistics(data.stats);
+            }
+            
+            if (data.teamMembers) {
+                displayTeamMembers(data.teamMembers);
+            }
+            
+            if (data.testimonials) {
+                displayTestimonials(data.testimonials);
+            }
+            
+            if (data.appSettings) {
+                updateContactInfo(data.appSettings);
+            }
+        }
+
+        // ==================== UI UPDATES ====================
+        function updateHomePageContent(content) {
+            try {
+                // Update hero section
+                if (content.hero) {
+                    const heroTitle = document.getElementById('heroTitle');
+                    const heroSubtitle = document.getElementById('heroSubtitle');
+                    
+                    if (heroTitle && content.hero.mainTitle) {
+                        heroTitle.textContent = content.hero.mainTitle;
+                    }
+                    
+                    if (heroSubtitle && content.hero.subtitle) {
+                        heroSubtitle.textContent = content.hero.subtitle;
+                    }
+                    
+                    // Update category tags
+                    const categoryTags = document.getElementById('categoryTags');
+                    if (categoryTags && content.hero.categoryTags && Array.isArray(content.hero.categoryTags)) {
+                        categoryTags.innerHTML = '';
+                        content.hero.categoryTags.forEach(tag => {
+                            const tagElement = document.createElement('span');
+                            tagElement.className = 'category-tag';
+                            tagElement.textContent = tag;
+                            categoryTags.appendChild(tagElement);
+                        });
+                    }
                 }
                 
-                // Update approach cards
-                const approachCards = document.getElementById('approachCards');
-                if (approachCards && content.approach.cards && Array.isArray(content.approach.cards)) {
-                    approachCards.innerHTML = '';
-                    content.approach.cards.forEach((card, index) => {
-                        const cardElement = document.createElement('div');
-                        cardElement.className = 'approach-card animate-on-scroll';
-                        cardElement.dataset.delay = index * 100;
-                        cardElement.innerHTML = `
-                            <div class="approach-icon">
-                                <i class="${card.icon || 'fas fa-users'}"></i>
-                            </div>
-                            <span class="approach-tag">${card.tag || 'ENGAGEMENT'}</span>
-                            <h3>${card.title || 'Transformative Events'}</h3>
-                            <p>${card.description || 'We organize impactful events that engage entrepreneurs in hands-on experiences, networking opportunities, and practical business challenges that shape their business acuity.'}</p>
-                        `;
-                        approachCards.appendChild(cardElement);
+                // Update approach section
+                if (content.approach) {
+                    const subtitleEl = document.getElementById('approachSubtitle');
+                    if (subtitleEl && content.approach.subtitle) {
+                        subtitleEl.textContent = content.approach.subtitle;
+                    }
+                    
+                    // Update approach cards
+                    const approachCards = document.getElementById('approachCards');
+                    if (approachCards && content.approach.cards && Array.isArray(content.approach.cards)) {
+                        approachCards.innerHTML = '';
+                        content.approach.cards.forEach((card, index) => {
+                            const cardElement = document.createElement('div');
+                            cardElement.className = 'approach-card animate-on-scroll';
+                            cardElement.dataset.delay = index * 100;
+                            cardElement.innerHTML = `
+                                <div class="approach-icon">
+                                    <i class="${card.icon || 'fas fa-users'}"></i>
+                                </div>
+                                <span class="approach-tag">${card.tag || 'ENGAGEMENT'}</span>
+                                <h3>${card.title || 'Transformative Events'}</h3>
+                                <p>${card.description || 'We organize impactful events that engage entrepreneurs in hands-on experiences, networking opportunities, and practical business challenges that shape their business acuity.'}</p>
+                            `;
+                            approachCards.appendChild(cardElement);
+                        });
+                        
+                        // Re-initialize animations
+                        setTimeout(() => {
+                            initializeAnimations();
+                        }, 100);
+                    }
+                }
+            } catch (error) {
+                console.error('Error updating home page content:', error);
+            }
+        }
+
+        function displayEvents(events) {
+            try {
+                const eventsGrid = document.getElementById('eventsGrid');
+                if (!eventsGrid) return;
+                
+                // Convert events object to array and filter active ones
+                const eventsArray = events ? Object.values(events)
+                    .filter(event => event.active !== false)
+                    .sort((a, b) => new Date(a.date || '9999-12-31') - new Date(b.date || '9999-12-31')) : [];
+                
+                if (eventsArray.length > 0) {
+                    eventsGrid.innerHTML = '';
+                    eventsArray.forEach((event, index) => {
+                        const eventCard = createEventCard(event, index);
+                        eventsGrid.appendChild(eventCard);
                     });
                     
-                    // Re-initialize animations
+                    // Initialize animations for new cards
                     setTimeout(() => {
                         initializeAnimations();
                     }, 100);
-                }
-            }
-        } catch (error) {
-            console.error('Error updating home page content:', error);
-        }
-    }
-
-    function displayEvents(events) {
-        try {
-            const eventsGrid = document.getElementById('eventsGrid');
-            if (!eventsGrid) return;
-            
-            // Convert events object to array and filter active ones
-            const eventsArray = events ? Object.values(events)
-                .filter(event => event.active !== false)
-                .sort((a, b) => new Date(a.date || '9999-12-31') - new Date(b.date || '9999-12-31')) : [];
-            
-            if (eventsArray.length > 0) {
-                eventsGrid.innerHTML = '';
-                eventsArray.forEach((event, index) => {
-                    const eventCard = createEventCard(event, index);
-                    eventsGrid.appendChild(eventCard);
-                });
-                
-                // Show real-time update indicator
-                showUpdateIndicator('Events updated');
-            } else {
-                eventsGrid.innerHTML = `
-                    <div class="event-card" style="grid-column: 1 / -1; text-align: center; padding: var(--space-2xl);">
-                        <div class="event-content">
-                            <h3>No Upcoming Events</h3>
-                            <p>Check back soon for our upcoming events and workshops!</p>
-                            <a href="contact.html" class="btn btn-primary" style="margin-top: var(--space-lg);">
-                                <i class="fas fa-calendar-plus"></i> Propose an Event
-                            </a>
+                } else {
+                    eventsGrid.innerHTML = `
+                        <div class="event-card" style="grid-column: 1 / -1; text-align: center; padding: var(--space-2xl);">
+                            <div class="event-content">
+                                <h3>No Upcoming Events</h3>
+                                <p>Check back soon for our upcoming events and workshops!</p>
+                                <a href="contact.html" class="btn btn-primary" style="margin-top: var(--space-lg);">
+                                    <i class="fas fa-calendar-plus"></i> Propose an Event
+                                </a>
+                            </div>
                         </div>
-                    </div>
-                `;
-            }
-            
-            console.log('Events displayed:', eventsArray.length);
-        } catch (error) {
-            console.error('Error displaying events:', error);
-        }
-    }
-
-    function displayStatistics(stats) {
-        try {
-            const statsGrid = document.getElementById('statsGrid');
-            if (!statsGrid) return;
-            
-            statsGrid.innerHTML = '';
-            
-            const statItems = [
-                { key: 'entrepreneursTrained', label: 'Entrepreneurs Trained', value: stats?.entrepreneursTrained || 0 },
-                { key: 'eventsHosted', label: 'Events Hosted', value: stats?.eventsHosted || 0 },
-                { key: 'startupsSupported', label: 'Startups Supported', value: stats?.startupsSupported || 0 },
-                { key: 'completionRate', label: 'Completion Rate', value: stats?.completionRate ? `${stats.completionRate}%` : '95%' },
-                { key: 'businessGrowthRate', label: 'Business Growth', value: stats?.businessGrowthRate ? `${stats.businessGrowthRate}%` : '85%' },
-                { key: 'satisfactionRate', label: 'Satisfaction Rate', value: stats?.satisfactionRate ? `${stats.satisfactionRate}%` : '90%' }
-            ];
-            
-            statItems.forEach((stat, index) => {
-                if (stat.value && stat.value !== '0') {
-                    const statItem = document.createElement('div');
-                    statItem.className = 'stat-item animate-on-scroll';
-                    statItem.dataset.delay = index * 100;
-                    statItem.innerHTML = `
-                        <div class="stat-number">${stat.value}</div>
-                        <div class="text-small">${stat.label}</div>
                     `;
-                    statsGrid.appendChild(statItem);
                 }
-            });
-            
-            // Re-initialize animations
-            setTimeout(() => {
-                initializeAnimations();
-            }, 100);
-            
-            // Show update indicator if stats changed
-            if (stats) {
-                showUpdateIndicator('Statistics updated');
+            } catch (error) {
+                console.error('Error displaying events:', error);
             }
-        } catch (error) {
-            console.error('Error displaying statistics:', error);
         }
-    }
 
-    function displayTeamMembers(team) {
-        try {
-            const teamGrid = document.getElementById('teamGrid');
-            if (!teamGrid) return;
-            
-            // Convert to array and filter active members
-            const teamArray = team ? Object.values(team)
-                .filter(member => member.active !== false) : [];
-            
-            if (teamArray.length > 0) {
-                teamGrid.innerHTML = '';
-                teamArray.forEach((member, index) => {
-                    const memberCard = createTeamMemberCard(member, index);
-                    teamGrid.appendChild(memberCard);
-                });
-                
-                // Show real-time update indicator
-                showUpdateIndicator('Team updated');
-            } else {
-                teamGrid.innerHTML = `
-                    <div class="value-card" style="grid-column: 1 / -1; text-align: center;">
-                        <div class="value-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <h4>Our Team</h4>
-                        <p>Meet our expert team dedicated to empowering entrepreneurs.</p>
-                    </div>
-                `;
-            }
-        } catch (error) {
-            console.error('Error displaying team members:', error);
-        }
-    }
-
-    function displayTestimonials(testimonials) {
-        try {
-            const testimonialsGrid = document.getElementById('testimonialsGrid');
-            if (!testimonialsGrid) return;
-            
-            // Convert to array and filter active testimonials
-            const testimonialsArray = testimonials ? Object.values(testimonials)
-                .filter(testimonial => testimonial.active !== false) : [];
-            
-            if (testimonialsArray.length > 0) {
-                testimonialsGrid.innerHTML = '';
-                // Take only first 3 testimonials
-                testimonialsArray.slice(0, 3).forEach((testimonial, index) => {
-                    const testimonialCard = createTestimonialCard(testimonial, index);
-                    testimonialsGrid.appendChild(testimonialCard);
-                });
-                
-                // Show real-time update indicator
-                showUpdateIndicator('Testimonials updated');
-            } else {
-                testimonialsGrid.innerHTML = `
-                    <div class="service-card" style="grid-column: 1 / -1; text-align: center;">
-                        <div class="service-icon">
-                            <i class="fas fa-comment"></i>
-                        </div>
-                        <h3>Success Stories</h3>
-                        <p>Hear from our successful entrepreneurs and clients.</p>
-                    </div>
-                `;
-            }
-        } catch (error) {
-            console.error('Error displaying testimonials:', error);
-        }
-    }
-
-    function updateContactInfo(settings) {
-        try {
-            // Update contact info in CTA section
-            if (settings.phoneNumber) {
-                const phoneElements = document.querySelectorAll('.text-medium');
-                phoneElements.forEach(el => {
-                    if (el.textContent.includes('0733 737 983')) {
-                        el.textContent = settings.phoneNumber;
-                    }
-                });
-            }
-            
-            if (settings.contactEmail) {
-                const emailElements = document.querySelectorAll('.text-medium');
-                emailElements.forEach(el => {
-                    if (el.textContent.includes('office.dsog@gmail.com')) {
-                        el.textContent = settings.contactEmail;
-                    }
-                });
-            }
-            
-            if (settings.eventsEmail) {
-                const eventsEmailElements = document.querySelectorAll('.text-medium');
-                eventsEmailElements.forEach(el => {
-                    if (el.textContent.includes('events@dsog.org')) {
-                        el.textContent = settings.eventsEmail;
-                    }
-                });
-            }
-        } catch (error) {
-            console.error('Error updating contact info:', error);
-        }
-    }
-
-    // ==================== CARD CREATION FUNCTIONS ====================
-    function createEventCard(event, index) {
-        const card = document.createElement('div');
-        card.className = `event-card animate-on-scroll ${event.category}-event`;
-        card.dataset.delay = index * 100;
-        
-        // Format date
-        let dateText = 'Date TBD';
-        if (event.date) {
+        function displayStatistics(stats) {
             try {
-                const eventDate = new Date(event.date);
-                if (!isNaN(eventDate.getTime())) {
-                    dateText = eventDate.toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
+                const statsGrid = document.getElementById('statsGrid');
+                if (!statsGrid) return;
+                
+                statsGrid.innerHTML = '';
+                
+                const statItems = [
+                    { key: 'entrepreneursTrained', label: 'Entrepreneurs Trained', value: stats?.entrepreneursTrained || 0 },
+                    { key: 'eventsHosted', label: 'Events Hosted', value: stats?.eventsHosted || 0 },
+                    { key: 'startupsSupported', label: 'Startups Supported', value: stats?.startupsSupported || 0 },
+                    { key: 'completionRate', label: 'Completion Rate', value: stats?.completionRate ? `${stats.completionRate}%` : '95%' },
+                    { key: 'businessGrowthRate', label: 'Business Growth', value: stats?.businessGrowthRate ? `${stats.businessGrowthRate}%` : '85%' },
+                    { key: 'satisfactionRate', label: 'Satisfaction Rate', value: stats?.satisfactionRate ? `${stats.satisfactionRate}%` : '90%' }
+                ];
+                
+                statItems.forEach((stat, index) => {
+                    if (stat.value && stat.value !== '0') {
+                        const statItem = document.createElement('div');
+                        statItem.className = 'stat-item animate-on-scroll';
+                        statItem.dataset.delay = index * 100;
+                        statItem.innerHTML = `
+                            <div class="stat-number">${stat.value}</div>
+                            <div class="text-small">${stat.label}</div>
+                        `;
+                        statsGrid.appendChild(statItem);
+                    }
+                });
+                
+                // Initialize animations for new cards
+                setTimeout(() => {
+                    initializeAnimations();
+                }, 100);
+            } catch (error) {
+                console.error('Error displaying statistics:', error);
+            }
+        }
+
+        function displayTeamMembers(team) {
+            try {
+                const teamGrid = document.getElementById('teamGrid');
+                if (!teamGrid) return;
+                
+                // Convert to array and filter active members
+                const teamArray = team ? Object.values(team)
+                    .filter(member => member.active !== false) : [];
+                
+                if (teamArray.length > 0) {
+                    teamGrid.innerHTML = '';
+                    teamArray.forEach((member, index) => {
+                        const memberCard = createTeamMemberCard(member, index);
+                        teamGrid.appendChild(memberCard);
+                    });
+                    
+                    // Initialize animations for new cards
+                    setTimeout(() => {
+                        initializeAnimations();
+                    }, 100);
+                } else {
+                    teamGrid.innerHTML = `
+                        <div class="value-card" style="grid-column: 1 / -1; text-align: center;">
+                            <div class="value-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h4>Our Team</h4>
+                            <p>Meet our expert team dedicated to empowering entrepreneurs.</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error displaying team members:', error);
+            }
+        }
+
+        function displayTestimonials(testimonials) {
+            try {
+                const testimonialsGrid = document.getElementById('testimonialsGrid');
+                if (!testimonialsGrid) return;
+                
+                // Convert to array and filter active testimonials
+                const testimonialsArray = testimonials ? Object.values(testimonials)
+                    .filter(testimonial => testimonial.active !== false) : [];
+                
+                if (testimonialsArray.length > 0) {
+                    testimonialsGrid.innerHTML = '';
+                    // Take only first 3 testimonials
+                    testimonialsArray.slice(0, 3).forEach((testimonial, index) => {
+                        const testimonialCard = createTestimonialCard(testimonial, index);
+                        testimonialsGrid.appendChild(testimonialCard);
+                    });
+                    
+                    // Initialize animations for new cards
+                    setTimeout(() => {
+                        initializeAnimations();
+                    }, 100);
+                } else {
+                    testimonialsGrid.innerHTML = `
+                        <div class="service-card" style="grid-column: 1 / -1; text-align: center;">
+                            <div class="service-icon">
+                                <i class="fas fa-comment"></i>
+                            </div>
+                            <h3>Success Stories</h3>
+                            <p>Hear from our successful entrepreneurs and clients.</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error displaying testimonials:', error);
+            }
+        }
+
+        function updateContactInfo(settings) {
+            try {
+                // Update contact info in CTA section
+                if (settings.phoneNumber) {
+                    const phoneElements = document.querySelectorAll('.text-medium');
+                    phoneElements.forEach(el => {
+                        if (el.textContent.includes('0733 737 983')) {
+                            el.textContent = settings.phoneNumber;
+                        }
+                    });
+                }
+                
+                if (settings.contactEmail) {
+                    const emailElements = document.querySelectorAll('.text-medium');
+                    emailElements.forEach(el => {
+                        if (el.textContent.includes('office.dsog@gmail.com')) {
+                            el.textContent = settings.contactEmail;
+                        }
+                    });
+                }
+                
+                if (settings.eventsEmail) {
+                    const eventsEmailElements = document.querySelectorAll('.text-medium');
+                    eventsEmailElements.forEach(el => {
+                        if (el.textContent.includes('events@dsog.org')) {
+                            el.textContent = settings.eventsEmail;
+                        }
                     });
                 }
             } catch (error) {
-                console.error('Error formatting date:', error);
+                console.error('Error updating contact info:', error);
             }
         }
-        
-        // Get category name
-        const categoryNames = {
-            'bootcamp': 'Startup Bootcamp',
-            'inspiration': 'Become What You Believe',
-            'spiritual': 'The Making of an Icon'
-        };
-        
-        const categoryName = categoryNames[event.category] || event.category || 'Event';
-        
-        // Determine button style
-        let btnClass = 'btn-primary';
-        if (event.category === 'inspiration') btnClass = 'btn-gold';
-        if (event.category === 'spiritual') btnClass = 'btn-spiritual';
-        
-        card.innerHTML = `
-            <div class="event-image-container">
-                <img src="${event.imageUrl || 'https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp'}" 
-                     alt="${event.title || 'DSOG Event'}" 
-                     class="event-image"
-                     onerror="this.src='https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp'">
-                <div class="event-date-badge">
-                    <i class="fas fa-calendar"></i> ${dateText}
-                </div>
-            </div>
-            <div class="event-content">
-                <span class="event-category ${event.category}">${categoryName.toUpperCase()}</span>
-                ${event.duration ? `<div class="duration-badge"><i class="fas fa-clock"></i> ${event.duration}</div>` : ''}
-                <div class="event-details">
-                    <h4>${event.title || 'Upcoming Event'}</h4>
-                    ${event.subtitle ? `<p><strong>${event.subtitle}</strong></p>` : ''}
-                    <p>${event.description || 'Join us for this transformative event.'}</p>
-                    <div class="event-meta">
-                        ${event.venue ? `<div class="meta-item"><i class="fas fa-map-marker-alt"></i><span>${event.venue}</span></div>` : ''}
-                        ${event.maxParticipants ? `<div class="meta-item"><i class="fas fa-users"></i><span>Max: ${event.maxParticipants} Participants</span></div>` : ''}
+
+        // ==================== CARD CREATION FUNCTIONS ====================
+        function createEventCard(event, index) {
+            const card = document.createElement('div');
+            card.className = `event-card animate-on-scroll ${event.category}-event`;
+            card.dataset.delay = index * 100;
+            
+            // Format date
+            let dateText = 'Date TBD';
+            if (event.date) {
+                try {
+                    const eventDate = new Date(event.date);
+                    if (!isNaN(eventDate.getTime())) {
+                        dateText = eventDate.toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error formatting date:', error);
+                }
+            }
+            
+            // Get category name
+            const categoryNames = {
+                'bootcamp': 'Startup Bootcamp',
+                'inspiration': 'Become What You Believe',
+                'spiritual': 'The Making of an Icon'
+            };
+            
+            const categoryName = categoryNames[event.category] || event.category || 'Event';
+            
+            // Determine button style
+            let btnClass = 'btn-primary';
+            if (event.category === 'inspiration') btnClass = 'btn-gold';
+            if (event.category === 'spiritual') btnClass = 'btn-spiritual';
+            
+            card.innerHTML = `
+                <div class="event-image-container">
+                    <img src="${event.imageUrl || 'https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp'}" 
+                         alt="${event.title || 'DSOG Event'}" 
+                         class="event-image"
+                         onerror="this.src='https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp'">
+                    <div class="event-date-badge">
+                        <i class="fas fa-calendar"></i> ${dateText}
                     </div>
                 </div>
-                <div class="event-action">
-                    <a href="${event.registrationUrl || 'https://wa.me/254733737983'}" 
-                       target="_blank" 
-                       class="btn ${btnClass} btn-block">
-                        <i class="fas ${event.category === 'spiritual' ? 'fa-hands-praying' : event.category === 'inspiration' ? 'fa-fire' : 'fa-graduation-cap'}"></i> 
-                        ${event.category === 'spiritual' ? 'Discover Your Purpose' : event.category === 'inspiration' ? 'Ignite Your Journey' : 'Register Now'}
-                    </a>
+                <div class="event-content">
+                    <span class="event-category ${event.category}">${categoryName.toUpperCase()}</span>
+                    ${event.duration ? `<div class="duration-badge"><i class="fas fa-clock"></i> ${event.duration}</div>` : ''}
+                    <div class="event-details">
+                        <h4>${event.title || 'Upcoming Event'}</h4>
+                        ${event.subtitle ? `<p><strong>${event.subtitle}</strong></p>` : ''}
+                        <p>${event.description || 'Join us for this transformative event.'}</p>
+                        <div class="event-meta">
+                            ${event.venue ? `<div class="meta-item"><i class="fas fa-map-marker-alt"></i><span>${event.venue}</span></div>` : ''}
+                            ${event.maxParticipants ? `<div class="meta-item"><i class="fas fa-users"></i><span>Max: ${event.maxParticipants} Participants</span></div>` : ''}
+                        </div>
+                    </div>
+                    <div class="event-action">
+                        <a href="${event.registrationUrl || 'https://wa.me/254733737983'}" 
+                           target="_blank" 
+                           class="btn ${btnClass} btn-block">
+                            <i class="fas ${event.category === 'spiritual' ? 'fa-hands-praying' : event.category === 'inspiration' ? 'fa-fire' : 'fa-graduation-cap'}"></i> 
+                            ${event.category === 'spiritual' ? 'Discover Your Purpose' : event.category === 'inspiration' ? 'Ignite Your Journey' : 'Register Now'}
+                        </a>
+                    </div>
                 </div>
-            </div>
-        `;
-        
-        return card;
-    }
-
-    function createTeamMemberCard(member, index) {
-        const card = document.createElement('div');
-        card.className = 'value-card animate-on-scroll';
-        card.dataset.delay = index * 100;
-        
-        card.innerHTML = `
-            <div class="value-icon">
-                ${member.imageUrl ? 
-                    `<img src="${member.imageUrl}" alt="${member.name}" 
-                          style="width: 70px; height: 70px; border-radius: var(--radius-lg); object-fit: cover;"
-                          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">` : 
-                    ''
-                }
-                <i class="fas fa-user-tie" style="${member.imageUrl ? 'display: none;' : ''}"></i>
-            </div>
-            <h4>${member.name || 'Team Member'}</h4>
-            <p><strong>${member.role || 'Team Member'}</strong></p>
-            <p style="font-size: 0.9rem; margin-top: var(--space-sm);">${member.bio || 'Expert in entrepreneurship and business development.'}</p>
-            ${member.social?.linkedin ? `
-                <a href="${member.social.linkedin}" target="_blank" style="margin-top: var(--space-sm); color: var(--primary-red); text-decoration: none;">
-                    <i class="fab fa-linkedin"></i> LinkedIn
-                </a>
-            ` : ''}
-        `;
-        
-        return card;
-    }
-
-    function createTestimonialCard(testimonial, index) {
-        const card = document.createElement('div');
-        card.className = 'service-card animate-on-scroll';
-        card.dataset.delay = index * 100;
-        
-        // Create star rating
-        const rating = testimonial.rating || 5;
-        const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
-        
-        card.innerHTML = `
-            <div class="service-icon">
-                ${testimonial.imageUrl ? 
-                    `<img src="${testimonial.imageUrl}" alt="${testimonial.name}" 
-                          style="width: 60px; height: 60px; border-radius: var(--radius-md); object-fit: cover;"
-                          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">` : 
-                    ''
-                }
-                <i class="fas fa-user" style="${testimonial.imageUrl ? 'display: none;' : ''}"></i>
-            </div>
-            <span class="service-tag">TESTIMONIAL</span>
-            <h3>${testimonial.name || 'Client'}</h3>
-            <p><strong>${testimonial.role || 'Entrepreneur'}</strong></p>
-            ${testimonial.company ? `<p style="color: var(--text-tertiary); font-size: 0.9rem;">${testimonial.company}</p>` : ''}
-            <div style="color: #ffc107; margin: var(--space-sm) 0; font-size: 1.1rem;">
-                ${stars}
-            </div>
-            <p style="font-style: italic; margin-top: var(--space-md);">"${testimonial.content || 'Great experience with DSOG!'}"</p>
-            ${testimonial.event ? `<p style="margin-top: var(--space-sm); font-size: 0.85rem; color: var(--primary-red);"><i class="fas fa-calendar"></i> ${testimonial.event}</p>` : ''}
-        `;
-        
-        return card;
-    }
-
-    // ==================== CORE FUNCTIONS ====================
-    function initializeTheme() {
-        const themeToggle = document.getElementById('themeToggle');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-        
-        const savedTheme = localStorage.getItem('theme');
-        const systemTheme = prefersDark.matches ? 'dark' : 'light';
-        const initialTheme = savedTheme || systemTheme;
-        
-        document.documentElement.setAttribute('data-theme', initialTheme);
-        updateThemeIcon(initialTheme);
-        
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            `;
             
-            document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateThemeIcon(newTheme);
+            return card;
+        }
+
+        function createTeamMemberCard(member, index) {
+            const card = document.createElement('div');
+            card.className = 'value-card animate-on-scroll';
+            card.dataset.delay = index * 100;
             
-            setTimeout(() => {
-                document.body.style.transition = '';
-            }, 300);
-        });
-        
-        prefersDark.addEventListener('change', (e) => {
-            if (!localStorage.getItem('theme')) {
-                const newTheme = e.matches ? 'dark' : 'light';
+            card.innerHTML = `
+                <div class="value-icon">
+                    ${member.imageUrl ? 
+                        `<img src="${member.imageUrl}" alt="${member.name}" 
+                              style="width: 70px; height: 70px; border-radius: var(--radius-lg); object-fit: cover;"
+                              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">` : 
+                        ''
+                    }
+                    <i class="fas fa-user-tie" style="${member.imageUrl ? 'display: none;' : ''}"></i>
+                </div>
+                <h4>${member.name || 'Team Member'}</h4>
+                <p><strong>${member.role || 'Team Member'}</strong></p>
+                <p style="font-size: 0.9rem; margin-top: var(--space-sm);">${member.bio || 'Expert in entrepreneurship and business development.'}</p>
+                ${member.social?.linkedin ? `
+                    <a href="${member.social.linkedin}" target="_blank" style="margin-top: var(--space-sm); color: var(--primary-red); text-decoration: none;">
+                        <i class="fab fa-linkedin"></i> LinkedIn
+                    </a>
+                ` : ''}
+            `;
+            
+            return card;
+        }
+
+        function createTestimonialCard(testimonial, index) {
+            const card = document.createElement('div');
+            card.className = 'service-card animate-on-scroll';
+            card.dataset.delay = index * 100;
+            
+            // Create star rating
+            const rating = testimonial.rating || 5;
+            const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+            
+            card.innerHTML = `
+                <div class="service-icon">
+                    ${testimonial.imageUrl ? 
+                        `<img src="${testimonial.imageUrl}" alt="${testimonial.name}" 
+                              style="width: 60px; height: 60px; border-radius: var(--radius-md); object-fit: cover;"
+                              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">` : 
+                        ''
+                    }
+                    <i class="fas fa-user" style="${testimonial.imageUrl ? 'display: none;' : ''}"></i>
+                </div>
+                <span class="service-tag">TESTIMONIAL</span>
+                <h3>${testimonial.name || 'Client'}</h3>
+                <p><strong>${testimonial.role || 'Entrepreneur'}</strong></p>
+                ${testimonial.company ? `<p style="color: var(--text-tertiary); font-size: 0.9rem;">${testimonial.company}</p>` : ''}
+                <div style="color: #ffc107; margin: var(--space-sm) 0; font-size: 1.1rem;">
+                    ${stars}
+                </div>
+                <p style="font-style: italic; margin-top: var(--space-md);">"${testimonial.content || 'Great experience with DSOG!'}"</p>
+                ${testimonial.event ? `<p style="margin-top: var(--space-sm); font-size: 0.85rem; color: var(--primary-red);"><i class="fas fa-calendar"></i> ${testimonial.event}</p>` : ''}
+            `;
+            
+            return card;
+        }
+
+        // ==================== CORE FUNCTIONS ====================
+        function initializeTheme() {
+            const themeToggle = document.getElementById('themeToggle');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+            
+            const savedTheme = localStorage.getItem('theme');
+            const systemTheme = prefersDark.matches ? 'dark' : 'light';
+            const initialTheme = savedTheme || systemTheme;
+            
+            document.documentElement.setAttribute('data-theme', initialTheme);
+            updateThemeIcon(initialTheme);
+            
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                
+                document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
                 document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
                 updateThemeIcon(newTheme);
-            }
-        });
-        
-        function updateThemeIcon(theme) {
-            const icon = themeToggle.querySelector('i');
-            if (theme === 'dark') {
-                icon.className = 'fas fa-sun';
-                themeToggle.setAttribute('aria-label', 'Switch to light theme');
-            } else {
-                icon.className = 'fas fa-moon';
-                themeToggle.setAttribute('aria-label', 'Switch to dark theme');
+                
+                setTimeout(() => {
+                    document.body.style.transition = '';
+                }, 300);
+            });
+            
+            prefersDark.addEventListener('change', (e) => {
+                if (!localStorage.getItem('theme')) {
+                    const newTheme = e.matches ? 'dark' : 'light';
+                    document.documentElement.setAttribute('data-theme', newTheme);
+                    updateThemeIcon(newTheme);
+                }
+            });
+            
+            function updateThemeIcon(theme) {
+                const icon = themeToggle.querySelector('i');
+                if (theme === 'dark') {
+                    icon.className = 'fas fa-sun';
+                    themeToggle.setAttribute('aria-label', 'Switch to light theme');
+                } else {
+                    icon.className = 'fas fa-moon';
+                    themeToggle.setAttribute('aria-label', 'Switch to dark theme');
+                }
             }
         }
-    }
 
-    function initializeNavigation() {
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const navLinks = document.getElementById('navLinks');
-        
-        if (mobileMenuBtn && navLinks) {
-            mobileMenuBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                navLinks.classList.toggle('active');
-                const icon = this.querySelector('i');
-                icon.className = navLinks.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
-                this.setAttribute('aria-expanded', navLinks.classList.contains('active'));
-                
-                if (navLinks.classList.contains('active')) {
-                    document.body.style.overflow = 'hidden';
-                } else {
-                    document.body.style.overflow = '';
-                }
-            });
+        function initializeNavigation() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (mobileMenuBtn && navLinks) {
+                mobileMenuBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    navLinks.classList.toggle('active');
+                    const icon = this.querySelector('i');
+                    icon.className = navLinks.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
+                    this.setAttribute('aria-expanded', navLinks.classList.contains('active'));
+                    
+                    if (navLinks.classList.contains('active')) {
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        document.body.style.overflow = '';
+                    }
+                });
 
-            document.addEventListener('click', function(event) {
-                if (!navLinks.contains(event.target) && !mobileMenuBtn.contains(event.target) && navLinks.classList.contains('active')) {
-                    navLinks.classList.remove('active');
-                    mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
-                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
-                    document.body.style.overflow = '';
-                }
-            });
-
-            navLinks.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => {
-                    if (window.innerWidth <= 1024) {
+                document.addEventListener('click', function(event) {
+                    if (!navLinks.contains(event.target) && !mobileMenuBtn.contains(event.target) && navLinks.classList.contains('active')) {
                         navLinks.classList.remove('active');
                         mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
                         mobileMenuBtn.setAttribute('aria-expanded', 'false');
                         document.body.style.overflow = '';
                     }
                 });
-            });
-            
-            window.addEventListener('resize', () => {
-                if (window.innerWidth > 1024) {
-                    navLinks.classList.remove('active');
-                    mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
-                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
-                    document.body.style.overflow = '';
-                }
-            });
-        }
 
-        // Header scroll effect
-        const header = document.getElementById('header');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
-
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                const href = this.getAttribute('href');
+                navLinks.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        if (window.innerWidth <= 1024) {
+                            navLinks.classList.remove('active');
+                            mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
+                            mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                            document.body.style.overflow = '';
+                        }
+                    });
+                });
                 
-                if (href.startsWith('#') && href !== '#') {
-                    e.preventDefault();
-                    
-                    const targetId = href.substring(1);
-                    const targetElement = document.getElementById(targetId);
-                    
-                    if (targetElement) {
-                        const headerHeight = document.getElementById('header').offsetHeight;
-                        const targetPosition = targetElement.offsetTop - headerHeight - 20;
-                        
-                        window.scrollTo({
-                            top: targetPosition,
-                            behavior: 'smooth'
-                        });
-                        
-                        history.pushState(null, '', href);
+                window.addEventListener('resize', () => {
+                    if (window.innerWidth > 1024) {
+                        navLinks.classList.remove('active');
+                        mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
+                        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                        document.body.style.overflow = '';
                     }
+                });
+            }
+
+            // Header scroll effect
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
                 }
             });
-        });
-    }
 
-    function initializeAnimations() {
-        const animatedElements = document.querySelectorAll('.animate-on-scroll');
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const delay = entry.target.dataset.delay || 0;
-                    setTimeout(() => {
-                        entry.target.classList.add('animated');
-                    }, delay);
-                    observer.unobserve(entry.target);
-                }
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    
+                    if (href.startsWith('#') && href !== '#') {
+                        e.preventDefault();
+                        
+                        const targetId = href.substring(1);
+                        const targetElement = document.getElementById(targetId);
+                        
+                        if (targetElement) {
+                            const headerHeight = document.getElementById('header').offsetHeight;
+                            const targetPosition = targetElement.offsetTop - headerHeight - 20;
+                            
+                            window.scrollTo({
+                                top: targetPosition,
+                                behavior: 'smooth'
+                            });
+                            
+                            history.pushState(null, '', href);
+                        }
+                    }
+                });
             });
-        }, {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        });
-        
-        animatedElements.forEach((element, index) => {
-            if (!element.dataset.delay) {
-                element.dataset.delay = index * 100;
-            }
-            observer.observe(element);
-        });
-    }
+        }
 
-    function initializeScrollEffects() {
-        let lastScroll = 0;
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
+        function initializeAnimations() {
+            const animatedElements = document.querySelectorAll('.animate-on-scroll');
             
-            // Add parallax effect to hero
-            const hero = document.querySelector('.hero');
-            if (hero) {
-                const scrolled = window.pageYOffset;
-                const rate = scrolled * -0.5;
-                hero.style.transform = `translate3d(0, ${rate}px, 0)`;
-            }
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const delay = entry.target.dataset.delay || 0;
+                        setTimeout(() => {
+                            entry.target.classList.add('animated');
+                        }, delay);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
             
-            lastScroll = currentScroll;
-        });
-    }
-
-    function showUpdateIndicator(message) {
-        // Create a subtle update indicator
-        const indicator = document.createElement('div');
-        indicator.className = 'update-indicator';
-        indicator.style.cssText = `
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-            padding: 8px 12px;
-            background: var(--primary-red);
-            color: white;
-            border-radius: var(--radius-md);
-            font-size: 12px;
-            z-index: 9999;
-            box-shadow: var(--shadow-md);
-            animation: slideUp 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        `;
-        
-        indicator.innerHTML = `
-            <i class="fas fa-sync-alt fa-spin"></i>
-            ${message}
-        `;
-        
-        document.body.appendChild(indicator);
-        
-        // Remove after 2 seconds
-        setTimeout(() => {
-            indicator.style.animation = 'slideDown 0.3s ease';
-            setTimeout(() => {
-                if (indicator.parentNode) {
-                    indicator.parentNode.removeChild(indicator);
+            animatedElements.forEach((element, index) => {
+                if (!element.dataset.delay) {
+                    element.dataset.delay = index * 100;
                 }
-            }, 300);
-        }, 2000);
-        
-        // Add CSS for animations if not already added
-        if (!document.querySelector('#update-indicator-styles')) {
-            const style = document.createElement('style');
-            style.id = 'update-indicator-styles';
-            style.textContent = `
-                @keyframes slideUp {
-                    from { transform: translateY(20px); opacity: 0; }
-                    to { transform: translateY(0); opacity: 1; }
-                }
-                @keyframes slideDown {
-                    from { transform: translateY(0); opacity: 1; }
-                    to { transform: translateY(20px); opacity: 0; }
-                }
-            `;
-            document.head.appendChild(style);
+                observer.observe(element);
+            });
         }
-    }
 
-    // ==================== REAL-TIME TESTING ====================
-    // Add connection status indicator
-    function setupConnectionStatus() {
-        const connectionRef = db.ref('.info/connected');
-        connectionRef.on('value', (snap) => {
-            if (snap.val() === true) {
-                console.log('Connected to Firebase - Real-time updates active');
-                showConnectionStatus('connected');
-            } else {
-                console.log('Disconnected from Firebase');
-                showConnectionStatus('disconnected');
+        function initializeScrollEffects() {
+            let lastScroll = 0;
+            window.addEventListener('scroll', () => {
+                const currentScroll = window.pageYOffset;
+                
+                // Add parallax effect to hero
+                const hero = document.querySelector('.hero');
+                if (hero) {
+                    const scrolled = window.pageYOffset;
+                    const rate = scrolled * -0.5;
+                    hero.style.transform = `translate3d(0, ${rate}px, 0)`;
+                }
+                
+                lastScroll = currentScroll;
+            });
+        }
+
+        // ==================== PERFORMANCE OPTIMIZATIONS ====================
+        // Debounce scroll events
+        let scrollTimeout;
+        window.addEventListener('scroll', function() {
+            if (scrollTimeout) {
+                window.cancelAnimationFrame(scrollTimeout);
             }
+            scrollTimeout = window.requestAnimationFrame(function() {
+                // Scroll handling code
+            });
         });
-    }
 
-    function showConnectionStatus(status) {
-        let statusEl = document.getElementById('firebase-status');
-        if (!statusEl) {
-            statusEl = document.createElement('div');
-            statusEl.id = 'firebase-status';
-            statusEl.style.cssText = `
-                position: fixed;
-                bottom: 20px;
-                left: 20px;
-                padding: 6px 10px;
-                border-radius: var(--radius-md);
-                font-size: 11px;
-                z-index: 9999;
-                background: ${status === 'connected' ? '#28a745' : '#dc3545'};
-                color: white;
-                box-shadow: var(--shadow-sm);
-            `;
-            document.body.appendChild(statusEl);
-        }
-        
-        statusEl.innerHTML = `
-            <i class="fas fa-${status === 'connected' ? 'check-circle' : 'exclamation-circle'}"></i>
-            Firebase: ${status === 'connected' ? 'Live' : 'Offline'}
-        `;
-        statusEl.style.background = status === 'connected' ? '#28a745' : '#dc3545';
-    }
+        // Optimize image loading
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('img');
+            images.forEach(img => {
+                img.loading = 'lazy';
+            });
+        });
 
-    // Initialize connection status
-    if (db) {
-        setupConnectionStatus();
-    }
+        // Touch device optimizations
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(event) {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
 
-    // Manual refresh function
-    window.refreshData = function() {
-        console.log('Manual refresh triggered');
-        removeAllListeners();
-        setupRealtimeListeners();
-    };
-
-    // Add refresh button for testing (remove in production)
-    const refreshBtn = document.createElement('button');
-    refreshBtn.textContent = '🔄 Reconnect';
-    refreshBtn.style.cssText = `
-        position: fixed;
-        bottom: 120px;
-        right: 20px;
-        padding: 8px 12px;
-        background: var(--primary-red);
-        color: white;
-        border: none;
-        border-radius: var(--radius-md);
-        cursor: pointer;
-        z-index: 1000;
-        font-size: 11px;
-        box-shadow: var(--shadow-md);
-    `;
-    refreshBtn.onclick = function() {
-        window.refreshData();
-        showUpdateIndicator('Reconnecting to Firebase...');
-    };
-    document.body.appendChild(refreshBtn);
-
-    // Touch optimizations
-    let lastTouchEnd = 0;
-    document.addEventListener('touchend', (event) => {
-        const now = Date.now();
-        if (now - lastTouchEnd <= 300) {
-            event.preventDefault();
-        }
-        lastTouchEnd = now;
-    }, false);
-</script>
+        // ==================== EXPORT FOR TESTING ====================
+        // For testing purposes only
+        window.dsog = {
+            refreshData: function() {
+                console.log('Manual refresh triggered');
+                if (isFirebaseInitialized) {
+                    removeAllListeners();
+                    setupRealtimeListeners();
+                    showUpdateIndicator('Manual refresh');
+                }
+            },
+            clearCache: function() {
+                localStorage.removeItem(CACHE_KEY);
+                console.log('Cache cleared');
+            },
+            getFirebaseStatus: function() {
+                return isFirebaseInitialized ? 'connected' : 'disconnected';
+            }
+        };
+    </script>
 </body>
 </html>
