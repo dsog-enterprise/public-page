@@ -2,10 +2,11 @@
 <html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.95, maximum-scale=5.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="format-detection" content="telephone=no">
     
     <!-- App Version -->
-    <meta name="app-version" content="7.0.0">
+    <meta name="app-version" content="8.0.0">
     
     <!-- SEO Meta Tags -->
     <meta name="description" content="DSOG - Empowering businesses, startups, and young entrepreneurs through training, events, and startup opportunities. Shape your business acuity with us.">
@@ -19,7 +20,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="DSOG">
     <meta name="msapplication-TileColor" content="#C21807">
-    <meta name="msapplication-starturl" content="/index.html?v=7.0.0">
+    <meta name="msapplication-starturl" content="/index.html?v=8.0.0">
     
     <!-- Updated Open Graph Meta Tags -->
     <meta property="og:title" content="DSOG | Empowering Businesses, Startups & Young Entrepreneurs">
@@ -125,7 +126,7 @@
             
             /* Layout Variables */
             --header-height: 72px;
-            --container-width: 1320px;
+            --container-width: min(1320px, 95%);
             --nav-item-spacing: 2.5rem;
             --logo-size: 40px;
             
@@ -142,6 +143,12 @@
             --z-fixed: 1000;
             --z-modal: 10000;
             --z-tooltip: 100000;
+            
+            /* Safe Area Insets */
+            --safe-top: env(safe-area-inset-top, 0px);
+            --safe-right: env(safe-area-inset-right, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --safe-left: env(safe-area-inset-left, 0px);
         }
 
         /* Dark Theme Variables */
@@ -179,6 +186,7 @@
             scroll-behavior: smooth;
             scroll-padding-top: calc(var(--header-height) + 20px);
             text-rendering: optimizeLegibility;
+            -webkit-text-size-adjust: 100%;
         }
 
         body {
@@ -193,6 +201,27 @@
             font-size: 0.9375rem;
             font-weight: 400;
             letter-spacing: 0.01em;
+            padding-top: var(--safe-top);
+            touch-action: manipulation;
+        }
+
+        /* Touch Optimizations */
+        button, 
+        a, 
+        input, 
+        textarea, 
+        select {
+            touch-action: manipulation;
+        }
+
+        /* Hide scrollbar but allow scrolling */
+        .scroll-container {
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; /* Firefox */
+        }
+
+        .scroll-container::-webkit-scrollbar {
+            display: none; /* Safari and Chrome */
         }
 
         /* Custom Scrollbar */
@@ -220,168 +249,6 @@
         ::selection {
             background: rgba(194, 24, 7, 0.2);
             color: var(--text-primary);
-        }
-
-        /* ===== HEADER ===== */
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: var(--header-height);
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-bottom: 1px solid var(--border-color);
-            z-index: var(--z-fixed);
-            transition: var(--transition-smooth);
-            box-shadow: var(--shadow-sm);
-        }
-
-        [data-theme="dark"] .header {
-            border-bottom: 1px solid rgba(64, 64, 64, 0.8);
-        }
-
-        .header.scrolled {
-            box-shadow: var(--shadow-lg);
-        }
-
-        /* Navbar Container */
-        .navbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 100%;
-            width: 100%;
-            max-width: var(--container-width);
-            margin: 0 auto;
-            padding: 0 var(--space-xl);
-            gap: var(--space-xl);
-        }
-
-        /* Logo */
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: var(--space-md);
-            text-decoration: none;
-            flex-shrink: 0;
-            padding: var(--space-xs) 0;
-            height: 100%;
-        }
-
-        .logo-image {
-            height: var(--logo-size);
-            width: auto;
-            object-fit: contain;
-            display: block;
-            transition: var(--transition-smooth);
-        }
-
-        [data-theme="dark"] .logo-image {
-            filter: brightness(0) invert(1);
-        }
-
-        .logo-text {
-            font-family: var(--font-heading);
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--text-primary);
-            letter-spacing: -0.02em;
-            line-height: 1;
-            white-space: nowrap;
-        }
-
-        .logo-text span {
-            color: var(--primary-red);
-            font-weight: 700;
-        }
-
-        /* Main Navigation */
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: var(--nav-item-spacing);
-            margin: 0;
-            padding: 0;
-            list-style: none;
-            height: 100%;
-        }
-
-        .nav-link {
-            position: relative;
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.875rem;
-            padding: 0;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            transition: var(--transition-fast);
-            letter-spacing: 0.01em;
-            white-space: nowrap;
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--gradient-primary);
-            transition: var(--transition-smooth);
-            border-radius: 1px;
-        }
-
-        .nav-link:hover {
-            color: var(--primary-red);
-        }
-
-        .nav-link:hover::after {
-            width: 100%;
-        }
-
-        .nav-link.active {
-            color: var(--primary-red);
-            font-weight: 600;
-        }
-
-        .nav-link.active::after {
-            width: 100%;
-        }
-
-        /* Contact Button */
-        .nav-links .btn-primary {
-            font-size: 0.875rem;
-            padding: var(--space-sm) var(--space-lg);
-            height: auto;
-            margin-left: var(--space-sm);
-            flex-shrink: 0;
-        }
-
-        /* Mobile Menu Button */
-        .mobile-menu-btn {
-            display: none;
-            align-items: center;
-            justify-content: center;
-            background: none;
-            border: none;
-            color: var(--primary-red);
-            font-size: 1.25rem;
-            cursor: pointer;
-            padding: var(--space-sm);
-            border-radius: var(--radius-md);
-            transition: var(--transition-smooth);
-            z-index: var(--z-dropdown);
-            width: 44px;
-            height: 44px;
-            flex-shrink: 0;
-        }
-
-        .mobile-menu-btn:hover {
-            background: var(--bg-tertiary);
         }
 
         /* ===== TYPOGRAPHY ===== */
@@ -418,22 +285,6 @@
             display: inline-block;
         }
 
-        .text-gradient-gold {
-            background: var(--gradient-gold);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            display: inline-block;
-        }
-
-        .text-gradient-spiritual {
-            background: var(--gradient-spiritual);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            display: inline-block;
-        }
-
         .lead {
             font-size: clamp(1.125rem, 2vw, 1.25rem);
             color: var(--text-secondary);
@@ -451,74 +302,183 @@
             font-weight: 400;
         }
 
-        .slogan {
-            font-family: var(--font-spiritual);
-            font-style: italic;
-            color: var(--text-tertiary);
-            font-size: 1.1rem;
-            margin-top: calc(var(--space-sm) * -1);
-            margin-bottom: var(--space-md);
-            position: relative;
-            padding-left: var(--space-lg);
-        }
-
-        .slogan::before {
-            content: '"';
-            position: absolute;
-            left: 0;
-            top: -5px;
-            font-size: 2rem;
-            color: var(--primary-red);
-            font-family: serif;
-        }
-
         /* ===== LAYOUT & CONTAINERS ===== */
         .container {
             width: 100%;
             max-width: var(--container-width);
             margin: 0 auto;
-            padding: 0 var(--space-xl);
+            padding: 0 clamp(var(--space-md), 5vw, var(--space-xl));
         }
 
         section {
-            padding: var(--space-4xl) 0;
+            padding: clamp(var(--space-2xl), 8vw, var(--space-4xl)) 0;
             position: relative;
         }
 
         .section-header {
             text-align: center;
-            margin-bottom: var(--space-3xl);
+            margin-bottom: clamp(var(--space-xl), 6vw, var(--space-3xl));
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
         }
 
-        .section-header h2 {
-            position: relative;
-            display: inline-block;
-            margin-bottom: var(--space-lg);
+        /* ===== HEADER ===== */
+        .header {
+            position: fixed;
+            top: var(--safe-top);
+            left: 0;
+            width: 100%;
+            height: var(--header-height);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid var(--border-color);
+            z-index: var(--z-fixed);
+            transition: var(--transition-smooth);
+            box-shadow: var(--shadow-sm);
+            padding-left: var(--safe-left);
+            padding-right: var(--safe-right);
         }
 
-        .section-header h2::after {
+        .header.scrolled {
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Navbar Container */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 100%;
+            width: 100%;
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 0 clamp(var(--space-md), 3vw, var(--space-xl));
+            gap: clamp(var(--space-md), 3vw, var(--space-xl));
+        }
+
+        /* Logo */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            text-decoration: none;
+            flex-shrink: 0;
+            padding: var(--space-xs) 0;
+            height: 100%;
+            min-height: 44px;
+        }
+
+        .logo-image {
+            height: clamp(32px, 5vw, var(--logo-size));
+            width: auto;
+            object-fit: contain;
+            display: block;
+            transition: var(--transition-smooth);
+        }
+
+        .logo-text {
+            font-family: var(--font-heading);
+            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            line-height: 1;
+            white-space: nowrap;
+        }
+
+        .logo-text span {
+            color: var(--primary-red);
+            font-weight: 700;
+        }
+
+        /* Main Navigation */
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: clamp(1rem, 2vw, var(--nav-item-spacing));
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            height: 100%;
+        }
+
+        .nav-link {
+            position: relative;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            transition: var(--transition-fast);
+            letter-spacing: 0.01em;
+            white-space: nowrap;
+            min-height: 44px;
+            padding: 0 var(--space-sm);
+        }
+
+        .nav-link::after {
             content: '';
             position: absolute;
-            bottom: -12px;
+            bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 60px;
-            height: 3px;
+            width: 0;
+            height: 2px;
             background: var(--gradient-primary);
-            border-radius: 2px;
+            transition: var(--transition-smooth);
+            border-radius: 1px;
         }
 
-        .section-subtitle {
-            color: var(--text-tertiary);
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: var(--space-sm);
-            display: block;
+        .nav-link:hover {
+            color: var(--primary-red);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link.active {
+            color: var(--primary-red);
             font-weight: 600;
+        }
+
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* Contact Button */
+        .nav-links .btn-primary {
+            font-size: 0.875rem;
+            padding: var(--space-sm) var(--space-lg);
+            height: auto;
+            margin-left: var(--space-sm);
+            flex-shrink: 0;
+            min-height: 44px;
+        }
+
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            color: var(--primary-red);
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: var(--space-sm);
+            border-radius: var(--radius-md);
+            transition: var(--transition-smooth);
+            z-index: var(--z-dropdown);
+            width: 44px;
+            height: 44px;
+            flex-shrink: 0;
+            min-height: 44px;
         }
 
         /* ===== BUTTONS ===== */
@@ -527,10 +487,10 @@
             align-items: center;
             justify-content: center;
             gap: var(--space-sm);
-            padding: var(--space-md) var(--space-xl);
+            padding: clamp(var(--space-md), 2vw, var(--space-lg)) clamp(var(--space-lg), 3vw, var(--space-xl));
             border-radius: var(--radius-md);
             font-weight: 600;
-            font-size: 0.875rem;
+            font-size: clamp(0.85rem, 1.5vw, 0.875rem);
             text-decoration: none;
             border: 1px solid transparent;
             cursor: pointer;
@@ -539,6 +499,8 @@
             overflow: hidden;
             white-space: nowrap;
             letter-spacing: 0.02em;
+            min-height: 44px;
+            width: fit-content;
         }
 
         .btn-primary {
@@ -565,49 +527,9 @@
             box-shadow: 0 8px 25px rgba(194, 24, 7, 0.2);
         }
 
-        .btn-gold {
-            background: var(--gradient-gold);
-            color: var(--primary-dark) !important;
-            border: none;
-            font-weight: 700;
-        }
-
-        .btn-gold:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
-        }
-
-        .btn-spiritual {
-            background: var(--gradient-spiritual);
-            color: var(--white) !important;
-            border: none;
-        }
-
-        .btn-spiritual:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(107, 70, 193, 0.3);
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-        }
-
-        .btn-outline:hover {
-            border-color: var(--primary-red);
-            color: var(--primary-red);
-            transform: translateY(-2px);
-        }
-
-        .btn-small {
-            padding: var(--space-sm) var(--space-lg);
-            font-size: 0.85rem;
-        }
-
         .btn-large {
-            padding: var(--space-lg) var(--space-2xl);
-            font-size: 1rem;
+            padding: clamp(var(--space-lg), 3vw, var(--space-xl)) clamp(var(--space-xl), 4vw, var(--space-2xl));
+            font-size: clamp(0.9rem, 1.8vw, 1rem);
         }
 
         /* ===== HERO SECTION ===== */
@@ -615,23 +537,10 @@
             min-height: 100vh;
             display: flex;
             align-items: center;
-            padding-top: var(--header-height);
+            padding-top: calc(var(--header-height) + var(--safe-top));
             position: relative;
             overflow: hidden;
             background: var(--gradient-light);
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(194, 24, 7, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.02) 0%, transparent 50%);
-            z-index: var(--z-negative);
         }
 
         .hero-content {
@@ -640,7 +549,7 @@
             max-width: 1200px;
             margin: 0 auto;
             text-align: center;
-            padding: 0 var(--space-xl);
+            padding: 0 clamp(var(--space-md), 3vw, var(--space-xl));
         }
 
         .mission-badge {
@@ -651,10 +560,10 @@
             color: var(--white);
             padding: var(--space-sm) var(--space-lg);
             border-radius: var(--radius-full);
-            font-size: 0.8rem;
+            font-size: clamp(0.75rem, 1.5vw, 0.8rem);
             font-weight: 600;
             letter-spacing: 0.05em;
-            margin-bottom: var(--space-xl);
+            margin-bottom: clamp(var(--space-lg), 4vw, var(--space-xl));
             box-shadow: var(--shadow-lg);
             text-transform: uppercase;
         }
@@ -664,7 +573,7 @@
             flex-wrap: wrap;
             gap: var(--space-sm);
             justify-content: center;
-            margin: var(--space-xl) 0;
+            margin: clamp(var(--space-lg), 4vw, var(--space-xl)) 0;
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
@@ -675,16 +584,12 @@
             color: var(--primary-red);
             padding: var(--space-xs) var(--space-md);
             border-radius: var(--radius-full);
-            font-size: 0.8rem;
+            font-size: clamp(0.75rem, 1.5vw, 0.8rem);
             font-weight: 500;
             border: 1px solid rgba(194, 24, 7, 0.15);
             transition: var(--transition-smooth);
             cursor: default;
-        }
-
-        .category-tag:hover {
-            background: rgba(194, 24, 7, 0.15);
-            transform: translateY(-1px);
+            white-space: nowrap;
         }
 
         .hero-buttons {
@@ -692,25 +597,21 @@
             gap: var(--space-md);
             justify-content: center;
             flex-wrap: wrap;
-            margin-top: var(--space-2xl);
+            margin-top: clamp(var(--space-xl), 5vw, var(--space-2xl));
         }
 
-        /* ===== OUR APPROACH SECTION ===== */
-        .approach-section {
-            background: var(--bg-primary);
-        }
-
+        /* ===== APPROACH SECTION ===== */
         .approach-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: var(--space-xl);
+            grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+            gap: clamp(var(--space-lg), 4vw, var(--space-xl));
             margin-top: var(--space-2xl);
         }
 
         .approach-card {
             background: var(--gradient-card);
             border-radius: var(--radius-lg);
-            padding: var(--space-xl);
+            padding: clamp(var(--space-lg), 3vw, var(--space-xl));
             position: relative;
             overflow: hidden;
             border: 1px solid var(--border-color);
@@ -721,27 +622,10 @@
             text-align: center;
         }
 
-        .approach-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--gradient-primary);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.4s var(--transition-smooth);
-        }
-
         .approach-card:hover {
             transform: translateY(-8px);
             box-shadow: var(--shadow-xl);
             border-color: var(--primary-red);
-        }
-
-        .approach-card:hover::before {
-            transform: scaleX(1);
         }
 
         .approach-icon {
@@ -758,34 +642,18 @@
             flex-shrink: 0;
         }
 
-        .approach-tag {
-            display: inline-block;
-            background: rgba(194, 24, 7, 0.1);
-            color: var(--primary-red);
-            padding: var(--space-2xs) var(--space-md);
-            border-radius: var(--radius-full);
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-bottom: var(--space-md);
-            letter-spacing: 0.05em;
-        }
-
         /* ===== SERVICES OVERVIEW ===== */
-        .services-overview {
-            background: var(--bg-secondary);
-        }
-
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: var(--space-xl);
+            grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+            gap: clamp(var(--space-lg), 4vw, var(--space-xl));
             margin-top: var(--space-2xl);
         }
 
         .service-card {
             background: var(--gradient-card);
             border-radius: var(--radius-lg);
-            padding: var(--space-xl);
+            padding: clamp(var(--space-lg), 3vw, var(--space-xl));
             position: relative;
             overflow: hidden;
             border: 1px solid var(--border-color);
@@ -793,29 +661,6 @@
             height: 100%;
             display: flex;
             flex-direction: column;
-        }
-
-        .service-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--gradient-primary);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.4s var(--transition-smooth);
-        }
-
-        .service-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-xl);
-            border-color: var(--primary-red);
-        }
-
-        .service-card:hover::before {
-            transform: scaleX(1);
         }
 
         .service-icon {
@@ -832,77 +677,11 @@
             flex-shrink: 0;
         }
 
-        .service-tag {
-            display: inline-block;
-            background: rgba(194, 24, 7, 0.1);
-            color: var(--primary-red);
-            padding: var(--space-2xs) var(--space-md);
-            border-radius: var(--radius-full);
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-bottom: var(--space-md);
-            letter-spacing: 0.05em;
-            align-self: flex-start;
-        }
-
-        .service-features {
-            margin-top: var(--space-md);
-            list-style: none;
-            flex-grow: 1;
-        }
-
-        .service-features li {
-            display: flex;
-            align-items: flex-start;
-            gap: var(--space-sm);
-            margin-bottom: var(--space-sm);
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .service-features i {
-            color: var(--primary-red);
-            margin-top: 0.2rem;
-            flex-shrink: 0;
-        }
-
         /* ===== EVENTS SECTION ===== */
-        .events-section {
-            background: var(--bg-primary);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .events-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: var(--gradient-primary);
-            opacity: 0.1;
-        }
-
-        .events-header {
-            text-align: center;
-            margin-bottom: var(--space-3xl);
-        }
-
-        .events-subtitle {
-            color: var(--text-tertiary);
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: var(--space-sm);
-            display: block;
-            font-weight: 600;
-        }
-
         .events-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: var(--space-xl);
+            grid-template-columns: repeat(auto-fit, minmax(min(350px, 100%), 1fr));
+            gap: clamp(var(--space-lg), 4vw, var(--space-xl));
             margin-top: var(--space-2xl);
         }
 
@@ -926,7 +705,7 @@
         .event-image-container {
             position: relative;
             width: 100%;
-            height: 220px;
+            aspect-ratio: 16/9;
             overflow: hidden;
         }
 
@@ -937,10 +716,6 @@
             transition: var(--transition-smooth);
         }
 
-        .event-card:hover .event-image {
-            transform: scale(1.05);
-        }
-
         .event-date-badge {
             position: absolute;
             top: var(--space-md);
@@ -949,7 +724,7 @@
             color: var(--white);
             padding: var(--space-xs) var(--space-md);
             border-radius: var(--radius-md);
-            font-size: 0.85rem;
+            font-size: clamp(0.8rem, 1.5vw, 0.85rem);
             font-weight: 600;
             box-shadow: var(--shadow-md);
             display: flex;
@@ -958,254 +733,46 @@
             z-index: var(--z-normal);
         }
 
-        .event-card.spiritual-event .event-date-badge {
-            background: var(--gradient-spiritual);
-        }
-
-        .event-card.inspiration-event .event-date-badge {
-            background: var(--gradient-gold);
-        }
-
-        .event-content {
-            padding: var(--space-xl);
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .event-category {
-            display: inline-block;
-            padding: var(--space-2xs) var(--space-md);
-            border-radius: var(--radius-full);
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-bottom: var(--space-md);
-            letter-spacing: 0.05em;
-            align-self: flex-start;
-        }
-
-        .event-category.bootcamp {
-            background: rgba(194, 24, 7, 0.1);
-            color: var(--primary-red);
-        }
-
-        .event-category.inspiration {
-            background: rgba(212, 175, 55, 0.1);
-            color: #B8860B;
-        }
-
-        .event-category.spiritual {
-            background: rgba(107, 70, 193, 0.1);
-            color: var(--accent-purple);
-        }
-
-        .event-details {
-            flex-grow: 1;
-        }
-
-        .event-details h4 {
-            margin-bottom: var(--space-sm);
-            line-height: 1.3;
-        }
-
-        .spiritual-event .event-details h4 {
-            font-family: var(--font-spiritual);
-            font-weight: 700;
-        }
-
-        .event-details p {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin-bottom: var(--space-lg);
-        }
-
-        .event-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--space-md);
-            margin-bottom: var(--space-lg);
-            padding-top: var(--space-md);
-            border-top: 1px solid var(--border-color);
-        }
-
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: var(--space-xs);
-            color: var(--text-tertiary);
-            font-size: 0.85rem;
-        }
-
-        .meta-item i {
-            width: 16px;
-        }
-
-        .event-card .meta-item i {
-            color: var(--primary-red);
-        }
-
-        .spiritual-event .meta-item i {
-            color: var(--accent-purple);
-        }
-
-        .inspiration-event .meta-item i {
-            color: #B8860B;
-        }
-
-        .duration-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-xs);
-            background: rgba(194, 24, 7, 0.08);
-            color: var(--primary-red);
-            padding: var(--space-2xs) var(--space-md);
-            border-radius: var(--radius-full);
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-bottom: var(--space-sm);
-        }
-
-        .duration-badge i {
-            font-size: 0.8rem;
-        }
-
-        .event-action {
-            margin-top: auto;
-        }
-
-        .events-cta {
-            text-align: center;
-            margin-top: var(--space-3xl);
-        }
-
         /* ===== ABOUT DSOG SECTION ===== */
-        .about-dsog-section {
-            background: var(--bg-secondary);
-            position: relative;
-        }
-
         .about-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: var(--space-2xl);
+            grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+            gap: clamp(var(--space-xl), 4vw, var(--space-2xl));
             align-items: center;
-        }
-
-        .about-content {
-            padding: var(--space-xl);
         }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr));
             gap: var(--space-lg);
             margin-top: var(--space-2xl);
         }
 
-        .stat-item {
-            text-align: center;
-            padding: var(--space-lg);
-            background: var(--gradient-card);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-color);
-            transition: var(--transition-smooth);
-        }
-
-        .stat-item:hover {
-            transform: translateY(-4px);
-            border-color: var(--primary-red);
-            box-shadow: var(--shadow-md);
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 800;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            line-height: 1;
-        }
-
         /* ===== VALUE PROPOSITION ===== */
-        .value-proposition {
-            background: var(--bg-primary);
-        }
-
         .value-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: var(--space-xl);
+            grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+            gap: clamp(var(--space-lg), 4vw, var(--space-xl));
             margin-top: var(--space-2xl);
-        }
-
-        .value-card {
-            text-align: center;
-            padding: var(--space-xl);
-        }
-
-        .value-icon {
-            width: 70px;
-            height: 70px;
-            background: var(--gradient-card);
-            border-radius: var(--radius-lg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto var(--space-lg);
-            font-size: 1.75rem;
-            color: var(--primary-red);
-            border: 1px solid var(--border-color);
-            transition: var(--transition-smooth);
-        }
-
-        .value-card:hover .value-icon {
-            transform: scale(1.1) rotate(5deg);
-            border-color: var(--primary-red);
-            box-shadow: var(--shadow-md);
         }
 
         /* ===== CTA SECTION ===== */
         .cta-section {
             background: var(--gradient-primary);
             color: var(--white);
-            padding: var(--space-4xl) 0;
+            padding: clamp(var(--space-2xl), 6vw, var(--space-4xl)) 0;
             text-align: center;
             position: relative;
             overflow: hidden;
             border-radius: var(--radius-xl);
-            margin: var(--space-4xl) auto;
+            margin: clamp(var(--space-2xl), 6vw, var(--space-4xl)) auto;
             max-width: 1200px;
         }
 
-        .cta-section::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%);
-        }
-
-        .cta-section > * {
-            position: relative;
-            z-index: var(--z-normal);
-        }
-
-        .cta-section h2 {
-            color: var(--white);
-        }
-
-        .cta-section .lead {
-            color: rgba(255, 255, 255, 0.9);
-        }
-
         .contact-info {
-            display: flex;
-            justify-content: center;
-            gap: var(--space-xl);
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+            gap: var(--space-lg);
             margin-top: var(--space-2xl);
         }
 
@@ -1220,105 +787,28 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.15);
             transition: var(--transition-smooth);
-            min-width: 260px;
-        }
-
-        .contact-item:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-4px);
-        }
-
-        .contact-icon {
-            background: rgba(255, 255, 255, 0.15);
-            color: var(--white);
-            width: 50px;
-            height: 50px;
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-            flex-shrink: 0;
         }
 
         /* ===== FOOTER ===== */
         .footer {
             background: var(--footer-bg);
             color: var(--white);
-            padding: var(--space-4xl) 0 var(--space-xl);
+            padding: clamp(var(--space-2xl), 6vw, var(--space-4xl)) 0 var(--space-xl);
             position: relative;
-        }
-
-        .footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--gradient-primary);
         }
 
         .footer-content {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
             gap: var(--space-xl);
             margin-bottom: var(--space-xl);
-        }
-
-        .footer-logo {
-            height: 40px;
-            margin-bottom: var(--space-md);
-            filter: brightness(0) invert(1);
-        }
-
-        .footer-section h3 {
-            color: var(--primary-gold);
-            margin-bottom: var(--space-md);
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            font-weight: 600;
-        }
-
-        .footer-section ul {
-            list-style: none;
-        }
-
-        .footer-section ul li {
-            margin-bottom: var(--space-sm);
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.7);
-            transition: var(--transition-smooth);
-        }
-
-        .footer-section ul li:hover {
-            color: var(--white);
-            transform: translateX(4px);
-        }
-
-        .footer-section ul li a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        .copyright {
-            text-align: center;
-            padding-top: var(--space-xl);
-            margin-top: var(--space-xl);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 0.85rem;
-            max-width: var(--container-width);
-            margin-left: auto;
-            margin-right: auto;
         }
 
         /* ===== THEME TOGGLE ===== */
         .theme-toggle {
             position: fixed;
-            bottom: var(--space-xl);
-            right: var(--space-xl);
+            bottom: calc(var(--space-xl) + var(--safe-bottom));
+            right: calc(var(--space-xl) + var(--safe-right));
             width: 52px;
             height: 52px;
             background: var(--gradient-primary);
@@ -1334,11 +824,180 @@
             transition: var(--transition-smooth);
             border: none;
             outline: none;
+            min-height: 44px;
         }
 
-        .theme-toggle:hover {
-            transform: rotate(30deg) scale(1.05);
-            box-shadow: var(--shadow-2xl);
+        /* ===== MOBILE NAVIGATION ===== */
+        @media (max-width: 1024px) {
+            :root {
+                --header-height: 64px;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: var(--header-height);
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: var(--bg-primary);
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0;
+                height: auto;
+                max-height: calc(100vh - var(--header-height));
+                overflow-y: auto;
+                padding: var(--space-md);
+                transform: translateX(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                            opacity 0.3s ease,
+                            visibility 0.3s ease;
+                box-shadow: var(--shadow-xl);
+                border-top: 1px solid var(--border-color);
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .nav-links.active {
+                transform: translateX(0);
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .nav-link {
+                height: auto;
+                padding: var(--space-md) var(--space-lg);
+                border-radius: var(--radius-md);
+                margin-bottom: var(--space-xs);
+                display: flex;
+                align-items: center;
+                min-height: 48px;
+            }
+
+            .nav-link::after {
+                display: none;
+            }
+
+            .nav-links .btn-primary {
+                margin: var(--space-md) 0 0 0;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 768px) {
+            :root {
+                --header-height: 64px;
+            }
+
+            .hero {
+                min-height: calc(100vh - var(--header-height));
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                width: 100%;
+                max-width: 400px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-buttons .btn {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .category-tags {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                justify-content: flex-start;
+                padding-bottom: var(--space-sm);
+                margin: var(--space-lg) calc(var(--space-lg) * -1);
+                padding-left: var(--space-lg);
+                padding-right: var(--space-lg);
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .category-tag {
+                flex-shrink: 0;
+                scroll-snap-align: start;
+            }
+
+            .contact-info {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .theme-toggle {
+                bottom: calc(var(--space-lg) + var(--safe-bottom));
+                right: calc(var(--space-lg) + var(--safe-right));
+                width: 48px;
+                height: 48px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            :root {
+                --header-height: 60px;
+            }
+
+            .container {
+                padding: 0 var(--space-md);
+            }
+
+            .mission-badge {
+                padding: var(--space-xs) var(--space-md);
+            }
+
+            .approach-card,
+            .service-card,
+            .event-card {
+                padding: var(--space-lg);
+            }
+
+            .theme-toggle {
+                bottom: calc(var(--space-md) + var(--safe-bottom));
+                right: calc(var(--space-md) + var(--safe-right));
+                width: 44px;
+                height: 44px;
+            }
+
+            .event-image-container {
+                aspect-ratio: 4/3;
+            }
+        }
+
+        @media (max-width: 360px) {
+            :root {
+                --header-height: 56px;
+            }
+            
+            .logo-text {
+                font-size: 1rem;
+            }
+            
+            .hero-buttons .btn {
+                font-size: 0.9rem;
+                padding: var(--space-md) var(--space-lg);
+            }
+            
+            .approach-card,
+            .service-card,
+            .event-card {
+                padding: var(--space-md);
+            }
+            
+            .event-image-container {
+                aspect-ratio: 1/1;
+            }
         }
 
         /* ===== ANIMATIONS ===== */
@@ -1354,283 +1013,6 @@
             transform: translateY(0);
         }
 
-        /* ===== MOBILE NAVIGATION ===== */
-        @media (max-width: 1024px) {
-            .nav-links {
-                position: fixed;
-                top: var(--header-height);
-                left: 0;
-                right: 0;
-                background: var(--bg-primary);
-                flex-direction: column;
-                align-items: stretch;
-                gap: 0;
-                height: auto;
-                max-height: calc(100vh - var(--header-height));
-                overflow-y: auto;
-                padding: var(--space-md);
-                transform: translateY(-100%);
-                opacity: 0;
-                visibility: hidden;
-                transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
-                            opacity 0.3s ease,
-                            visibility 0.3s ease;
-                box-shadow: var(--shadow-xl);
-                border-top: 1px solid var(--border-color);
-            }
-
-            .nav-links.active {
-                transform: translateY(0);
-                opacity: 1;
-                visibility: visible;
-            }
-
-            .nav-link {
-                height: auto;
-                padding: var(--space-md) var(--space-lg);
-                border-radius: var(--radius-md);
-                margin-bottom: var(--space-xs);
-                display: flex;
-                align-items: center;
-            }
-
-            .nav-link:hover {
-                background: var(--bg-tertiary);
-            }
-
-            .nav-link::after {
-                display: none;
-            }
-
-            .nav-links .btn-primary {
-                margin: var(--space-md) 0 0 0;
-                width: 100%;
-                justify-content: center;
-            }
-
-            .mobile-menu-btn {
-                display: flex;
-                margin-left: auto;
-            }
-
-            .navbar {
-                gap: var(--space-md);
-                padding: 0 var(--space-lg);
-            }
-        }
-
-        /* ===== RESPONSIVE DESIGN ===== */
-        @media (max-width: 768px) {
-            :root {
-                --header-height: 64px;
-                --nav-item-spacing: 1.5rem;
-                --logo-size: 36px;
-            }
-
-            .navbar {
-                padding: 0 var(--space-lg);
-            }
-
-            .logo-text {
-                font-size: 1.25rem;
-            }
-
-            .hero {
-                padding-top: var(--header-height);
-            }
-
-            h1 { font-size: 2.25rem; }
-            h2 { font-size: 1.75rem; }
-            h3 { font-size: 1.5rem; }
-
-            .approach-grid,
-            .services-grid,
-            .events-grid,
-            .value-grid {
-                grid-template-columns: 1fr;
-                max-width: 500px;
-                margin-left: auto;
-                margin-right: auto;
-            }
-
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .hero-buttons {
-                flex-direction: column;
-                align-items: center;
-                gap: var(--space-md);
-            }
-
-            .hero-buttons .btn {
-                width: 100%;
-                max-width: 300px;
-            }
-
-            .category-tags {
-                overflow-x: auto;
-                flex-wrap: nowrap;
-                justify-content: flex-start;
-                padding-bottom: var(--space-sm);
-                margin: var(--space-lg) calc(var(--space-lg) * -1);
-                padding-left: var(--space-lg);
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none;
-            }
-
-            .category-tags::-webkit-scrollbar {
-                display: none;
-            }
-
-            .category-tag {
-                flex-shrink: 0;
-                white-space: nowrap;
-            }
-
-            .contact-info {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .contact-item {
-                width: 100%;
-                max-width: 400px;
-                min-width: auto;
-            }
-
-            .theme-toggle {
-                bottom: var(--space-lg);
-                right: var(--space-lg);
-                width: 48px;
-                height: 48px;
-                font-size: 1rem;
-            }
-
-            .event-image-container {
-                height: 200px;
-            }
-
-            .event-meta {
-                flex-direction: column;
-                gap: var(--space-sm);
-            }
-
-            .event-date-badge {
-                font-size: 0.8rem;
-                padding: var(--space-2xs) var(--space-sm);
-            }
-        }
-
-        @media (max-width: 480px) {
-            :root {
-                --header-height: 60px;
-                --logo-size: 32px;
-            }
-
-            h1 { font-size: 2rem; }
-            h2 { font-size: 1.5rem; }
-            h3 { font-size: 1.25rem; }
-
-            .container {
-                padding: 0 var(--space-md);
-            }
-
-            .hero {
-                padding-top: var(--header-height);
-            }
-
-            .mission-badge {
-                font-size: 0.75rem;
-                padding: var(--space-xs) var(--space-md);
-            }
-
-            .btn {
-                padding: var(--space-md) var(--space-lg);
-                font-size: 0.9rem;
-            }
-
-            .approach-card,
-            .service-card,
-            .event-card {
-                padding: var(--space-lg);
-            }
-
-            .contact-item {
-                padding: var(--space-md);
-                text-align: left;
-            }
-
-            .contact-icon {
-                width: 45px;
-                height: 45px;
-                font-size: 1.1rem;
-            }
-
-            .theme-toggle {
-                bottom: var(--space-md);
-                right: var(--space-md);
-                width: 44px;
-                height: 44px;
-                font-size: 0.95rem;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .event-image-container {
-                height: 180px;
-            }
-
-            .event-content {
-                padding: var(--space-lg);
-            }
-
-            .event-date-badge {
-                top: var(--space-sm);
-                left: var(--space-sm);
-                font-size: 0.75rem;
-            }
-        }
-
-        @media (max-width: 360px) {
-            .logo-image {
-                height: 32px;
-            }
-            
-            .logo-text {
-                font-size: 1.1rem;
-            }
-            
-            h1 { font-size: 1.75rem; }
-            h2 { font-size: 1.25rem; }
-            h3 { font-size: 1.1rem; }
-            
-            .lead {
-                font-size: 1rem;
-            }
-            
-            .approach-card,
-            .service-card,
-            .event-card {
-                padding: var(--space-md);
-            }
-            
-            .btn {
-                padding: var(--space-sm) var(--space-md);
-                font-size: 0.85rem;
-            }
-
-            .events-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .event-image-container {
-                height: 160px;
-            }
-        }
-
         /* Loading States */
         .loading {
             display: flex;
@@ -1639,6 +1021,7 @@
             justify-content: center;
             padding: var(--space-2xl);
             color: var(--text-secondary);
+            text-align: center;
         }
 
         .loading-spinner {
@@ -1654,6 +1037,83 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        /* Update Indicator */
+        .update-indicator {
+            position: fixed;
+            bottom: calc(80px + var(--safe-bottom));
+            right: calc(20px + var(--safe-right));
+            padding: 8px 12px;
+            background: var(--primary-red);
+            color: white;
+            border-radius: var(--radius-md);
+            font-size: 12px;
+            z-index: var(--z-tooltip);
+            box-shadow: var(--shadow-md);
+            animation: slideUp 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            max-width: calc(100% - 40px);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(20px); opacity: 0; }
+        }
+
+        /* Skeleton Loading */
+        .skeleton {
+            background: linear-gradient(
+                90deg,
+                var(--bg-secondary) 25%,
+                var(--bg-tertiary) 50%,
+                var(--bg-secondary) 75%
+            );
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: var(--radius-md);
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Connection Status */
+        #firebase-status {
+            position: fixed;
+            bottom: 20px;
+            left: calc(20px + var(--safe-left));
+            padding: 6px 10px;
+            border-radius: var(--radius-md);
+            font-size: 11px;
+            z-index: var(--z-tooltip);
+            color: white;
+            box-shadow: var(--shadow-sm);
+            background: #28a745;
+        }
+
+        /* Image Fallbacks */
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        img[data-src] {
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        img.loaded {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -1665,10 +1125,11 @@
     <!-- Header -->
     <header class="header" id="header">
         <nav class="navbar">
-            <a href="index.html" class="logo">
+            <a href="index.html" class="logo" aria-label="DSOG Home">
                 <img src="https://i.postimg.cc/kMZ1jTww/Untitled-design-4-removebg-preview.png" 
                      alt="DSOG" 
-                     class="logo-image">
+                     class="logo-image"
+                     loading="lazy">
                 <span class="logo-text">DSOG</span>
             </a>
 
@@ -1682,7 +1143,7 @@
                 <li><a href="contact.html" class="btn btn-primary">Contact Us</a></li>
             </ul>
 
-            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu" aria-expanded="false">
                 <i class="fas fa-bars"></i>
             </button>
         </nav>
@@ -1696,11 +1157,13 @@
                     <i class="fas fa-bullseye"></i> EMPOWERING BUSINESSES & ENTREPRENEURS
                 </div>
                 
-                <h1 id="heroTitle">Loading...</h1>
-                <p class="lead" id="heroSubtitle">Loading content...</p>
+                <h1 id="heroTitle" class="skeleton" style="height: 3.5rem; width: 80%; margin: 0 auto;"></h1>
+                <p class="lead" id="heroSubtitle" class="skeleton" style="height: 1.5rem; width: 90%; margin: 1rem auto;"></p>
                 
                 <div class="category-tags" id="categoryTags">
-                    <!-- Tags will be loaded dynamically -->
+                    <span class="category-tag skeleton" style="width: 100px;"></span>
+                    <span class="category-tag skeleton" style="width: 120px;"></span>
+                    <span class="category-tag skeleton" style="width: 90px;"></span>
                 </div>
                 
                 <div class="hero-buttons">
@@ -1721,11 +1184,15 @@
             <div class="section-header">
                 <span class="section-subtitle">Our Methodology</span>
                 <h2>How We <span class="text-gradient">Empower Entrepreneurs</span></h2>
-                <p class="lead" id="approachSubtitle">Loading approach content...</p>
+                <p class="lead" id="approachSubtitle" class="skeleton" style="height: 1.5rem; width: 80%;"></p>
             </div>
             
             <div class="approach-grid" id="approachCards">
                 <!-- Cards will be loaded dynamically -->
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading approach...</p>
+                </div>
             </div>
         </div>
     </section>
@@ -1747,15 +1214,15 @@
                     </div>
                     <span class="service-tag">SKILL DEVELOPMENT</span>
                     <h3>Professional Training</h3>
-                    <p>Tailored training programs covering business fundamentals, leadership, digital skills, and industry-specific knowledge to prepare you for entrepreneurial success.</p>
+                    <p>Tailored training programs covering business fundamentals, leadership, digital skills, and industry-specific knowledge.</p>
                     <ul class="service-features">
-                        <li><i class="fas fa-check"></i> Business Fundamentals & Strategy</li>
-                        <li><i class="fas fa-check"></i> Digital Marketing & E-commerce</li>
-                        <li><i class="fas fa-check"></i> Financial Management & Funding</li>
-                        <li><i class="fas fa-check"></i> Leadership & Team Building</li>
+                        <li><i class="fas fa-check"></i> Business Fundamentals</li>
+                        <li><i class="fas fa-check"></i> Digital Marketing</li>
+                        <li><i class="fas fa-check"></i> Financial Management</li>
+                        <li><i class="fas fa-check"></i> Leadership Skills</li>
                     </ul>
                     <a href="training.html" class="btn btn-secondary btn-small" style="margin-top: var(--space-md);">
-                        View Training Programs <i class="fas fa-arrow-right"></i>
+                        View Programs <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
                 
@@ -1766,15 +1233,15 @@
                     </div>
                     <span class="service-tag">NETWORKING & LEARNING</span>
                     <h3>Entrepreneurship Events</h3>
-                    <p>Regular events, workshops, and networking sessions designed to connect entrepreneurs, share knowledge, and foster collaborative opportunities.</p>
+                    <p>Regular events, workshops, and networking sessions to connect entrepreneurs and share knowledge.</p>
                     <ul class="service-features">
                         <li><i class="fas fa-check"></i> Business Pitch Competitions</li>
-                        <li><i class="fas fa-check"></i> Industry Networking Mixers</li>
-                        <li><i class="fas fa-check"></i> Expert Workshop Series</li>
-                        <li><i class="fas fa-check"></i> Annual Entrepreneurship Summit</li>
+                        <li><i class="fas fa-check"></i> Networking Mixers</li>
+                        <li><i class="fas fa-check"></i> Expert Workshops</li>
+                        <li><i class="fas fa-check"></i> Annual Summit</li>
                     </ul>
                     <a href="#events" class="btn btn-secondary btn-small" style="margin-top: var(--space-md);">
-                        See Upcoming Events <i class="fas fa-arrow-right"></i>
+                        See Events <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
                 
@@ -1785,15 +1252,15 @@
                     </div>
                     <span class="service-tag">GROWTH SUPPORT</span>
                     <h3>Startup Opportunities</h3>
-                    <p>Practical startup opportunities with mentorship, resources, and support systems to help you launch and grow your business venture.</p>
+                    <p>Practical startup opportunities with mentorship, resources, and support systems.</p>
                     <ul class="service-features">
-                        <li><i class="fas fa-check"></i> Business Incubation Programs</li>
-                        <li><i class="fas fa-check"></i> Mentorship & Advisory Services</li>
-                        <li><i class="fas fa-check"></i> Funding & Investment Connections</li>
-                        <li><i class="fas fa-check"></i> Market Access & Partnerships</li>
+                        <li><i class="fas fa-check"></i> Business Incubation</li>
+                        <li><i class="fas fa-check"></i> Mentorship Services</li>
+                        <li><i class="fas fa-check"></i> Funding Connections</li>
+                        <li><i class="fas fa-check"></i> Market Access</li>
                     </ul>
                     <a href="bootcamp.html" class="btn btn-secondary btn-small" style="margin-top: var(--space-md);">
-                        Explore Opportunities <i class="fas fa-arrow-right"></i>
+                        Explore <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
             </div>
@@ -1806,11 +1273,10 @@
             <div class="events-header">
                 <span class="events-subtitle">Get Involved</span>
                 <h2>Upcoming <span class="text-gradient">Events & Workshops</span></h2>
-                <p class="lead">Join our transformative events designed to shape your business acuity, ignite your entrepreneurial fire, and connect you with divine purpose.</p>
+                <p class="lead">Join our transformative events to shape your business acuity and connect with purpose.</p>
             </div>
             
             <div class="events-grid" id="eventsGrid">
-                <!-- Events will be loaded dynamically -->
                 <div class="loading">
                     <div class="loading-spinner"></div>
                     <p>Loading events...</p>
@@ -1819,7 +1285,7 @@
             
             <div class="events-cta">
                 <a href="contact.html" class="btn btn-outline btn-large">
-                    <i class="fas fa-calendar-plus"></i> Propose an Event
+                    <i class="fas fa-calendar-plus"></i> Propose Event
                 </a>
             </div>
         </div>
@@ -1831,17 +1297,15 @@
             <div class="section-header">
                 <span class="section-subtitle">Our Organization</span>
                 <h2>About <span class="text-gradient">DSOG</span></h2>
-                <p class="lead">We are dedicated to empowering businesses, startups, and young entrepreneurs through comprehensive support systems and practical opportunities.</p>
+                <p class="lead">Empowering entrepreneurs with knowledge, skills, and opportunities for success.</p>
             </div>
             
             <div class="about-container">
                 <div class="about-content animate-on-scroll">
                     <h3>Our Mission & Vision</h3>
-                    <p>DSOG exists to empower entrepreneurs with the knowledge, skills, and opportunities needed to build successful enterprises. We believe in transforming business ideas into reality through practical engagement and support.</p>
-                    <p>Our vision is to create a thriving ecosystem where every entrepreneur has access to the training, events, and startup opportunities needed to succeed in today's competitive business environment.</p>
+                    <p>DSOG exists to empower entrepreneurs with the knowledge, skills, and opportunities needed to build successful enterprises.</p>
                     
                     <div class="stats-grid" id="statsGrid">
-                        <!-- Stats will be loaded dynamically -->
                         <div class="loading">
                             <div class="loading-spinner"></div>
                             <p>Loading statistics...</p>
@@ -1851,17 +1315,14 @@
                 
                 <div class="about-content animate-on-scroll">
                     <h3>Our Impact</h3>
-                    <p>Through our comprehensive approach, we've helped numerous entrepreneurs and businesses achieve their goals:</p>
                     <ul class="service-features">
-                        <li><i class="fas fa-check text-primary"></i> Transformed business ideas into successful enterprises</li>
-                        <li><i class="fas fa-check text-primary"></i> Developed business acuity through hands-on events</li>
-                        <li><i class="fas fa-check text-primary"></i> Provided professional training to enhance skills</li>
-                        <li><i class="fas fa-check text-primary"></i> Created startup opportunities for practical experience</li>
-                        <li><i class="fas fa-check text-primary"></i> Built a supportive community of entrepreneurs</li>
-                        <li><i class="fas fa-check text-primary"></i> Facilitated networking and collaboration opportunities</li>
+                        <li><i class="fas fa-check text-primary"></i> Transformed business ideas</li>
+                        <li><i class="fas fa-check text-primary"></i> Developed business acuity</li>
+                        <li><i class="fas fa-check text-primary"></i> Provided professional training</li>
+                        <li><i class="fas fa-check text-primary"></i> Created startup opportunities</li>
                     </ul>
                     <a href="about.html" class="btn btn-primary" style="margin-top: var(--space-md);">
-                        Learn More About DSOG <i class="fas fa-arrow-right"></i>
+                        Learn More <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
             </div>
@@ -1874,14 +1335,13 @@
             <div class="section-header">
                 <span class="section-subtitle">Our Team</span>
                 <h2>Meet Our <span class="text-gradient">Expert Team</span></h2>
-                <p class="lead">Learn from successful entrepreneurs and industry experts who have walked the path before you.</p>
+                <p class="lead">Learn from successful entrepreneurs and industry experts.</p>
             </div>
             
             <div class="value-grid" id="teamGrid">
-                <!-- Team members will be loaded dynamically -->
                 <div class="loading">
                     <div class="loading-spinner"></div>
-                    <p>Loading team members...</p>
+                    <p>Loading team...</p>
                 </div>
             </div>
         </div>
@@ -1893,11 +1353,10 @@
             <div class="section-header">
                 <span class="section-subtitle">Success Stories</span>
                 <h2>What Our <span class="text-gradient">Clients Say</span></h2>
-                <p class="lead">Hear from entrepreneurs and businesses who have transformed their journeys with DSOG.</p>
+                <p class="lead">Hear from entrepreneurs transformed by DSOG.</p>
             </div>
             
             <div class="services-grid" id="testimonialsGrid">
-                <!-- Testimonials will be loaded dynamically -->
                 <div class="loading">
                     <div class="loading-spinner"></div>
                     <p>Loading testimonials...</p>
@@ -1912,7 +1371,7 @@
             <div class="section-header">
                 <span class="section-subtitle">Start Your Journey</span>
                 <h2>Ready to <span class="text-gradient">Empower Your Business?</span></h2>
-                <p class="lead">Join DSOG today and access the training, events, and opportunities you need to build a successful enterprise.</p>
+                <p class="lead">Join DSOG today for training, events, and opportunities.</p>
             </div>
             
             <div class="hero-buttons">
@@ -1940,7 +1399,7 @@
                         <i class="fas fa-envelope-open-text"></i>
                     </div>
                     <div>
-                        <div class="text-small">Email Application</div>
+                        <div class="text-small">Email</div>
                         <div class="text-medium">office.dsog@gmail.com</div>
                     </div>
                 </div>
@@ -1950,7 +1409,7 @@
                         <i class="fas fa-calendar-check"></i>
                     </div>
                     <div>
-                        <div class="text-small">Event Registration</div>
+                        <div class="text-small">Events</div>
                         <div class="text-medium">events@dsog.org</div>
                     </div>
                 </div>
@@ -1965,11 +1424,9 @@
                 <div class="footer-section">
                     <img src="https://i.postimg.cc/kMZ1jTww/Untitled-design-4-removebg-preview.png" 
                          alt="DSOG" 
-                         class="footer-logo">
-                    <p>Empowering businesses, startups, and young entrepreneurs through transformative training, impactful events, and practical startup opportunities.</p>
-                    <div class="mission-badge" style="margin-top: var(--space-md); background: rgba(255,255,255,0.1); color: white;">
-                        <i class="fas fa-bullseye"></i> EMPOWERING ENTREPRENEURS
-                    </div>
+                         class="footer-logo"
+                         loading="lazy">
+                    <p>Empowering businesses and entrepreneurs through training, events, and opportunities.</p>
                 </div>
                 
                 <div class="footer-section">
@@ -1979,9 +1436,6 @@
                         <li><a href="about.html">About Us</a></li>
                         <li><a href="enterprise.html">Enterprise</a></li>
                         <li><a href="#events">Events</a></li>
-                        <li><a href="training.html">Training</a></li>
-                        <li><a href="bootcamp.html">Startup Bootcamp</a></li>
-                        <li><a href="admin.html">Admin Panel</a></li>
                     </ul>
                 </div>
                 
@@ -1989,35 +1443,30 @@
                     <h3>Our Services</h3>
                     <ul>
                         <li>Entrepreneurship Training</li>
-                        <li>Business Events & Workshops</li>
+                        <li>Business Events</li>
                         <li>Startup Incubation</li>
-                        <li>Professional Development</li>
-                        <li>Business Networking</li>
                         <li>Enterprise Support</li>
                     </ul>
                 </div>
                 
                 <div class="footer-section">
-                    <h3>Contact Info</h3>
+                    <h3>Contact</h3>
                     <ul>
                         <li><i class="fas fa-phone"></i> 0733 737 983</li>
                         <li><i class="fas fa-envelope"></i> office.dsog@gmail.com</li>
-                        <li><i class="fab fa-whatsapp"></i> WhatsApp Business</li>
-                        <li><i class="fas fa-map-marker-alt"></i> Nairobi, Kenya</li>
+                        <li><i class="fab fa-whatsapp"></i> WhatsApp</li>
                     </ul>
                 </div>
             </div>
             
             <div class="copyright">
-                <p>&copy; <span id="currentYear"></span> DSOG - Empowering Businesses, Startups & Young Entrepreneurs. All rights reserved.</p>
-                <p style="margin-top: var(--space-sm); font-size: 0.85rem;">Professional Training • Entrepreneurship Events • Startup Opportunities • Enterprise Development</p>
+                <p>&copy; <span id="currentYear"></span> DSOG - Empowering Businesses & Entrepreneurs.</p>
             </div>
         </div>
     </footer>
 
-    <!-- JavaScript -->
     <script>
-    // Firebase Configuration
+    // Enhanced Firebase Configuration
     const firebaseConfig = {
         apiKey: "AIzaSyDb5ZFHbo7lGM8ph0oBxFVTHRF5C5C_DWU",
         authDomain: "dsog-events.firebaseapp.com",
@@ -2034,114 +1483,113 @@
     try {
         firebase.initializeApp(firebaseConfig);
         db = firebase.database();
-        console.log('Firebase initialized successfully - REAL-TIME MODE');
+        console.log('Firebase initialized - REAL-TIME MODE ACTIVE');
     } catch (error) {
         console.error('Firebase initialization error:', error);
         db = null;
     }
 
-    // Cache management
-    const CACHE_KEY = 'dsog_website_cache';
-    const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+    // Cache Management
+    const CACHE_KEY = 'dsog_website_cache_v8';
+    const CACHE_DURATION = 5 * 60 * 1000;
 
     // Initialize the website
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('🚀 DSOG Website Version 7.0.0 - REAL-TIME UPDATES');
+        console.log('🚀 DSOG Website Version 8.0.0 - ULTRA RESPONSIVE');
         
-        // Initialize all components
+        // Initialize components
         initializeTheme();
         initializeNavigation();
         initializeAnimations();
-        initializeScrollEffects();
+        initializeLazyLoading();
         
         // Set current year
         document.getElementById('currentYear').textContent = new Date().getFullYear();
         
-        // Try to load from cache first for faster display
+        // Load from cache for instant display
         const cachedData = getCachedData();
         if (cachedData && !isCacheExpired(cachedData.timestamp)) {
             console.log('Loading from cache for instant display');
             displayCachedData(cachedData);
-        } else {
-            console.log('Cache empty or expired');
+            removeSkeletons();
         }
         
-        // Setup REAL-TIME listeners (this is the key change)
+        // Setup REAL-TIME listeners
         setupRealtimeListeners();
         
-        console.log('Website initialized with real-time updates');
+        // Setup connection monitoring
+        if (db) setupConnectionStatus();
+        
+        console.log('Website initialized with maximum responsiveness');
     });
 
     // ==================== REAL-TIME LISTENERS ====================
     function setupRealtimeListeners() {
         if (!db) {
-            console.error('Firebase not available, using cached data only');
+            console.error('Firebase not available');
+            showOfflineMode();
             return;
         }
 
         console.log('Setting up real-time Firebase listeners...');
         
-        // Remove any existing listeners
+        // Remove existing listeners
         removeAllListeners();
         
-        // 1. Home Page Content Listener
+        // Home Page Content
         const homePageRef = db.ref('homePageContent');
         const homePageListener = homePageRef.on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
-                console.log('Home page content updated in real-time');
                 updateHomePageContent(data);
                 saveToCachePartial('homePageContent', data);
+                removeSkeletons();
             }
         });
         firebaseListeners.push({ ref: homePageRef, listener: homePageListener });
         
-        // 2. Events Listener
+        // Events
         const eventsRef = db.ref('upcomingEvents');
         const eventsListener = eventsRef.on('value', (snapshot) => {
             const data = snapshot.val();
-            console.log('Events updated in real-time');
             displayEvents(data);
             saveToCachePartial('upcomingEvents', data);
+            showUpdateIndicator('Events updated');
         });
         firebaseListeners.push({ ref: eventsRef, listener: eventsListener });
         
-        // 3. Statistics Listener
+        // Statistics
         const statsRef = db.ref('stats');
         const statsListener = statsRef.on('value', (snapshot) => {
             const data = snapshot.val();
-            console.log('Statistics updated in real-time');
             displayStatistics(data);
             saveToCachePartial('stats', data);
         });
         firebaseListeners.push({ ref: statsRef, listener: statsListener });
         
-        // 4. Team Members Listener
+        // Team Members
         const teamRef = db.ref('teamMembers');
         const teamListener = teamRef.on('value', (snapshot) => {
             const data = snapshot.val();
-            console.log('Team members updated in real-time');
             displayTeamMembers(data);
             saveToCachePartial('teamMembers', data);
         });
         firebaseListeners.push({ ref: teamRef, listener: teamListener });
         
-        // 5. Testimonials Listener
+        // Testimonials
         const testimonialsRef = db.ref('testimonials');
         const testimonialsListener = testimonialsRef.on('value', (snapshot) => {
             const data = snapshot.val();
-            console.log('Testimonials updated in real-time');
             displayTestimonials(data);
             saveToCachePartial('testimonials', data);
         });
         firebaseListeners.push({ ref: testimonialsRef, listener: testimonialsListener });
         
-        // 6. App Settings Listener (for contact info, etc.)
+        // App Settings
         const settingsRef = db.ref('appSettings');
         const settingsListener = settingsRef.on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
-                console.log('App settings updated in real-time');
                 updateContactInfo(data);
                 saveToCachePartial('appSettings', data);
             }
@@ -2156,7 +1604,6 @@
             ref.off('value', listener);
         });
         firebaseListeners = [];
-        console.log('Removed all Firebase listeners');
     }
 
     // ==================== CACHE MANAGEMENT ====================
@@ -2165,7 +1612,6 @@
             const cached = localStorage.getItem(CACHE_KEY);
             return cached ? JSON.parse(cached) : null;
         } catch (error) {
-            console.error('Error reading cache:', error);
             return null;
         }
     }
@@ -2177,7 +1623,7 @@
             cached.timestamp = Date.now();
             localStorage.setItem(CACHE_KEY, JSON.stringify(cached));
         } catch (error) {
-            console.error('Error saving to cache:', error);
+            console.error('Cache save error:', error);
         }
     }
 
@@ -2188,40 +1634,37 @@
     function displayCachedData(cachedData) {
         const data = cachedData.data;
         
-        if (data.homePageContent) {
-            updateHomePageContent(data.homePageContent);
-        }
-        
-        if (data.upcomingEvents) {
-            displayEvents(data.upcomingEvents);
-        }
-        
-        if (data.stats) {
-            displayStatistics(data.stats);
-        }
-        
-        if (data.teamMembers) {
-            displayTeamMembers(data.teamMembers);
-        }
-        
-        if (data.testimonials) {
-            displayTestimonials(data.testimonials);
-        }
-        
-        if (data.appSettings) {
-            updateContactInfo(data.appSettings);
-        }
+        if (data.homePageContent) updateHomePageContent(data.homePageContent);
+        if (data.upcomingEvents) displayEvents(data.upcomingEvents);
+        if (data.stats) displayStatistics(data.stats);
+        if (data.teamMembers) displayTeamMembers(data.teamMembers);
+        if (data.testimonials) displayTestimonials(data.testimonials);
+        if (data.appSettings) updateContactInfo(data.appSettings);
+    }
+
+    function removeSkeletons() {
+        document.querySelectorAll('.skeleton').forEach(el => {
+            el.classList.remove('skeleton');
+            el.style.background = '';
+            el.style.height = '';
+            el.style.width = '';
+        });
     }
 
     // ==================== UI UPDATES ====================
     function updateHomePageContent(content) {
         try {
-            // Update hero section
+            // Hero Section
             if (content.hero) {
-                document.getElementById('heroTitle').textContent = content.hero.mainTitle || 'Become What You Believe!';
-                document.getElementById('heroSubtitle').textContent = content.hero.subtitle || 'DSOG empowers businesses, startups, and young entrepreneurs through transformative training, impactful events, and real startup opportunities that turn learning into successful enterprises.';
+                const heroTitle = document.getElementById('heroTitle');
+                const heroSubtitle = document.getElementById('heroSubtitle');
+                const approachSubtitle = document.getElementById('approachSubtitle');
                 
-                // Update category tags
+                if (heroTitle) heroTitle.textContent = content.hero.mainTitle || 'Become What You Believe!';
+                if (heroSubtitle) heroSubtitle.textContent = content.hero.subtitle || 'Empowering businesses through transformative training and opportunities.';
+                if (approachSubtitle) approachSubtitle.textContent = content.approach?.subtitle || 'We engage, train, and provide opportunities for entrepreneurs.';
+                
+                // Category Tags
                 const categoryTags = document.getElementById('categoryTags');
                 if (content.hero.categoryTags && Array.isArray(content.hero.categoryTags)) {
                     categoryTags.innerHTML = '';
@@ -2234,40 +1677,29 @@
                 }
             }
             
-            // Update approach section
-            if (content.approach) {
-                const subtitleEl = document.getElementById('approachSubtitle');
-                if (subtitleEl) {
-                    subtitleEl.textContent = content.approach.subtitle || 'We engage people through events aimed at shaping their business acuity, train professionals, and provide startup opportunities to practice what they\'ve learned.';
-                }
-                
-                // Update approach cards
+            // Approach Cards
+            if (content.approach?.cards) {
                 const approachCards = document.getElementById('approachCards');
-                if (approachCards && content.approach.cards && Array.isArray(content.approach.cards)) {
+                if (approachCards) {
                     approachCards.innerHTML = '';
                     content.approach.cards.forEach((card, index) => {
                         const cardElement = document.createElement('div');
                         cardElement.className = 'approach-card animate-on-scroll';
-                        cardElement.dataset.delay = index * 100;
                         cardElement.innerHTML = `
                             <div class="approach-icon">
                                 <i class="${card.icon || 'fas fa-users'}"></i>
                             </div>
                             <span class="approach-tag">${card.tag || 'ENGAGEMENT'}</span>
                             <h3>${card.title || 'Transformative Events'}</h3>
-                            <p>${card.description || 'We organize impactful events that engage entrepreneurs in hands-on experiences, networking opportunities, and practical business challenges that shape their business acuity.'}</p>
+                            <p>${card.description || 'Engaging events that shape business acuity.'}</p>
                         `;
                         approachCards.appendChild(cardElement);
                     });
-                    
-                    // Re-initialize animations
-                    setTimeout(() => {
-                        initializeAnimations();
-                    }, 100);
+                    initializeAnimations();
                 }
             }
         } catch (error) {
-            console.error('Error updating home page content:', error);
+            console.error('Home page update error:', error);
         }
     }
 
@@ -2276,7 +1708,6 @@
             const eventsGrid = document.getElementById('eventsGrid');
             if (!eventsGrid) return;
             
-            // Convert events object to array and filter active ones
             const eventsArray = events ? Object.values(events)
                 .filter(event => event.active !== false)
                 .sort((a, b) => new Date(a.date || '9999-12-31') - new Date(b.date || '9999-12-31')) : [];
@@ -2287,26 +1718,22 @@
                     const eventCard = createEventCard(event, index);
                     eventsGrid.appendChild(eventCard);
                 });
-                
-                // Show real-time update indicator
-                showUpdateIndicator('Events updated');
+                initializeAnimations();
             } else {
                 eventsGrid.innerHTML = `
                     <div class="event-card" style="grid-column: 1 / -1; text-align: center; padding: var(--space-2xl);">
                         <div class="event-content">
                             <h3>No Upcoming Events</h3>
-                            <p>Check back soon for our upcoming events and workshops!</p>
-                            <a href="contact.html" class="btn btn-primary" style="margin-top: var(--space-lg);">
-                                <i class="fas fa-calendar-plus"></i> Propose an Event
+                            <p>Check back soon for upcoming events!</p>
+                            <a href="contact.html" class="btn btn-primary">
+                                <i class="fas fa-calendar-plus"></i> Propose Event
                             </a>
                         </div>
                     </div>
                 `;
             }
-            
-            console.log('Events displayed:', eventsArray.length);
         } catch (error) {
-            console.error('Error displaying events:', error);
+            console.error('Events display error:', error);
         }
     }
 
@@ -2322,15 +1749,12 @@
                 { key: 'eventsHosted', label: 'Events Hosted', value: stats?.eventsHosted || 0 },
                 { key: 'startupsSupported', label: 'Startups Supported', value: stats?.startupsSupported || 0 },
                 { key: 'completionRate', label: 'Completion Rate', value: stats?.completionRate ? `${stats.completionRate}%` : '95%' },
-                { key: 'businessGrowthRate', label: 'Business Growth', value: stats?.businessGrowthRate ? `${stats.businessGrowthRate}%` : '85%' },
-                { key: 'satisfactionRate', label: 'Satisfaction Rate', value: stats?.satisfactionRate ? `${stats.satisfactionRate}%` : '90%' }
             ];
             
             statItems.forEach((stat, index) => {
                 if (stat.value && stat.value !== '0') {
                     const statItem = document.createElement('div');
                     statItem.className = 'stat-item animate-on-scroll';
-                    statItem.dataset.delay = index * 100;
                     statItem.innerHTML = `
                         <div class="stat-number">${stat.value}</div>
                         <div class="text-small">${stat.label}</div>
@@ -2339,17 +1763,9 @@
                 }
             });
             
-            // Re-initialize animations
-            setTimeout(() => {
-                initializeAnimations();
-            }, 100);
-            
-            // Show update indicator if stats changed
-            if (stats) {
-                showUpdateIndicator('Statistics updated');
-            }
+            initializeAnimations();
         } catch (error) {
-            console.error('Error displaying statistics:', error);
+            console.error('Stats display error:', error);
         }
     }
 
@@ -2358,7 +1774,6 @@
             const teamGrid = document.getElementById('teamGrid');
             if (!teamGrid) return;
             
-            // Convert to array and filter active members
             const teamArray = team ? Object.values(team)
                 .filter(member => member.active !== false) : [];
             
@@ -2368,22 +1783,10 @@
                     const memberCard = createTeamMemberCard(member, index);
                     teamGrid.appendChild(memberCard);
                 });
-                
-                // Show real-time update indicator
-                showUpdateIndicator('Team updated');
-            } else {
-                teamGrid.innerHTML = `
-                    <div class="value-card" style="grid-column: 1 / -1; text-align: center;">
-                        <div class="value-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <h4>Our Team</h4>
-                        <p>Meet our expert team dedicated to empowering entrepreneurs.</p>
-                    </div>
-                `;
+                initializeAnimations();
             }
         } catch (error) {
-            console.error('Error displaying team members:', error);
+            console.error('Team display error:', error);
         }
     }
 
@@ -2392,75 +1795,40 @@
             const testimonialsGrid = document.getElementById('testimonialsGrid');
             if (!testimonialsGrid) return;
             
-            // Convert to array and filter active testimonials
             const testimonialsArray = testimonials ? Object.values(testimonials)
                 .filter(testimonial => testimonial.active !== false) : [];
             
             if (testimonialsArray.length > 0) {
                 testimonialsGrid.innerHTML = '';
-                // Take only first 3 testimonials
                 testimonialsArray.slice(0, 3).forEach((testimonial, index) => {
                     const testimonialCard = createTestimonialCard(testimonial, index);
                     testimonialsGrid.appendChild(testimonialCard);
                 });
-                
-                // Show real-time update indicator
-                showUpdateIndicator('Testimonials updated');
-            } else {
-                testimonialsGrid.innerHTML = `
-                    <div class="service-card" style="grid-column: 1 / -1; text-align: center;">
-                        <div class="service-icon">
-                            <i class="fas fa-comment"></i>
-                        </div>
-                        <h3>Success Stories</h3>
-                        <p>Hear from our successful entrepreneurs and clients.</p>
-                    </div>
-                `;
+                initializeAnimations();
             }
         } catch (error) {
-            console.error('Error displaying testimonials:', error);
+            console.error('Testimonials display error:', error);
         }
     }
 
     function updateContactInfo(settings) {
         try {
-            // Update contact info in CTA section
             if (settings.phoneNumber) {
-                const phoneElements = document.querySelectorAll('.text-medium');
-                phoneElements.forEach(el => {
+                document.querySelectorAll('.text-medium').forEach(el => {
                     if (el.textContent.includes('0733 737 983')) {
                         el.textContent = settings.phoneNumber;
                     }
                 });
             }
-            
-            if (settings.contactEmail) {
-                const emailElements = document.querySelectorAll('.text-medium');
-                emailElements.forEach(el => {
-                    if (el.textContent.includes('office.dsog@gmail.com')) {
-                        el.textContent = settings.contactEmail;
-                    }
-                });
-            }
-            
-            if (settings.eventsEmail) {
-                const eventsEmailElements = document.querySelectorAll('.text-medium');
-                eventsEmailElements.forEach(el => {
-                    if (el.textContent.includes('events@dsog.org')) {
-                        el.textContent = settings.eventsEmail;
-                    }
-                });
-            }
         } catch (error) {
-            console.error('Error updating contact info:', error);
+            console.error('Contact info update error:', error);
         }
     }
 
-    // ==================== CARD CREATION FUNCTIONS ====================
+    // ==================== CARD CREATION ====================
     function createEventCard(event, index) {
         const card = document.createElement('div');
         card.className = `event-card animate-on-scroll ${event.category}-event`;
-        card.dataset.delay = index * 100;
         
         // Format date
         let dateText = 'Date TBD';
@@ -2470,57 +1838,41 @@
                 if (!isNaN(eventDate.getTime())) {
                     dateText = eventDate.toLocaleDateString('en-US', {
                         year: 'numeric',
-                        month: 'long',
+                        month: 'short',
                         day: 'numeric'
                     });
                 }
             } catch (error) {
-                console.error('Error formatting date:', error);
+                console.error('Date formatting error:', error);
             }
         }
-        
-        // Get category name
-        const categoryNames = {
-            'bootcamp': 'Startup Bootcamp',
-            'inspiration': 'Become What You Believe',
-            'spiritual': 'The Making of an Icon'
-        };
-        
-        const categoryName = categoryNames[event.category] || event.category || 'Event';
-        
-        // Determine button style
-        let btnClass = 'btn-primary';
-        if (event.category === 'inspiration') btnClass = 'btn-gold';
-        if (event.category === 'spiritual') btnClass = 'btn-spiritual';
         
         card.innerHTML = `
             <div class="event-image-container">
                 <img src="${event.imageUrl || 'https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp'}" 
                      alt="${event.title || 'DSOG Event'}" 
                      class="event-image"
+                     loading="lazy"
                      onerror="this.src='https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp'">
                 <div class="event-date-badge">
                     <i class="fas fa-calendar"></i> ${dateText}
                 </div>
             </div>
             <div class="event-content">
-                <span class="event-category ${event.category}">${categoryName.toUpperCase()}</span>
+                <span class="event-category ${event.category}">${(event.category || 'event').toUpperCase()}</span>
                 ${event.duration ? `<div class="duration-badge"><i class="fas fa-clock"></i> ${event.duration}</div>` : ''}
                 <div class="event-details">
                     <h4>${event.title || 'Upcoming Event'}</h4>
-                    ${event.subtitle ? `<p><strong>${event.subtitle}</strong></p>` : ''}
                     <p>${event.description || 'Join us for this transformative event.'}</p>
                     <div class="event-meta">
                         ${event.venue ? `<div class="meta-item"><i class="fas fa-map-marker-alt"></i><span>${event.venue}</span></div>` : ''}
-                        ${event.maxParticipants ? `<div class="meta-item"><i class="fas fa-users"></i><span>Max: ${event.maxParticipants} Participants</span></div>` : ''}
                     </div>
                 </div>
                 <div class="event-action">
                     <a href="${event.registrationUrl || 'https://wa.me/254733737983'}" 
                        target="_blank" 
-                       class="btn ${btnClass} btn-block">
-                        <i class="fas ${event.category === 'spiritual' ? 'fa-hands-praying' : event.category === 'inspiration' ? 'fa-fire' : 'fa-graduation-cap'}"></i> 
-                        ${event.category === 'spiritual' ? 'Discover Your Purpose' : event.category === 'inspiration' ? 'Ignite Your Journey' : 'Register Now'}
+                       class="btn btn-primary">
+                        <i class="fas fa-graduation-cap"></i> Register Now
                     </a>
                 </div>
             </div>
@@ -2532,26 +1884,14 @@
     function createTeamMemberCard(member, index) {
         const card = document.createElement('div');
         card.className = 'value-card animate-on-scroll';
-        card.dataset.delay = index * 100;
         
         card.innerHTML = `
             <div class="value-icon">
-                ${member.imageUrl ? 
-                    `<img src="${member.imageUrl}" alt="${member.name}" 
-                          style="width: 70px; height: 70px; border-radius: var(--radius-lg); object-fit: cover;"
-                          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">` : 
-                    ''
-                }
-                <i class="fas fa-user-tie" style="${member.imageUrl ? 'display: none;' : ''}"></i>
+                <i class="fas fa-user-tie"></i>
             </div>
             <h4>${member.name || 'Team Member'}</h4>
             <p><strong>${member.role || 'Team Member'}</strong></p>
-            <p style="font-size: 0.9rem; margin-top: var(--space-sm);">${member.bio || 'Expert in entrepreneurship and business development.'}</p>
-            ${member.social?.linkedin ? `
-                <a href="${member.social.linkedin}" target="_blank" style="margin-top: var(--space-sm); color: var(--primary-red); text-decoration: none;">
-                    <i class="fab fa-linkedin"></i> LinkedIn
-                </a>
-            ` : ''}
+            <p style="font-size: 0.9rem;">${member.bio || 'Expert in entrepreneurship.'}</p>
         `;
         
         return card;
@@ -2560,31 +1900,19 @@
     function createTestimonialCard(testimonial, index) {
         const card = document.createElement('div');
         card.className = 'service-card animate-on-scroll';
-        card.dataset.delay = index * 100;
         
-        // Create star rating
         const rating = testimonial.rating || 5;
         const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
         
         card.innerHTML = `
             <div class="service-icon">
-                ${testimonial.imageUrl ? 
-                    `<img src="${testimonial.imageUrl}" alt="${testimonial.name}" 
-                          style="width: 60px; height: 60px; border-radius: var(--radius-md); object-fit: cover;"
-                          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">` : 
-                    ''
-                }
-                <i class="fas fa-user" style="${testimonial.imageUrl ? 'display: none;' : ''}"></i>
+                <i class="fas fa-comment"></i>
             </div>
             <span class="service-tag">TESTIMONIAL</span>
             <h3>${testimonial.name || 'Client'}</h3>
             <p><strong>${testimonial.role || 'Entrepreneur'}</strong></p>
-            ${testimonial.company ? `<p style="color: var(--text-tertiary); font-size: 0.9rem;">${testimonial.company}</p>` : ''}
-            <div style="color: #ffc107; margin: var(--space-sm) 0; font-size: 1.1rem;">
-                ${stars}
-            </div>
-            <p style="font-style: italic; margin-top: var(--space-md);">"${testimonial.content || 'Great experience with DSOG!'}"</p>
-            ${testimonial.event ? `<p style="margin-top: var(--space-sm); font-size: 0.85rem; color: var(--primary-red);"><i class="fas fa-calendar"></i> ${testimonial.event}</p>` : ''}
+            <div style="color: #ffc107; margin: var(--space-sm) 0;">${stars}</div>
+            <p style="font-style: italic;">"${testimonial.content || 'Great experience!'}"</p>
         `;
         
         return card;
@@ -2606,14 +1934,9 @@
             const currentTheme = document.documentElement.getAttribute('data-theme');
             const newTheme = currentTheme === 'light' ? 'dark' : 'light';
             
-            document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
             document.documentElement.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
             updateThemeIcon(newTheme);
-            
-            setTimeout(() => {
-                document.body.style.transition = '';
-            }, 300);
         });
         
         prefersDark.addEventListener('change', (e) => {
@@ -2648,6 +1971,7 @@
                 icon.className = navLinks.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
                 this.setAttribute('aria-expanded', navLinks.classList.contains('active'));
                 
+                // Toggle body scroll
                 if (navLinks.classList.contains('active')) {
                     document.body.style.overflow = 'hidden';
                 } else {
@@ -2655,6 +1979,7 @@
                 }
             });
 
+            // Close menu when clicking outside
             document.addEventListener('click', function(event) {
                 if (!navLinks.contains(event.target) && !mobileMenuBtn.contains(event.target) && navLinks.classList.contains('active')) {
                     navLinks.classList.remove('active');
@@ -2664,6 +1989,7 @@
                 }
             });
 
+            // Close menu on link click (mobile)
             navLinks.querySelectorAll('a').forEach(link => {
                 link.addEventListener('click', () => {
                     if (window.innerWidth <= 1024) {
@@ -2675,6 +2001,7 @@
                 });
             });
             
+            // Responsive behavior
             window.addEventListener('resize', () => {
                 if (window.innerWidth > 1024) {
                     navLinks.classList.remove('active');
@@ -2695,7 +2022,7 @@
             }
         });
 
-        // Smooth scroll for anchor links
+        // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 const href = this.getAttribute('href');
@@ -2714,8 +2041,6 @@
                             top: targetPosition,
                             behavior: 'smooth'
                         });
-                        
-                        history.pushState(null, '', href);
                     }
                 }
             });
@@ -2728,10 +2053,7 @@
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    const delay = entry.target.dataset.delay || 0;
-                    setTimeout(() => {
-                        entry.target.classList.add('animated');
-                    }, delay);
+                    entry.target.classList.add('animated');
                     observer.unobserve(entry.target);
                 }
             });
@@ -2740,60 +2062,47 @@
             rootMargin: '0px 0px -50px 0px'
         });
         
-        animatedElements.forEach((element, index) => {
-            if (!element.dataset.delay) {
-                element.dataset.delay = index * 100;
-            }
+        animatedElements.forEach(element => {
             observer.observe(element);
         });
     }
 
-    function initializeScrollEffects() {
-        let lastScroll = 0;
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
+    function initializeLazyLoading() {
+        const images = document.querySelectorAll('img[loading="lazy"]');
+        
+        if ('loading' in HTMLImageElement.prototype) {
+            // Browser supports native lazy loading
+            images.forEach(img => {
+                if (img.dataset.src) {
+                    img.src = img.dataset.src;
+                }
+            });
+        } else {
+            // Fallback for browsers without native support
+            const imageObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        if (img.dataset.src) {
+                            img.src = img.dataset.src;
+                        }
+                        img.classList.add('loaded');
+                        imageObserver.unobserve(img);
+                    }
+                });
+            });
             
-            // Add parallax effect to hero
-            const hero = document.querySelector('.hero');
-            if (hero) {
-                const scrolled = window.pageYOffset;
-                const rate = scrolled * -0.5;
-                hero.style.transform = `translate3d(0, ${rate}px, 0)`;
-            }
-            
-            lastScroll = currentScroll;
-        });
+            images.forEach(img => imageObserver.observe(img));
+        }
     }
 
     function showUpdateIndicator(message) {
-        // Create a subtle update indicator
         const indicator = document.createElement('div');
         indicator.className = 'update-indicator';
-        indicator.style.cssText = `
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-            padding: 8px 12px;
-            background: var(--primary-red);
-            color: white;
-            border-radius: var(--radius-md);
-            font-size: 12px;
-            z-index: 9999;
-            box-shadow: var(--shadow-md);
-            animation: slideUp 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        `;
-        
-        indicator.innerHTML = `
-            <i class="fas fa-sync-alt fa-spin"></i>
-            ${message}
-        `;
+        indicator.textContent = message;
         
         document.body.appendChild(indicator);
         
-        // Remove after 2 seconds
         setTimeout(() => {
             indicator.style.animation = 'slideDown 0.3s ease';
             setTimeout(() => {
@@ -2802,37 +2111,14 @@
                 }
             }, 300);
         }, 2000);
-        
-        // Add CSS for animations if not already added
-        if (!document.querySelector('#update-indicator-styles')) {
-            const style = document.createElement('style');
-            style.id = 'update-indicator-styles';
-            style.textContent = `
-                @keyframes slideUp {
-                    from { transform: translateY(20px); opacity: 0; }
-                    to { transform: translateY(0); opacity: 1; }
-                }
-                @keyframes slideDown {
-                    from { transform: translateY(0); opacity: 1; }
-                    to { transform: translateY(20px); opacity: 0; }
-                }
-            `;
-            document.head.appendChild(style);
-        }
     }
 
-    // ==================== REAL-TIME TESTING ====================
-    // Add connection status indicator
     function setupConnectionStatus() {
+        if (!db) return;
+        
         const connectionRef = db.ref('.info/connected');
         connectionRef.on('value', (snap) => {
-            if (snap.val() === true) {
-                console.log('Connected to Firebase - Real-time updates active');
-                showConnectionStatus('connected');
-            } else {
-                console.log('Disconnected from Firebase');
-                showConnectionStatus('disconnected');
-            }
+            showConnectionStatus(snap.val() === true ? 'connected' : 'disconnected');
         });
     }
 
@@ -2841,72 +2127,40 @@
         if (!statusEl) {
             statusEl = document.createElement('div');
             statusEl.id = 'firebase-status';
-            statusEl.style.cssText = `
-                position: fixed;
-                bottom: 20px;
-                left: 20px;
-                padding: 6px 10px;
-                border-radius: var(--radius-md);
-                font-size: 11px;
-                z-index: 9999;
-                background: ${status === 'connected' ? '#28a745' : '#dc3545'};
-                color: white;
-                box-shadow: var(--shadow-sm);
-            `;
             document.body.appendChild(statusEl);
         }
         
         statusEl.innerHTML = `
             <i class="fas fa-${status === 'connected' ? 'check-circle' : 'exclamation-circle'}"></i>
-            Firebase: ${status === 'connected' ? 'Live' : 'Offline'}
+            ${status === 'connected' ? 'Live' : 'Offline'}
         `;
         statusEl.style.background = status === 'connected' ? '#28a745' : '#dc3545';
     }
 
-    // Initialize connection status
-    if (db) {
-        setupConnectionStatus();
+    function showOfflineMode() {
+        console.log('Running in offline mode');
+        showConnectionStatus('disconnected');
     }
 
-    // Manual refresh function
+    // Touch optimizations
+    document.addEventListener('touchstart', function() {}, { passive: true });
+
+    // Performance optimizations
+    let resizeTimeout;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function() {
+            // Handle resize completion
+        }, 250);
+    });
+
+    // Manual refresh for testing
     window.refreshData = function() {
         console.log('Manual refresh triggered');
         removeAllListeners();
         setupRealtimeListeners();
+        showUpdateIndicator('Reconnecting...');
     };
-
-    // Add refresh button for testing (remove in production)
-    const refreshBtn = document.createElement('button');
-    refreshBtn.textContent = '🔄 Reconnect';
-    refreshBtn.style.cssText = `
-        position: fixed;
-        bottom: 120px;
-        right: 20px;
-        padding: 8px 12px;
-        background: var(--primary-red);
-        color: white;
-        border: none;
-        border-radius: var(--radius-md);
-        cursor: pointer;
-        z-index: 1000;
-        font-size: 11px;
-        box-shadow: var(--shadow-md);
-    `;
-    refreshBtn.onclick = function() {
-        window.refreshData();
-        showUpdateIndicator('Reconnecting to Firebase...');
-    };
-    document.body.appendChild(refreshBtn);
-
-    // Touch optimizations
-    let lastTouchEnd = 0;
-    document.addEventListener('touchend', (event) => {
-        const now = Date.now();
-        if (now - lastTouchEnd <= 300) {
-            event.preventDefault();
-        }
-        lastTouchEnd = now;
-    }, false);
-</script>
+    </script>
 </body>
 </html>
