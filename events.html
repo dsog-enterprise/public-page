@@ -1545,192 +1545,229 @@
 
     <!-- JavaScript -->
     <script>
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyDb5ZFHbo7lGM8ph0oBxFVTHRF5C5C_DWU",
-            authDomain: "dsog-events.firebaseapp.com",
-            databaseURL: "https://dsog-events-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "dsog-events",
-            storageBucket: "dsog-events.firebasestorage.app",
-            messagingSenderId: "1075977932287",
-            appId: "1:1075977932287:web:b2bf4d1c0083d2dac8ebca"
-        };
+    // ============================================
+    // FIREBASE CONFIGURATION & DATA LOADING
+    // ============================================
+    
+    // Firebase Configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyDb5ZFHbo7lGM8ph0oBxFVTHRF5C5C_DWU",
+        authDomain: "dsog-events.firebaseapp.com",
+        databaseURL: "https://dsog-events-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "dsog-events",
+        storageBucket: "dsog-events.firebasestorage.app",
+        messagingSenderId: "1075977932287",
+        appId: "1:1075977932287:web:b2bf4d1c0083d2dac8ebca"
+    };
 
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
 
-        // DOM Elements
-        const eventCategoriesContainer = document.getElementById('eventCategories');
-        const eventsGridContainer = document.getElementById('eventsGrid');
+    // DOM Elements for Firebase
+    const eventCategoriesContainer = document.getElementById('eventCategories');
+    const eventsGridContainer = document.getElementById('eventsGrid');
 
-        // Category class mapping
-        const categoryClasses = {
-            'bootcamp': 'bootcamp',
-            'inspiration': 'inspiration',
-            'spiritual': 'spiritual'
-        };
+    // Category mapping
+    const categoryConfig = {
+        'bootcamp': {
+            class: 'bootcamp',
+            gradient: 'text-gradient',
+            button: 'btn-primary',
+            icon: 'fas fa-graduation-cap'
+        },
+        'inspiration': {
+            class: 'inspiration',
+            gradient: 'text-gradient-gold',
+            button: 'btn-gold',
+            icon: 'fas fa-fire'
+        },
+        'spiritual': {
+            class: 'spiritual',
+            gradient: 'text-gradient-spiritual',
+            button: 'btn-spiritual',
+            icon: 'fas fa-hands-praying'
+        }
+    };
 
-        // Category gradient mapping
-        const categoryGradients = {
-            'bootcamp': 'text-gradient',
-            'inspiration': 'text-gradient-gold',
-            'spiritual': 'text-gradient-spiritual'
-        };
-
-        // Category button mapping
-        const categoryButtons = {
-            'bootcamp': 'btn-primary',
-            'inspiration': 'btn-gold',
-            'spiritual': 'btn-spiritual'
-        };
-
-        // Category icon mapping
-        const categoryIcons = {
-            'bootcamp': 'fas fa-graduation-cap',
-            'inspiration': 'fas fa-fire',
-            'spiritual': 'fas fa-hands-praying'
-        };
-
-        // Format date for display
-        function formatDate(dateString) {
+    // Format date
+    function formatDate(dateString) {
+        try {
             const date = new Date(dateString);
-            const options = { month: 'short', day: 'numeric', year: 'numeric' };
-            return date.toLocaleDateString('en-US', options);
+            return date.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric', 
+                year: 'numeric' 
+            });
+        } catch (error) {
+            return dateString;
+        }
+    }
+
+    // Render categories
+    function renderCategories(categories) {
+        if (!categories || Object.keys(categories).length === 0) {
+            eventCategoriesContainer.innerHTML = `
+                <div class="no-events">
+                    <i class="fas fa-calendar-times error-icon"></i>
+                    <h3>No Event Categories Available</h3>
+                    <p>Check back soon for upcoming event categories.</p>
+                </div>
+            `;
+            return;
         }
 
-        // Format frequency for display
-        function formatFrequency(frequency) {
-            const frequencyMap = {
-                'monthly': 'Monthly',
-                'one-time': 'One-Time Event',
-                'weekly': 'Weekly',
-                'bi-weekly': 'Bi-Weekly'
-            };
-            return frequencyMap[frequency] || frequency;
-        }
-
-        // Render event categories
-        function renderCategories(categories) {
-            if (!categories || categories.length === 0) {
-                eventCategoriesContainer.innerHTML = `
-                    <div class="no-events">
-                        <i class="fas fa-calendar-times error-icon"></i>
-                        <h3>No Event Categories Available</h3>
-                        <p>Check back soon for upcoming event categories.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            const activeCategories = categories.filter(cat => cat.active !== false);
+        const categoriesArray = Object.values(categories);
+        const activeCategories = categoriesArray.filter(cat => cat.active !== false);
+        
+        const categoriesHTML = activeCategories.map(category => {
+            const config = categoryConfig[category.id] || categoryConfig.bootcamp;
             
-            const categoriesHTML = activeCategories.map(category => {
-                const categoryClass = categoryClasses[category.id] || '';
-                const gradientClass = categoryGradients[category.id] || '';
-                const buttonClass = categoryButtons[category.id] || 'btn-primary';
-                const iconClass = categoryIcons[category.id] || 'fas fa-calendar-alt';
+            return `
+                <div class="category-card ${config.class} animate-on-scroll">
+                    <div class="category-icon">
+                        <i class="${category.icon || config.icon}"></i>
+                    </div>
+                    <span class="category-tag">${category.frequency || 'TRANSFORMATIVE'}</span>
+                    <h3 class="${config.gradient}">${category.name}</h3>
+                    <p>${category.description}</p>
+                    <div style="margin-top: auto; padding-top: var(--space-md);">
+                        <a href="#${category.id}-details" class="btn ${config.button}" style="width: 100%;">
+                            <i class="fas fa-info-circle"></i> Learn More
+                        </a>
+                    </div>
+                </div>
+            `;
+        }).join('');
 
-                return `
-                    <div class="category-card ${categoryClass} animate-on-scroll">
-                        <div class="category-icon">
-                            <i class="${iconClass}"></i>
+        eventCategoriesContainer.innerHTML = categoriesHTML;
+    }
+
+    // Render events
+    function renderEvents(events) {
+        if (!events || Object.keys(events).length === 0) {
+            eventsGridContainer.innerHTML = `
+                <div class="no-events">
+                    <i class="fas fa-calendar-times error-icon"></i>
+                    <h3>No Upcoming Events</h3>
+                    <p>Check back soon for upcoming events or contact us for more information.</p>
+                    <a href="contact.html" class="btn btn-primary" style="margin-top: var(--space-lg);">
+                        <i class="fas fa-envelope"></i> Contact Us
+                    </a>
+                </div>
+            `;
+            return;
+        }
+
+        const eventsArray = Object.values(events);
+        const activeEvents = eventsArray.filter(event => event.active !== false);
+        
+        // Sort by date
+        const sortedEvents = activeEvents.sort((a, b) => {
+            try {
+                return new Date(a.date) - new Date(b.date);
+            } catch {
+                return 0;
+            }
+        });
+        
+        const eventsHTML = sortedEvents.map(event => {
+            const config = categoryConfig[event.category] || categoryConfig.bootcamp;
+            const formattedDate = formatDate(event.date);
+            const isSpiritual = event.category === 'spiritual';
+
+            return `
+                <div id="${event.category}-details" class="event-card ${config.class} animate-on-scroll">
+                    <img src="${event.imageUrl || 'https://via.placeholder.com/400x220/FF0000/FFFFFF?text=DSOG+Event'}" 
+                         alt="${event.title}" 
+                         class="event-image">
+                    <div class="event-date-badge">
+                        <i class="fas fa-calendar"></i> ${formattedDate}
+                    </div>
+                    <div class="event-content">
+                        <div class="duration-badge">
+                            <i class="fas fa-clock"></i> ${event.duration || 'TBD'}
                         </div>
-                        <span class="category-tag">${category.frequency || 'TRANSFORMATIVE'}</span>
-                        <h3 class="${gradientClass}">${category.name}</h3>
-                        <p>${category.description}</p>
-                        <div style="margin-top: auto; padding-top: var(--space-md);">
-                            <a href="#${category.id}-details" class="btn ${buttonClass}" style="width: 100%;">
-                                <i class="fas fa-info-circle"></i> Learn More
+                        <div class="event-details">
+                            <h3 class="${config.gradient}">${event.title}</h3>
+                            ${isSpiritual ? '<div class="slogan">"Search within me O Lord"</div>' : ''}
+                            <p><strong>${event.subtitle || ''}</strong></p>
+                            <p>${event.description}</p>
+                            <div class="event-meta">
+                                <div class="meta-item">
+                                    <i class="fas fa-users"></i>
+                                    <span>${event.maxParticipants > 0 ? `Limited to ${event.maxParticipants} Participants` : 'Unlimited Participants'}</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>${event.venue || 'Venue TBD'}</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span>${event.frequency ? (event.frequency.charAt(0).toUpperCase() + event.frequency.slice(1)) : 'One-time Event'}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event-action" style="margin-top: auto;">
+                            <a href="${event.registrationUrl || `https://wa.me/254733737983?text=I'm%20interested%20in%20${encodeURIComponent(event.title)}`}" 
+                               target="_blank" 
+                               class="btn ${config.button} btn-block">
+                                <i class="fas fa-ticket-alt"></i> Register Now
                             </a>
                         </div>
                     </div>
-                `;
-            }).join('');
+                </div>
+            `;
+        }).join('');
 
-            eventCategoriesContainer.innerHTML = categoriesHTML;
-        }
+        eventsGridContainer.innerHTML = eventsHTML;
+    }
 
-        // Render upcoming events
-        function renderEvents(events) {
-            if (!events || events.length === 0) {
-                eventsGridContainer.innerHTML = `
-                    <div class="no-events">
-                        <i class="fas fa-calendar-times error-icon"></i>
-                        <h3>No Upcoming Events</h3>
-                        <p>Check back soon for upcoming events or contact us for more information.</p>
-                        <a href="contact.html" class="btn btn-primary" style="margin-top: var(--space-lg);">
-                            <i class="fas fa-envelope"></i> Contact Us
-                        </a>
-                    </div>
-                `;
-                return;
-            }
-
-            // Sort events by date (soonest first)
-            const sortedEvents = [...events].sort((a, b) => new Date(a.date) - new Date(b.date));
+    // Load data from Firebase
+    async function loadEvents() {
+        try {
+            // Show loading state
+            eventCategoriesContainer.innerHTML = `
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p class="loading-text">Loading event categories...</p>
+                </div>
+            `;
             
-            const eventsHTML = sortedEvents.map(event => {
-                const categoryClass = categoryClasses[event.category] || '';
-                const gradientClass = categoryGradients[event.category] || '';
-                const buttonClass = categoryButtons[event.category] || 'btn-primary';
-                const formattedDate = formatDate(event.date);
-                const isSpiritual = event.category === 'spiritual';
+            eventsGridContainer.innerHTML = `
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p class="loading-text">Loading upcoming events...</p>
+                </div>
+            `;
 
-                return `
-                    <div id="${event.category}-details" class="event-card ${categoryClass} animate-on-scroll">
-                        <img src="${event.imageUrl}" 
-                             alt="${event.title}" 
-                             class="event-image">
-                        <div class="event-date-badge">
-                            <i class="fas fa-calendar"></i> ${formattedDate}
-                        </div>
-                        <div class="event-content">
-                            <div class="duration-badge">
-                                <i class="fas fa-clock"></i> ${event.duration}
-                            </div>
-                            <div class="event-details">
-                                <h3 class="${gradientClass}">${event.title}</h3>
-                                ${isSpiritual ? '<div class="slogan">"Search within me O Lord"</div>' : ''}
-                                <p><strong>${event.subtitle}</strong></p>
-                                <p>${event.description}</p>
-                                <div class="event-meta">
-                                    <div class="meta-item">
-                                        <i class="fas fa-users"></i>
-                                        <span>${event.maxParticipants > 0 ? `Limited to ${event.maxParticipants} Participants` : 'Unlimited Participants'}</span>
-                                    </div>
-                                    <div class="meta-item">
-                                        <i class="fas fa-map-marker-alt"></i>
-                                        <span>${event.venue}</span>
-                                    </div>
-                                    <div class="meta-item">
-                                        <i class="fas fa-calendar-alt"></i>
-                                        <span>${formatFrequency(event.frequency)}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="event-action" style="margin-top: auto;">
-                                <a href="${event.registrationUrl}" 
-                                   target="_blank" 
-                                   class="btn ${buttonClass} btn-block">
-                                    <i class="fas fa-ticket-alt"></i> Register Now
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
+            // Fetch data from Firebase
+            const categoriesRef = database.ref('eventCategories');
+            const eventsRef = database.ref('upcomingEvents');
 
-            eventsGridContainer.innerHTML = eventsHTML;
-        }
+            // Fetch both data sets
+            const categoriesSnapshot = await categoriesRef.once('value');
+            const eventsSnapshot = await eventsRef.once('value');
 
-        // Show error state
-        function showError(message) {
+            // Get data
+            const categories = categoriesSnapshot.val();
+            const events = eventsSnapshot.val();
+
+            // Render data
+            renderCategories(categories);
+            renderEvents(events);
+
+            // Initialize animations
+            setTimeout(initAnimations, 100);
+
+        } catch (error) {
+            console.error('Error loading events:', error);
+            
             eventCategoriesContainer.innerHTML = `
                 <div class="error-state">
                     <i class="fas fa-exclamation-triangle error-icon"></i>
                     <h3>Unable to Load Events</h3>
-                    <p>${message}</p>
+                    <p>Failed to load events. Please check your internet connection and try again.</p>
                     <button onclick="loadEvents()" class="btn btn-primary" style="margin-top: var(--space-lg);">
                         <i class="fas fa-redo"></i> Try Again
                     </button>
@@ -1741,210 +1778,152 @@
                 <div class="error-state">
                     <i class="fas fa-exclamation-triangle error-icon"></i>
                     <h3>Unable to Load Events</h3>
-                    <p>${message}</p>
+                    <p>Failed to load events. Please check your internet connection and try again.</p>
                     <button onclick="loadEvents()" class="btn btn-primary" style="margin-top: var(--space-lg);">
                         <i class="fas fa-redo"></i> Try Again
                     </button>
                 </div>
             `;
         }
+    }
 
-        // Load events from Firebase
-        async function loadEvents() {
-            try {
-                // Show loading state
-                eventCategoriesContainer.innerHTML = `
-                    <div class="loading">
-                        <div class="loading-spinner"></div>
-                        <p class="loading-text">Loading event categories...</p>
-                    </div>
-                `;
-                
-                eventsGridContainer.innerHTML = `
-                    <div class="loading">
-                        <div class="loading-spinner"></div>
-                        <p class="loading-text">Loading upcoming events...</p>
-                    </div>
-                `;
+    // ============================================
+    // ANIMATIONS
+    // ============================================
+    
+    // Initialize animations
+    function initAnimations() {
+        const animatedElements = document.querySelectorAll('.animate-on-scroll');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const delay = entry.target.dataset.delay || 0;
+                    setTimeout(() => {
+                        entry.target.classList.add('animated');
+                    }, delay);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+        
+        animatedElements.forEach((element, index) => {
+            element.dataset.delay = index * 100;
+            observer.observe(element);
+        });
+    }
 
-                // Fetch data from Firebase
-                const categoriesRef = database.ref('eventCategories');
-                const eventsRef = database.ref('upcomingEvents');
-
-                // Use Promise.all to fetch both data sets concurrently
-                const [categoriesSnapshot, eventsSnapshot] = await Promise.all([
-                    categoriesRef.once('value'),
-                    eventsRef.once('value')
-                ]);
-
-                const categories = [];
-                const events = [];
-
-                // Process categories
-                categoriesSnapshot.forEach((childSnapshot) => {
-                    categories.push({
-                        id: childSnapshot.key,
-                        ...childSnapshot.val()
-                    });
-                });
-
-                // Process events
-                eventsSnapshot.forEach((childSnapshot) => {
-                    events.push({
-                        id: childSnapshot.key,
-                        ...childSnapshot.val()
-                    });
-                });
-
-                // Render the data
-                renderCategories(categories);
-                renderEvents(events);
-
-                // Initialize animations after rendering
-                setTimeout(initAnimations, 100);
-
-            } catch (error) {
-                console.error('Error loading events:', error);
-                showError('Failed to load events. Please check your internet connection and try again.');
+    // ============================================
+    // THEME TOGGLE
+    // ============================================
+    
+    function setupThemeToggle() {
+        const themeToggle = document.getElementById('themeToggle');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+        
+        // Get saved theme or system preference
+        const savedTheme = localStorage.getItem('theme');
+        const systemTheme = prefersDark.matches ? 'dark' : 'light';
+        const initialTheme = savedTheme || systemTheme;
+        
+        // Set initial theme
+        document.documentElement.setAttribute('data-theme', initialTheme);
+        updateThemeIcon(initialTheme);
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+            
+            setTimeout(() => {
+                document.body.style.transition = '';
+            }, 300);
+        });
+        
+        function updateThemeIcon(theme) {
+            const icon = themeToggle.querySelector('i');
+            if (theme === 'dark') {
+                icon.className = 'fas fa-sun';
+                themeToggle.setAttribute('aria-label', 'Switch to light theme');
+            } else {
+                icon.className = 'fas fa-moon';
+                themeToggle.setAttribute('aria-label', 'Switch to dark theme');
             }
         }
+    }
 
-        // Initialize scroll animations
-        function initAnimations() {
-            const animatedElements = document.querySelectorAll('.animate-on-scroll');
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const delay = entry.target.dataset.delay || 0;
-                        setTimeout(() => {
-                            entry.target.classList.add('animated');
-                        }, delay);
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            });
-            
-            animatedElements.forEach((element, index) => {
-                element.dataset.delay = index * 100;
-                observer.observe(element);
-            });
-        }
-
-        // Event Listeners for WhatsApp registration links
-        function setupWhatsAppLinks() {
-            document.querySelectorAll('a[href*="whatsapp"]').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    const href = this.getAttribute('href');
-                    if (href.includes('whatsapp')) {
-                        // Track which event they're interested in
-                        const eventType = this.closest('.event-card') ? 
-                            this.closest('.event-card').classList.contains('bootcamp') ? 'Bootcamp' :
-                            this.closest('.event-card').classList.contains('inspiration') ? 'Become What You Believe' :
-                            this.closest('.event-card').classList.contains('spiritual') ? 'The Making of an Icon' : 'DSOG Event' : 'DSOG Event';
-                        
-                        // Update the WhatsApp message to include event type
-                        const newHref = href.replace('DSOG%20event', encodeURIComponent(eventType));
-                        this.setAttribute('href', newHref);
-                    }
-                });
-            });
-        }
-
-        // DOM Content Loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 DSOG Events Page Loaded - Firebase Integration Active');
-            
-            // Initialize Firebase and load events
-            loadEvents();
-            
-            // Theme Toggle
-            const themeToggle = document.getElementById('themeToggle');
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-            
-            // Get saved theme or system preference
-            const savedTheme = localStorage.getItem('theme');
-            const systemTheme = prefersDark.matches ? 'dark' : 'light';
-            const initialTheme = savedTheme || systemTheme;
-            
-            // Set initial theme
-            document.documentElement.setAttribute('data-theme', initialTheme);
-            updateThemeIcon(initialTheme);
-            
-            themeToggle.addEventListener('click', () => {
-                const currentTheme = document.documentElement.getAttribute('data-theme');
-                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    // ============================================
+    // MOBILE MENU
+    // ============================================
+    
+    function setupMobileMenu() {
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+        
+        if (mobileMenuBtn && navLinks) {
+            mobileMenuBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                navLinks.classList.toggle('active');
+                const icon = this.querySelector('i');
+                icon.className = navLinks.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
+                this.setAttribute('aria-expanded', navLinks.classList.contains('active'));
                 
-                document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
-                document.documentElement.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-                updateThemeIcon(newTheme);
-                
-                setTimeout(() => {
-                    document.body.style.transition = '';
-                }, 300);
+                // Prevent body scroll when menu is open
+                if (navLinks.classList.contains('active')) {
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    document.body.style.overflow = '';
+                }
             });
-            
-            function updateThemeIcon(theme) {
-                const icon = themeToggle.querySelector('i');
-                icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-                themeToggle.setAttribute('aria-label', `Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`);
-            }
 
-            // Mobile Menu
-            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-            const navLinks = document.getElementById('navLinks');
-            
-            if (mobileMenuBtn && navLinks) {
-                mobileMenuBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    navLinks.classList.toggle('active');
-                    const icon = this.querySelector('i');
-                    icon.className = navLinks.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
-                    this.setAttribute('aria-expanded', navLinks.classList.contains('active'));
-                    
-                    // Prevent body scroll when menu is open
-                    document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
-                });
+            // Close menu when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!navLinks.contains(event.target) && !mobileMenuBtn.contains(event.target) && navLinks.classList.contains('active')) {
+                    navLinks.classList.remove('active');
+                    mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                    document.body.style.overflow = '';
+                }
+            });
 
-                // Close menu when clicking outside
-                document.addEventListener('click', function(event) {
-                    if (!navLinks.contains(event.target) && !mobileMenuBtn.contains(event.target) && navLinks.classList.contains('active')) {
+            // Close menu when clicking a link
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth <= 1024) {
                         navLinks.classList.remove('active');
                         mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
                         mobileMenuBtn.setAttribute('aria-expanded', 'false');
                         document.body.style.overflow = '';
                     }
                 });
+            });
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 1024) {
+                    navLinks.classList.remove('active');
+                    mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                    document.body.style.overflow = '';
+                }
+            });
+        }
+    }
 
-                // Close menu when clicking a link
-                navLinks.querySelectorAll('a').forEach(link => {
-                    link.addEventListener('click', () => {
-                        if (window.innerWidth <= 1024) {
-                            navLinks.classList.remove('active');
-                            mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
-                            mobileMenuBtn.setAttribute('aria-expanded', 'false');
-                            document.body.style.overflow = '';
-                        }
-                    });
-                });
-                
-                // Handle window resize
-                window.addEventListener('resize', () => {
-                    if (window.innerWidth > 1024) {
-                        navLinks.classList.remove('active');
-                        mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
-                        mobileMenuBtn.setAttribute('aria-expanded', 'false');
-                        document.body.style.overflow = '';
-                    }
-                });
-            }
-
-            // Header scroll effect
-            const header = document.getElementById('header');
+    // ============================================
+    // HEADER SCROLL EFFECT
+    // ============================================
+    
+    function setupHeaderScroll() {
+        const header = document.getElementById('header');
+        if (header) {
             window.addEventListener('scroll', () => {
                 if (window.scrollY > 50) {
                     header.classList.add('scrolled');
@@ -1952,60 +1931,113 @@
                     header.classList.remove('scrolled');
                 }
             });
+        }
+    }
 
-            // Smooth scroll for anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    const href = this.getAttribute('href');
+    // ============================================
+    // SMOOTH SCROLL
+    // ============================================
+    
+    function setupSmoothScroll() {
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                
+                if (href.startsWith('#') && href !== '#') {
+                    e.preventDefault();
                     
-                    if (href.startsWith('#') && href !== '#') {
-                        e.preventDefault();
+                    const targetId = href.substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        const headerHeight = document.getElementById('header').offsetHeight;
+                        const targetPosition = targetElement.offsetTop - headerHeight - 20;
                         
-                        const targetId = href.substring(1);
-                        const targetElement = document.getElementById(targetId);
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
                         
-                        if (targetElement) {
-                            const headerHeight = document.getElementById('header').offsetHeight;
-                            const targetPosition = targetElement.offsetTop - headerHeight - 20;
-                            
-                            window.scrollTo({
-                                top: targetPosition,
-                                behavior: 'smooth'
-                            });
-                            
-                            history.pushState(null, '', href);
-                        }
+                        history.pushState(null, '', href);
                     }
-                });
+                }
             });
-
-            // Set current year in footer
-            document.getElementById('currentYear').textContent = new Date().getFullYear();
-
-            // Setup WhatsApp links
-            setupWhatsAppLinks();
-
-            // Real-time updates (optional - uncomment if you want live updates)
-        
-            const eventsRef = database.ref('upcomingEvents');
-            eventsRef.on('value', (snapshot) => {
-                console.log('Events updated in real-time');
-                const events = [];
-                snapshot.forEach((childSnapshot) => {
-                    events.push({
-                        id: childSnapshot.key,
-                        ...childSnapshot.val()
-                    });
-                });
-                renderEvents(events);
-                initAnimations();
-                setupWhatsAppLinks();
-            });
-            
         });
+    }
 
-        // Export loadEvents for retry button
+    // ============================================
+    // SET CURRENT YEAR
+    // ============================================
+    
+    function setCurrentYear() {
+        const yearElement = document.getElementById('currentYear');
+        if (yearElement) {
+            yearElement.textContent = new Date().getFullYear();
+        }
+    }
+
+    // ============================================
+    // TOUCH OPTIMIZATIONS
+    // ============================================
+    
+    function setupTouchOptimizations() {
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', (event) => {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+    }
+
+    // ============================================
+    // WHATSAPP LINKS SETUP
+    // ============================================
+    
+    function setupWhatsAppLinks() {
+        document.querySelectorAll('a[href*="whatsapp"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href.includes('whatsapp')) {
+                    // Track which event they're interested in
+                    const eventType = this.closest('.event-card') ? 
+                        this.closest('.event-card').classList.contains('bootcamp') ? 'Bootcamp' :
+                        this.closest('.event-card').classList.contains('inspiration') ? 'Become What You Believe' :
+                        this.closest('.event-card').classList.contains('spiritual') ? 'The Making of an Icon' : 'DSOG Event' : 'DSOG Event';
+                    
+                    // Update the WhatsApp message to include event type
+                    const newHref = href.replace('DSOG%20event', encodeURIComponent(eventType));
+                    this.setAttribute('href', newHref);
+                }
+            });
+        });
+    }
+
+    // ============================================
+    // DOM CONTENT LOADED
+    // ============================================
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('🚀 DSOG Events Page Loaded - Firebase Integration Active');
+        
+        // Initialize all features
+        setupThemeToggle();
+        setupMobileMenu();
+        setupHeaderScroll();
+        setupSmoothScroll();
+        setCurrentYear();
+        setupTouchOptimizations();
+        
+        // Load events from Firebase
+        loadEvents();
+        
+        // Setup WhatsApp links after events are loaded
+        setTimeout(setupWhatsAppLinks, 1000);
+        
+        // Export for retry button
         window.loadEvents = loadEvents;
-    </script>
+    });
+</script>
 </body>
 </html>
