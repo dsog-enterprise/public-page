@@ -3,77 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DSOG Events Admin Panel</title>
+    <title>DSOG Admin Panel</title>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            /* Professional Color Palette */
             --primary-red: #C21807;
             --primary-dark: #1A1A1A;
-            --primary-gold: #D4AF37;
-            --accent-purple: #6B46C1;
-            --accent-green: #2D7D46;
-            --accent-blue: #2C5282;
-            
-            /* Light Mode Colors */
-            --bg-primary: #FFFFFF;
-            --bg-secondary: #F8F9FA;
-            --bg-tertiary: #E9ECEF;
-            --text-primary: #212529;
-            --text-secondary: #6C757D;
-            --text-tertiary: #868E96;
+            --white: #FFFFFF;
+            --light-gray: #F8F9FA;
+            --medium-gray: #E9ECEF;
+            --dark-gray: #6C757D;
             --border-color: #DEE2E6;
-            --card-bg: #FFFFFF;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
             
-            /* Dark Theme Variables */
-            --dark-bg-primary: #121212;
-            --dark-bg-secondary: #1E1E1E;
-            --dark-bg-tertiary: #2D2D2D;
-            --dark-text-primary: #F5F5F5;
-            --dark-text-secondary: #B0B0B0;
-            --dark-border-color: #404040;
+            /* Theme Variables */
+            --bg-primary: var(--white);
+            --bg-secondary: var(--light-gray);
+            --bg-tertiary: var(--medium-gray);
+            --text-primary: var(--primary-dark);
+            --text-secondary: var(--dark-gray);
+            --card-bg: var(--white);
             
-            /* Spacing */
+            --font-primary: 'Inter', sans-serif;
+            --font-heading: 'Manrope', sans-serif;
+            
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 14px;
+            
             --space-xs: 0.5rem;
             --space-sm: 0.75rem;
             --space-md: 1rem;
             --space-lg: 1.5rem;
             --space-xl: 2rem;
             --space-2xl: 3rem;
-            
-            /* Border Radius */
-            --radius-sm: 6px;
-            --radius-md: 8px;
-            --radius-lg: 12px;
-            
-            /* Shadows */
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            
-            /* Transition */
-            --transition: all 0.3s ease;
         }
 
         [data-theme="dark"] {
-            --bg-primary: var(--dark-bg-primary);
-            --bg-secondary: var(--dark-bg-secondary);
-            --bg-tertiary: var(--dark-bg-tertiary);
-            --text-primary: var(--dark-text-primary);
-            --text-secondary: var(--dark-text-secondary);
-            --border-color: var(--dark-border-color);
-            --card-bg: var(--dark-bg-secondary);
+            --bg-primary: #121212;
+            --bg-secondary: #1E1E1E;
+            --bg-tertiary: #2D2D2D;
+            --card-bg: #1E1E1E;
+            --text-primary: #F5F5F5;
+            --text-secondary: #B0B0B0;
+            --border-color: #404040;
+            --white: #1E1E1E;
         }
 
         * {
@@ -83,365 +71,87 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-primary);
+            font-family: var(--font-primary);
+            background: var(--bg-secondary);
             color: var(--text-primary);
-            line-height: 1.6;
             min-height: 100vh;
-            transition: var(--transition);
+            transition: background-color 0.3s ease;
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 var(--space-lg);
-        }
-
-        /* Auth Styles */
-        .auth-wrapper {
+        /* Admin Layout */
+        .admin-container {
+            display: flex;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: var(--space-xl);
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        }
-
-        [data-theme="dark"] .auth-wrapper {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-        }
-
-        .auth-card {
-            background: var(--card-bg);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-lg);
-            width: 100%;
-            max-width: 420px;
-            overflow: hidden;
-        }
-
-        .auth-header {
-            background: linear-gradient(135deg, var(--primary-red), #E53935);
-            color: white;
-            padding: var(--space-xl);
-            text-align: center;
-        }
-
-        .auth-header i {
-            font-size: 2.5rem;
-            margin-bottom: var(--space-md);
-        }
-
-        .auth-header h1 {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: var(--space-xs);
-        }
-
-        .auth-header p {
-            opacity: 0.9;
-            font-size: 0.875rem;
-        }
-
-        .auth-body {
-            padding: var(--space-2xl);
-        }
-
-        .auth-tabs {
-            display: flex;
-            margin-bottom: var(--space-xl);
-            border-bottom: 2px solid var(--border-color);
-        }
-
-        .auth-tab {
-            flex: 1;
-            padding: var(--space-md);
-            background: none;
-            border: none;
-            font-size: 0.9375rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: var(--transition);
-            text-align: center;
-        }
-
-        .auth-tab.active {
-            color: var(--primary-red);
-            border-bottom: 2px solid var(--primary-red);
-            margin-bottom: -2px;
-        }
-
-        .auth-form {
-            display: none;
-        }
-
-        .auth-form.active {
-            display: block;
-        }
-
-        .form-group {
-            margin-bottom: var(--space-lg);
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: var(--space-xs);
-            font-weight: 500;
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: var(--space-md);
-            border: 2px solid var(--border-color);
-            border-radius: var(--radius-md);
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            font-family: inherit;
-            font-size: 0.9375rem;
-            transition: var(--transition);
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary-red);
-            box-shadow: 0 0 0 3px rgba(194, 24, 7, 0.1);
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--space-sm);
-            padding: var(--space-md) var(--space-lg);
-            border-radius: var(--radius-md);
-            font-weight: 600;
-            font-size: 0.875rem;
-            border: none;
-            cursor: pointer;
-            transition: var(--transition);
-            text-decoration: none;
-            font-family: inherit;
-            width: 100%;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary-red), #E53935);
-            color: white;
-        }
-
-        .btn-primary:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .btn-primary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .btn-secondary {
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-            border: 2px solid var(--border-color);
-        }
-
-        .btn-secondary:hover {
-            background: var(--border-color);
-        }
-
-        .btn-link {
-            background: none;
-            color: var(--primary-red);
-            padding: 0;
-            font-size: 0.875rem;
-            width: auto;
-        }
-
-        .auth-footer {
-            text-align: center;
-            margin-top: var(--space-xl);
-            padding-top: var(--space-lg);
-            border-top: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-        }
-
-        /* Message Styles */
-        .message {
-            padding: var(--space-md);
-            border-radius: var(--radius-md);
-            margin-bottom: var(--space-lg);
-            display: flex;
-            align-items: center;
-            gap: var(--space-md);
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .message-success {
-            background: rgba(72, 187, 120, 0.1);
-            border-left: 4px solid var(--accent-green);
-            color: var(--accent-green);
-        }
-
-        .message-error {
-            background: rgba(229, 62, 62, 0.1);
-            border-left: 4px solid #E53E3E;
-            color: #E53E3E;
-        }
-
-        .message-info {
-            background: rgba(66, 153, 225, 0.1);
-            border-left: 4px solid #4299E1;
-            color: #4299E1;
-        }
-
-        .message i {
-            font-size: 1.25rem;
-        }
-
-        /* Loading */
-        .loading {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--space-md);
-            padding: var(--space-xl);
-        }
-
-        .loading-spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--border-color);
-            border-top-color: var(--primary-red);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Admin Dashboard Styles */
-        .admin-dashboard {
-            display: none;
-            min-height: 100vh;
-        }
-
-        .admin-header {
-            background: linear-gradient(135deg, var(--primary-red), #E53935);
-            color: white;
-            padding: var(--space-lg) 0;
-            box-shadow: var(--shadow-md);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .admin-title {
-            display: flex;
-            align-items: center;
-            gap: var(--space-md);
-        }
-
-        .admin-title i {
-            font-size: 2rem;
-        }
-
-        .admin-title h1 {
-            font-size: 1.75rem;
-            font-weight: 700;
-        }
-
-        .admin-actions {
-            display: flex;
-            gap: var(--space-md);
-            align-items: center;
-        }
-
-        .theme-toggle {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.25rem;
-            cursor: pointer;
-            padding: var(--space-sm);
-            border-radius: var(--radius-md);
-            transition: var(--transition);
-        }
-
-        .theme-toggle:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Dashboard Layout */
-        .dashboard {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: var(--space-xl);
-            padding: var(--space-xl) 0;
-            min-height: calc(100vh - 100px);
         }
 
         /* Sidebar */
-        .sidebar {
-            background: var(--card-bg);
-            border-radius: var(--radius-lg);
-            padding: var(--space-lg);
-            box-shadow: var(--shadow-md);
-            height: fit-content;
-            position: sticky;
-            top: var(--space-xl);
+        .admin-sidebar {
+            width: 260px;
+            background: var(--bg-primary);
+            border-right: 1px solid var(--border-color);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+            z-index: 1000;
         }
 
-        .nav-menu {
-            list-style: none;
+        .sidebar-header {
+            padding: var(--space-xl);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
         }
 
-        .nav-item {
-            margin-bottom: var(--space-xs);
+        .sidebar-header img {
+            height: 40px;
+            width: auto;
+        }
+
+        .sidebar-header h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-red);
+        }
+
+        .sidebar-nav {
+            padding: var(--space-lg) 0;
+        }
+
+        .nav-section {
+            margin-bottom: var(--space-xl);
+        }
+
+        .nav-section h3 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            padding: 0 var(--space-xl) var(--space-sm);
+            font-weight: 600;
         }
 
         .nav-link {
             display: flex;
             align-items: center;
             gap: var(--space-md);
-            padding: var(--space-md);
-            border-radius: var(--radius-md);
+            padding: var(--space-md) var(--space-xl);
             color: var(--text-secondary);
             text-decoration: none;
-            transition: var(--transition);
-            font-weight: 500;
-            cursor: pointer;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
         }
 
         .nav-link:hover {
-            background: var(--bg-tertiary);
+            background: var(--bg-secondary);
             color: var(--text-primary);
         }
 
         .nav-link.active {
-            background: var(--primary-red);
-            color: white;
+            background: rgba(194, 24, 7, 0.1);
+            color: var(--primary-red);
+            border-left-color: var(--primary-red);
         }
 
         .nav-link i {
@@ -449,38 +159,116 @@
             text-align: center;
         }
 
-        .stats-card {
-            background: linear-gradient(135deg, var(--accent-blue), #4299E1);
-            color: white;
-            padding: var(--space-lg);
-            border-radius: var(--radius-lg);
-            margin-top: var(--space-xl);
-        }
-
-        .stats-card h3 {
-            margin-bottom: var(--space-md);
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-
-        .stats-number {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: var(--space-xs);
-        }
-
-        .stats-label {
-            font-size: 0.875rem;
-            opacity: 0.8;
+        .version-badge {
+            position: absolute;
+            bottom: var(--space-xl);
+            left: 0;
+            right: 0;
+            text-align: center;
+            padding: var(--space-md);
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border-color);
         }
 
         /* Main Content */
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-xl);
+        .admin-main {
+            flex: 1;
+            margin-left: 260px;
+            padding: var(--space-xl);
         }
 
+        /* Top Bar */
+        .admin-topbar {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg) var(--space-xl);
+            margin-bottom: var(--space-xl);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .topbar-left h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .topbar-left p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: var(--space-xs);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+        }
+
+        .theme-toggle {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            transition: all 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            cursor: pointer;
+            padding: var(--space-xs);
+            border-radius: var(--radius-md);
+            transition: background 0.2s ease;
+        }
+
+        .user-profile:hover {
+            background: var(--bg-secondary);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .user-role {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Content Sections */
         .content-section {
             display: none;
         }
@@ -491,40 +279,83 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Card Styles */
-        .card {
+        /* Dashboard */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--space-2xl);
+        }
+
+        .stat-card {
             background: var(--card-bg);
             border-radius: var(--radius-lg);
             padding: var(--space-xl);
-            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .card-header {
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--radius-md);
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: var(--space-xl);
-            padding-bottom: var(--space-md);
-            border-bottom: 2px solid var(--border-color);
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: var(--space-md);
+            color: white;
         }
 
-        .card-title {
-            font-size: 1.5rem;
+        .stat-icon.blue { background: linear-gradient(135deg, #2C5282, #4299E1); }
+        .stat-icon.red { background: linear-gradient(135deg, #C21807, #E53935); }
+        .stat-icon.green { background: linear-gradient(135deg, #2D7D46, #48BB78); }
+        .stat-icon.purple { background: linear-gradient(135deg, #6B46C1, #9F7AEA); }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: var(--space-xs);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Form Styles */
+        .form-section {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: var(--space-2xl);
+            margin-bottom: var(--space-xl);
+            border: 1px solid var(--border-color);
+        }
+
+        .form-section h3 {
+            margin-bottom: var(--space-xl);
+            font-size: 1.25rem;
             font-weight: 600;
             color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
         }
 
-        .card-subtitle {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            margin-top: var(--space-xs);
+        .form-section h3 i {
+            color: var(--primary-red);
         }
 
-        /* Form Grid */
         .form-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -532,1644 +363,1424 @@
             margin-bottom: var(--space-xl);
         }
 
-        .form-group.full-width {
-            grid-column: 1 / -1;
+        .form-group {
+            margin-bottom: var(--space-lg);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: var(--space-sm);
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: var(--space-md);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-family: var(--font-primary);
+            font-size: 0.9rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-red);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) var(--space-xl);
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: var(--font-primary);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #C21807, #E53935);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(194, 24, 7, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .btn-small {
+            padding: var(--space-sm) var(--space-lg);
+            font-size: 0.85rem;
+        }
+
+        .btn-block {
+            width: 100%;
+            display: flex;
         }
 
         .form-actions {
             display: flex;
             gap: var(--space-md);
-            justify-content: flex-end;
             margin-top: var(--space-xl);
-            padding-top: var(--space-lg);
+            padding-top: var(--space-xl);
             border-top: 1px solid var(--border-color);
         }
 
         /* Table Styles */
-        .table-responsive {
-            overflow-x: auto;
+        .data-table {
+            width: 100%;
+            background: var(--card-bg);
             border-radius: var(--radius-lg);
+            overflow: hidden;
             border: 1px solid var(--border-color);
+            margin-bottom: var(--space-xl);
+        }
+
+        .data-table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-lg) var(--space-xl);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .data-table-header h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 800px;
-        }
-
-        thead {
-            background: var(--bg-tertiary);
         }
 
         th {
-            padding: var(--space-md) var(--space-lg);
+            padding: var(--space-lg) var(--space-xl);
             text-align: left;
             font-weight: 600;
             color: var(--text-secondary);
-            border-bottom: 2px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         td {
-            padding: var(--space-md) var(--space-lg);
+            padding: var(--space-lg) var(--space-xl);
             border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-size: 0.9rem;
         }
 
-        tbody tr:hover {
-            background: var(--bg-tertiary);
+        tr:hover {
+            background: var(--bg-secondary);
         }
 
-        /* Badge Styles */
         .status-badge {
-            display: inline-block;
-            padding: var(--space-xs) var(--space-sm);
-            border-radius: var(--radius-full);
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .status-upcoming {
-            background: rgba(66, 153, 225, 0.1);
-            color: #3182CE;
-        }
-
-        .status-ongoing {
-            background: rgba(72, 187, 120, 0.1);
-            color: #38A169;
-        }
-
-        .status-completed {
-            background: rgba(160, 174, 192, 0.1);
-            color: #718096;
-        }
-
-        .category-badge {
-            display: inline-block;
-            padding: var(--space-xs) var(--space-sm);
-            border-radius: var(--radius-full);
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .category-bootcamp {
-            background: rgba(194, 24, 7, 0.1);
-            color: var(--primary-red);
-        }
-
-        .category-inspiration {
-            background: rgba(212, 175, 55, 0.1);
-            color: var(--primary-gold);
-        }
-
-        .category-spiritual {
-            background: rgba(107, 70, 193, 0.1);
-            color: var(--accent-purple);
-        }
-
-        /* Action Buttons */
-        .btn-sm {
-            padding: var(--space-xs) var(--space-md);
-            font-size: 0.75rem;
-            width: auto;
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, var(--accent-green), #48BB78);
-            color: white;
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #E53E3E, #C53030);
-            color: white;
-        }
-
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            padding: var(--space-lg);
+            gap: var(--space-xs);
+            padding: var(--space-2xs) var(--space-md);
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+            font-weight: 500;
         }
 
-        .modal.active {
+        .status-active {
+            background: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+
+        .status-inactive {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+        }
+
+        .table-actions {
             display: flex;
-            animation: fadeIn 0.3s ease;
+            gap: var(--space-sm);
         }
 
-        .modal-content {
-            background: var(--card-bg);
-            border-radius: var(--radius-lg);
-            max-width: 500px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .modal-header {
-            padding: var(--space-lg);
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: var(--text-secondary);
-            cursor: pointer;
-            padding: 0;
+        .action-btn {
             width: 32px;
             height: 32px;
+            border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: var(--radius-sm);
-        }
-
-        .modal-close:hover {
-            background: var(--bg-tertiary);
-        }
-
-        .modal-body {
-            padding: var(--space-lg);
-        }
-
-        /* Toggle Switch */
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 30px;
-        }
-
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .toggle-slider {
-            position: absolute;
+            border: none;
             cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: var(--border-color);
-            transition: var(--transition);
-            border-radius: 34px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
         }
 
-        .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 22px;
-            width: 22px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: var(--transition);
+        .action-btn.edit {
+            background: rgba(23, 162, 184, 0.1);
+            color: var(--info);
+        }
+
+        .action-btn.edit:hover {
+            background: var(--info);
+            color: white;
+        }
+
+        .action-btn.delete {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+        }
+
+        .action-btn.delete:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Login Form */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-secondary);
+            padding: var(--space-xl);
+        }
+
+        .login-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: var(--space-2xl);
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .login-header img {
+            height: 60px;
+            margin-bottom: var(--space-lg);
+        }
+
+        .login-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .login-header p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: var(--space-xl);
+            padding-top: var(--space-xl);
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-2xl);
+            color: var(--text-secondary);
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--primary-red);
             border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: var(--space-md);
         }
 
-        input:checked + .toggle-slider {
-            background-color: var(--primary-red);
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
-        input:checked + .toggle-slider:before {
-            transform: translateX(30px);
+        /* Error Messages */
+        .error-message {
+            background: rgba(220, 53, 69, 0.1);
+            border: 1px solid rgba(220, 53, 69, 0.3);
+            color: var(--danger);
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-lg);
+            font-size: 0.9rem;
         }
 
-        /* Responsive */
+        .success-message {
+            background: rgba(40, 167, 69, 0.1);
+            border: 1px solid rgba(40, 167, 69, 0.3);
+            color: var(--success);
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-lg);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
         @media (max-width: 1024px) {
-            .dashboard {
-                grid-template-columns: 1fr;
+            .admin-sidebar {
+                transform: translateX(-100%);
             }
             
-            .sidebar {
-                position: static;
+            .admin-sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .admin-main {
+                margin-left: 0;
+            }
+            
+            .mobile-menu-btn {
+                display: flex;
             }
         }
 
         @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: var(--space-md);
-                text-align: center;
+            .admin-main {
+                padding: var(--space-md);
             }
             
-            .form-actions {
-                flex-direction: column;
+            .topbar-left h2 {
+                font-size: 1.25rem;
             }
             
-            .btn {
-                width: 100%;
+            .stats-grid {
+                grid-template-columns: 1fr;
             }
             
-            .auth-body {
-                padding: var(--space-xl);
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
             }
         }
 
-        @media (max-width: 480px) {
-            .container {
-                padding: 0 var(--space-md);
-            }
-            
-            .card {
-                padding: var(--space-lg);
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .mobile-menu-btn {
+                display: flex;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Authentication Section -->
-    <div id="authSection" class="auth-wrapper">
-        <div class="auth-card">
-            <div class="auth-header">
-                <i class="fas fa-calendar-star"></i>
-                <h1>DSOG Events Admin</h1>
-                <p>Manage Transformative Events</p>
+    <!-- Login Screen (Initial State) -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <img src="https://i.postimg.cc/kMZ1jTww/Untitled-design-4-removebg-preview.png" alt="DSOG Admin">
+                <h2>DSOG Admin Panel</h2>
+                <p>Sign in to manage your website content</p>
             </div>
             
-            <div class="auth-body">
-                <div class="auth-tabs">
-                    <button class="auth-tab active" data-tab="login">Login</button>
-                    <button class="auth-tab" data-tab="register">Register</button>
-                </div>
+            <div id="loginError" class="error-message" style="display: none;"></div>
+            
+            <div class="form-group">
+                <label for="adminEmail">Email Address</label>
+                <input type="email" id="adminEmail" placeholder="admin@dsog.org">
+            </div>
+            
+            <div class="form-group">
+                <label for="adminPassword">Password</label>
+                <input type="password" id="adminPassword" placeholder="••••••••">
+            </div>
+            
+            <button id="loginBtn" class="btn btn-primary btn-block">
+                <i class="fas fa-sign-in-alt"></i> Sign In
+            </button>
+            
+            <div class="login-footer">
+                <p>Version 7.0.0 | Secure Admin Access</p>
+            </div>
+        </div>
+    </div>
 
-                <!-- Login Form -->
-                <form id="loginForm" class="auth-form active">
-                    <div id="loginMessage" class="message" style="display: none;"></div>
-                    
-                    <div class="form-group">
-                        <label for="loginEmail" class="form-label">Email Address</label>
-                        <input type="email" id="loginEmail" class="form-control" placeholder="admin@dsog.org" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="loginPassword" class="form-label">Password</label>
-                        <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password" required>
-                    </div>
-                    
-                    <button type="submit" id="loginBtn" class="btn btn-primary">
-                        <span>Login</span>
-                        <div class="loading-spinner" style="display: none;"></div>
+    <!-- Admin Panel (Hidden until login) -->
+    <div id="adminPanel" class="admin-container" style="display: none;">
+        <!-- Sidebar -->
+        <div class="admin-sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <img src="https://i.postimg.cc/kMZ1jTww/Untitled-design-4-removebg-preview.png" alt="DSOG">
+                <h1>DSOG Admin</h1>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <h3>Dashboard</h3>
+                    <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Overview</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <h3>Content Management</h3>
+                    <a href="#events" class="nav-link" data-section="events">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Events</span>
+                    </a>
+                    <a href="#training" class="nav-link" data-section="training">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Training Programs</span>
+                    </a>
+                    <a href="#team" class="nav-link" data-section="team">
+                        <i class="fas fa-users"></i>
+                        <span>Team Members</span>
+                    </a>
+                    <a href="#testimonials" class="nav-link" data-section="testimonials">
+                        <i class="fas fa-comment"></i>
+                        <span>Testimonials</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <h3>Website Settings</h3>
+                    <a href="#settings" class="nav-link" data-section="settings">
+                        <i class="fas fa-cog"></i>
+                        <span>App Settings</span>
+                    </a>
+                    <a href="#stats" class="nav-link" data-section="stats">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Statistics</span>
+                    </a>
+                    <a href="#faq" class="nav-link" data-section="faq">
+                        <i class="fas fa-question-circle"></i>
+                        <span>FAQs</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <h3>User Management</h3>
+                    <a href="#users" class="nav-link" data-section="users">
+                        <i class="fas fa-user-shield"></i>
+                        <span>Admin Users</span>
+                    </a>
+                    <a href="#backup" class="nav-link" data-section="backup">
+                        <i class="fas fa-database"></i>
+                        <span>Backup & Restore</span>
+                    </a>
+                </div>
+            </nav>
+            
+            <div class="version-badge">
+                Version 7.0.0
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="admin-main">
+            <!-- Top Bar -->
+            <div class="admin-topbar">
+                <div class="topbar-left">
+                    <h2 id="pageTitle">Dashboard Overview</h2>
+                    <p id="pageSubtitle">Welcome back, Admin</p>
+                </div>
+                
+                <div class="topbar-right">
+                    <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+                        <i class="fas fa-moon"></i>
                     </button>
-                </form>
-
-                <!-- Register Form -->
-                <form id="registerForm" class="auth-form">
-                    <div id="registerMessage" class="message" style="display: none;"></div>
                     
-                    <div class="form-group">
-                        <label for="registerEmail" class="form-label">Email Address</label>
-                        <input type="email" id="registerEmail" class="form-control" placeholder="admin@dsog.org" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="registerPassword" class="form-label">Password</label>
-                        <input type="password" id="registerPassword" class="form-control" placeholder="Minimum 6 characters" minlength="6" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="confirmPassword" class="form-label">Confirm Password</label>
-                        <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm your password" required>
-                    </div>
-                    
-                    <button type="submit" id="registerBtn" class="btn btn-primary">
-                        <span>Create Account</span>
-                        <div class="loading-spinner" style="display: none;"></div>
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">
+                        <i class="fas fa-bars"></i>
                     </button>
-                </form>
-
-                <div class="auth-footer">
-                    <p>Use your Firebase Authentication credentials</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Admin Dashboard -->
-    <div id="adminDashboard" class="admin-dashboard">
-        <!-- Header -->
-        <header class="admin-header">
-            <div class="container">
-                <div class="header-content">
-                    <div class="admin-title">
-                        <i class="fas fa-calendar-star"></i>
-                        <div>
-                            <h1>DSOG Events Admin</h1>
-                            <p style="opacity: 0.9; font-size: 0.875rem;">Manage Events, Categories & Content</p>
+                    
+                    <div class="user-profile" id="userProfile">
+                        <div class="user-avatar" id="userAvatar">A</div>
+                        <div class="user-info">
+                            <span class="user-name" id="userName">Admin User</span>
+                            <span class="user-role">Super Admin</span>
                         </div>
                     </div>
-                    <div class="admin-actions">
-                        <button id="themeToggle" class="theme-toggle">
-                            <i class="fas fa-moon"></i>
+                </div>
+            </div>
+
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="content-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon red">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="stat-number" id="totalEvents">0</div>
+                        <div class="stat-label">Upcoming Events</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon blue">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="stat-number" id="totalTraining">0</div>
+                        <div class="stat-label">Training Programs</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-number" id="totalTeam">0</div>
+                        <div class="stat-label">Team Members</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon purple">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div class="stat-number" id="totalTestimonials">0</div>
+                        <div class="stat-label">Testimonials</div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                    <div class="form-grid">
+                        <button class="btn btn-secondary" onclick="switchSection('events')">
+                            <i class="fas fa-plus"></i> Add New Event
                         </button>
-                        <button id="logoutBtn" class="btn btn-secondary btn-sm">
-                            <i class="fas fa-sign-out-alt"></i> Logout
+                        <button class="btn btn-secondary" onclick="switchSection('training')">
+                            <i class="fas fa-plus"></i> Add Training Program
+                        </button>
+                        <button class="btn btn-secondary" onclick="switchSection('team')">
+                            <i class="fas fa-plus"></i> Add Team Member
+                        </button>
+                        <button class="btn btn-secondary" onclick="switchSection('testimonials')">
+                            <i class="fas fa-plus"></i> Add Testimonial
                         </button>
                     </div>
                 </div>
-            </div>
-        </header>
 
-        <div class="container">
-            <div class="dashboard">
-                <!-- Sidebar -->
-                <aside class="sidebar">
-                    <nav>
-                        <ul class="nav-menu">
-                            <li class="nav-item">
-                                <a class="nav-link active" data-section="dashboard">
-                                    <i class="fas fa-tachometer-alt"></i>
-                                    <span>Dashboard</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-section="events">
-                                    <i class="fas fa-calendar-alt"></i>
-                                    <span>Manage Events</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-section="categories">
-                                    <i class="fas fa-tags"></i>
-                                    <span>Event Categories</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-section="add-event">
-                                    <i class="fas fa-plus-circle"></i>
-                                    <span>Add New Event</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-
-                    <div class="stats-card">
-                        <h3><i class="fas fa-chart-line"></i> QUICK STATS</h3>
-                        <div class="stats-number" id="totalEvents">0</div>
-                        <div class="stats-label">Total Events</div>
-                        <div class="stats-number" id="upcomingEvents">0</div>
-                        <div class="stats-label">Upcoming Events</div>
+                <div class="form-section">
+                    <h3><i class="fas fa-history"></i> Recent Activity</h3>
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Action</th>
+                                    <th>User</th>
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+                            <tbody id="activityLog">
+                                <!-- Activity log will be populated here -->
+                            </tbody>
+                        </table>
                     </div>
-                </aside>
-
-                <!-- Main Content -->
-                <main class="main-content">
-                    <!-- Dashboard Section -->
-                    <section id="dashboardSection" class="content-section active">
-                        <div class="card">
-                            <div class="card-header">
-                                <div>
-                                    <h2 class="card-title">Welcome, Admin</h2>
-                                    <p class="card-subtitle">Manage your DSOG events efficiently</p>
-                                </div>
-                            </div>
-                            
-                            <div class="form-grid">
-                                <div>
-                                    <h3 style="margin-bottom: var(--space-md); color: var(--text-primary);">
-                                        <i class="fas fa-bolt"></i> Quick Actions
-                                    </h3>
-                                    <div style="display: flex; flex-direction: column; gap: var(--space-sm);">
-                                        <button class="btn btn-primary" data-section="add-event">
-                                            <i class="fas fa-plus"></i> Add New Event
-                                        </button>
-                                        <button class="btn btn-secondary" data-section="events">
-                                            <i class="fas fa-edit"></i> Edit Existing Events
-                                        </button>
-                                        <button class="btn btn-secondary" data-section="categories">
-                                            <i class="fas fa-tags"></i> Manage Categories
-                                        </button>
-                                    </div>
-                                </div>
-                                
-                                <div>
-                                    <h3 style="margin-bottom: var(--space-md); color: var(--text-primary);">
-                                        <i class="fas fa-info-circle"></i> Event Status
-                                    </h3>
-                                    <div style="display: flex; flex-direction: column; gap: var(--space-sm);">
-                                        <div style="display: flex; justify-content: space-between; padding: var(--space-sm); background: var(--bg-tertiary); border-radius: var(--radius-md);">
-                                            <span>Active Categories:</span>
-                                            <strong id="activeCategories">0</strong>
-                                        </div>
-                                        <div style="display: flex; justify-content: space-between; padding: var(--space-sm); background: var(--bg-tertiary); border-radius: var(--radius-md);">
-                                            <span>Featured Events:</span>
-                                            <strong id="featuredEvents">0</strong>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- Events Section -->
-                    <section id="eventsSection" class="content-section">
-                        <div class="card">
-                            <div class="card-header">
-                                <div>
-                                    <h2 class="card-title">Manage Events</h2>
-                                    <p class="card-subtitle">Edit or delete existing events</p>
-                                </div>
-                            </div>
-
-                            <div id="eventsList">
-                                <div class="loading">
-                                    <div class="loading-spinner"></div>
-                                    <p>Loading events...</p>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- Categories Section -->
-                    <section id="categoriesSection" class="content-section">
-                        <div class="card">
-                            <div class="card-header">
-                                <div>
-                                    <h2 class="card-title">Event Categories</h2>
-                                    <p class="card-subtitle">Manage event categories and their properties</p>
-                                </div>
-                                <button id="addCategoryBtn" class="btn btn-primary btn-sm">
-                                    <i class="fas fa-plus"></i> Add Category
-                                </button>
-                            </div>
-
-                            <div id="categoriesList">
-                                <div class="loading">
-                                    <div class="loading-spinner"></div>
-                                    <p>Loading categories...</p>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- Add Event Section -->
-                    <section id="addEventSection" class="content-section">
-                        <div class="card">
-                            <div class="card-header">
-                                <div>
-                                    <h2 class="card-title">Add New Event</h2>
-                                    <p class="card-subtitle">Create a new transformative event</p>
-                                </div>
-                            </div>
-
-                            <form id="eventForm">
-                                <div class="form-grid">
-                                    <div class="form-group">
-                                        <label for="eventTitle" class="form-label">Event Title *</label>
-                                        <input type="text" id="eventTitle" class="form-control" required placeholder="e.g., DSOG Franchise Startup Bootcamp">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="eventSubtitle" class="form-label">Event Subtitle</label>
-                                        <input type="text" id="eventSubtitle" class="form-control" placeholder="e.g., 3-Month Intensive Program">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="eventCategory" class="form-label">Category *</label>
-                                        <select id="eventCategory" class="form-control" required>
-                                            <option value="">Select Category</option>
-                                            <option value="bootcamp">Bootcamp</option>
-                                            <option value="inspiration">Inspiration</option>
-                                            <option value="spiritual">Spiritual</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="eventDate" class="form-label">Event Date *</label>
-                                        <input type="date" id="eventDate" class="form-control" required>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="eventDuration" class="form-label">Duration</label>
-                                        <input type="text" id="eventDuration" class="form-control" placeholder="e.g., 3 Months, 1 Day, Weekend Retreat">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="eventFrequency" class="form-label">Frequency</label>
-                                        <select id="eventFrequency" class="form-control">
-                                            <option value="one-time">One-Time Event</option>
-                                            <option value="monthly">Monthly</option>
-                                            <option value="weekly">Weekly</option>
-                                            <option value="bi-weekly">Bi-Weekly</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="eventVenue" class="form-label">Venue</label>
-                                        <input type="text" id="eventVenue" class="form-control" placeholder="e.g., Hybrid: Virtual & On-site">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="maxParticipants" class="form-label">Max Participants (0 = unlimited)</label>
-                                        <input type="number" id="maxParticipants" class="form-control" value="0" min="0">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="imageUrl" class="form-label">Image URL *</label>
-                                        <input type="url" id="imageUrl" class="form-control" required placeholder="https://example.com/image.jpg">
-                                    </div>
-
-                                    <div class="form-group full-width">
-                                        <label for="eventDescription" class="form-label">Event Description *</label>
-                                        <textarea id="eventDescription" class="form-control" required rows="4" placeholder="Detailed description of the event..."></textarea>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="registrationUrl" class="form-label">Registration URL *</label>
-                                        <input type="url" id="registrationUrl" class="form-control" required placeholder="https://wa.me/254733737983?text=...">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="eventStatus" class="form-label">Status</label>
-                                        <select id="eventStatus" class="form-control">
-                                            <option value="upcoming">Upcoming</option>
-                                            <option value="ongoing">Ongoing</option>
-                                            <option value="completed">Completed</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label style="display: flex; align-items: center; gap: var(--space-sm);">
-                                            <input type="checkbox" id="featuredEvent" style="width: auto;">
-                                            <span>Featured Event</span>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div class="form-actions">
-                                    <button type="button" id="cancelEventBtn" class="btn btn-secondary">
-                                        Cancel
-                                    </button>
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-save"></i> Save Event
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </section>
-                </main>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modals -->
-    <div id="editEventModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Edit Event</h3>
-                <button class="modal-close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="editEventForm">
-                    <div id="editEventFormContent">
-                        <!-- Form will be populated dynamically -->
-                    </div>
-                    <div class="form-actions">
-                        <button type="button" class="modal-close btn btn-secondary">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Update Event</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div id="editCategoryModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Edit Category</h3>
-                <button class="modal-close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="editCategoryForm">
-                    <div id="editCategoryFormContent">
-                        <!-- Form will be populated dynamically -->
-                    </div>
-                    <div class="form-actions">
-                        <button type="button" class="modal-close btn btn-secondary">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Update Category</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div id="confirmModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title" id="confirmModalTitle">Confirm Action</h3>
-                <button class="modal-close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p id="confirmModalMessage">Are you sure you want to perform this action?</p>
-                <div class="form-actions">
-                    <button type="button" class="modal-close btn btn-secondary">Cancel</button>
-                    <button type="button" id="confirmActionBtn" class="btn btn-danger">Confirm</button>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <script>
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyDb5ZFHbo7lGM8ph0oBxFVTHRF5C5C_DWU",
-            authDomain: "dsog-events.firebaseapp.com",
-            databaseURL: "https://dsog-events-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "dsog-events",
-            storageBucket: "dsog-events.firebasestorage.app",
-            messagingSenderId: "1075977932287",
-            appId: "1:1075977932287:web:b2bf4d1c0083d2dac8ebca"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        const auth = firebase.auth();
-
-        // State management
-        let currentUser = null;
-        let events = [];
-        let categories = [];
-        let currentEventId = null;
-        let currentCategoryId = null;
-
-        // DOM Elements
-        const authSection = document.getElementById('authSection');
-        const adminDashboard = document.getElementById('adminDashboard');
-        const loginForm = document.getElementById('loginForm');
-        const registerForm = document.getElementById('registerForm');
-        const loginBtn = document.getElementById('loginBtn');
-        const registerBtn = document.getElementById('registerBtn');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const themeToggle = document.getElementById('themeToggle');
-        const authTabs = document.querySelectorAll('.auth-tab');
-
-        // Message elements
-        const loginMessage = document.getElementById('loginMessage');
-        const registerMessage = document.getElementById('registerMessage');
-
-        // Stats elements
-        const totalEventsEl = document.getElementById('totalEvents');
-        const upcomingEventsEl = document.getElementById('upcomingEvents');
-        const activeCategoriesEl = document.getElementById('activeCategories');
-        const featuredEventsEl = document.getElementById('featuredEvents');
-
-        // Forms
-        const eventForm = document.getElementById('eventForm');
-        const editEventForm = document.getElementById('editEventForm');
-        const editCategoryForm = document.getElementById('editCategoryForm');
-
-        // Modals
-        const editEventModal = document.getElementById('editEventModal');
-        const editCategoryModal = document.getElementById('editCategoryModal');
-        const confirmModal = document.getElementById('confirmModal');
-        const modalCloseButtons = document.querySelectorAll('.modal-close');
-
-        // Show message function
-        function showMessage(element, text, type = 'info') {
-            element.innerHTML = `
-                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
-                <span>${text}</span>
-            `;
-            element.className = `message message-${type}`;
-            element.style.display = 'flex';
-            
-            // Clear message after 5 seconds
-            setTimeout(() => {
-                element.style.display = 'none';
-            }, 5000);
-        }
-
-        // Show loading state
-        function showLoading(button) {
-            const buttonText = button.querySelector('span');
-            const spinner = button.querySelector('.loading-spinner');
-            
-            if (buttonText) buttonText.style.display = 'none';
-            if (spinner) spinner.style.display = 'block';
-            button.disabled = true;
-        }
-
-        // Hide loading state
-        function hideLoading(button) {
-            const buttonText = button.querySelector('span');
-            const spinner = button.querySelector('.loading-spinner');
-            
-            if (buttonText) buttonText.style.display = 'inline';
-            if (spinner) spinner.style.display = 'none';
-            button.disabled = false;
-        }
-
-        // Login function with Firebase Authentication
-        async function login(email, password) {
-            try {
-                showLoading(loginBtn);
-                const userCredential = await auth.signInWithEmailAndPassword(email, password);
-                currentUser = userCredential.user;
-                
-                showMessage(loginMessage, 'Login successful!', 'success');
-                
-                // Store login state
-                localStorage.setItem('dsogAdminLoggedIn', 'true');
-                localStorage.setItem('dsogAdminEmail', email);
-                
-                // Switch to admin dashboard after brief delay
-                setTimeout(() => {
-                    authSection.style.display = 'none';
-                    adminDashboard.style.display = 'block';
-                    loadData();
-                }, 1000);
-                
-            } catch (error) {
-                let errorMessage = 'Login failed. ';
-                
-                switch (error.code) {
-                    case 'auth/user-not-found':
-                        errorMessage += 'No user found with this email.';
-                        break;
-                    case 'auth/wrong-password':
-                        errorMessage += 'Incorrect password.';
-                        break;
-                    case 'auth/invalid-email':
-                        errorMessage += 'Invalid email address.';
-                        break;
-                    case 'auth/user-disabled':
-                        errorMessage += 'This account has been disabled.';
-                        break;
-                    case 'auth/too-many-requests':
-                        errorMessage += 'Too many failed attempts. Please try again later.';
-                        break;
-                    default:
-                        errorMessage += error.message;
-                }
-                
-                showMessage(loginMessage, errorMessage, 'error');
-            } finally {
-                hideLoading(loginBtn);
-            }
-        }
-
-        // Register function
-        async function register(email, password) {
-            try {
-                showLoading(registerBtn);
-                
-                // Check if passwords match
-                const confirmPassword = document.getElementById('confirmPassword').value;
-                if (password !== confirmPassword) {
-                    throw new Error('Passwords do not match');
-                }
-                
-                // Create user with Firebase Authentication
-                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                currentUser = userCredential.user;
-                
-                showMessage(registerMessage, 'Account created successfully! You can now login.', 'success');
-                
-                // Clear form
-                document.getElementById('registerEmail').value = '';
-                document.getElementById('registerPassword').value = '';
-                document.getElementById('confirmPassword').value = '';
-                
-                // Switch to login tab
-                switchAuthTab('login');
-                
-            } catch (error) {
-                let errorMessage = 'Registration failed. ';
-                
-                switch (error.code) {
-                    case 'auth/email-already-in-use':
-                        errorMessage += 'Email already in use.';
-                        break;
-                    case 'auth/invalid-email':
-                        errorMessage += 'Invalid email address.';
-                        break;
-                    case 'auth/operation-not-allowed':
-                        errorMessage += 'Email/password accounts are not enabled.';
-                        break;
-                    case 'auth/weak-password':
-                        errorMessage += 'Password is too weak.';
-                        break;
-                    default:
-                        errorMessage += error.message || 'Please try again.';
-                }
-                
-                showMessage(registerMessage, errorMessage, 'error');
-            } finally {
-                hideLoading(registerBtn);
-            }
-        }
-
-        // Logout function
-        function logout() {
-            auth.signOut().then(() => {
-                currentUser = null;
-                localStorage.removeItem('dsogAdminLoggedIn');
-                localStorage.removeItem('dsogAdminEmail');
-                
-                authSection.style.display = 'flex';
-                adminDashboard.style.display = 'none';
-                
-                // Reset forms
-                loginForm.reset();
-                registerForm.reset();
-                loginMessage.style.display = 'none';
-                registerMessage.style.display = 'none';
-                
-                // Switch to login tab
-                switchAuthTab('login');
-            }).catch((error) => {
-                console.error('Logout error:', error);
-            });
-        }
-
-        // Switch auth tab
-        function switchAuthTab(tab) {
-            authTabs.forEach(t => {
-                if (t.dataset.tab === tab) {
-                    t.classList.add('active');
-                } else {
-                    t.classList.remove('active');
-                }
-            });
-            
-            if (tab === 'login') {
-                loginForm.classList.add('active');
-                registerForm.classList.remove('active');
-            } else {
-                loginForm.classList.remove('active');
-                registerForm.classList.add('active');
-            }
-        }
-
-        // Load data from Firebase
-        async function loadData() {
-            try {
-                // Load events
-                const eventsSnapshot = await database.ref('upcomingEvents').once('value');
-                events = [];
-                eventsSnapshot.forEach((childSnapshot) => {
-                    events.push({
-                        id: childSnapshot.key,
-                        ...childSnapshot.val()
-                    });
-                });
-
-                // Load categories
-                const categoriesSnapshot = await database.ref('eventCategories').once('value');
-                categories = [];
-                categoriesSnapshot.forEach((childSnapshot) => {
-                    categories.push({
-                        id: childSnapshot.key,
-                        ...childSnapshot.val()
-                    });
-                });
-
-                // Update stats
-                updateStats();
-                
-                // Render data
-                renderEvents();
-                renderCategories();
-
-            } catch (error) {
-                console.error('Error loading data:', error);
-                alert('Failed to load data. Please refresh the page.');
-            }
-        }
-
-        // Update statistics
-        function updateStats() {
-            // Total events
-            totalEventsEl.textContent = events.length;
-            
-            // Upcoming events
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            
-            const upcomingCount = events.filter(event => {
-                const eventDate = new Date(event.date);
-                eventDate.setHours(0, 0, 0, 0);
-                return eventDate >= today || event.status === 'upcoming' || event.status === 'ongoing';
-            }).length;
-            
-            upcomingEventsEl.textContent = upcomingCount;
-            
-            // Active categories
-            const activeCount = categories.filter(cat => cat.active !== false).length;
-            activeCategoriesEl.textContent = activeCount;
-            
-            // Featured events
-            const featuredCount = events.filter(event => event.featured).length;
-            featuredEventsEl.textContent = featuredCount;
-        }
-
-        // Format date
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            });
-        }
-
-        // Render events list
-        function renderEvents() {
-            const eventsList = document.getElementById('eventsList');
-            
-            if (events.length === 0) {
-                eventsList.innerHTML = `
-                    <div class="message message-info">
-                        <i class="fas fa-info-circle"></i>
-                        <span>No events found. Add your first event!</span>
+            <!-- Events Section -->
+            <div id="events" class="content-section">
+                <div class="form-section">
+                    <h3><i class="fas fa-calendar-plus"></i> Manage Events</h3>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="eventTitle">Event Title</label>
+                            <input type="text" id="eventTitle" placeholder="Enter event title">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="eventCategory">Category</label>
+                            <select id="eventCategory">
+                                <option value="bootcamp">Startup Bootcamp</option>
+                                <option value="inspiration">Become What You Believe</option>
+                                <option value="spiritual">The Making of an Icon</option>
+                            </select>
+                        </div>
                     </div>
-                `;
-                return;
-            }
+                    
+                    <div class="form-group">
+                        <label for="eventDescription">Description</label>
+                        <textarea id="eventDescription" placeholder="Enter event description"></textarea>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="eventDate">Date</label>
+                            <input type="date" id="eventDate">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="eventVenue">Venue</label>
+                            <input type="text" id="eventVenue" placeholder="Enter venue">
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="saveEvent()">
+                            <i class="fas fa-save"></i> Save Event
+                        </button>
+                        <button class="btn btn-secondary" onclick="clearEventForm()">
+                            <i class="fas fa-times"></i> Clear Form
+                        </button>
+                    </div>
+                </div>
 
-            // Sort events by date (newest first)
-            const sortedEvents = [...events].sort((a, b) => new Date(b.date) - new Date(a.date));
-            
-            const eventsHTML = `
-                <div class="table-responsive">
+                <div class="data-table">
+                    <div class="data-table-header">
+                        <h3>Current Events</h3>
+                        <button class="btn btn-small btn-secondary" onclick="refreshEvents()">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
                     <table>
                         <thead>
                             <tr>
-                                <th>Event</th>
+                                <th>Title</th>
                                 <th>Category</th>
                                 <th>Date</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            ${sortedEvents.map(event => {
-                                const eventDate = new Date(event.date);
-                                const today = new Date();
-                                today.setHours(0, 0, 0, 0);
-                                
-                                let status = event.status || 'upcoming';
-                                if (!event.status) {
-                                    status = eventDate >= today ? 'upcoming' : 'completed';
-                                }
-                                
-                                return `
-                                    <tr>
-                                        <td>
-                                            <div style="font-weight: 600;">${event.title}</div>
-                                            <div style="font-size: 0.875rem; color: var(--text-secondary);">${event.subtitle || ''}</div>
-                                        </td>
-                                        <td>
-                                            <span class="category-badge category-${event.category}">
-                                                ${event.category}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <div>${formatDate(event.date)}</div>
-                                            <div style="font-size: 0.875rem; color: var(--text-secondary);">${event.duration || ''}</div>
-                                        </td>
-                                        <td>
-                                            <span class="status-badge status-${status}">
-                                                ${status}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <div style="display: flex; gap: var(--space-xs);">
-                                                <button class="btn btn-sm btn-secondary edit-event-btn" data-id="${event.id}">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
-                                                <button class="btn btn-sm btn-danger delete-event-btn" data-id="${event.id}" data-title="${event.title}">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                `;
-                            }).join('')}
+                        <tbody id="eventsTable">
+                            <!-- Events will be populated here -->
                         </tbody>
                     </table>
                 </div>
-            `;
-            
-            eventsList.innerHTML = eventsHTML;
-            
-            // Add event listeners to action buttons
-            document.querySelectorAll('.edit-event-btn').forEach(btn => {
-                btn.addEventListener('click', () => openEditEventModal(btn.dataset.id));
-            });
-            
-            document.querySelectorAll('.delete-event-btn').forEach(btn => {
-                btn.addEventListener('click', () => confirmDeleteEvent(btn.dataset.id, btn.dataset.title));
-            });
-        }
+            </div>
 
-        // Render categories list
-        function renderCategories() {
-            const categoriesList = document.getElementById('categoriesList');
-            
-            if (categories.length === 0) {
-                categoriesList.innerHTML = `
-                    <div class="message message-info">
-                        <i class="fas fa-info-circle"></i>
-                        <span>No categories found. Add your first category!</span>
-                    </div>
-                `;
-                return;
-            }
-
-            const categoriesHTML = `
-                <div class="table-responsive">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th>ID</th>
-                                <th>Active</th>
-                                <th>Description</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${categories.map(category => `
-                                <tr>
-                                    <td>
-                                        <div style="font-weight: 600;">${category.name}</div>
-                                        <div style="font-size: 0.875rem; color: ${category.textColor || 'var(--text-secondary)'};">${category.icon || ''}</div>
-                                    </td>
-                                    <td>
-                                        <code>${category.id}</code>
-                                    </td>
-                                    <td>
-                                        <label class="toggle-switch">
-                                            <input type="checkbox" ${category.active !== false ? 'checked' : ''} 
-                                                   data-id="${category.id}" class="category-toggle">
-                                            <span class="toggle-slider"></span>
-                                        </label>
-                                    </td>
-                                    <td style="max-width: 300px;">
-                                        <div style="font-size: 0.875rem;">${category.description || ''}</div>
-                                    </td>
-                                    <td>
-                                        <div style="display: flex; gap: var(--space-xs);">
-                                            <button class="btn btn-sm btn-secondary edit-category-btn" data-id="${category.id}">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-danger delete-category-btn" 
-                                                    data-id="${category.id}" 
-                                                    data-name="${category.name}"
-                                                    ${category.id === 'bootcamp' || category.id === 'inspiration' || category.id === 'spiritual' ? 'disabled' : ''}>
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
+            <!-- Training Programs Section -->
+            <div id="training" class="content-section">
+                <!-- Similar structure as Events section -->
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading Training Programs...</p>
                 </div>
-            `;
-            
-            categoriesList.innerHTML = categoriesHTML;
-            
-            // Add event listeners
-            document.querySelectorAll('.category-toggle').forEach(toggle => {
-                toggle.addEventListener('change', (e) => toggleCategoryActive(e.target.dataset.id, e.target.checked));
-            });
-            
-            document.querySelectorAll('.edit-category-btn').forEach(btn => {
-                btn.addEventListener('click', () => openEditCategoryModal(btn.dataset.id));
-            });
-            
-            document.querySelectorAll('.delete-category-btn:not([disabled])').forEach(btn => {
-                btn.addEventListener('click', () => confirmDeleteCategory(btn.dataset.id, btn.dataset.name));
-            });
-        }
+            </div>
 
-        // Toggle category active state
-        async function toggleCategoryActive(categoryId, active) {
-            try {
-                await database.ref(`eventCategories/${categoryId}/active`).set(active);
-                showMessage(loginMessage, `Category ${active ? 'activated' : 'deactivated'} successfully`, 'success');
-                loadData(); // Reload data to update stats
-            } catch (error) {
-                console.error('Error updating category:', error);
-                showMessage(loginMessage, 'Failed to update category', 'error');
-            }
-        }
-
-        // Open edit event modal
-        function openEditEventModal(eventId) {
-            const event = events.find(e => e.id === eventId);
-            if (!event) return;
-
-            currentEventId = eventId;
-            
-            const formContent = `
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="editEventTitle" class="form-label">Event Title *</label>
-                        <input type="text" id="editEventTitle" class="form-control" value="${event.title}" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editEventSubtitle" class="form-label">Event Subtitle</label>
-                        <input type="text" id="editEventSubtitle" class="form-control" value="${event.subtitle || ''}">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editEventCategory" class="form-label">Category *</label>
-                        <select id="editEventCategory" class="form-control" required>
-                            <option value="bootcamp" ${event.category === 'bootcamp' ? 'selected' : ''}>Bootcamp</option>
-                            <option value="inspiration" ${event.category === 'inspiration' ? 'selected' : ''}>Inspiration</option>
-                            <option value="spiritual" ${event.category === 'spiritual' ? 'selected' : ''}>Spiritual</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editEventDate" class="form-label">Event Date *</label>
-                        <input type="date" id="editEventDate" class="form-control" value="${event.date}" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editEventDuration" class="form-label">Duration</label>
-                        <input type="text" id="editEventDuration" class="form-control" value="${event.duration || ''}">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editEventFrequency" class="form-label">Frequency</label>
-                        <select id="editEventFrequency" class="form-control">
-                            <option value="one-time" ${event.frequency === 'one-time' ? 'selected' : ''}>One-Time Event</option>
-                            <option value="monthly" ${event.frequency === 'monthly' ? 'selected' : ''}>Monthly</option>
-                            <option value="weekly" ${event.frequency === 'weekly' ? 'selected' : ''}>Weekly</option>
-                            <option value="bi-weekly" ${event.frequency === 'bi-weekly' ? 'selected' : ''}>Bi-Weekly</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editEventVenue" class="form-label">Venue</label>
-                        <input type="text" id="editEventVenue" class="form-control" value="${event.venue || ''}">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editMaxParticipants" class="form-label">Max Participants (0 = unlimited)</label>
-                        <input type="number" id="editMaxParticipants" class="form-control" value="${event.maxParticipants || 0}" min="0">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editImageUrl" class="form-label">Image URL *</label>
-                        <input type="url" id="editImageUrl" class="form-control" value="${event.imageUrl}" required>
-                    </div>
-
-                    <div class="form-group full-width">
-                        <label for="editEventDescription" class="form-label">Event Description *</label>
-                        <textarea id="editEventDescription" class="form-control" required rows="4">${event.description}</textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editRegistrationUrl" class="form-label">Registration URL *</label>
-                        <input type="url" id="editRegistrationUrl" class="form-control" value="${event.registrationUrl}" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editEventStatus" class="form-label">Status</label>
-                        <select id="editEventStatus" class="form-control">
-                            <option value="upcoming" ${event.status === 'upcoming' ? 'selected' : ''}>Upcoming</option>
-                            <option value="ongoing" ${event.status === 'ongoing' ? 'selected' : ''}>Ongoing</option>
-                            <option value="completed" ${event.status === 'completed' ? 'selected' : ''}>Completed</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label style="display: flex; align-items: center; gap: var(--space-sm);">
-                            <input type="checkbox" id="editFeaturedEvent" ${event.featured ? 'checked' : ''} style="width: auto;">
-                            <span>Featured Event</span>
-                        </label>
-                    </div>
+            <!-- Team Members Section -->
+            <div id="team" class="content-section">
+                <!-- Similar structure -->
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading Team Members...</p>
                 </div>
-            `;
+            </div>
 
-            document.getElementById('editEventFormContent').innerHTML = formContent;
-            editEventModal.classList.add('active');
-        }
-
-        // Open edit category modal
-        function openEditCategoryModal(categoryId) {
-            const category = categories.find(c => c.id === categoryId);
-            if (!category) return;
-
-            currentCategoryId = categoryId;
-            
-            const formContent = `
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="editCategoryName" class="form-label">Category Name *</label>
-                        <input type="text" id="editCategoryName" class="form-control" value="${category.name}" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editCategoryId" class="form-label">Category ID *</label>
-                        <input type="text" id="editCategoryId" class="form-control" value="${category.id}" required ${category.id === 'bootcamp' || category.id === 'inspiration' || category.id === 'spiritual' ? 'readonly' : ''}>
-                        <small style="color: var(--text-secondary);">Note: Core categories (bootcamp, inspiration, spiritual) cannot be renamed</small>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editCategoryIcon" class="form-label">Font Awesome Icon</label>
-                        <input type="text" id="editCategoryIcon" class="form-control" value="${category.icon || ''}" placeholder="fas fa-icon-name">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editCategoryColor" class="form-label">Color (Hex)</label>
-                        <input type="color" id="editCategoryColor" class="form-control" value="${category.color || '#C21807'}" style="height: 45px; padding: var(--space-xs);">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editCategoryDescription" class="form-label">Description</label>
-                        <textarea id="editCategoryDescription" class="form-control" rows="3">${category.description || ''}</textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label style="display: flex; align-items: center; gap: var(--space-sm);">
-                            <input type="checkbox" id="editCategoryActive" ${category.active !== false ? 'checked' : ''} style="width: auto;">
-                            <span>Active Category</span>
-                        </label>
-                    </div>
+            <!-- Testimonials Section -->
+            <div id="testimonials" class="content-section">
+                <!-- Similar structure -->
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading Testimonials...</p>
                 </div>
-            `;
+            </div>
 
-            document.getElementById('editCategoryFormContent').innerHTML = formContent;
-            editCategoryModal.classList.add('active');
+            <!-- Settings Section -->
+            <div id="settings" class="content-section">
+                <!-- Settings form -->
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading Settings...</p>
+                </div>
+            </div>
+
+            <!-- Statistics Section -->
+            <div id="stats" class="content-section">
+                <!-- Statistics management -->
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading Statistics...</p>
+                </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div id="faq" class="content-section">
+                <!-- FAQ management -->
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading FAQs...</p>
+                </div>
+            </div>
+
+            <!-- Users Section -->
+            <div id="users" class="content-section">
+                <!-- User management -->
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading Users...</p>
+                </div>
+            </div>
+
+            <!-- Backup Section -->
+            <div id="backup" class="content-section">
+                <!-- Backup/Restore -->
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading Backup Tools...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // Firebase Configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyDb5ZFHbo7lGM8ph0oBxFVTHRF5C5C_DWU",
+        authDomain: "dsog-events.firebaseapp.com",
+        databaseURL: "https://dsog-events-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "dsog-events",
+        storageBucket: "dsog-events.firebasestorage.app",
+        messagingSenderId: "1075977932287",
+        appId: "1:1075977932287:web:b2bf4d1c0083d2dac8ebca"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    const auth = firebase.auth();
+
+    // Global variables
+    let currentUser = null;
+    let isEditing = false;
+    let editId = null;
+
+    // DOM Elements
+    const loginScreen = document.getElementById('loginScreen');
+    const adminPanel = document.getElementById('adminPanel');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginError = document.getElementById('loginError');
+    const themeToggle = document.getElementById('themeToggle');
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const sidebar = document.getElementById('sidebar');
+    const userAvatar = document.getElementById('userAvatar');
+    const userName = document.getElementById('userName');
+    const pageTitle = document.getElementById('pageTitle');
+    const pageSubtitle = document.getElementById('pageSubtitle');
+
+    // Check authentication state on page load
+    auth.onAuthStateChanged((user) => {
+        console.log('Auth state changed:', user ? 'User logged in' : 'No user');
+        if (user) {
+            // User is signed in
+            currentUser = user;
+            console.log('User signed in:', user.email);
+            showLoginScreen(false);
+            initAdminPanel();
+            updateUserProfile(user);
+        } else {
+            // User is signed out
+            console.log('User signed out');
+            showLoginScreen(true);
         }
+    });
 
-        // Confirm delete event
-        function confirmDeleteEvent(eventId, eventTitle) {
-            const confirmActionBtn = document.getElementById('confirmActionBtn');
-            const confirmModalTitle = document.getElementById('confirmModalTitle');
-            const confirmModalMessage = document.getElementById('confirmModalMessage');
-            
-            confirmModalTitle.textContent = 'Delete Event';
-            confirmModalMessage.textContent = `Are you sure you want to delete "${eventTitle}"? This action cannot be undone.`;
-            
-            confirmActionBtn.onclick = () => deleteEvent(eventId);
-            confirmModal.classList.add('active');
-        }
+    // Initialize the admin panel
+    function initAdminPanel() {
+        console.log('Initializing admin panel...');
+        setupTheme();
+        setupNavigation();
+        setupEventListeners();
+        loadDashboardStats();
+        loadEvents();
+    }
 
-        // Confirm delete category
-        function confirmDeleteCategory(categoryId, categoryName) {
-            const confirmActionBtn = document.getElementById('confirmActionBtn');
-            const confirmModalTitle = document.getElementById('confirmModalTitle');
-            const confirmModalMessage = document.getElementById('confirmModalMessage');
-            
-            confirmModalTitle.textContent = 'Delete Category';
-            confirmModalMessage.textContent = `Are you sure you want to delete "${categoryName}"? Events in this category will not be affected.`;
-            
-            confirmActionBtn.onclick = () => deleteCategory(categoryId);
-            confirmModal.classList.add('active');
-        }
+    // Setup theme toggle
+    function setupTheme() {
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
 
-        // Delete event
-        async function deleteEvent(eventId) {
-            try {
-                await database.ref(`upcomingEvents/${eventId}`).remove();
-                showMessage(loginMessage, 'Event deleted successfully', 'success');
-                confirmModal.classList.remove('active');
-                loadData();
-            } catch (error) {
-                console.error('Error deleting event:', error);
-                showMessage(loginMessage, 'Failed to delete event', 'error');
-            }
-        }
-
-        // Delete category
-        async function deleteCategory(categoryId) {
-            try {
-                await database.ref(`eventCategories/${categoryId}`).remove();
-                showMessage(loginMessage, 'Category deleted successfully', 'success');
-                confirmModal.classList.remove('active');
-                loadData();
-            } catch (error) {
-                console.error('Error deleting category:', error);
-                showMessage(loginMessage, 'Failed to delete category', 'error');
-            }
-        }
-
-        // Add new event
-        async function addEvent(eventData) {
-            try {
-                const newEventRef = database.ref('upcomingEvents').push();
-                await newEventRef.set({
-                    ...eventData,
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                });
-                
-                showMessage(loginMessage, 'Event added successfully!', 'success');
-                eventForm.reset();
-                switchSection('events');
-                loadData();
-            } catch (error) {
-                console.error('Error adding event:', error);
-                showMessage(loginMessage, 'Failed to add event', 'error');
-            }
-        }
-
-        // Update event
-        async function updateEvent(eventId, eventData) {
-            try {
-                await database.ref(`upcomingEvents/${eventId}`).update({
-                    ...eventData,
-                    updatedAt: new Date().toISOString()
-                });
-                
-                showMessage(loginMessage, 'Event updated successfully!', 'success');
-                editEventModal.classList.remove('active');
-                loadData();
-            } catch (error) {
-                console.error('Error updating event:', error);
-                showMessage(loginMessage, 'Failed to update event', 'error');
-            }
-        }
-
-        // Update category
-        async function updateCategory(categoryId, categoryData) {
-            try {
-                await database.ref(`eventCategories/${categoryId}`).update(categoryData);
-                
-                showMessage(loginMessage, 'Category updated successfully!', 'success');
-                editCategoryModal.classList.remove('active');
-                loadData();
-            } catch (error) {
-                console.error('Error updating category:', error);
-                showMessage(loginMessage, 'Failed to update category', 'error');
-            }
-        }
-
-        // Switch between sections
-        function switchSection(sectionId) {
-            // Update active nav link
-            document.querySelectorAll('.nav-link').forEach(link => {
-                if (link.dataset.section === sectionId) {
-                    link.classList.add('active');
-                } else {
-                    link.classList.remove('active');
-                }
-            });
-
-            // Show selected section
-            document.querySelectorAll('.content-section').forEach(section => {
-                if (section.id === `${sectionId}Section`) {
-                    section.classList.add('active');
-                } else {
-                    section.classList.remove('active');
-                }
-            });
-        }
-
-        // Theme toggle
-        function toggleTheme() {
+        themeToggle.addEventListener('click', () => {
             const currentTheme = document.documentElement.getAttribute('data-theme');
             const newTheme = currentTheme === 'light' ? 'dark' : 'light';
             document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('dsogAdminTheme', newTheme);
-            
-            const icon = themeToggle.querySelector('i');
-            icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+    }
+
+    function updateThemeIcon(theme) {
+        const icon = themeToggle.querySelector('i');
+        icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    }
+
+    // Update user profile display
+    function updateUserProfile(user) {
+        console.log('Updating profile for:', user.email);
+        userName.textContent = user.email.split('@')[0];
+        userAvatar.textContent = user.email.charAt(0).toUpperCase();
+        pageSubtitle.textContent = `Welcome back, ${user.email}`;
+    }
+
+    // Setup navigation
+    function setupNavigation() {
+        console.log('Setting up navigation...');
+        
+        // Navigation links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const section = link.getAttribute('data-section');
+                console.log('Navigating to section:', section);
+                switchSection(section);
+                
+                // Update active state
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                
+                // Close mobile menu if open
+                if (window.innerWidth <= 1024) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        });
+
+        // Mobile menu toggle
+        mobileMenuBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+            console.log('Mobile menu toggled');
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 1024 && 
+                !sidebar.contains(e.target) && 
+                !mobileMenuBtn.contains(e.target)) {
+                sidebar.classList.remove('active');
+            }
+        });
+    }
+
+    // Switch between sections
+    function switchSection(sectionId) {
+        console.log('Switching to section:', sectionId);
+        
+        // Hide all sections
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.classList.remove('active');
+        });
+
+        // Show selected section
+        const targetSection = document.getElementById(sectionId);
+        if (targetSection) {
+            targetSection.classList.add('active');
+            updatePageTitle(sectionId);
+            loadSectionData(sectionId);
+        }
+    }
+
+    function updatePageTitle(sectionId) {
+        const titles = {
+            'dashboard': 'Dashboard Overview',
+            'events': 'Events Management',
+            'training': 'Training Programs',
+            'team': 'Team Members',
+            'testimonials': 'Testimonials',
+            'settings': 'App Settings',
+            'stats': 'Statistics',
+            'faq': 'FAQs Management',
+            'users': 'User Management',
+            'backup': 'Backup & Restore'
+        };
+
+        pageTitle.textContent = titles[sectionId] || 'Admin Panel';
+        if (currentUser) {
+            pageSubtitle.textContent = `Welcome back, ${currentUser.email}`;
+        }
+    }
+
+    // Load section data
+    function loadSectionData(sectionId) {
+        console.log('Loading data for section:', sectionId);
+        
+        switch(sectionId) {
+            case 'dashboard':
+                loadDashboardStats();
+                break;
+            case 'events':
+                loadEvents();
+                break;
+            case 'training':
+                loadTrainingPrograms();
+                break;
+            case 'team':
+                loadTeamMembers();
+                break;
+            case 'testimonials':
+                loadTestimonials();
+                break;
+            default:
+                // For other sections, remove loading state
+                const section = document.getElementById(sectionId);
+                const loading = section.querySelector('.loading');
+                if (loading) {
+                    loading.style.display = 'none';
+                }
+                break;
+        }
+    }
+
+    // Setup event listeners
+    function setupEventListeners() {
+        console.log('Setting up event listeners...');
+        
+        // Login button
+        loginBtn.addEventListener('click', handleLogin);
+        
+        // Enter key for login
+        document.getElementById('adminPassword')?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                console.log('Enter key pressed');
+                handleLogin();
+            }
+        });
+
+        // User profile click (logout)
+        document.getElementById('userProfile')?.addEventListener('click', () => {
+            console.log('User profile clicked');
+            if (confirm('Are you sure you want to logout?')) {
+                logout();
+            }
+        });
+    }
+
+    // Handle login with Firebase Authentication
+    async function handleLogin() {
+        console.log('Login button clicked');
+        
+        const email = document.getElementById('adminEmail').value.trim();
+        const password = document.getElementById('adminPassword').value;
+
+        console.log('Login attempt with:', { email });
+
+        // Show loading state
+        loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
+        loginBtn.disabled = true;
+
+        // Clear any previous errors
+        loginError.style.display = 'none';
+        loginError.textContent = '';
+
+        // Basic validation
+        if (!email || !password) {
+            showError('Please enter both email and password');
+            resetLoginButton();
+            return;
         }
 
-        // Initialize the application
-        function initApp() {
-            // Check for saved theme
-            const savedTheme = localStorage.getItem('dsogAdminTheme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            const themeIcon = themeToggle.querySelector('i');
-            themeIcon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        if (!email.includes('@') || !email.includes('.')) {
+            showError('Please enter a valid email address');
+            resetLoginButton();
+            return;
+        }
 
-            // Check auth state
-            auth.onAuthStateChanged((user) => {
-                if (user) {
-                    currentUser = user;
-                    authSection.style.display = 'none';
-                    adminDashboard.style.display = 'block';
-                    loadData();
-                } else {
-                    // Check if user was previously logged in
-                    const wasLoggedIn = localStorage.getItem('dsogAdminLoggedIn') === 'true';
-                    if (wasLoggedIn) {
-                        const savedEmail = localStorage.getItem('dsogAdminEmail');
-                        if (savedEmail) {
-                            document.getElementById('loginEmail').value = savedEmail;
-                        }
-                    }
-                }
-            });
+        try {
+            console.log('Attempting Firebase sign in...');
+            
+            // Sign in with Firebase Auth
+            const userCredential = await auth.signInWithEmailAndPassword(email, password);
+            
+            console.log('Firebase sign in successful:', userCredential.user.email);
+            
+            // The onAuthStateChanged listener will handle the rest
+            // (show admin panel, etc.)
+            
+        } catch (error) {
+            console.error('Login error:', error);
+            
+            // Handle specific Firebase Auth errors
+            let errorMessage = 'Login failed. ';
+            
+            switch(error.code) {
+                case 'auth/invalid-email':
+                    errorMessage += 'Invalid email address.';
+                    break;
+                case 'auth/user-disabled':
+                    errorMessage += 'This account has been disabled.';
+                    break;
+                case 'auth/user-not-found':
+                    errorMessage += 'No account found with this email.';
+                    break;
+                case 'auth/wrong-password':
+                    errorMessage += 'Incorrect password.';
+                    break;
+                case 'auth/too-many-requests':
+                    errorMessage += 'Too many failed attempts. Please try again later.';
+                    break;
+                case 'auth/network-request-failed':
+                    errorMessage += 'Network error. Please check your connection.';
+                    break;
+                default:
+                    errorMessage += error.message;
+            }
+            
+            showError(errorMessage);
+            resetLoginButton();
+        }
+    }
 
-            // Auth tab switching
-            authTabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    switchAuthTab(tab.dataset.tab);
+    // Reset login button to original state
+    function resetLoginButton() {
+        loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
+        loginBtn.disabled = false;
+    }
+
+    // Show error message
+    function showError(message) {
+        console.error('Showing error:', message);
+        loginError.textContent = message;
+        loginError.style.display = 'block';
+        
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            loginError.style.display = 'none';
+        }, 5000);
+    }
+
+    // Show/hide login screen
+    function showLoginScreen(show) {
+        console.log('Show login screen:', show);
+        
+        if (show) {
+            loginScreen.style.display = 'flex';
+            adminPanel.style.display = 'none';
+            
+            // Clear form fields
+            document.getElementById('adminEmail').value = '';
+            document.getElementById('adminPassword').value = '';
+            resetLoginButton();
+        } else {
+            loginScreen.style.display = 'none';
+            adminPanel.style.display = 'block';
+            
+            // Show success message
+            showMessage('Login successful! Welcome to DSOG Admin Panel.', 'success');
+        }
+    }
+
+    // Show message in admin panel
+    function showMessage(message, type) {
+        console.log('Showing message:', { message, type });
+        
+        const messageDiv = document.createElement('div');
+        messageDiv.className = type === 'error' ? 'error-message' : 'success-message';
+        messageDiv.innerHTML = `<i class="fas fa-${type === 'error' ? 'exclamation-circle' : 'check-circle'}"></i> ${message}`;
+        
+        const container = document.querySelector('.admin-main');
+        if (container.firstChild) {
+            container.insertBefore(messageDiv, container.firstChild);
+        } else {
+            container.appendChild(messageDiv);
+        }
+        
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+            if (messageDiv.parentNode) {
+                messageDiv.remove();
+            }
+        }, 5000);
+    }
+
+    // Logout
+    async function logout() {
+        console.log('Logging out...');
+        
+        try {
+            await auth.signOut();
+            console.log('Logout successful');
+            
+            // Clear any data
+            currentUser = null;
+            isEditing = false;
+            editId = null;
+            
+            // Show login screen
+            showLoginScreen(true);
+            
+            // Show logout message
+            loginError.style.display = 'none';
+            
+        } catch (error) {
+            console.error('Logout error:', error);
+            showMessage('Logout failed: ' + error.message, 'error');
+        }
+    }
+
+    // Load dashboard statistics
+    async function loadDashboardStats() {
+        console.log('Loading dashboard stats...');
+        
+        try {
+            const snapshot = await database.ref('/').once('value');
+            const data = snapshot.val();
+            
+            console.log('Dashboard data loaded:', data);
+            
+            if (data) {
+                document.getElementById('totalEvents').textContent = 
+                    Object.keys(data.upcomingEvents || {}).length;
+                document.getElementById('totalTraining').textContent = 
+                    Object.keys(data.trainingPrograms || {}).length;
+                document.getElementById('totalTeam').textContent = 
+                    Object.keys(data.teamMembers || {}).length;
+                document.getElementById('totalTestimonials').textContent = 
+                    Object.keys(data.testimonials || {}).length;
+            }
+            
+            // Load activity log
+            loadActivityLog();
+            
+        } catch (error) {
+            console.error('Error loading dashboard stats:', error);
+            showMessage('Error loading dashboard statistics', 'error');
+        }
+    }
+
+    // Load activity log
+    async function loadActivityLog() {
+        try {
+            const snapshot = await database.ref('adminActivities').limitToLast(10).once('value');
+            const activities = snapshot.val();
+            const logTable = document.getElementById('activityLog');
+            
+            logTable.innerHTML = '';
+            
+            if (activities) {
+                Object.entries(activities).forEach(([id, activity]) => {
+                    const row = document.createElement('tr');
+                    const time = new Date(activity.timestamp);
+                    row.innerHTML = `
+                        <td>${time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</td>
+                        <td>${activity.action || 'Unknown action'}</td>
+                        <td>${activity.user || 'Unknown user'}</td>
+                        <td>${activity.details || '-'}</td>
+                    `;
+                    logTable.appendChild(row);
                 });
-            });
+            } else {
+                logTable.innerHTML = '<tr><td colspan="4" style="text-align: center;">No recent activity</td></tr>';
+            }
+        } catch (error) {
+            console.error('Error loading activity log:', error);
+        }
+    }
 
-            // Login form submission
-            loginForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                
-                const email = document.getElementById('loginEmail').value.trim();
-                const password = document.getElementById('loginPassword').value.trim();
-                
-                if (!email || !password) {
-                    showMessage(loginMessage, 'Please enter both email and password', 'error');
-                    return;
-                }
-                
-                await login(email, password);
-            });
+    // Log activity
+    function logActivity(action, details = '') {
+        if (!currentUser) return;
+        
+        const activity = {
+            timestamp: new Date().toISOString(),
+            user: currentUser.email,
+            action: action,
+            details: details
+        };
 
-            // Register form submission
-            registerForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                
-                const email = document.getElementById('registerEmail').value.trim();
-                const password = document.getElementById('registerPassword').value.trim();
-                
-                if (!email || !password) {
-                    showMessage(registerMessage, 'Please fill in all fields', 'error');
-                    return;
-                }
-                
-                await register(email, password);
-            });
+        // Save to Firebase
+        database.ref('adminActivities').push(activity);
+        
+        // Update UI
+        const logTable = document.getElementById('activityLog');
+        if (logTable) {
+            const row = document.createElement('tr');
+            const time = new Date(activity.timestamp);
+            row.innerHTML = `
+                <td>${time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</td>
+                <td>${activity.action}</td>
+                <td>${activity.user}</td>
+                <td>${activity.details || '-'}</td>
+            `;
+            // Add to top of table
+            if (logTable.firstChild) {
+                logTable.insertBefore(row, logTable.firstChild);
+            } else {
+                logTable.appendChild(row);
+            }
+            
+            // Limit to 10 rows
+            while (logTable.children.length > 10) {
+                logTable.removeChild(logTable.lastChild);
+            }
+        }
+    }
 
-            // Logout button
-            logoutBtn.addEventListener('click', logout);
-
-            // Theme toggle
-            themeToggle.addEventListener('click', toggleTheme);
-
-            // Navigation
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    switchSection(link.dataset.section);
+    // Load events
+    async function loadEvents() {
+        console.log('Loading events...');
+        
+        try {
+            const snapshot = await database.ref('upcomingEvents').once('value');
+            const events = snapshot.val();
+            const table = document.getElementById('eventsTable');
+            
+            table.innerHTML = '';
+            
+            if (events) {
+                Object.entries(events).forEach(([id, event]) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${event.title || 'No title'}</td>
+                        <td>${event.category || 'No category'}</td>
+                        <td>${event.date || 'No date'}</td>
+                        <td>
+                            <span class="status-badge ${event.active ? 'status-active' : 'status-inactive'}">
+                                <i class="fas fa-circle"></i>
+                                ${event.active ? 'Active' : 'Inactive'}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="action-btn edit" onclick="editEvent('${id}')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn delete" onclick="deleteEvent('${id}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    table.appendChild(row);
                 });
-            });
+            } else {
+                table.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 2rem;">No events found. Add your first event above!</td></tr>';
+            }
+            
+            console.log('Events loaded:', Object.keys(events || {}).length);
+            
+        } catch (error) {
+            console.error('Error loading events:', error);
+            showMessage('Error loading events: ' + error.message, 'error');
+        }
+    }
 
-            // Quick action buttons
-            document.querySelectorAll('[data-section]').forEach(btn => {
-                if (btn.dataset.section) {
-                    btn.addEventListener('click', () => switchSection(btn.dataset.section));
-                }
-            });
+    // Save event
+    async function saveEvent() {
+        const eventTitle = document.getElementById('eventTitle').value.trim();
+        const eventCategory = document.getElementById('eventCategory').value;
+        const eventDescription = document.getElementById('eventDescription').value.trim();
+        const eventDate = document.getElementById('eventDate').value;
+        const eventVenue = document.getElementById('eventVenue').value.trim();
 
-            // Add category button
-            document.getElementById('addCategoryBtn').addEventListener('click', () => {
-                const newCategoryId = prompt('Enter new category ID (lowercase, no spaces):');
-                if (!newCategoryId) return;
+        console.log('Saving event:', { eventTitle, eventCategory, eventDate });
+
+        if (!eventTitle || !eventDate) {
+            showMessage('Please fill in required fields (Title and Date)', 'error');
+            return;
+        }
+
+        const eventData = {
+            title: eventTitle,
+            category: eventCategory,
+            description: eventDescription,
+            date: eventDate,
+            venue: eventVenue,
+            active: true,
+            lastUpdated: new Date().toISOString(),
+            updatedBy: currentUser.email
+        };
+
+        try {
+            if (isEditing && editId) {
+                // Update existing event
+                await database.ref(`upcomingEvents/${editId}`).update(eventData);
+                showMessage('Event updated successfully!', 'success');
+                logActivity('Event updated', eventTitle);
+            } else {
+                // Create new event
+                const newId = 'event_' + Date.now();
+                eventData.id = newId;
+                await database.ref(`upcomingEvents/${newId}`).set(eventData);
+                showMessage('Event created successfully!', 'success');
+                logActivity('Event created', eventTitle);
+            }
+
+            clearEventForm();
+            loadEvents();
+            
+        } catch (error) {
+            console.error('Error saving event:', error);
+            showMessage('Error saving event: ' + error.message, 'error');
+        }
+    }
+
+    // Edit event
+    function editEvent(eventId) {
+        console.log('Editing event:', eventId);
+        
+        database.ref(`upcomingEvents/${eventId}`).once('value').then(snapshot => {
+            const event = snapshot.val();
+            if (event) {
+                document.getElementById('eventTitle').value = event.title || '';
+                document.getElementById('eventCategory').value = event.category || 'bootcamp';
+                document.getElementById('eventDescription').value = event.description || '';
+                document.getElementById('eventDate').value = event.date || '';
+                document.getElementById('eventVenue').value = event.venue || '';
                 
-                if (!/^[a-z]+$/.test(newCategoryId)) {
-                    showMessage(loginMessage, 'Category ID must be lowercase letters only, no spaces', 'error');
-                    return;
-                }
+                isEditing = true;
+                editId = eventId;
                 
-                const newCategory = {
-                    id: newCategoryId,
-                    name: newCategoryId.charAt(0).toUpperCase() + newCategoryId.slice(1),
-                    description: '',
-                    icon: 'fas fa-calendar-alt',
-                    color: '#C21807',
-                    active: true
-                };
+                showMessage(`Editing event: ${event.title}`, 'info');
+                logActivity('Started editing event', event.title);
                 
-                database.ref(`eventCategories/${newCategoryId}`).set(newCategory)
+                // Scroll to form
+                document.getElementById('eventTitle').scrollIntoView({ behavior: 'smooth' });
+            }
+        }).catch(error => {
+            console.error('Error loading event for editing:', error);
+            showMessage('Error loading event: ' + error.message, 'error');
+        });
+    }
+
+    // Delete event
+    function deleteEvent(eventId) {
+        console.log('Deleting event:', eventId);
+        
+        if (confirm('Are you sure you want to delete this event? This action cannot be undone.')) {
+            database.ref(`upcomingEvents/${eventId}`).once('value').then(snapshot => {
+                const eventTitle = snapshot.val()?.title || 'Unknown event';
+                
+                database.ref(`upcomingEvents/${eventId}`).remove()
                     .then(() => {
-                        showMessage(loginMessage, 'Category added successfully!', 'success');
-                        loadData();
+                        showMessage('Event deleted successfully!', 'success');
+                        loadEvents();
+                        logActivity('Event deleted', eventTitle);
                     })
                     .catch(error => {
-                        console.error('Error adding category:', error);
-                        showMessage(loginMessage, 'Failed to add category', 'error');
+                        console.error('Error deleting event:', error);
+                        showMessage('Error deleting event: ' + error.message, 'error');
                     });
             });
-
-            // Form submissions
-            eventForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                
-                const eventData = {
-                    title: document.getElementById('eventTitle').value,
-                    subtitle: document.getElementById('eventSubtitle').value,
-                    category: document.getElementById('eventCategory').value,
-                    date: document.getElementById('eventDate').value,
-                    duration: document.getElementById('eventDuration').value,
-                    frequency: document.getElementById('eventFrequency').value,
-                    venue: document.getElementById('eventVenue').value,
-                    maxParticipants: parseInt(document.getElementById('maxParticipants').value) || 0,
-                    imageUrl: document.getElementById('imageUrl').value,
-                    description: document.getElementById('eventDescription').value,
-                    registrationUrl: document.getElementById('registrationUrl').value,
-                    status: document.getElementById('eventStatus').value,
-                    featured: document.getElementById('featuredEvent').checked,
-                    tags: []
-                };
-                
-                addEvent(eventData);
-            });
-
-            editEventForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                
-                const eventData = {
-                    title: document.getElementById('editEventTitle').value,
-                    subtitle: document.getElementById('editEventSubtitle').value,
-                    category: document.getElementById('editEventCategory').value,
-                    date: document.getElementById('editEventDate').value,
-                    duration: document.getElementById('editEventDuration').value,
-                    frequency: document.getElementById('editEventFrequency').value,
-                    venue: document.getElementById('editEventVenue').value,
-                    maxParticipants: parseInt(document.getElementById('editMaxParticipants').value) || 0,
-                    imageUrl: document.getElementById('editImageUrl').value,
-                    description: document.getElementById('editEventDescription').value,
-                    registrationUrl: document.getElementById('editRegistrationUrl').value,
-                    status: document.getElementById('editEventStatus').value,
-                    featured: document.getElementById('editFeaturedEvent').checked
-                };
-                
-                updateEvent(currentEventId, eventData);
-            });
-
-            editCategoryForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                
-                const categoryData = {
-                    name: document.getElementById('editCategoryName').value,
-                    id: document.getElementById('editCategoryId').value,
-                    icon: document.getElementById('editCategoryIcon').value,
-                    color: document.getElementById('editCategoryColor').value,
-                    description: document.getElementById('editCategoryDescription').value,
-                    active: document.getElementById('editCategoryActive').checked
-                };
-                
-                updateCategory(currentCategoryId, categoryData);
-            });
-
-            // Cancel event form
-            document.getElementById('cancelEventBtn').addEventListener('click', () => {
-                eventForm.reset();
-                switchSection('events');
-            });
-
-            // Modal close buttons
-            modalCloseButtons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    editEventModal.classList.remove('active');
-                    editCategoryModal.classList.remove('active');
-                    confirmModal.classList.remove('active');
-                });
-            });
-
-            // Close modal on outside click
-            window.addEventListener('click', (e) => {
-                if (e.target === editEventModal) {
-                    editEventModal.classList.remove('active');
-                }
-                if (e.target === editCategoryModal) {
-                    editCategoryModal.classList.remove('active');
-                }
-                if (e.target === confirmModal) {
-                    confirmModal.classList.remove('active');
-                }
-            });
-
-            // Allow Enter key in login form
-            document.getElementById('loginPassword').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    loginForm.requestSubmit();
-                }
-            });
         }
+    }
 
-        // Initialize the app when DOM is loaded
-        document.addEventListener('DOMContentLoaded', initApp);
-    </script>
+    // Clear event form
+    function clearEventForm() {
+        document.getElementById('eventTitle').value = '';
+        document.getElementById('eventCategory').value = 'bootcamp';
+        document.getElementById('eventDescription').value = '';
+        document.getElementById('eventDate').value = '';
+        document.getElementById('eventVenue').value = '';
+        isEditing = false;
+        editId = null;
+        
+        showMessage('Form cleared', 'info');
+    }
+
+    // Refresh events
+    function refreshEvents() {
+        console.log('Refreshing events...');
+        loadEvents();
+        showMessage('Events list refreshed', 'info');
+    }
+
+    // Load other sections (stubs for now)
+    async function loadTrainingPrograms() {
+        const section = document.getElementById('training');
+        const loading = section.querySelector('.loading');
+        if (loading) {
+            loading.style.display = 'none';
+        }
+        showMessage('Training Programs section - Coming soon!', 'info');
+    }
+
+    async function loadTeamMembers() {
+        const section = document.getElementById('team');
+        const loading = section.querySelector('.loading');
+        if (loading) {
+            loading.style.display = 'none';
+        }
+        showMessage('Team Members section - Coming soon!', 'info');
+    }
+
+    async function loadTestimonials() {
+        const section = document.getElementById('testimonials');
+        const loading = section.querySelector('.loading');
+        if (loading) {
+            loading.style.display = 'none';
+        }
+        showMessage('Testimonials section - Coming soon!', 'info');
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('Admin page loaded');
+        
+        // Make functions globally available for onclick attributes
+        window.switchSection = switchSection;
+        window.saveEvent = saveEvent;
+        window.clearEventForm = clearEventForm;
+        window.editEvent = editEvent;
+        window.deleteEvent = deleteEvent;
+        window.refreshEvents = refreshEvents;
+        
+        // Check if user needs to log in (handled by onAuthStateChanged)
+        console.log('Waiting for auth state...');
+    });
+</script>
 </body>
 </html>
