@@ -2,32 +2,17 @@
 <html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     
     <!-- App Version -->
-    <meta name="app-version" content="8.0.0">
+    <meta name="app-version" content="9.0.0">
     
     <!-- SEO Meta Tags -->
     <meta name="description" content="DSOG - Empowering businesses, startups, and young entrepreneurs through training, events, and startup opportunities. Shape your business acuity with us.">
-    <meta name="keywords" content="DSOG, entrepreneurship, business training, startup opportunities, young entrepreneurs, business events, professional training, enterprise development">
     
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#C21807">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="DSOG">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="DSOG">
-    <meta name="msapplication-TileColor" content="#C21807">
-    <meta name="msapplication-starturl" content="/index.html?v=8.0.0">
-    
-    <!-- Updated Open Graph Meta Tags -->
-    <meta property="og:title" content="DSOG | Empowering Businesses, Startups & Young Entrepreneurs">
-    <meta property="og:description" content="Empower your business journey with DSOG. We provide training, events, and startup opportunities to help entrepreneurs build successful enterprises.">
-    <meta property="og:image" content="https://i.postimg.cc/CxNLzQgt/Untitled-design-3.webp">
-    <meta property="og:url" content="https://dsog.org">
-    <meta property="og:type" content="website">
     
     <title>DSOG | Empowering Businesses, Startups & Young Entrepreneurs</title>
     
@@ -46,69 +31,39 @@
     <style>
         /* ===== CSS CUSTOM PROPERTIES ===== */
         :root {
-            /* Professional Color Palette */
+            /* Modern Color System */
             --primary-red: #C21807;
-            --primary-dark: #1A1A1A;
+            --primary-dark: #0A0A0A;
             --primary-gold: #D4AF37;
-            --secondary-red: #E53935;
-            --secondary-dark: #2D2D2D;
-            --accent-blue: #2C5282;
-            --accent-green: #2D7D46;
-            --accent-purple: #6B46C1;
+            --accent-cyan: #00D4FF;
+            --accent-purple: #9D4EDD;
+            --accent-green: #00CC88;
             
-            /* Neutral Colors */
-            --white: #FFFFFF;
-            --light-gray: #F8F9FA;
-            --medium-gray: #E9ECEF;
-            --dark-gray: #6C757D;
-            --black: #212529;
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, #C21807 0%, #FF416C 100%);
+            --gradient-gold: linear-gradient(135deg, #D4AF37 0%, #FFE55C 100%);
+            --gradient-dark: linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 100%);
+            --gradient-cyber: linear-gradient(135deg, #00D4FF 0%, #9D4EDD 100%);
+            --gradient-neon: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-purple) 50%, var(--accent-green) 100%);
             
-            /* Light Mode Colors */
-            --bg-primary: var(--white);
-            --bg-secondary: var(--light-gray);
-            --bg-tertiary: var(--medium-gray);
-            --text-primary: var(--black);
-            --text-secondary: var(--dark-gray);
-            --text-tertiary: #868E96;
-            --border-color: #DEE2E6;
-            --card-bg: var(--white);
-            --footer-bg: var(--primary-dark);
+            /* Glass Morphism */
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             
-            /* Professional Shadow System */
-            --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.03);
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
-            --shadow-xl: 0 20px 25px -5px rgba(194, 24, 7, 0.05), 0 10px 10px -5px rgba(194, 24, 7, 0.02);
-            --shadow-2xl: 0 25px 50px -12px rgba(194, 24, 7, 0.15);
-            --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.04);
+            /* Modern Shadows */
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 25px -5px rgba(194, 24, 7, 0.1);
+            --shadow-xl: 0 25px 50px -12px rgba(194, 24, 7, 0.25);
+            --shadow-glow: 0 0 40px rgba(194, 24, 7, 0.3);
             
-            /* Advanced Gradients */
-            --gradient-primary: linear-gradient(135deg, #C21807 0%, #E53935 100%);
-            --gradient-gold: linear-gradient(135deg, #D4AF37 0%, #F4D03F 100%);
-            --gradient-dark: linear-gradient(135deg, #1A1A1A 0%, #2D2D2D 100%);
-            --gradient-light: linear-gradient(135deg, var(--white) 0%, #F8F9FA 100%);
-            --gradient-card: linear-gradient(145deg, var(--white) 0%, #F8F9FA 100%);
-            --gradient-spiritual: linear-gradient(135deg, #6B46C1 0%, #9F7AEA 100%);
-            --gradient-inspiration: linear-gradient(135deg, #D4AF37 0%, #F6E05E 100%);
-            
-            /* Animation Properties */
+            /* Animations */
+            --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            --transition-fast: all 0.15s ease-out;
-            --transition-slow: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             
-            /* Border Radius System */
-            --radius-sm: 6px;
-            --radius-md: 10px;
-            --radius-lg: 14px;
-            --radius-xl: 18px;
-            --radius-2xl: 22px;
-            --radius-full: 9999px;
-            
-            /* Spacing System */
-            --space-3xs: 0.125rem;
-            --space-2xs: 0.25rem;
+            /* Spacing */
             --space-xs: 0.5rem;
             --space-sm: 0.75rem;
             --space-md: 1rem;
@@ -117,328 +72,183 @@
             --space-2xl: 3rem;
             --space-3xl: 4rem;
             --space-4xl: 6rem;
-            --space-5xl: 8rem;
             
-            /* Professional Typography */
-            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            --font-heading: 'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            --font-spiritual: 'Playfair Display', serif;
+            /* Typography */
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-heading: 'Manrope', system-ui, -apple-system, sans-serif;
+            --font-serif: 'Playfair Display', serif;
             
-            /* Layout Variables */
-            --header-height: 72px;
-            --container-width: min(1320px, 95%);
-            --nav-item-spacing: 2.5rem;
-            --logo-size: 40px;
+            /* Layout */
+            --header-height: 80px;
+            --container-width: min(1400px, 95%);
+            --border-radius-sm: 8px;
+            --border-radius-md: 12px;
+            --border-radius-lg: 20px;
+            --border-radius-xl: 28px;
             
-            /* Glass Morphism */
-            --glass-bg: rgba(255, 255, 255, 0.92);
-            --glass-border: rgba(255, 255, 255, 0.2);
-            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-            
-            /* Z-index Layers */
-            --z-negative: -1;
-            --z-normal: 1;
-            --z-dropdown: 100;
-            --z-sticky: 200;
-            --z-fixed: 1000;
-            --z-modal: 10000;
-            --z-tooltip: 100000;
-            
-            /* Safe Area Insets */
-            --safe-top: env(safe-area-inset-top, 0px);
-            --safe-right: env(safe-area-inset-right, 0px);
-            --safe-bottom: env(safe-area-inset-bottom, 0px);
-            --safe-left: env(safe-area-inset-left, 0px);
+            /* Effects */
+            --blur-bg: blur(20px);
+            --backdrop-filter: saturate(180%) blur(20px);
         }
 
-        /* Dark Theme Variables */
+        /* Dark Theme */
         [data-theme="dark"] {
-            --bg-primary: #121212;
-            --bg-secondary: #1E1E1E;
-            --bg-tertiary: #2D2D2D;
-            --card-bg: #1E1E1E;
-            --text-primary: #F5F5F5;
-            --text-secondary: #B0B0B0;
-            --text-tertiary: #808080;
-            --border-color: #404040;
-            --footer-bg: #0A0A0A;
-            --glass-bg: rgba(30, 30, 30, 0.92);
+            --glass-bg: rgba(10, 10, 10, 0.8);
             --glass-border: rgba(255, 255, 255, 0.1);
-            --gradient-light: linear-gradient(135deg, #1E1E1E 0%, #2D2D2D 100%);
-            --gradient-card: linear-gradient(145deg, #1E1E1E 0%, #252525 100%);
-            --white: #1E1E1E;
-            --light-gray: #2D2D2D;
-            --medium-gray: #404040;
         }
 
-        /* ===== CSS RESET & BASE STYLES ===== */
-        *, *::before, *::after {
+        /* ===== BASE STYLES ===== */
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
 
         html {
             font-size: 16px;
             scroll-behavior: smooth;
             scroll-padding-top: calc(var(--header-height) + 20px);
-            text-rendering: optimizeLegibility;
-            -webkit-text-size-adjust: 100%;
         }
 
         body {
-            font-family: var(--font-primary);
+            font-family: var(--font-sans);
             line-height: 1.6;
-            color: var(--text-primary);
-            background-color: var(--bg-primary);
-            overflow-x: hidden;
-            transition: var(--transition-smooth);
-            position: relative;
+            color: #1A1A1A;
+            background: linear-gradient(135deg, #FFFFFF 0%, #F8F9FA 100%);
             min-height: 100vh;
-            font-size: 0.9375rem;
-            font-weight: 400;
-            letter-spacing: 0.01em;
-            padding-top: var(--safe-top);
-            touch-action: manipulation;
+            overflow-x: hidden;
+            position: relative;
         }
 
-        /* Touch Optimizations */
-        button, 
-        a, 
-        input, 
-        textarea, 
-        select {
-            touch-action: manipulation;
-        }
-
-        /* Hide scrollbar but allow scrolling */
-        .scroll-container {
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none; /* Firefox */
-        }
-
-        .scroll-container::-webkit-scrollbar {
-            display: none; /* Safari and Chrome */
+        [data-theme="dark"] body {
+            background: linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 100%);
+            color: #FFFFFF;
         }
 
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+            width: 10px;
         }
 
         ::-webkit-scrollbar-track {
-            background: var(--bg-secondary);
-            border-radius: var(--radius-full);
+            background: rgba(0, 0, 0, 0.1);
         }
 
         ::-webkit-scrollbar-thumb {
             background: var(--gradient-primary);
-            border-radius: var(--radius-full);
-            border: 2px solid var(--bg-secondary);
+            border-radius: 5px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
             background: var(--primary-red);
         }
 
-        /* Selection Color */
+        /* Selection */
         ::selection {
-            background: rgba(194, 24, 7, 0.2);
-            color: var(--text-primary);
+            background: rgba(194, 24, 7, 0.3);
+            color: inherit;
         }
 
-        /* ===== TYPOGRAPHY ===== */
-        h1, h2, h3, h4, h5, h6 {
-            font-family: var(--font-heading);
-            font-weight: 700;
-            line-height: 1.2;
-            letter-spacing: -0.02em;
-            margin-bottom: var(--space-md);
-            color: var(--text-primary);
-        }
-
-        h1 {
-            font-size: clamp(2.5rem, 5vw, 3.5rem);
-            font-weight: 800;
-            letter-spacing: -0.03em;
-        }
-
-        h2 {
-            font-size: clamp(1.875rem, 4vw, 2.75rem);
-            font-weight: 700;
-        }
-
-        h3 {
-            font-size: clamp(1.5rem, 3vw, 2rem);
-            font-weight: 600;
-        }
-
-        .text-gradient {
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            display: inline-block;
-        }
-
-        .lead {
-            font-size: clamp(1.125rem, 2vw, 1.25rem);
-            color: var(--text-secondary);
-            line-height: 1.6;
-            font-weight: 400;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        p {
-            margin-bottom: var(--space-md);
-            color: var(--text-secondary);
-            line-height: 1.7;
-            font-weight: 400;
-        }
-
-        /* ===== LAYOUT & CONTAINERS ===== */
-        .container {
-            width: 100%;
-            max-width: var(--container-width);
-            margin: 0 auto;
-            padding: 0 clamp(var(--space-md), 5vw, var(--space-xl));
-        }
-
-        section {
-            padding: clamp(var(--space-2xl), 8vw, var(--space-4xl)) 0;
-            position: relative;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: clamp(var(--space-xl), 6vw, var(--space-3xl));
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* ===== HEADER ===== */
+        /* ===== MODERN HEADER ===== */
         .header {
             position: fixed;
-            top: var(--safe-top);
+            top: 0;
             left: 0;
             width: 100%;
             height: var(--header-height);
             background: var(--glass-bg);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-bottom: 1px solid var(--border-color);
-            z-index: var(--z-fixed);
+            backdrop-filter: var(--backdrop-filter);
+            -webkit-backdrop-filter: var(--backdrop-filter);
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 1000;
             transition: var(--transition-smooth);
-            box-shadow: var(--shadow-sm);
-            padding-left: var(--safe-left);
-            padding-right: var(--safe-right);
         }
 
         .header.scrolled {
             box-shadow: var(--shadow-lg);
+            background: rgba(255, 255, 255, 0.95);
         }
 
-        /* Navbar Container */
+        [data-theme="dark"] .header.scrolled {
+            background: rgba(10, 10, 10, 0.95);
+        }
+
         .navbar {
             display: flex;
             align-items: center;
             justify-content: space-between;
             height: 100%;
-            width: 100%;
             max-width: var(--container-width);
             margin: 0 auto;
-            padding: 0 clamp(var(--space-md), 3vw, var(--space-xl));
-            gap: clamp(var(--space-md), 3vw, var(--space-xl));
+            padding: 0 var(--space-lg);
         }
 
-        /* Logo */
         .logo {
             display: flex;
             align-items: center;
-            gap: var(--space-md);
+            gap: var(--space-sm);
             text-decoration: none;
-            flex-shrink: 0;
-            padding: var(--space-xs) 0;
-            height: 100%;
-            min-height: 44px;
-        }
-
-        .logo-image {
-            height: clamp(32px, 5vw, var(--logo-size));
-            width: auto;
-            object-fit: contain;
-            display: block;
+            font-family: var(--font-heading);
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--primary-dark);
             transition: var(--transition-smooth);
         }
 
-        .logo-text {
-            font-family: var(--font-heading);
-            font-size: clamp(1.1rem, 2vw, 1.5rem);
-            font-weight: 800;
-            color: var(--text-primary);
-            letter-spacing: -0.02em;
-            line-height: 1;
-            white-space: nowrap;
+        [data-theme="dark"] .logo {
+            color: #FFFFFF;
         }
 
-        .logo-text span {
-            color: var(--primary-red);
-            font-weight: 700;
+        .logo:hover {
+            transform: scale(1.05);
         }
 
-        /* Main Navigation */
+        .logo-image {
+            height: 40px;
+            width: auto;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+        }
+
+        /* Modern Navigation */
         .nav-links {
             display: flex;
             align-items: center;
-            gap: clamp(1rem, 2vw, var(--nav-item-spacing));
-            margin: 0;
-            padding: 0;
+            gap: var(--space-xl);
             list-style: none;
-            height: 100%;
         }
 
         .nav-link {
             position: relative;
-            color: var(--text-secondary);
             text-decoration: none;
+            color: var(--primary-dark);
             font-weight: 500;
-            font-size: 0.875rem;
-            padding: 0;
-            height: 100%;
-            display: flex;
-            align-items: center;
+            font-size: 0.95rem;
+            padding: var(--space-sm) 0;
             transition: var(--transition-fast);
-            letter-spacing: 0.01em;
-            white-space: nowrap;
-            min-height: 44px;
-            padding: 0 var(--space-sm);
         }
 
-        .nav-link::after {
+        [data-theme="dark"] .nav-link {
+            color: #FFFFFF;
+        }
+
+        .nav-link::before {
             content: '';
             position: absolute;
             bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
+            left: 0;
             width: 0;
             height: 2px;
             background: var(--gradient-primary);
             transition: var(--transition-smooth);
-            border-radius: 1px;
+            border-radius: 2px;
         }
 
         .nav-link:hover {
             color: var(--primary-red);
         }
 
-        .nav-link:hover::after {
+        .nav-link:hover::before {
             width: 100%;
         }
 
@@ -447,66 +257,49 @@
             font-weight: 600;
         }
 
-        .nav-link.active::after {
+        .nav-link.active::before {
             width: 100%;
         }
 
-        /* Contact Button */
-        .nav-links .btn-primary {
-            font-size: 0.875rem;
-            padding: var(--space-sm) var(--space-lg);
-            height: auto;
-            margin-left: var(--space-sm);
-            flex-shrink: 0;
-            min-height: 44px;
-        }
-
-        /* Mobile Menu Button */
-        .mobile-menu-btn {
-            display: none;
-            align-items: center;
-            justify-content: center;
-            background: none;
-            border: none;
-            color: var(--primary-red);
-            font-size: 1.25rem;
-            cursor: pointer;
-            padding: var(--space-sm);
-            border-radius: var(--radius-md);
-            transition: var(--transition-smooth);
-            z-index: var(--z-dropdown);
-            width: 44px;
-            height: 44px;
-            flex-shrink: 0;
-            min-height: 44px;
-        }
-
-        /* ===== BUTTONS ===== */
+        /* Modern Buttons */
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: var(--space-sm);
-            padding: clamp(var(--space-md), 2vw, var(--space-lg)) clamp(var(--space-lg), 3vw, var(--space-xl));
-            border-radius: var(--radius-md);
+            padding: var(--space-md) var(--space-xl);
+            border-radius: var(--border-radius-md);
             font-weight: 600;
-            font-size: clamp(0.85rem, 1.5vw, 0.875rem);
+            font-size: 0.95rem;
             text-decoration: none;
-            border: 1px solid transparent;
+            border: none;
             cursor: pointer;
             transition: var(--transition-smooth);
             position: relative;
             overflow: hidden;
-            white-space: nowrap;
-            letter-spacing: 0.02em;
-            min-height: 44px;
-            width: fit-content;
+            z-index: 1;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            z-index: -1;
+            transition: var(--transition-smooth);
+        }
+
+        .btn:hover::before {
+            filter: brightness(1.2);
         }
 
         .btn-primary {
             background: var(--gradient-primary);
-            color: var(--white) !important;
-            border: none;
+            color: white;
+            box-shadow: var(--shadow-md);
         }
 
         .btn-primary:hover {
@@ -514,42 +307,91 @@
             box-shadow: var(--shadow-xl);
         }
 
-        .btn-secondary {
+        .btn-outline {
             background: transparent;
             color: var(--primary-red);
-            border: 1px solid var(--primary-red);
+            border: 2px solid var(--primary-red);
         }
 
-        .btn-secondary:hover {
+        .btn-outline:hover {
             background: var(--primary-red);
-            color: var(--white) !important;
+            color: white;
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(194, 24, 7, 0.2);
         }
 
-        .btn-large {
-            padding: clamp(var(--space-lg), 3vw, var(--space-xl)) clamp(var(--space-xl), 4vw, var(--space-2xl));
-            font-size: clamp(0.9rem, 1.8vw, 1rem);
+        .btn-glow {
+            background: var(--gradient-neon);
+            color: white;
+            animation: pulse 2s infinite;
         }
 
-        /* ===== HERO SECTION ===== */
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(157, 78, 221, 0.7); }
+        }
+
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--primary-red);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: var(--space-sm);
+            transition: var(--transition-smooth);
+        }
+
+        /* ===== CYBER HERO SECTION ===== */
         .hero {
             min-height: 100vh;
             display: flex;
             align-items: center;
-            padding-top: calc(var(--header-height) + var(--safe-top));
             position: relative;
             overflow: hidden;
-            background: var(--gradient-light);
+            padding-top: var(--header-height);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(194, 24, 7, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 212, 255, 0.1) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100vw;
+            height: 100vh;
+            background: 
+                radial-gradient(circle at center, rgba(194, 24, 7, 0.05) 0%, transparent 70%),
+                repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0, 212, 255, 0.02) 3px);
+            z-index: -2;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
         }
 
         .hero-content {
-            position: relative;
-            z-index: var(--z-normal);
-            max-width: 1200px;
+            max-width: var(--container-width);
             margin: 0 auto;
+            padding: var(--space-3xl) var(--space-lg);
             text-align: center;
-            padding: 0 clamp(var(--space-md), 3vw, var(--space-xl));
+            position: relative;
+            z-index: 1;
         }
 
         .mission-badge {
@@ -557,390 +399,408 @@
             align-items: center;
             gap: var(--space-sm);
             background: var(--gradient-primary);
-            color: var(--white);
-            padding: var(--space-sm) var(--space-lg);
-            border-radius: var(--radius-full);
-            font-size: clamp(0.75rem, 1.5vw, 0.8rem);
+            color: white;
+            padding: var(--space-sm) var(--space-xl);
+            border-radius: var(--border-radius-xl);
+            font-size: 0.9rem;
             font-weight: 600;
-            letter-spacing: 0.05em;
-            margin-bottom: clamp(var(--space-lg), 4vw, var(--space-xl));
+            letter-spacing: 1px;
+            margin-bottom: var(--space-2xl);
             box-shadow: var(--shadow-lg);
             text-transform: uppercase;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero-title {
+            font-family: var(--font-heading);
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: var(--space-xl);
+            background: var(--gradient-neon);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 3vw, 1.5rem);
+            color: var(--dark-gray);
+            max-width: 800px;
+            margin: 0 auto var(--space-2xl);
+            line-height: 1.6;
+        }
+
+        [data-theme="dark"] .hero-subtitle {
+            color: rgba(255, 255, 255, 0.8);
         }
 
         .category-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: var(--space-sm);
             justify-content: center;
-            margin: clamp(var(--space-lg), 4vw, var(--space-xl)) 0;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
+            gap: var(--space-md);
+            margin: var(--space-2xl 0);
         }
 
         .category-tag {
-            background: rgba(194, 24, 7, 0.08);
-            color: var(--primary-red);
-            padding: var(--space-xs) var(--space-md);
-            border-radius: var(--radius-full);
-            font-size: clamp(0.75rem, 1.5vw, 0.8rem);
+            padding: var(--space-sm) var(--space-lg);
+            background: var(--glass-bg);
+            backdrop-filter: var(--backdrop-filter);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-xl);
+            font-size: 0.9rem;
             font-weight: 500;
-            border: 1px solid rgba(194, 24, 7, 0.15);
+            color: var(--primary-dark);
             transition: var(--transition-smooth);
-            cursor: default;
-            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        [data-theme="dark"] .category-tag {
+            color: #FFFFFF;
+        }
+
+        .category-tag:hover {
+            background: var(--gradient-primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
         }
 
         .hero-buttons {
             display: flex;
-            gap: var(--space-md);
+            gap: var(--space-lg);
             justify-content: center;
             flex-wrap: wrap;
-            margin-top: clamp(var(--space-xl), 5vw, var(--space-2xl));
+            margin-top: var(--space-3xl);
+        }
+
+        /* ===== GLASS CARDS ===== */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--backdrop-filter);
+            -webkit-backdrop-filter: var(--backdrop-filter);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-lg);
+            padding: var(--space-xl);
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: var(--transition-smooth);
+        }
+
+        .glass-card:hover::before {
+            left: 100%;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        /* Section Styles */
+        section {
+            padding: var(--space-4xl) 0;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--space-3xl);
+        }
+
+        .section-subtitle {
+            display: inline-block;
+            background: var(--gradient-primary);
+            color: white;
+            padding: var(--space-xs) var(--space-lg);
+            border-radius: var(--border-radius-xl);
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: var(--space-md);
+            text-transform: uppercase;
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: var(--space-lg);
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-red) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        [data-theme="dark"] .section-title {
+            background: linear-gradient(135deg, #FFFFFF 0%, var(--primary-red) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
         }
 
         /* ===== APPROACH SECTION ===== */
         .approach-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
-            gap: clamp(var(--space-lg), 4vw, var(--space-xl));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-xl);
             margin-top: var(--space-2xl);
         }
 
         .approach-card {
-            background: var(--gradient-card);
-            border-radius: var(--radius-lg);
-            padding: clamp(var(--space-lg), 3vw, var(--space-xl));
-            position: relative;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            transition: var(--transition-smooth);
-            height: 100%;
-            display: flex;
-            flex-direction: column;
+            composes: glass-card;
             text-align: center;
         }
 
-        .approach-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-xl);
-            border-color: var(--primary-red);
-        }
-
         .approach-icon {
-            width: 70px;
-            height: 70px;
+            width: 80px;
+            height: 80px;
             background: var(--gradient-primary);
-            color: var(--white);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.75rem;
             margin: 0 auto var(--space-lg);
-            flex-shrink: 0;
+            font-size: 2rem;
+            color: white;
+            box-shadow: var(--shadow-lg);
         }
 
-        /* ===== SERVICES OVERVIEW ===== */
+        /* ===== SERVICES SECTION ===== */
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
-            gap: clamp(var(--space-lg), 4vw, var(--space-xl));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: var(--space-xl);
             margin-top: var(--space-2xl);
         }
 
         .service-card {
-            background: var(--gradient-card);
-            border-radius: var(--radius-lg);
-            padding: clamp(var(--space-lg), 3vw, var(--space-xl));
-            position: relative;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            transition: var(--transition-smooth);
-            height: 100%;
-            display: flex;
-            flex-direction: column;
+            composes: glass-card;
         }
 
         .service-icon {
             width: 60px;
             height: 60px;
             background: var(--gradient-primary);
-            color: var(--white);
-            border-radius: var(--radius-md);
+            border-radius: var(--border-radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
             margin-bottom: var(--space-lg);
-            flex-shrink: 0;
+            font-size: 1.5rem;
+            color: white;
         }
 
         /* ===== EVENTS SECTION ===== */
         .events-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(min(350px, 100%), 1fr));
-            gap: clamp(var(--space-lg), 4vw, var(--space-xl));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: var(--space-xl);
             margin-top: var(--space-2xl);
         }
 
         .event-card {
-            background: var(--gradient-card);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            transition: var(--transition-smooth);
-            height: 100%;
+            composes: glass-card;
             display: flex;
             flex-direction: column;
         }
 
-        .event-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-xl);
-            border-color: var(--primary-red);
-        }
-
-        .event-image-container {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 16/9;
-            overflow: hidden;
-        }
-
         .event-image {
             width: 100%;
-            height: 100%;
+            height: 200px;
             object-fit: cover;
-            transition: var(--transition-smooth);
+            border-radius: var(--border-radius-md);
+            margin-bottom: var(--space-lg);
         }
 
-        .event-date-badge {
-            position: absolute;
-            top: var(--space-md);
-            left: var(--space-md);
-            background: var(--gradient-primary);
-            color: var(--white);
-            padding: var(--space-xs) var(--space-md);
-            border-radius: var(--radius-md);
-            font-size: clamp(0.8rem, 1.5vw, 0.85rem);
-            font-weight: 600;
-            box-shadow: var(--shadow-md);
-            display: flex;
-            align-items: center;
-            gap: var(--space-xs);
-            z-index: var(--z-normal);
-        }
-
-        /* ===== ABOUT DSOG SECTION ===== */
-        .about-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
-            gap: clamp(var(--space-xl), 4vw, var(--space-2xl));
-            align-items: center;
-        }
-
+        /* ===== STATS SECTION ===== */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr));
-            gap: var(--space-lg);
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-xl);
             margin-top: var(--space-2xl);
         }
 
-        /* ===== VALUE PROPOSITION ===== */
-        .value-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
-            gap: clamp(var(--space-lg), 4vw, var(--space-xl));
-            margin-top: var(--space-2xl);
+        .stat-card {
+            composes: glass-card;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-neon);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1;
         }
 
         /* ===== CTA SECTION ===== */
         .cta-section {
-            background: var(--gradient-primary);
-            color: var(--white);
-            padding: clamp(var(--space-2xl), 6vw, var(--space-4xl)) 0;
-            text-align: center;
+            background: var(--gradient-cyber);
+            color: white;
+            padding: var(--space-4xl) 0;
             position: relative;
             overflow: hidden;
-            border-radius: var(--radius-xl);
-            margin: clamp(var(--space-2xl), 6vw, var(--space-4xl)) auto;
-            max-width: 1200px;
         }
 
-        .contact-info {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
-            gap: var(--space-lg);
-            margin-top: var(--space-2xl);
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: var(--space-md);
-            color: var(--white);
-            background: rgba(255, 255, 255, 0.1);
-            padding: var(--space-lg);
-            border-radius: var(--radius-lg);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            transition: var(--transition-smooth);
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></svg>') center/20px 20px,
+                radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            animation: float 20s linear infinite;
         }
 
         /* ===== FOOTER ===== */
         .footer {
-            background: var(--footer-bg);
-            color: var(--white);
-            padding: clamp(var(--space-2xl), 6vw, var(--space-4xl)) 0 var(--space-xl);
+            background: var(--gradient-dark);
+            color: white;
+            padding: var(--space-4xl) 0 var(--space-xl);
             position: relative;
         }
 
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
         .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
-            gap: var(--space-xl);
-            margin-bottom: var(--space-xl);
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 0 var(--space-lg);
         }
 
         /* ===== THEME TOGGLE ===== */
         .theme-toggle {
             position: fixed;
-            bottom: calc(var(--space-xl) + var(--safe-bottom));
-            right: calc(var(--space-xl) + var(--safe-right));
-            width: 52px;
-            height: 52px;
+            bottom: var(--space-xl);
+            right: var(--space-xl);
+            width: 60px;
+            height: 60px;
             background: var(--gradient-primary);
-            border-radius: var(--radius-md);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--white);
-            font-size: 1.1rem;
+            color: white;
+            font-size: 1.5rem;
             cursor: pointer;
-            z-index: var(--z-fixed);
+            z-index: 1000;
             box-shadow: var(--shadow-xl);
-            transition: var(--transition-smooth);
             border: none;
-            outline: none;
-            min-height: 44px;
+            transition: var(--transition-smooth);
         }
 
-        /* ===== MOBILE NAVIGATION ===== */
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
         @media (max-width: 1024px) {
-            :root {
-                --header-height: 64px;
-            }
-            
             .nav-links {
                 position: fixed;
                 top: var(--header-height);
                 left: 0;
                 right: 0;
                 bottom: 0;
-                background: var(--bg-primary);
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: var(--backdrop-filter);
                 flex-direction: column;
-                align-items: stretch;
-                gap: 0;
-                height: auto;
-                max-height: calc(100vh - var(--header-height));
-                overflow-y: auto;
-                padding: var(--space-md);
-                transform: translateX(-100%);
+                align-items: center;
+                justify-content: flex-start;
+                padding-top: var(--space-2xl);
+                gap: var(--space-lg);
+                transform: translateY(-100%);
                 opacity: 0;
                 visibility: hidden;
-                transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
-                            opacity 0.3s ease,
-                            visibility 0.3s ease;
-                box-shadow: var(--shadow-xl);
-                border-top: 1px solid var(--border-color);
-                -webkit-overflow-scrolling: touch;
+                transition: var(--transition-smooth);
+            }
+
+            [data-theme="dark"] .nav-links {
+                background: rgba(10, 10, 10, 0.98);
             }
 
             .nav-links.active {
-                transform: translateX(0);
+                transform: translateY(0);
                 opacity: 1;
                 visibility: visible;
             }
 
-            .nav-link {
-                height: auto;
-                padding: var(--space-md) var(--space-lg);
-                border-radius: var(--radius-md);
-                margin-bottom: var(--space-xs);
-                display: flex;
-                align-items: center;
-                min-height: 48px;
-            }
-
-            .nav-link::after {
-                display: none;
-            }
-
-            .nav-links .btn-primary {
-                margin: var(--space-md) 0 0 0;
-                width: 100%;
-                justify-content: center;
-            }
-
             .mobile-menu-btn {
-                display: flex;
-            }
-        }
-
-        /* ===== RESPONSIVE DESIGN ===== */
-        @media (max-width: 768px) {
-            :root {
-                --header-height: 64px;
-            }
-
-            .hero {
-                min-height: calc(100vh - var(--header-height));
+                display: block;
             }
 
             .hero-buttons {
                 flex-direction: column;
-                width: 100%;
-                max-width: 400px;
-                margin-left: auto;
-                margin-right: auto;
+                align-items: center;
             }
 
             .hero-buttons .btn {
                 width: 100%;
-                max-width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --header-height: 70px;
+                --space-4xl: 4rem;
+                --space-3xl: 3rem;
+            }
+
+            .hero-title {
+                font-size: clamp(2.5rem, 6vw, 4rem);
+            }
+
+            .section-title {
+                font-size: clamp(1.75rem, 4vw, 2.5rem);
+            }
+
+            .approach-grid,
+            .services-grid,
+            .events-grid {
+                grid-template-columns: 1fr;
             }
 
             .category-tags {
                 overflow-x: auto;
                 flex-wrap: nowrap;
                 justify-content: flex-start;
-                padding-bottom: var(--space-sm);
-                margin: var(--space-lg) calc(var(--space-lg) * -1);
-                padding-left: var(--space-lg);
-                padding-right: var(--space-lg);
-                scroll-snap-type: x mandatory;
+                padding: var(--space-sm) 0;
                 -webkit-overflow-scrolling: touch;
             }
 
-            .category-tag {
-                flex-shrink: 0;
-                scroll-snap-align: start;
-            }
-
-            .contact-info {
-                grid-template-columns: 1fr;
-                max-width: 400px;
-                margin-left: auto;
-                margin-right: auto;
-            }
-
-            .theme-toggle {
-                bottom: calc(var(--space-lg) + var(--safe-bottom));
-                right: calc(var(--space-lg) + var(--safe-right));
-                width: 48px;
-                height: 48px;
+            .category-tags::-webkit-scrollbar {
+                display: none;
             }
         }
 
@@ -949,135 +809,103 @@
                 --header-height: 60px;
             }
 
-            .container {
-                padding: 0 var(--space-md);
+            .hero {
+                min-height: calc(100vh - var(--header-height));
             }
 
             .mission-badge {
-                padding: var(--space-xs) var(--space-md);
+                padding: var(--space-xs) var(--space-lg);
+                font-size: 0.8rem;
             }
 
-            .approach-card,
-            .service-card,
-            .event-card {
-                padding: var(--space-lg);
+            .btn {
+                padding: var(--space-md) var(--space-lg);
             }
 
             .theme-toggle {
-                bottom: calc(var(--space-md) + var(--safe-bottom));
-                right: calc(var(--space-md) + var(--safe-right));
-                width: 44px;
-                height: 44px;
-            }
-
-            .event-image-container {
-                aspect-ratio: 4/3;
-            }
-        }
-
-        @media (max-width: 360px) {
-            :root {
-                --header-height: 56px;
-            }
-            
-            .logo-text {
-                font-size: 1rem;
-            }
-            
-            .hero-buttons .btn {
-                font-size: 0.9rem;
-                padding: var(--space-md) var(--space-lg);
-            }
-            
-            .approach-card,
-            .service-card,
-            .event-card {
-                padding: var(--space-md);
-            }
-            
-            .event-image-container {
-                aspect-ratio: 1/1;
+                bottom: var(--space-lg);
+                right: var(--space-lg);
+                width: 50px;
+                height: 50px;
+                font-size: 1.25rem;
             }
         }
 
         /* ===== ANIMATIONS ===== */
-        .animate-on-scroll {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s var(--transition-smooth), 
-                        transform 0.6s var(--transition-smooth);
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .animate-on-scroll.animated {
-            opacity: 1;
-            transform: translateY(0);
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Animation Classes */
+        .animate {
+            animation-duration: 0.6s;
+            animation-fill-mode: both;
+            animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .animate-fade-in-up {
+            animation-name: fadeInUp;
+        }
+
+        .animate-slide-in-left {
+            animation-name: slideInLeft;
+        }
+
+        .animate-slide-in-right {
+            animation-name: slideInRight;
+        }
+
+        /* Staggered Animation */
+        .stagger > * {
+            opacity: 0;
+            animation: fadeInUp 0.6s forwards;
+        }
+
+        .stagger > *:nth-child(1) { animation-delay: 0.1s; }
+        .stagger > *:nth-child(2) { animation-delay: 0.2s; }
+        .stagger > *:nth-child(3) { animation-delay: 0.3s; }
+        .stagger > *:nth-child(4) { animation-delay: 0.4s; }
+        .stagger > *:nth-child(5) { animation-delay: 0.5s; }
 
         /* Loading States */
-        .loading {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: var(--space-2xl);
-            color: var(--text-secondary);
-            text-align: center;
-        }
-
-        .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--border-color);
-            border-top-color: var(--primary-red);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: var(--space-md);
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Update Indicator */
-        .update-indicator {
-            position: fixed;
-            bottom: calc(80px + var(--safe-bottom));
-            right: calc(20px + var(--safe-right));
-            padding: 8px 12px;
-            background: var(--primary-red);
-            color: white;
-            border-radius: var(--radius-md);
-            font-size: 12px;
-            z-index: var(--z-tooltip);
-            box-shadow: var(--shadow-md);
-            animation: slideUp 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            max-width: calc(100% - 40px);
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        @keyframes slideDown {
-            from { transform: translateY(0); opacity: 1; }
-            to { transform: translateY(20px); opacity: 0; }
-        }
-
-        /* Skeleton Loading */
         .skeleton {
-            background: linear-gradient(
-                90deg,
-                var(--bg-secondary) 25%,
-                var(--bg-tertiary) 50%,
-                var(--bg-secondary) 75%
-            );
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
             background-size: 200% 100%;
             animation: loading 1.5s infinite;
-            border-radius: var(--radius-md);
+            border-radius: var(--border-radius-md);
+        }
+
+        [data-theme="dark"] .skeleton {
+            background: linear-gradient(90deg, #2a2a2a 25%, #333333 50%, #2a2a2a 75%);
         }
 
         @keyframes loading {
@@ -1085,38 +913,116 @@
             100% { background-position: -200% 0; }
         }
 
-        /* Connection Status */
-        #firebase-status {
+        /* Particle Background */
+        .particles {
             position: fixed;
-            bottom: 20px;
-            left: calc(20px + var(--safe-left));
-            padding: 6px 10px;
-            border-radius: var(--radius-md);
-            font-size: 11px;
-            z-index: var(--z-tooltip);
-            color: white;
-            box-shadow: var(--shadow-sm);
-            background: #28a745;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
         }
 
-        /* Image Fallbacks */
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
+        /* Parallax Layers */
+        .parallax-layer {
+            position: absolute;
+            will-change: transform;
         }
 
-        img[data-src] {
-            opacity: 0;
-            transition: opacity 0.3s;
+        /* 3D Card Effect */
+        .card-3d {
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
 
-        img.loaded {
-            opacity: 1;
+        .card-3d:hover {
+            transform: rotateY(10deg) rotateX(5deg);
+        }
+
+        /* Gradient Text Animation */
+        .gradient-text {
+            background: var(--gradient-neon);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Glitch Effect */
+        .glitch {
+            position: relative;
+            animation: glitch 5s infinite;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch::before {
+            animation: glitch-top 1s infinite;
+            clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+            -webkit-clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+        }
+
+        .glitch::after {
+            animation: glitch-bottom 1.5s infinite;
+            clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
+            -webkit-clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
+        }
+
+        @keyframes glitch {
+            2%, 64% { transform: translate(2px, 0) skew(0deg); }
+            4%, 60% { transform: translate(-2px, 0) skew(0deg); }
+            62% { transform: translate(0, 0) skew(5deg); }
+        }
+
+        @keyframes glitch-top {
+            2%, 64% { transform: translate(2px, -2px); }
+            4%, 60% { transform: translate(-2px, 2px); }
+            62% { transform: translate(13px, -1px) skew(-13deg); }
+        }
+
+        @keyframes glitch-bottom {
+            2%, 64% { transform: translate(-2px, 0); }
+            4%, 60% { transform: translate(-2px, 0); }
+            62% { transform: translate(-22px, 5px) skew(21deg); }
+        }
+
+        /* Holographic Effect */
+        .holographic {
+            background: linear-gradient(
+                45deg,
+                rgba(255, 255, 255, 0.1) 0%,
+                rgba(255, 255, 255, 0.3) 50%,
+                rgba(255, 255, 255, 0.1) 100%
+            );
+            background-size: 200% 200%;
+            animation: holographic 3s ease-in-out infinite;
+        }
+
+        @keyframes holographic {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
     </style>
 </head>
 <body>
+    <!-- Particle Background -->
+    <div class="particles" id="particles"></div>
+
     <!-- Theme Toggle -->
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
         <i class="fas fa-moon"></i>
@@ -1125,11 +1031,10 @@
     <!-- Header -->
     <header class="header" id="header">
         <nav class="navbar">
-            <a href="index.html" class="logo" aria-label="DSOG Home">
+            <a href="index.html" class="logo">
                 <img src="https://i.postimg.cc/kMZ1jTww/Untitled-design-4-removebg-preview.png" 
                      alt="DSOG" 
-                     class="logo-image"
-                     loading="lazy">
+                     class="logo-image">
                 <span class="logo-text">DSOG</span>
             </a>
 
@@ -1143,7 +1048,7 @@
                 <li><a href="contact.html" class="btn btn-primary">Contact Us</a></li>
             </ul>
 
-            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu" aria-expanded="false">
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
                 <i class="fas fa-bars"></i>
             </button>
         </nav>
@@ -1151,29 +1056,27 @@
 
     <!-- Hero Section -->
     <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <div class="mission-badge">
-                    <i class="fas fa-bullseye"></i> EMPOWERING BUSINESSES & ENTREPRENEURS
-                </div>
-                
-                <h1 id="heroTitle" class="skeleton" style="height: 3.5rem; width: 80%; margin: 0 auto;"></h1>
-                <p class="lead" id="heroSubtitle" class="skeleton" style="height: 1.5rem; width: 90%; margin: 1rem auto;"></p>
-                
-                <div class="category-tags" id="categoryTags">
-                    <span class="category-tag skeleton" style="width: 100px;"></span>
-                    <span class="category-tag skeleton" style="width: 120px;"></span>
-                    <span class="category-tag skeleton" style="width: 90px;"></span>
-                </div>
-                
-                <div class="hero-buttons">
-                    <a href="bootcamp.html" class="btn btn-primary btn-large">
-                        <i class="fas fa-calendar-alt"></i> Ongoing Bootcamp
-                    </a>
-                    <a href="#events" class="btn btn-outline btn-large">
-                        <i class="fas fa-briefcase"></i> View Events
-                    </a>
-                </div>
+        <div class="hero-content">
+            <div class="mission-badge">
+                <i class="fas fa-bullseye"></i> EMPOWERING BUSINESSES & ENTREPRENEURS
+            </div>
+            
+            <h1 class="hero-title gradient-text" id="heroTitle">Loading...</h1>
+            <p class="hero-subtitle" id="heroSubtitle">Loading content...</p>
+            
+            <div class="category-tags" id="categoryTags">
+                <span class="category-tag skeleton" style="width: 100px;"></span>
+                <span class="category-tag skeleton" style="width: 120px;"></span>
+                <span class="category-tag skeleton" style="width: 90px;"></span>
+            </div>
+            
+            <div class="hero-buttons">
+                <a href="bootcamp.html" class="btn btn-primary btn-glow">
+                    <i class="fas fa-calendar-alt"></i> Ongoing Bootcamp
+                </a>
+                <a href="#events" class="btn btn-outline">
+                    <i class="fas fa-briefcase"></i> View Events
+                </a>
             </div>
         </div>
     </section>
@@ -1183,85 +1086,51 @@
         <div class="container">
             <div class="section-header">
                 <span class="section-subtitle">Our Methodology</span>
-                <h2>How We <span class="text-gradient">Empower Entrepreneurs</span></h2>
-                <p class="lead" id="approachSubtitle" class="skeleton" style="height: 1.5rem; width: 80%;"></p>
+                <h2 class="section-title">How We <span class="gradient-text">Empower Entrepreneurs</span></h2>
+                <p class="lead" id="approachSubtitle">Loading approach content...</p>
             </div>
             
-            <div class="approach-grid" id="approachCards">
+            <div class="approach-grid stagger" id="approachCards">
                 <!-- Cards will be loaded dynamically -->
-                <div class="loading">
-                    <div class="loading-spinner"></div>
-                    <p>Loading approach...</p>
-                </div>
             </div>
         </div>
     </section>
 
     <!-- Services Overview -->
-    <section class="services-overview">
+    <section class="services-section">
         <div class="container">
             <div class="section-header">
                 <span class="section-subtitle">Our Services</span>
-                <h2>Comprehensive <span class="text-gradient">Entrepreneurship Support</span></h2>
+                <h2 class="section-title">Comprehensive <span class="gradient-text">Entrepreneurship Support</span></h2>
                 <p class="lead">From training to enterprise development, we offer a complete ecosystem for business growth and success.</p>
             </div>
             
-            <div class="services-grid">
-                <!-- Business Training -->
-                <div class="service-card animate-on-scroll">
+            <div class="services-grid stagger">
+                <div class="service-card animate">
                     <div class="service-icon">
                         <i class="fas fa-chalkboard-teacher"></i>
                     </div>
                     <span class="service-tag">SKILL DEVELOPMENT</span>
                     <h3>Professional Training</h3>
                     <p>Tailored training programs covering business fundamentals, leadership, digital skills, and industry-specific knowledge.</p>
-                    <ul class="service-features">
-                        <li><i class="fas fa-check"></i> Business Fundamentals</li>
-                        <li><i class="fas fa-check"></i> Digital Marketing</li>
-                        <li><i class="fas fa-check"></i> Financial Management</li>
-                        <li><i class="fas fa-check"></i> Leadership Skills</li>
-                    </ul>
-                    <a href="training.html" class="btn btn-secondary btn-small" style="margin-top: var(--space-md);">
-                        View Programs <i class="fas fa-arrow-right"></i>
-                    </a>
                 </div>
                 
-                <!-- Entrepreneurship Events -->
-                <div class="service-card animate-on-scroll">
+                <div class="service-card animate">
                     <div class="service-icon">
                         <i class="fas fa-calendar-star"></i>
                     </div>
                     <span class="service-tag">NETWORKING & LEARNING</span>
                     <h3>Entrepreneurship Events</h3>
                     <p>Regular events, workshops, and networking sessions to connect entrepreneurs and share knowledge.</p>
-                    <ul class="service-features">
-                        <li><i class="fas fa-check"></i> Business Pitch Competitions</li>
-                        <li><i class="fas fa-check"></i> Networking Mixers</li>
-                        <li><i class="fas fa-check"></i> Expert Workshops</li>
-                        <li><i class="fas fa-check"></i> Annual Summit</li>
-                    </ul>
-                    <a href="#events" class="btn btn-secondary btn-small" style="margin-top: var(--space-md);">
-                        See Events <i class="fas fa-arrow-right"></i>
-                    </a>
                 </div>
                 
-                <!-- Startup Support -->
-                <div class="service-card animate-on-scroll">
+                <div class="service-card animate">
                     <div class="service-icon">
                         <i class="fas fa-handshake"></i>
                     </div>
                     <span class="service-tag">GROWTH SUPPORT</span>
                     <h3>Startup Opportunities</h3>
                     <p>Practical startup opportunities with mentorship, resources, and support systems.</p>
-                    <ul class="service-features">
-                        <li><i class="fas fa-check"></i> Business Incubation</li>
-                        <li><i class="fas fa-check"></i> Mentorship Services</li>
-                        <li><i class="fas fa-check"></i> Funding Connections</li>
-                        <li><i class="fas fa-check"></i> Market Access</li>
-                    </ul>
-                    <a href="bootcamp.html" class="btn btn-secondary btn-small" style="margin-top: var(--space-md);">
-                        Explore <i class="fas fa-arrow-right"></i>
-                    </a>
                 </div>
             </div>
         </div>
@@ -1270,700 +1139,190 @@
     <!-- Upcoming Events Section -->
     <section id="events" class="events-section">
         <div class="container">
-            <div class="events-header">
-                <span class="events-subtitle">Get Involved</span>
-                <h2>Upcoming <span class="text-gradient">Events & Workshops</span></h2>
+            <div class="section-header">
+                <span class="section-subtitle">Get Involved</span>
+                <h2 class="section-title">Upcoming <span class="gradient-text">Events & Workshops</span></h2>
                 <p class="lead">Join our transformative events to shape your business acuity and connect with purpose.</p>
             </div>
             
-            <div class="events-grid" id="eventsGrid">
-                <div class="loading">
-                    <div class="loading-spinner"></div>
-                    <p>Loading events...</p>
-                </div>
-            </div>
-            
-            <div class="events-cta">
-                <a href="contact.html" class="btn btn-outline btn-large">
-                    <i class="fas fa-calendar-plus"></i> Propose Event
-                </a>
+            <div class="events-grid stagger" id="eventsGrid">
+                <!-- Events will be loaded dynamically -->
             </div>
         </div>
     </section>
 
-    <!-- About DSOG Section -->
-    <section id="about" class="about-dsog-section">
+    <!-- Stats Section -->
+    <section class="stats-section">
         <div class="container">
             <div class="section-header">
-                <span class="section-subtitle">Our Organization</span>
-                <h2>About <span class="text-gradient">DSOG</span></h2>
-                <p class="lead">Empowering entrepreneurs with knowledge, skills, and opportunities for success.</p>
+                <span class="section-subtitle">Our Impact</span>
+                <h2 class="section-title">By The <span class="gradient-text">Numbers</span></h2>
             </div>
             
-            <div class="about-container">
-                <div class="about-content animate-on-scroll">
-                    <h3>Our Mission & Vision</h3>
-                    <p>DSOG exists to empower entrepreneurs with the knowledge, skills, and opportunities needed to build successful enterprises.</p>
-                    
-                    <div class="stats-grid" id="statsGrid">
-                        <div class="loading">
-                            <div class="loading-spinner"></div>
-                            <p>Loading statistics...</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="about-content animate-on-scroll">
-                    <h3>Our Impact</h3>
-                    <ul class="service-features">
-                        <li><i class="fas fa-check text-primary"></i> Transformed business ideas</li>
-                        <li><i class="fas fa-check text-primary"></i> Developed business acuity</li>
-                        <li><i class="fas fa-check text-primary"></i> Provided professional training</li>
-                        <li><i class="fas fa-check text-primary"></i> Created startup opportunities</li>
-                    </ul>
-                    <a href="about.html" class="btn btn-primary" style="margin-top: var(--space-md);">
-                        Learn More <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Team Section -->
-    <section id="team" class="value-proposition">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-subtitle">Our Team</span>
-                <h2>Meet Our <span class="text-gradient">Expert Team</span></h2>
-                <p class="lead">Learn from successful entrepreneurs and industry experts.</p>
-            </div>
-            
-            <div class="value-grid" id="teamGrid">
-                <div class="loading">
-                    <div class="loading-spinner"></div>
-                    <p>Loading team...</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials Section -->
-    <section class="services-overview">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-subtitle">Success Stories</span>
-                <h2>What Our <span class="text-gradient">Clients Say</span></h2>
-                <p class="lead">Hear from entrepreneurs transformed by DSOG.</p>
-            </div>
-            
-            <div class="services-grid" id="testimonialsGrid">
-                <div class="loading">
-                    <div class="loading-spinner"></div>
-                    <p>Loading testimonials...</p>
-                </div>
+            <div class="stats-grid stagger" id="statsGrid">
+                <!-- Stats will be loaded dynamically -->
             </div>
         </div>
     </section>
 
     <!-- CTA Section -->
-    <section id="contact" class="cta-section">
+    <section class="cta-section">
         <div class="container">
             <div class="section-header">
-                <span class="section-subtitle">Start Your Journey</span>
-                <h2>Ready to <span class="text-gradient">Empower Your Business?</span></h2>
-                <p class="lead">Join DSOG today for training, events, and opportunities.</p>
+                <h2 class="section-title">Ready to <span class="gradient-text">Transform Your Business?</span></h2>
+                <p class="lead">Join DSOG today and start your entrepreneurial journey with expert guidance and support.</p>
             </div>
             
             <div class="hero-buttons">
-                <a href="https://wa.me/254733737983" target="_blank" class="btn btn-primary btn-large">
+                <a href="https://wa.me/254733737983" target="_blank" class="btn btn-primary btn-glow">
                     <i class="fab fa-whatsapp"></i> WhatsApp Inquiry
                 </a>
-                <a href="#events" class="btn btn-secondary btn-large">
-                    <i class="fas fa-calendar-alt"></i> Join Next Event
+                <a href="contact.html" class="btn btn-outline">
+                    <i class="fas fa-envelope"></i> Email Us
                 </a>
-            </div>
-            
-            <div class="contact-info">
-                <div class="contact-item animate-on-scroll">
-                    <div class="contact-icon">
-                        <i class="fas fa-phone-alt"></i>
-                    </div>
-                    <div>
-                        <div class="text-small">General Inquiries</div>
-                        <div class="text-medium">0733 737 983</div>
-                    </div>
-                </div>
-                
-                <div class="contact-item animate-on-scroll">
-                    <div class="contact-icon">
-                        <i class="fas fa-envelope-open-text"></i>
-                    </div>
-                    <div>
-                        <div class="text-small">Email</div>
-                        <div class="text-medium">office.dsog@gmail.com</div>
-                    </div>
-                </div>
-                
-                <div class="contact-item animate-on-scroll">
-                    <div class="contact-icon">
-                        <i class="fas fa-calendar-check"></i>
-                    </div>
-                    <div>
-                        <div class="text-small">Events</div>
-                        <div class="text-medium">events@dsog.org</div>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
+        <div class="footer-content">
+            <div class="footer-grid">
                 <div class="footer-section">
-                    <img src="https://i.postimg.cc/kMZ1jTww/Untitled-design-4-removebg-preview.png" 
-                         alt="DSOG" 
-                         class="footer-logo"
-                         loading="lazy">
-                    <p>Empowering businesses and entrepreneurs through training, events, and opportunities.</p>
+                    <h3>DSOG</h3>
+                    <p>Empowering businesses, startups, and young entrepreneurs through transformative opportunities.</p>
                 </div>
-                
                 <div class="footer-section">
-                    <h3>Quick Links</h3>
+                    <h4>Quick Links</h4>
                     <ul>
                         <li><a href="index.html">Home</a></li>
-                        <li><a href="about.html">About Us</a></li>
-                        <li><a href="enterprise.html">Enterprise</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="training.html">Training</a></li>
                         <li><a href="#events">Events</a></li>
                     </ul>
                 </div>
-                
                 <div class="footer-section">
-                    <h3>Our Services</h3>
-                    <ul>
-                        <li>Entrepreneurship Training</li>
-                        <li>Business Events</li>
-                        <li>Startup Incubation</li>
-                        <li>Enterprise Support</li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Contact</h3>
-                    <ul>
-                        <li><i class="fas fa-phone"></i> 0733 737 983</li>
-                        <li><i class="fas fa-envelope"></i> office.dsog@gmail.com</li>
-                        <li><i class="fab fa-whatsapp"></i> WhatsApp</li>
-                    </ul>
+                    <h4>Contact</h4>
+                    <p><i class="fas fa-phone"></i> 0733 737 983</p>
+                    <p><i class="fas fa-envelope"></i> office.dsog@gmail.com</p>
                 </div>
             </div>
-            
             <div class="copyright">
-                <p>&copy; <span id="currentYear"></span> DSOG - Empowering Businesses & Entrepreneurs.</p>
+                <p>&copy; <span id="currentYear"></span> DSOG. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <script>
-    // Enhanced Firebase Configuration
-    const firebaseConfig = {
-        apiKey: "AIzaSyDb5ZFHbo7lGM8ph0oBxFVTHRF5C5C_DWU",
-        authDomain: "dsog-events.firebaseapp.com",
-        databaseURL: "https://dsog-events-default-rtdb.europe-west1.firebasedatabase.app",
-        projectId: "dsog-events",
-        storageBucket: "dsog-events.firebasestorage.app",
-        messagingSenderId: "1075977932287",
-        appId: "1:1075977932287:web:b2bf4d1c0083d2dac8ebca"
-    };
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDb5ZFHbo7lGM8ph0oBxFVTHRF5C5C_DWU",
+            authDomain: "dsog-events.firebaseapp.com",
+            databaseURL: "https://dsog-events-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "dsog-events",
+            storageBucket: "dsog-events.firebasestorage.app",
+            messagingSenderId: "1075977932287",
+            appId: "1:1075977932287:web:b2bf4d1c0083d2dac8ebca"
+        };
 
-    // Initialize Firebase
-    let db;
-    let firebaseListeners = [];
-    try {
-        firebase.initializeApp(firebaseConfig);
-        db = firebase.database();
-        console.log('Firebase initialized - REAL-TIME MODE ACTIVE');
-    } catch (error) {
-        console.error('Firebase initialization error:', error);
-        db = null;
-    }
-
-    // Cache Management
-    const CACHE_KEY = 'dsog_website_cache_v8';
-    const CACHE_DURATION = 5 * 60 * 1000;
-
-    // Initialize the website
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('🚀 DSOG Website Version 8.0.0 - ULTRA RESPONSIVE');
-        
-        // Initialize components
-        initializeTheme();
-        initializeNavigation();
-        initializeAnimations();
-        initializeLazyLoading();
-        
-        // Set current year
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
-        
-        // Load from cache for instant display
-        const cachedData = getCachedData();
-        if (cachedData && !isCacheExpired(cachedData.timestamp)) {
-            console.log('Loading from cache for instant display');
-            displayCachedData(cachedData);
-            removeSkeletons();
-        }
-        
-        // Setup REAL-TIME listeners
-        setupRealtimeListeners();
-        
-        // Setup connection monitoring
-        if (db) setupConnectionStatus();
-        
-        console.log('Website initialized with maximum responsiveness');
-    });
-
-    // ==================== REAL-TIME LISTENERS ====================
-    function setupRealtimeListeners() {
-        if (!db) {
-            console.error('Firebase not available');
-            showOfflineMode();
-            return;
-        }
-
-        console.log('Setting up real-time Firebase listeners...');
-        
-        // Remove existing listeners
-        removeAllListeners();
-        
-        // Home Page Content
-        const homePageRef = db.ref('homePageContent');
-        const homePageListener = homePageRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                updateHomePageContent(data);
-                saveToCachePartial('homePageContent', data);
-                removeSkeletons();
-            }
-        });
-        firebaseListeners.push({ ref: homePageRef, listener: homePageListener });
-        
-        // Events
-        const eventsRef = db.ref('upcomingEvents');
-        const eventsListener = eventsRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            displayEvents(data);
-            saveToCachePartial('upcomingEvents', data);
-            showUpdateIndicator('Events updated');
-        });
-        firebaseListeners.push({ ref: eventsRef, listener: eventsListener });
-        
-        // Statistics
-        const statsRef = db.ref('stats');
-        const statsListener = statsRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            displayStatistics(data);
-            saveToCachePartial('stats', data);
-        });
-        firebaseListeners.push({ ref: statsRef, listener: statsListener });
-        
-        // Team Members
-        const teamRef = db.ref('teamMembers');
-        const teamListener = teamRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            displayTeamMembers(data);
-            saveToCachePartial('teamMembers', data);
-        });
-        firebaseListeners.push({ ref: teamRef, listener: teamListener });
-        
-        // Testimonials
-        const testimonialsRef = db.ref('testimonials');
-        const testimonialsListener = testimonialsRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            displayTestimonials(data);
-            saveToCachePartial('testimonials', data);
-        });
-        firebaseListeners.push({ ref: testimonialsRef, listener: testimonialsListener });
-        
-        // App Settings
-        const settingsRef = db.ref('appSettings');
-        const settingsListener = settingsRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                updateContactInfo(data);
-                saveToCachePartial('appSettings', data);
-            }
-        });
-        firebaseListeners.push({ ref: settingsRef, listener: settingsListener });
-        
-        console.log(`Setup ${firebaseListeners.length} real-time listeners`);
-    }
-
-    function removeAllListeners() {
-        firebaseListeners.forEach(({ ref, listener }) => {
-            ref.off('value', listener);
-        });
-        firebaseListeners = [];
-    }
-
-    // ==================== CACHE MANAGEMENT ====================
-    function getCachedData() {
+        // Initialize Firebase
+        let db;
         try {
-            const cached = localStorage.getItem(CACHE_KEY);
-            return cached ? JSON.parse(cached) : null;
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.database();
+            console.log('Firebase initialized successfully');
         } catch (error) {
-            return null;
+            console.error('Firebase initialization error:', error);
+            db = null;
         }
-    }
 
-    function saveToCachePartial(key, data) {
-        try {
-            const cached = getCachedData() || { timestamp: Date.now(), data: {} };
-            cached.data[key] = data;
-            cached.timestamp = Date.now();
-            localStorage.setItem(CACHE_KEY, JSON.stringify(cached));
-        } catch (error) {
-            console.error('Cache save error:', error);
-        }
-    }
-
-    function isCacheExpired(timestamp) {
-        return Date.now() - timestamp > CACHE_DURATION;
-    }
-
-    function displayCachedData(cachedData) {
-        const data = cachedData.data;
-        
-        if (data.homePageContent) updateHomePageContent(data.homePageContent);
-        if (data.upcomingEvents) displayEvents(data.upcomingEvents);
-        if (data.stats) displayStatistics(data.stats);
-        if (data.teamMembers) displayTeamMembers(data.teamMembers);
-        if (data.testimonials) displayTestimonials(data.testimonials);
-        if (data.appSettings) updateContactInfo(data.appSettings);
-    }
-
-    function removeSkeletons() {
-        document.querySelectorAll('.skeleton').forEach(el => {
-            el.classList.remove('skeleton');
-            el.style.background = '';
-            el.style.height = '';
-            el.style.width = '';
+        // DOM Ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 DSOG Website v9.0.0 - Cyber Mode Activated');
+            
+            // Initialize components
+            initThemeToggle();
+            initMobileMenu();
+            initAnimations();
+            initParticles();
+            initParallax();
+            
+            // Set current year
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            // Load initial data
+            loadInitialData();
+            
+            // Setup real-time listeners
+            if (db) {
+                setupRealtimeListeners();
+            }
+            
+            // Add scroll effects
+            initScrollEffects();
+            
+            // Add 3D card effects
+            init3DEffects();
         });
-    }
 
-    // ==================== UI UPDATES ====================
-    function updateHomePageContent(content) {
-        try {
-            // Hero Section
-            if (content.hero) {
-                const heroTitle = document.getElementById('heroTitle');
-                const heroSubtitle = document.getElementById('heroSubtitle');
-                const approachSubtitle = document.getElementById('approachSubtitle');
+        // ===== THEME MANAGEMENT =====
+        function initThemeToggle() {
+            const themeToggle = document.getElementById('themeToggle');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+            
+            // Get saved theme or use system preference
+            const savedTheme = localStorage.getItem('dsog-theme');
+            const systemTheme = prefersDark.matches ? 'dark' : 'light';
+            const initialTheme = savedTheme || systemTheme;
+            
+            // Apply theme
+            document.documentElement.setAttribute('data-theme', initialTheme);
+            updateThemeIcon(initialTheme);
+            
+            // Toggle theme on click
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
                 
-                if (heroTitle) heroTitle.textContent = content.hero.mainTitle || 'Become What You Believe!';
-                if (heroSubtitle) heroSubtitle.textContent = content.hero.subtitle || 'Empowering businesses through transformative training and opportunities.';
-                if (approachSubtitle) approachSubtitle.textContent = content.approach?.subtitle || 'We engage, train, and provide opportunities for entrepreneurs.';
+                // Smooth theme transition
+                document.documentElement.style.transition = 'all 0.3s ease';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('dsog-theme', newTheme);
+                updateThemeIcon(newTheme);
                 
-                // Category Tags
-                const categoryTags = document.getElementById('categoryTags');
-                if (content.hero.categoryTags && Array.isArray(content.hero.categoryTags)) {
-                    categoryTags.innerHTML = '';
-                    content.hero.categoryTags.forEach(tag => {
-                        const tagElement = document.createElement('span');
-                        tagElement.className = 'category-tag';
-                        tagElement.textContent = tag;
-                        categoryTags.appendChild(tagElement);
-                    });
-                }
-            }
+                setTimeout(() => {
+                    document.documentElement.style.transition = '';
+                }, 300);
+            });
             
-            // Approach Cards
-            if (content.approach?.cards) {
-                const approachCards = document.getElementById('approachCards');
-                if (approachCards) {
-                    approachCards.innerHTML = '';
-                    content.approach.cards.forEach((card, index) => {
-                        const cardElement = document.createElement('div');
-                        cardElement.className = 'approach-card animate-on-scroll';
-                        cardElement.innerHTML = `
-                            <div class="approach-icon">
-                                <i class="${card.icon || 'fas fa-users'}"></i>
-                            </div>
-                            <span class="approach-tag">${card.tag || 'ENGAGEMENT'}</span>
-                            <h3>${card.title || 'Transformative Events'}</h3>
-                            <p>${card.description || 'Engaging events that shape business acuity.'}</p>
-                        `;
-                        approachCards.appendChild(cardElement);
-                    });
-                    initializeAnimations();
-                }
-            }
-        } catch (error) {
-            console.error('Home page update error:', error);
-        }
-    }
-
-    function displayEvents(events) {
-        try {
-            const eventsGrid = document.getElementById('eventsGrid');
-            if (!eventsGrid) return;
-            
-            const eventsArray = events ? Object.values(events)
-                .filter(event => event.active !== false)
-                .sort((a, b) => new Date(a.date || '9999-12-31') - new Date(b.date || '9999-12-31')) : [];
-            
-            if (eventsArray.length > 0) {
-                eventsGrid.innerHTML = '';
-                eventsArray.forEach((event, index) => {
-                    const eventCard = createEventCard(event, index);
-                    eventsGrid.appendChild(eventCard);
-                });
-                initializeAnimations();
-            } else {
-                eventsGrid.innerHTML = `
-                    <div class="event-card" style="grid-column: 1 / -1; text-align: center; padding: var(--space-2xl);">
-                        <div class="event-content">
-                            <h3>No Upcoming Events</h3>
-                            <p>Check back soon for upcoming events!</p>
-                            <a href="contact.html" class="btn btn-primary">
-                                <i class="fas fa-calendar-plus"></i> Propose Event
-                            </a>
-                        </div>
-                    </div>
-                `;
-            }
-        } catch (error) {
-            console.error('Events display error:', error);
-        }
-    }
-
-    function displayStatistics(stats) {
-        try {
-            const statsGrid = document.getElementById('statsGrid');
-            if (!statsGrid) return;
-            
-            statsGrid.innerHTML = '';
-            
-            const statItems = [
-                { key: 'entrepreneursTrained', label: 'Entrepreneurs Trained', value: stats?.entrepreneursTrained || 0 },
-                { key: 'eventsHosted', label: 'Events Hosted', value: stats?.eventsHosted || 0 },
-                { key: 'startupsSupported', label: 'Startups Supported', value: stats?.startupsSupported || 0 },
-                { key: 'completionRate', label: 'Completion Rate', value: stats?.completionRate ? `${stats.completionRate}%` : '95%' },
-            ];
-            
-            statItems.forEach((stat, index) => {
-                if (stat.value && stat.value !== '0') {
-                    const statItem = document.createElement('div');
-                    statItem.className = 'stat-item animate-on-scroll';
-                    statItem.innerHTML = `
-                        <div class="stat-number">${stat.value}</div>
-                        <div class="text-small">${stat.label}</div>
-                    `;
-                    statsGrid.appendChild(statItem);
+            // Listen for system theme changes
+            prefersDark.addEventListener('change', (e) => {
+                if (!localStorage.getItem('dsog-theme')) {
+                    const newTheme = e.matches ? 'dark' : 'light';
+                    document.documentElement.setAttribute('data-theme', newTheme);
+                    updateThemeIcon(newTheme);
                 }
             });
             
-            initializeAnimations();
-        } catch (error) {
-            console.error('Stats display error:', error);
-        }
-    }
-
-    function displayTeamMembers(team) {
-        try {
-            const teamGrid = document.getElementById('teamGrid');
-            if (!teamGrid) return;
-            
-            const teamArray = team ? Object.values(team)
-                .filter(member => member.active !== false) : [];
-            
-            if (teamArray.length > 0) {
-                teamGrid.innerHTML = '';
-                teamArray.forEach((member, index) => {
-                    const memberCard = createTeamMemberCard(member, index);
-                    teamGrid.appendChild(memberCard);
-                });
-                initializeAnimations();
-            }
-        } catch (error) {
-            console.error('Team display error:', error);
-        }
-    }
-
-    function displayTestimonials(testimonials) {
-        try {
-            const testimonialsGrid = document.getElementById('testimonialsGrid');
-            if (!testimonialsGrid) return;
-            
-            const testimonialsArray = testimonials ? Object.values(testimonials)
-                .filter(testimonial => testimonial.active !== false) : [];
-            
-            if (testimonialsArray.length > 0) {
-                testimonialsGrid.innerHTML = '';
-                testimonialsArray.slice(0, 3).forEach((testimonial, index) => {
-                    const testimonialCard = createTestimonialCard(testimonial, index);
-                    testimonialsGrid.appendChild(testimonialCard);
-                });
-                initializeAnimations();
-            }
-        } catch (error) {
-            console.error('Testimonials display error:', error);
-        }
-    }
-
-    function updateContactInfo(settings) {
-        try {
-            if (settings.phoneNumber) {
-                document.querySelectorAll('.text-medium').forEach(el => {
-                    if (el.textContent.includes('0733 737 983')) {
-                        el.textContent = settings.phoneNumber;
-                    }
-                });
-            }
-        } catch (error) {
-            console.error('Contact info update error:', error);
-        }
-    }
-
-    // ==================== CARD CREATION ====================
-    function createEventCard(event, index) {
-        const card = document.createElement('div');
-        card.className = `event-card animate-on-scroll ${event.category}-event`;
-        
-        // Format date
-        let dateText = 'Date TBD';
-        if (event.date) {
-            try {
-                const eventDate = new Date(event.date);
-                if (!isNaN(eventDate.getTime())) {
-                    dateText = eventDate.toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric'
-                    });
+            function updateThemeIcon(theme) {
+                const icon = themeToggle.querySelector('i');
+                if (theme === 'dark') {
+                    icon.className = 'fas fa-sun';
+                    themeToggle.setAttribute('aria-label', 'Switch to light theme');
+                } else {
+                    icon.className = 'fas fa-moon';
+                    themeToggle.setAttribute('aria-label', 'Switch to dark theme');
                 }
-            } catch (error) {
-                console.error('Date formatting error:', error);
             }
         }
-        
-        card.innerHTML = `
-            <div class="event-image-container">
-                <img src="${event.imageUrl || 'https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp'}" 
-                     alt="${event.title || 'DSOG Event'}" 
-                     class="event-image"
-                     loading="lazy"
-                     onerror="this.src='https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp'">
-                <div class="event-date-badge">
-                    <i class="fas fa-calendar"></i> ${dateText}
-                </div>
-            </div>
-            <div class="event-content">
-                <span class="event-category ${event.category}">${(event.category || 'event').toUpperCase()}</span>
-                ${event.duration ? `<div class="duration-badge"><i class="fas fa-clock"></i> ${event.duration}</div>` : ''}
-                <div class="event-details">
-                    <h4>${event.title || 'Upcoming Event'}</h4>
-                    <p>${event.description || 'Join us for this transformative event.'}</p>
-                    <div class="event-meta">
-                        ${event.venue ? `<div class="meta-item"><i class="fas fa-map-marker-alt"></i><span>${event.venue}</span></div>` : ''}
-                    </div>
-                </div>
-                <div class="event-action">
-                    <a href="${event.registrationUrl || 'https://wa.me/254733737983'}" 
-                       target="_blank" 
-                       class="btn btn-primary">
-                        <i class="fas fa-graduation-cap"></i> Register Now
-                    </a>
-                </div>
-            </div>
-        `;
-        
-        return card;
-    }
 
-    function createTeamMemberCard(member, index) {
-        const card = document.createElement('div');
-        card.className = 'value-card animate-on-scroll';
-        
-        card.innerHTML = `
-            <div class="value-icon">
-                <i class="fas fa-user-tie"></i>
-            </div>
-            <h4>${member.name || 'Team Member'}</h4>
-            <p><strong>${member.role || 'Team Member'}</strong></p>
-            <p style="font-size: 0.9rem;">${member.bio || 'Expert in entrepreneurship.'}</p>
-        `;
-        
-        return card;
-    }
-
-    function createTestimonialCard(testimonial, index) {
-        const card = document.createElement('div');
-        card.className = 'service-card animate-on-scroll';
-        
-        const rating = testimonial.rating || 5;
-        const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
-        
-        card.innerHTML = `
-            <div class="service-icon">
-                <i class="fas fa-comment"></i>
-            </div>
-            <span class="service-tag">TESTIMONIAL</span>
-            <h3>${testimonial.name || 'Client'}</h3>
-            <p><strong>${testimonial.role || 'Entrepreneur'}</strong></p>
-            <div style="color: #ffc107; margin: var(--space-sm) 0;">${stars}</div>
-            <p style="font-style: italic;">"${testimonial.content || 'Great experience!'}"</p>
-        `;
-        
-        return card;
-    }
-
-    // ==================== CORE FUNCTIONS ====================
-    function initializeTheme() {
-        const themeToggle = document.getElementById('themeToggle');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-        
-        const savedTheme = localStorage.getItem('theme');
-        const systemTheme = prefersDark.matches ? 'dark' : 'light';
-        const initialTheme = savedTheme || systemTheme;
-        
-        document.documentElement.setAttribute('data-theme', initialTheme);
-        updateThemeIcon(initialTheme);
-        
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        // ===== MOBILE MENU =====
+        function initMobileMenu() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.getElementById('navLinks');
             
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateThemeIcon(newTheme);
-        });
-        
-        prefersDark.addEventListener('change', (e) => {
-            if (!localStorage.getItem('theme')) {
-                const newTheme = e.matches ? 'dark' : 'light';
-                document.documentElement.setAttribute('data-theme', newTheme);
-                updateThemeIcon(newTheme);
-            }
-        });
-        
-        function updateThemeIcon(theme) {
-            const icon = themeToggle.querySelector('i');
-            if (theme === 'dark') {
-                icon.className = 'fas fa-sun';
-                themeToggle.setAttribute('aria-label', 'Switch to light theme');
-            } else {
-                icon.className = 'fas fa-moon';
-                themeToggle.setAttribute('aria-label', 'Switch to dark theme');
-            }
-        }
-    }
-
-    function initializeNavigation() {
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const navLinks = document.getElementById('navLinks');
-        
-        if (mobileMenuBtn && navLinks) {
+            if (!mobileMenuBtn || !navLinks) return;
+            
             mobileMenuBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
                 navLinks.classList.toggle('active');
@@ -1971,14 +1330,14 @@
                 icon.className = navLinks.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
                 this.setAttribute('aria-expanded', navLinks.classList.contains('active'));
                 
-                // Toggle body scroll
+                // Prevent body scroll when menu is open
                 if (navLinks.classList.contains('active')) {
                     document.body.style.overflow = 'hidden';
                 } else {
                     document.body.style.overflow = '';
                 }
             });
-
+            
             // Close menu when clicking outside
             document.addEventListener('click', function(event) {
                 if (!navLinks.contains(event.target) && !mobileMenuBtn.contains(event.target) && navLinks.classList.contains('active')) {
@@ -1988,8 +1347,8 @@
                     document.body.style.overflow = '';
                 }
             });
-
-            // Close menu on link click (mobile)
+            
+            // Close menu on link click
             navLinks.querySelectorAll('a').forEach(link => {
                 link.addEventListener('click', () => {
                     if (window.innerWidth <= 1024) {
@@ -2012,73 +1371,403 @@
             });
         }
 
-        // Header scroll effect
-        const header = document.getElementById('header');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
-
-        // Smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                const href = this.getAttribute('href');
-                
-                if (href.startsWith('#') && href !== '#') {
-                    e.preventDefault();
-                    
-                    const targetId = href.substring(1);
-                    const targetElement = document.getElementById(targetId);
-                    
-                    if (targetElement) {
-                        const headerHeight = document.getElementById('header').offsetHeight;
-                        const targetPosition = targetElement.offsetTop - headerHeight - 20;
-                        
-                        window.scrollTo({
-                            top: targetPosition,
-                            behavior: 'smooth'
-                        });
+        // ===== ANIMATIONS =====
+        function initAnimations() {
+            // Intersection Observer for scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate');
+                        observer.unobserve(entry.target);
                     }
+                });
+            }, observerOptions);
+            
+            // Observe all animate elements
+            document.querySelectorAll('.animate').forEach(el => {
+                observer.observe(el);
+            });
+            
+            // Stagger animation
+            document.querySelectorAll('.stagger > *').forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.1}s`;
+                observer.observe(el);
+            });
+        }
+
+        // ===== PARTICLE BACKGROUND =====
+        function initParticles() {
+            const particlesContainer = document.getElementById('particles');
+            if (!particlesContainer) return;
+            
+            const particleCount = window.innerWidth < 768 ? 30 : 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.style.cssText = `
+                    position: absolute;
+                    width: ${Math.random() * 3 + 1}px;
+                    height: ${Math.random() * 3 + 1}px;
+                    background: ${Math.random() > 0.5 ? 'var(--primary-red)' : 'var(--accent-cyan)'};
+                    border-radius: 50%;
+                    opacity: ${Math.random() * 0.5 + 0.2};
+                    top: ${Math.random() * 100}%;
+                    left: ${Math.random() * 100}%;
+                    animation: float ${Math.random() * 20 + 10}s linear infinite;
+                    animation-delay: ${Math.random() * 5}s;
+                `;
+                
+                // Add floating animation
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes float {
+                        0% {
+                            transform: translate(0, 0) rotate(0deg);
+                        }
+                        25% {
+                            transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) rotate(90deg);
+                        }
+                        50% {
+                            transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) rotate(180deg);
+                        }
+                        75% {
+                            transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) rotate(270deg);
+                        }
+                        100% {
+                            transform: translate(0, 0) rotate(360deg);
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // ===== PARALLAX EFFECT =====
+        function initParallax() {
+            const parallaxElements = document.querySelectorAll('.parallax-layer');
+            
+            window.addEventListener('scroll', () => {
+                const scrolled = window.pageYOffset;
+                
+                parallaxElements.forEach((el, index) => {
+                    const speed = 0.5 + (index * 0.1);
+                    const yPos = -(scrolled * speed);
+                    el.style.transform = `translateY(${yPos}px)`;
+                });
+            });
+        }
+
+        // ===== 3D CARD EFFECTS =====
+        function init3DEffects() {
+            const cards = document.querySelectorAll('.glass-card');
+            
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    const rotateY = (x - centerX) / 25;
+                    const rotateX = (centerY - y) / 25;
+                    
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
+                });
+            });
+        }
+
+        // ===== SCROLL EFFECTS =====
+        function initScrollEffects() {
+            const header = document.getElementById('header');
+            
+            window.addEventListener('scroll', () => {
+                // Header scroll effect
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+                
+                // Parallax for hero
+                const hero = document.querySelector('.hero');
+                if (hero) {
+                    const scrolled = window.pageYOffset;
+                    const rate = scrolled * -0.5;
+                    hero.style.transform = `translate3d(0, ${rate}px, 0)`;
                 }
             });
-        });
-    }
+        }
 
-    function initializeAnimations() {
-        const animatedElements = document.querySelectorAll('.animate-on-scroll');
+        // ===== FIREBASE DATA MANAGEMENT =====
+        let firebaseListeners = [];
         
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animated');
-                    observer.unobserve(entry.target);
+        function setupRealtimeListeners() {
+            if (!db) return;
+            
+            // Remove existing listeners
+            firebaseListeners.forEach(listener => listener());
+            firebaseListeners = [];
+            
+            // Home Page Content
+            const homeRef = db.ref('homePageContent');
+            const homeListener = homeRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    updateHomePageContent(data);
+                    saveToCache('homePageContent', data);
                 }
             });
-        }, {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
+            firebaseListeners.push(() => homeRef.off('value', homeListener));
+            
+            // Events
+            const eventsRef = db.ref('upcomingEvents');
+            const eventsListener = eventsRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                displayEvents(data);
+                saveToCache('upcomingEvents', data);
+            });
+            firebaseListeners.push(() => eventsRef.off('value', eventsListener));
+            
+            // Statistics
+            const statsRef = db.ref('stats');
+            const statsListener = statsRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                displayStatistics(data);
+                saveToCache('stats', data);
+            });
+            firebaseListeners.push(() => statsRef.off('value', statsListener));
+        }
+        
+        // ===== CACHE MANAGEMENT =====
+        const CACHE_KEY = 'dsog_cache_v9';
+        const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+        
+        function getCachedData(key) {
+            try {
+                const cached = localStorage.getItem(CACHE_KEY);
+                if (!cached) return null;
+                
+                const data = JSON.parse(cached);
+                if (Date.now() - data.timestamp > CACHE_DURATION) {
+                    return null; // Cache expired
+                }
+                
+                return data[key];
+            } catch (error) {
+                console.error('Cache read error:', error);
+                return null;
+            }
+        }
+        
+        function saveToCache(key, value) {
+            try {
+                const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}');
+                cached[key] = value;
+                cached.timestamp = Date.now();
+                localStorage.setItem(CACHE_KEY, JSON.stringify(cached));
+            } catch (error) {
+                console.error('Cache save error:', error);
+            }
+        }
+        
+        // ===== DATA LOADING =====
+        function loadInitialData() {
+            // Try cache first
+            const homeData = getCachedData('homePageContent');
+            const eventsData = getCachedData('upcomingEvents');
+            const statsData = getCachedData('stats');
+            
+            if (homeData) updateHomePageContent(homeData);
+            if (eventsData) displayEvents(eventsData);
+            if (statsData) displayStatistics(statsData);
+            
+            // Remove skeletons
+            setTimeout(() => {
+                document.querySelectorAll('.skeleton').forEach(el => {
+                    el.classList.remove('skeleton');
+                });
+            }, 500);
+        }
+        
+        // ===== UI UPDATES =====
+        function updateHomePageContent(data) {
+            // Hero Section
+            if (data.hero) {
+                const heroTitle = document.getElementById('heroTitle');
+                const heroSubtitle = document.getElementById('heroSubtitle');
+                const approachSubtitle = document.getElementById('approachSubtitle');
+                
+                if (heroTitle) heroTitle.textContent = data.hero.mainTitle || 'Become What You Believe!';
+                if (heroSubtitle) heroSubtitle.textContent = data.hero.subtitle || 'DSOG empowers businesses, startups, and young entrepreneurs through transformative training, impactful events, and real startup opportunities.';
+                if (approachSubtitle) approachSubtitle.textContent = data.approach?.subtitle || 'We engage people through events aimed at shaping their business acuity, train professionals, and provide startup opportunities to practice what they\'ve learned.';
+                
+                // Category Tags
+                const categoryTags = document.getElementById('categoryTags');
+                if (data.hero.categoryTags && Array.isArray(data.hero.categoryTags)) {
+                    categoryTags.innerHTML = '';
+                    data.hero.categoryTags.forEach(tag => {
+                        const tagElement = document.createElement('span');
+                        tagElement.className = 'category-tag';
+                        tagElement.textContent = tag;
+                        categoryTags.appendChild(tagElement);
+                    });
+                }
+            }
+            
+            // Approach Cards
+            if (data.approach?.cards) {
+                const approachCards = document.getElementById('approachCards');
+                if (approachCards) {
+                    approachCards.innerHTML = '';
+                    data.approach.cards.forEach((card, index) => {
+                        const cardElement = document.createElement('div');
+                        cardElement.className = 'approach-card animate';
+                        cardElement.style.animationDelay = `${index * 0.1}s`;
+                        cardElement.innerHTML = `
+                            <div class="approach-icon">
+                                <i class="${card.icon || 'fas fa-users'}"></i>
+                            </div>
+                            <span class="approach-tag">${card.tag || 'ENGAGEMENT'}</span>
+                            <h3>${card.title || 'Transformative Events'}</h3>
+                            <p>${card.description || 'Engaging events that shape business acuity.'}</p>
+                        `;
+                        approachCards.appendChild(cardElement);
+                    });
+                }
+            }
+        }
+        
+        function displayEvents(events) {
+            const eventsGrid = document.getElementById('eventsGrid');
+            if (!eventsGrid) return;
+            
+            // Convert to array and filter
+            const eventsArray = events ? Object.values(events)
+                .filter(event => event.active !== false)
+                .sort((a, b) => new Date(a.date || '9999-12-31') - new Date(b.date || '9999-12-31')) : [];
+            
+            if (eventsArray.length > 0) {
+                eventsGrid.innerHTML = '';
+                eventsArray.forEach((event, index) => {
+                    const eventCard = document.createElement('div');
+                    eventCard.className = 'event-card animate';
+                    eventCard.style.animationDelay = `${index * 0.1}s`;
+                    
+                    // Format date
+                    let dateText = 'Date TBD';
+                    if (event.date) {
+                        try {
+                            const eventDate = new Date(event.date);
+                            dateText = eventDate.toLocaleDateString('en-US', {
+                                month: 'short',
+                                day: 'numeric',
+                                year: 'numeric'
+                            });
+                        } catch (e) {
+                            console.error('Date error:', e);
+                        }
+                    }
+                    
+                    eventCard.innerHTML = `
+                        <img src="${event.imageUrl || 'https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp'}" 
+                             alt="${event.title || 'Event'}" 
+                             class="event-image"
+                             loading="lazy">
+                        <div class="event-content">
+                            <div class="event-date">${dateText}</div>
+                            <h3>${event.title || 'Upcoming Event'}</h3>
+                            <p>${event.description || 'Join us for this transformative experience.'}</p>
+                            ${event.venue ? `<p class="event-venue"><i class="fas fa-map-marker-alt"></i> ${event.venue}</p>` : ''}
+                            <a href="${event.registrationUrl || 'https://wa.me/254733737983'}" 
+                               target="_blank" 
+                               class="btn btn-primary btn-small">
+                                <i class="fas fa-calendar-plus"></i> Register Now
+                            </a>
+                        </div>
+                    `;
+                    
+                    eventsGrid.appendChild(eventCard);
+                });
+            } else {
+                eventsGrid.innerHTML = `
+                    <div class="no-events animate">
+                        <h3>No Upcoming Events</h3>
+                        <p>Stay tuned for our upcoming events!</p>
+                    </div>
+                `;
+            }
+            
+            // Re-initialize animations
+            initAnimations();
+        }
+        
+        function displayStatistics(stats) {
+            const statsGrid = document.getElementById('statsGrid');
+            if (!statsGrid) return;
+            
+            const statItems = [
+                { key: 'entrepreneursTrained', label: 'Entrepreneurs Trained', icon: 'fas fa-user-graduate' },
+                { key: 'eventsHosted', label: 'Events Hosted', icon: 'fas fa-calendar-check' },
+                { key: 'startupsSupported', label: 'Startups Supported', icon: 'fas fa-rocket' },
+                { key: 'successRate', label: 'Success Rate', icon: 'fas fa-chart-line' }
+            ];
+            
+            statsGrid.innerHTML = '';
+            statItems.forEach((stat, index) => {
+                const value = stats?.[stat.key] || (stat.key === 'successRate' ? '95%' : '0');
+                
+                const statCard = document.createElement('div');
+                statCard.className = 'stat-card animate';
+                statCard.style.animationDelay = `${index * 0.1}s`;
+                statCard.innerHTML = `
+                    <div class="stat-icon">
+                        <i class="${stat.icon}"></i>
+                    </div>
+                    <div class="stat-number">${value}</div>
+                    <div class="stat-label">${stat.label}</div>
+                `;
+                
+                statsGrid.appendChild(statCard);
+            });
+            
+            // Re-initialize animations
+            initAnimations();
+        }
+        
+        // ===== PERFORMANCE OPTIMIZATIONS =====
+        
+        // Debounce resize events
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                // Handle resize completion
+            }, 250);
         });
         
-        animatedElements.forEach(element => {
-            observer.observe(element);
-        });
-    }
-
-    function initializeLazyLoading() {
-        const images = document.querySelectorAll('img[loading="lazy"]');
-        
+        // Lazy load images
         if ('loading' in HTMLImageElement.prototype) {
-            // Browser supports native lazy loading
+            const images = document.querySelectorAll('img[loading="lazy"]');
             images.forEach(img => {
                 if (img.dataset.src) {
                     img.src = img.dataset.src;
                 }
             });
         } else {
-            // Fallback for browsers without native support
+            // Fallback for older browsers
             const imageObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -2086,81 +1775,75 @@
                         if (img.dataset.src) {
                             img.src = img.dataset.src;
                         }
-                        img.classList.add('loaded');
                         imageObserver.unobserve(img);
                     }
                 });
             });
             
-            images.forEach(img => imageObserver.observe(img));
-        }
-    }
-
-    function showUpdateIndicator(message) {
-        const indicator = document.createElement('div');
-        indicator.className = 'update-indicator';
-        indicator.textContent = message;
-        
-        document.body.appendChild(indicator);
-        
-        setTimeout(() => {
-            indicator.style.animation = 'slideDown 0.3s ease';
-            setTimeout(() => {
-                if (indicator.parentNode) {
-                    indicator.parentNode.removeChild(indicator);
-                }
-            }, 300);
-        }, 2000);
-    }
-
-    function setupConnectionStatus() {
-        if (!db) return;
-        
-        const connectionRef = db.ref('.info/connected');
-        connectionRef.on('value', (snap) => {
-            showConnectionStatus(snap.val() === true ? 'connected' : 'disconnected');
-        });
-    }
-
-    function showConnectionStatus(status) {
-        let statusEl = document.getElementById('firebase-status');
-        if (!statusEl) {
-            statusEl = document.createElement('div');
-            statusEl.id = 'firebase-status';
-            document.body.appendChild(statusEl);
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                imageObserver.observe(img);
+            });
         }
         
-        statusEl.innerHTML = `
-            <i class="fas fa-${status === 'connected' ? 'check-circle' : 'exclamation-circle'}"></i>
-            ${status === 'connected' ? 'Live' : 'Offline'}
-        `;
-        statusEl.style.background = status === 'connected' ? '#28a745' : '#dc3545';
-    }
-
-    function showOfflineMode() {
-        console.log('Running in offline mode');
-        showConnectionStatus('disconnected');
-    }
-
-    // Touch optimizations
-    document.addEventListener('touchstart', function() {}, { passive: true });
-
-    // Performance optimizations
-    let resizeTimeout;
-    window.addEventListener('resize', function() {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(function() {
-            // Handle resize completion
-        }, 250);
-    });
-
-    // Manual refresh for testing
-    window.refreshData = function() {
-        console.log('Manual refresh triggered');
-        removeAllListeners();
-        setupRealtimeListeners();
-        showUpdateIndicator('Reconnecting...');
-    };
+        // Touch optimizations
+        document.addEventListener('touchstart', () => {}, { passive: true });
+        
+        // Connection status indicator
+        function showConnectionStatus(connected) {
+            let statusEl = document.getElementById('connection-status');
+            if (!statusEl) {
+                statusEl = document.createElement('div');
+                statusEl.id = 'connection-status';
+                statusEl.style.cssText = `
+                    position: fixed;
+                    bottom: 20px;
+                    left: 20px;
+                    padding: 8px 12px;
+                    border-radius: 20px;
+                    font-size: 12px;
+                    font-weight: 600;
+                    z-index: 1000;
+                    background: ${connected ? '#10B981' : '#EF4444'};
+                    color: white;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    transition: all 0.3s ease;
+                `;
+                document.body.appendChild(statusEl);
+            }
+            
+            statusEl.innerHTML = `
+                <i class="fas fa-${connected ? 'wifi' : 'exclamation-triangle'}"></i>
+                ${connected ? 'Live Updates' : 'Offline Mode'}
+            `;
+            statusEl.style.background = connected ? '#10B981' : '#EF4444';
+            
+            if (!connected) {
+                setTimeout(() => {
+                    if (statusEl.parentNode) {
+                        statusEl.style.opacity = '0.5';
+                    }
+                }, 3000);
+            }
+        }
+        
+        // Monitor Firebase connection
+        if (db) {
+            const connectedRef = db.ref('.info/connected');
+            connectedRef.on('value', (snap) => {
+                showConnectionStatus(snap.val() === true);
+            });
+        }
+        
+        // Manual refresh for testing
+        window.refreshData = function() {
+            console.log('Refreshing data...');
+            if (db) {
+                setupRealtimeListeners();
+            }
+        };
     </script>
 </body>
 </html>
