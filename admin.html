@@ -16,731 +16,368 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- Trix Editor for rich text -->
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.0/dist/trix.css">
+    <script type="text/javascript" src="https://unpkg.com/trix@2.0.0/dist/trix.umd.min.js"></script>
+    
     <style>
-        :root {
-            --primary-red: #C21807;
-            --primary-dark: #1A1A1A;
-            --white: #FFFFFF;
-            --light-gray: #F8F9FA;
-            --medium-gray: #E9ECEF;
-            --dark-gray: #6C757D;
-            --border-color: #DEE2E6;
-            --success: #28a745;
-            --warning: #ffc107;
-            --danger: #dc3545;
-            --info: #17a2b8;
-            
-            /* Theme Variables */
-            --bg-primary: var(--white);
-            --bg-secondary: var(--light-gray);
-            --bg-tertiary: var(--medium-gray);
-            --text-primary: var(--primary-dark);
-            --text-secondary: var(--dark-gray);
-            --card-bg: var(--white);
-            
-            --font-primary: 'Inter', sans-serif;
-            --font-heading: 'Manrope', sans-serif;
-            
-            --radius-sm: 6px;
-            --radius-md: 10px;
-            --radius-lg: 14px;
-            
-            --space-xs: 0.5rem;
-            --space-sm: 0.75rem;
-            --space-md: 1rem;
-            --space-lg: 1.5rem;
-            --space-xl: 2rem;
-            --space-2xl: 3rem;
-        }
-
-        [data-theme="dark"] {
-            --bg-primary: #121212;
-            --bg-secondary: #1E1E1E;
-            --bg-tertiary: #2D2D2D;
-            --card-bg: #1E1E1E;
-            --text-primary: #F5F5F5;
-            --text-secondary: #B0B0B0;
-            --border-color: #404040;
-            --white: #1E1E1E;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: var(--font-primary);
+        /* All previous styles remain the same, adding new ones for additional sections */
+        
+        /* Trix Editor Styling */
+        trix-toolbar {
             background: var(--bg-secondary);
-            color: var(--text-primary);
-            min-height: 100vh;
+            border: 1px solid var(--border-color);
+            border-bottom: none;
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
+            padding: var(--space-sm);
         }
-
-        /* Login Container */
-        .login-container {
-            min-height: 100vh;
+        
+        trix-editor {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 0 0 var(--radius-md) var(--radius-md);
+            min-height: 150px;
+            padding: var(--space-md);
+            color: var(--text-primary);
+            font-family: var(--font-primary);
+        }
+        
+        /* Array items styling */
+        .array-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
+            margin-bottom: var(--space-sm);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .array-item-content {
+            flex: 1;
+            padding-right: var(--space-md);
+        }
+        
+        /* Tab navigation for sections */
+        .tab-navigation {
+            display: flex;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-xl);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: var(--space-sm);
+        }
+        
+        .tab-btn {
+            padding: var(--space-sm) var(--space-lg);
+            background: transparent;
+            border: none;
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .tab-btn:hover {
+            background: var(--bg-secondary);
+        }
+        
+        .tab-btn.active {
+            background: var(--primary-red);
+            color: white;
+        }
+        
+        /* Image preview */
+        .image-preview {
+            width: 100%;
+            max-width: 300px;
+            height: 200px;
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--bg-secondary);
-            padding: var(--space-xl);
+            overflow: hidden;
+            margin-top: var(--space-sm);
         }
-
-        .login-card {
+        
+        .image-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+        }
+        
+        /* Sortable lists */
+        .sortable-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .sortable-item {
             background: var(--card-bg);
-            border-radius: var(--radius-lg);
-            padding: var(--space-2xl);
-            width: 100%;
-            max-width: 400px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-        }
-
-        .login-header {
-            text-align: center;
-            margin-bottom: var(--space-2xl);
-        }
-
-        .login-header img {
-            height: 60px;
-            margin-bottom: var(--space-lg);
-        }
-
-        .login-header h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: var(--space-xs);
-        }
-
-        .login-header p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .form-group {
-            margin-bottom: var(--space-lg);
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: var(--space-sm);
-            font-weight: 500;
-            color: var(--text-primary);
-            font-size: 0.9rem;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: var(--space-md);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            font-family: var(--font-primary);
-            font-size: 0.9rem;
-            transition: border-color 0.2s ease;
+            padding: var(--space-md);
+            margin-bottom: var(--space-sm);
+            cursor: move;
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
         }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
+        
+        .sortable-item:hover {
             border-color: var(--primary-red);
         }
-
-        .form-group textarea {
-            min-height: 100px;
-            resize: vertical;
+        
+        .sortable-handle {
+            color: var(--text-secondary);
+            cursor: move;
         }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+        
+        /* Multi-select for array fields */
+        .array-input-container {
+            margin-bottom: var(--space-md);
+        }
+        
+        .array-input-group {
+            display: flex;
             gap: var(--space-sm);
-            padding: var(--space-md) var(--space-xl);
-            border-radius: var(--radius-md);
-            font-weight: 600;
-            font-size: 0.9rem;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: var(--font-primary);
+            margin-bottom: var(--space-sm);
         }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #C21807, #E53935);
-            color: white;
+        
+        .array-input-group input {
+            flex: 1;
         }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(194, 24, 7, 0.3);
-        }
-
-        .btn-secondary {
-            background: var(--bg-secondary);
-            color: var(--text-primary);
+        
+        /* Tag input */
+        .tag-input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-xs);
+            padding: var(--space-sm);
             border: 1px solid var(--border-color);
-        }
-
-        .btn-secondary:hover {
-            background: var(--bg-tertiary);
-        }
-
-        .btn-success {
-            background: var(--success);
-            color: white;
-        }
-
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-
-        .btn-small {
-            padding: var(--space-sm) var(--space-lg);
-            font-size: 0.85rem;
-        }
-
-        .btn-block {
-            width: 100%;
-        }
-
-        .login-footer {
-            text-align: center;
-            margin-top: var(--space-xl);
-            padding-top: var(--space-xl);
-            border-top: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-        }
-
-        .error-message {
-            background: rgba(220, 53, 69, 0.1);
-            border: 1px solid rgba(220, 53, 69, 0.3);
-            color: var(--danger);
-            padding: var(--space-md);
             border-radius: var(--radius-md);
-            margin-bottom: var(--space-lg);
-            font-size: 0.9rem;
-            display: none;
-        }
-
-        .success-message {
-            background: rgba(40, 167, 69, 0.1);
-            border: 1px solid rgba(40, 167, 69, 0.3);
-            color: var(--success);
-            padding: var(--space-md);
-            border-radius: var(--radius-md);
-            margin-bottom: var(--space-lg);
-            font-size: 0.9rem;
-            display: none;
-        }
-
-        /* Admin Panel */
-        .admin-container {
-            display: none;
-            min-height: 100vh;
-        }
-
-        /* Sidebar */
-        .admin-sidebar {
-            width: 260px;
-            background: var(--bg-primary);
-            border-right: 1px solid var(--border-color);
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-            z-index: 1000;
-        }
-
-        .sidebar-header {
-            padding: var(--space-xl);
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            gap: var(--space-md);
-        }
-
-        .sidebar-header img {
-            height: 40px;
-            width: auto;
-        }
-
-        .sidebar-header h1 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--primary-red);
-        }
-
-        .sidebar-nav {
-            padding: var(--space-lg) 0;
-        }
-
-        .nav-section {
-            margin-bottom: var(--space-xl);
-        }
-
-        .nav-section h3 {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-secondary);
-            padding: 0 var(--space-xl) var(--space-sm);
-            font-weight: 600;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: var(--space-md);
-            padding: var(--space-md) var(--space-xl);
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: all 0.2s ease;
-            border-left: 3px solid transparent;
-            cursor: pointer;
-        }
-
-        .nav-link:hover {
             background: var(--bg-secondary);
-            color: var(--text-primary);
+            min-height: 44px;
         }
-
-        .nav-link.active {
+        
+        .tag {
             background: rgba(194, 24, 7, 0.1);
             color: var(--primary-red);
-            border-left-color: var(--primary-red);
-        }
-
-        .nav-link i {
-            width: 20px;
-            text-align: center;
-        }
-
-        /* Main Content */
-        .admin-main {
-            flex: 1;
-            margin-left: 260px;
-            padding: var(--space-xl);
-        }
-
-        /* Top Bar */
-        .admin-topbar {
-            background: var(--card-bg);
-            border-radius: var(--radius-lg);
-            padding: var(--space-lg) var(--space-xl);
-            margin-bottom: var(--space-xl);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-
-        .topbar-left h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .topbar-left p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-top: var(--space-xs);
-        }
-
-        .topbar-right {
-            display: flex;
-            align-items: center;
-            gap: var(--space-lg);
-        }
-
-        .theme-toggle {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: var(--text-primary);
-            font-size: 1.1rem;
-            transition: all 0.2s ease;
-        }
-
-        .theme-toggle:hover {
-            background: var(--bg-tertiary);
-        }
-
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: var(--space-md);
-            cursor: pointer;
-            padding: var(--space-xs);
-            border-radius: var(--radius-md);
-            transition: background 0.2s ease;
-        }
-
-        .user-profile:hover {
-            background: var(--bg-secondary);
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #C21807, #E53935);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-        }
-
-        .user-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .user-name {
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .user-role {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-
-        /* Content Sections */
-        .content-section {
-            display: none;
-        }
-
-        .content-section.active {
-            display: block;
-        }
-
-        /* Dashboard */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: var(--space-lg);
-            margin-bottom: var(--space-2xl);
-        }
-
-        .stat-card {
-            background: var(--card-bg);
-            border-radius: var(--radius-lg);
-            padding: var(--space-xl);
-            border: 1px solid var(--border-color);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-        }
-
-        .stat-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: var(--space-md);
-            color: white;
-        }
-
-        .stat-icon.red { background: linear-gradient(135deg, #C21807, #E53935); }
-        .stat-icon.blue { background: linear-gradient(135deg, #2C5282, #4299E1); }
-        .stat-icon.green { background: linear-gradient(135deg, #2D7D46, #48BB78); }
-        .stat-icon.purple { background: linear-gradient(135deg, #6B46C1, #9F7AEA); }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-            line-height: 1;
-            margin-bottom: var(--space-xs);
-        }
-
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* Form Sections */
-        .form-section {
-            background: var(--card-bg);
-            border-radius: var(--radius-lg);
-            padding: var(--space-2xl);
-            margin-bottom: var(--space-xl);
-            border: 1px solid var(--border-color);
-        }
-
-        .form-section h3 {
-            margin-bottom: var(--space-xl);
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-        }
-
-        .form-section h3 i {
-            color: var(--primary-red);
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: var(--space-lg);
-            margin-bottom: var(--space-lg);
-        }
-
-        .form-actions {
-            display: flex;
-            gap: var(--space-md);
-            margin-top: var(--space-xl);
-            padding-top: var(--space-xl);
-            border-top: 1px solid var(--border-color);
-        }
-
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            margin-top: var(--space-md);
-        }
-
-        .checkbox-group input {
-            width: auto;
-        }
-
-        /* Data Tables */
-        .data-table-container {
-            background: var(--card-bg);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-color);
-            overflow: hidden;
-        }
-
-        .data-table-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: var(--space-lg) var(--space-xl);
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .data-table-header h3 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th {
-            padding: var(--space-lg) var(--space-xl);
-            text-align: left;
-            font-weight: 600;
-            color: var(--text-secondary);
-            border-bottom: 1px solid var(--border-color);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-sm);
             font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        td {
-            padding: var(--space-lg) var(--space-xl);
-            border-bottom: 1px solid var(--border-color);
-            color: var(--text-primary);
-            font-size: 0.9rem;
-        }
-
-        tr:hover {
-            background: var(--bg-secondary);
-        }
-
-        .status-badge {
             display: inline-flex;
             align-items: center;
             gap: var(--space-xs);
-            padding: var(--space-2xs) var(--space-md);
-            border-radius: var(--radius-full);
+        }
+        
+        .tag-remove {
+            cursor: pointer;
             font-size: 0.8rem;
-            font-weight: 500;
         }
-
-        .status-active {
-            background: rgba(40, 167, 69, 0.1);
-            color: var(--success);
+        
+        .tag-input input {
+            border: none;
+            background: transparent;
+            flex: 1;
+            min-width: 100px;
+            color: var(--text-primary);
         }
-
-        .status-inactive {
-            background: rgba(220, 53, 69, 0.1);
-            color: var(--danger);
+        
+        .tag-input input:focus {
+            outline: none;
         }
-
-        .table-actions {
+        
+        /* Nested form sections */
+        .nested-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+            margin-top: var(--space-md);
+        }
+        
+        .nested-section-header {
             display: flex;
-            gap: var(--space-sm);
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-md);
         }
-
-        .action-btn {
-            width: 32px;
-            height: 32px;
-            border-radius: var(--radius-sm);
+        
+        /* Dashboard improvements */
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--space-2xl);
+        }
+        
+        .dashboard-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s ease;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .dashboard-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-md);
+        }
+        
+        .dashboard-card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .dashboard-card-count {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: var(--space-xs);
+        }
+        
+        .dashboard-card-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        /* Quick stats */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-md);
+            margin-bottom: var(--space-xl);
+        }
+        
+        .quick-stat {
+            background: var(--card-bg);
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+        
+        .quick-stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-red);
+            line-height: 1;
+        }
+        
+        .quick-stat-label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-top: var(--space-xs);
+        }
+        
+        /* Enhanced form styling */
+        .form-section-tabs {
+            display: flex;
+            gap: var(--space-md);
+            margin-bottom: var(--space-xl);
+            overflow-x: auto;
+        }
+        
+        .form-tab {
+            padding: var(--space-md) var(--space-lg);
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .form-tab:hover {
+            background: var(--bg-secondary);
+        }
+        
+        .form-tab.active {
+            background: var(--primary-red);
+            color: white;
+            border-color: var(--primary-red);
+        }
+        
+        /* Color picker */
+        .color-picker {
+            width: 100%;
+            height: 44px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+        }
+        
+        /* Progress bar */
+        .progress-bar {
+            height: 6px;
+            background: var(--bg-secondary);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: var(--space-sm);
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-red);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        
+        /* Loading overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
             display: flex;
             align-items: center;
             justify-content: center;
-            border: none;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
-        }
-
-        .action-btn.edit {
-            background: rgba(23, 162, 184, 0.1);
-            color: var(--info);
-        }
-
-        .action-btn.edit:hover {
-            background: var(--info);
-            color: white;
-        }
-
-        .action-btn.delete {
-            background: rgba(220, 53, 69, 0.1);
-            color: var(--danger);
-        }
-
-        .action-btn.delete:hover {
-            background: var(--danger);
-            color: white;
-        }
-
-        /* Quick Actions */
-        .quick-actions {
-            display: flex;
-            gap: var(--space-md);
-            flex-wrap: wrap;
-            margin: var(--space-xl) 0;
-        }
-
-        /* Loading */
-        .loading {
-            text-align: center;
-            padding: var(--space-2xl);
-            color: var(--text-secondary);
-        }
-
-        .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--border-color);
-            border-top-color: var(--primary-red);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto var(--space-md);
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Message */
-        .message {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: var(--space-md) var(--space-lg);
-            border-radius: var(--radius-md);
             z-index: 10000;
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            animation: slideIn 0.3s ease;
-        }
-
-        .message.success {
-            background: var(--success);
+            flex-direction: column;
             color: white;
         }
-
-        .message.error {
-            background: var(--danger);
-            color: white;
+        
+        /* JSON viewer */
+        .json-viewer {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
+            font-family: monospace;
+            font-size: 0.9rem;
+            max-height: 400px;
+            overflow-y: auto;
         }
-
-        .message.info {
-            background: var(--info);
-            color: white;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .admin-sidebar {
-                display: none;
-            }
-            
-            .admin-main {
-                margin-left: 0;
-            }
-        }
-
+        
+        /* Responsive improvements */
         @media (max-width: 768px) {
-            .admin-main {
+            .form-section-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .nested-section {
                 padding: var(--space-md);
-            }
-            
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .form-actions {
-                flex-direction: column;
-            }
-            
-            .quick-actions {
-                flex-direction: column;
-            }
-            
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            table {
-                display: block;
-                overflow-x: auto;
             }
         }
     </style>
@@ -772,7 +409,7 @@
             </button>
             
             <div class="login-footer">
-                <p>Version 7.0.0 | Secure Admin Access</p>
+                <p>Version 7.0.0 | Complete Data Management</p>
             </div>
         </div>
     </div>
@@ -797,13 +434,25 @@
                 
                 <div class="nav-section">
                     <h3>Content Management</h3>
+                    <div class="nav-link" data-section="appSettings">
+                        <i class="fas fa-cog"></i>
+                        <span>App Settings</span>
+                    </div>
+                    <div class="nav-link" data-section="eventCategories">
+                        <i class="fas fa-tags"></i>
+                        <span>Event Categories</span>
+                    </div>
                     <div class="nav-link" data-section="events">
                         <i class="fas fa-calendar-alt"></i>
                         <span>Events</span>
                     </div>
-                    <div class="nav-link" data-section="training">
+                    <div class="nav-link" data-section="trainingPrograms">
                         <i class="fas fa-graduation-cap"></i>
                         <span>Training Programs</span>
+                    </div>
+                    <div class="nav-link" data-section="trainingSchedules">
+                        <i class="fas fa-clock"></i>
+                        <span>Training Schedules</span>
                     </div>
                     <div class="nav-link" data-section="team">
                         <i class="fas fa-users"></i>
@@ -812,6 +461,14 @@
                     <div class="nav-link" data-section="testimonials">
                         <i class="fas fa-comment"></i>
                         <span>Testimonials</span>
+                    </div>
+                    <div class="nav-link" data-section="homePage">
+                        <i class="fas fa-home"></i>
+                        <span>Home Page</span>
+                    </div>
+                    <div class="nav-link" data-section="trainingPage">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <span>Training Page</span>
                     </div>
                 </div>
                 
@@ -824,6 +481,10 @@
                     <div class="nav-link" data-section="faq">
                         <i class="fas fa-question-circle"></i>
                         <span>FAQs</span>
+                    </div>
+                    <div class="nav-link" data-section="dataImportExport">
+                        <i class="fas fa-database"></i>
+                        <span>Data Tools</span>
                     </div>
                 </div>
             </nav>
@@ -855,37 +516,60 @@
 
             <!-- Dashboard Section -->
             <div id="dashboard" class="content-section active">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon red">
-                            <i class="fas fa-calendar-alt"></i>
+                <div class="dashboard-cards">
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-header">
+                            <div class="dashboard-card-title">Total Events</div>
+                            <i class="fas fa-calendar-alt" style="color: var(--primary-red);"></i>
                         </div>
-                        <div class="stat-number" id="totalEvents">0</div>
-                        <div class="stat-label">Upcoming Events</div>
+                        <div class="dashboard-card-count" id="totalEvents">0</div>
+                        <div class="dashboard-card-subtitle">Upcoming & Active</div>
                     </div>
                     
-                    <div class="stat-card">
-                        <div class="stat-icon blue">
-                            <i class="fas fa-graduation-cap"></i>
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-header">
+                            <div class="dashboard-card-title">Training Programs</div>
+                            <i class="fas fa-graduation-cap" style="color: #2C5282;"></i>
                         </div>
-                        <div class="stat-number" id="totalTraining">0</div>
-                        <div class="stat-label">Training Programs</div>
+                        <div class="dashboard-card-count" id="totalTraining">0</div>
+                        <div class="dashboard-card-subtitle">Active Programs</div>
                     </div>
                     
-                    <div class="stat-card">
-                        <div class="stat-icon green">
-                            <i class="fas fa-users"></i>
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-header">
+                            <div class="dashboard-card-title">Team Members</div>
+                            <i class="fas fa-users" style="color: #2D7D46;"></i>
                         </div>
-                        <div class="stat-number" id="totalTeam">0</div>
-                        <div class="stat-label">Team Members</div>
+                        <div class="dashboard-card-count" id="totalTeam">0</div>
+                        <div class="dashboard-card-subtitle">Active Members</div>
                     </div>
                     
-                    <div class="stat-card">
-                        <div class="stat-icon purple">
-                            <i class="fas fa-comments"></i>
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-header">
+                            <div class="dashboard-card-title">Testimonials</div>
+                            <i class="fas fa-comments" style="color: #6B46C1;"></i>
                         </div>
-                        <div class="stat-number" id="totalTestimonials">0</div>
-                        <div class="stat-label">Testimonials</div>
+                        <div class="dashboard-card-count" id="totalTestimonials">0</div>
+                        <div class="dashboard-card-subtitle">Published Reviews</div>
+                    </div>
+                </div>
+
+                <div class="quick-stats">
+                    <div class="quick-stat">
+                        <div class="quick-stat-value" id="statsEntrepreneurs">0</div>
+                        <div class="quick-stat-label">Entrepreneurs Trained</div>
+                    </div>
+                    <div class="quick-stat">
+                        <div class="quick-stat-value" id="statsEventsHosted">0</div>
+                        <div class="quick-stat-label">Events Hosted</div>
+                    </div>
+                    <div class="quick-stat">
+                        <div class="quick-stat-value" id="statsStartups">0</div>
+                        <div class="quick-stat-label">Startups Supported</div>
+                    </div>
+                    <div class="quick-stat">
+                        <div class="quick-stat-value" id="statsSatisfaction">0%</div>
+                        <div class="quick-stat-label">Satisfaction Rate</div>
                     </div>
                 </div>
 
@@ -895,7 +579,7 @@
                         <button class="btn btn-secondary" onclick="switchSection('events')">
                             <i class="fas fa-plus"></i> Add New Event
                         </button>
-                        <button class="btn btn-secondary" onclick="switchSection('training')">
+                        <button class="btn btn-secondary" onclick="switchSection('trainingPrograms')">
                             <i class="fas fa-plus"></i> Add Training Program
                         </button>
                         <button class="btn btn-secondary" onclick="switchSection('team')">
@@ -908,71 +592,238 @@
                 </div>
             </div>
 
-            <!-- Events Section -->
-            <div id="events" class="content-section">
+            <!-- App Settings Section -->
+            <div id="appSettings" class="content-section">
                 <div class="form-section">
-                    <h3><i class="fas fa-calendar-plus"></i> Manage Events</h3>
+                    <h3><i class="fas fa-cog"></i> Application Settings</h3>
                     
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="eventTitle">Event Title *</label>
-                            <input type="text" id="eventTitle" placeholder="Enter event title">
+                            <label for="appVersion">App Version *</label>
+                            <input type="text" id="appVersion" placeholder="e.g., 7.0.0">
                         </div>
                         
                         <div class="form-group">
-                            <label for="eventCategory">Category *</label>
-                            <select id="eventCategory">
-                                <option value="bootcamp">Startup Bootcamp</option>
-                                <option value="inspiration">Become What You Believe</option>
-                                <option value="spiritual">The Making of an Icon</option>
+                            <label for="appMaintenance">Maintenance Mode</label>
+                            <select id="appMaintenance">
+                                <option value="false">Disabled</option>
+                                <option value="true">Enabled</option>
                             </select>
                         </div>
                     </div>
                     
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="eventDate">Date *</label>
-                            <input type="date" id="eventDate">
+                            <label for="appWhatsapp">WhatsApp Number *</label>
+                            <input type="text" id="appWhatsapp" placeholder="e.g., 254733737983">
                         </div>
                         
                         <div class="form-group">
-                            <label for="eventDuration">Duration</label>
-                            <input type="text" id="eventDuration" placeholder="e.g., 3 Months Intensive Program">
+                            <label for="appPhone">Phone Number</label>
+                            <input type="text" id="appPhone" placeholder="e.g., 0733 737 983">
                         </div>
                     </div>
                     
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="eventVenue">Venue</label>
-                            <input type="text" id="eventVenue" placeholder="Enter venue">
+                            <label for="appContactEmail">Contact Email *</label>
+                            <input type="email" id="appContactEmail" placeholder="e.g., office.dsog@gmail.com">
                         </div>
                         
                         <div class="form-group">
-                            <label for="eventMaxParticipants">Max Participants</label>
-                            <input type="number" id="eventMaxParticipants" placeholder="e.g., 30">
+                            <label for="appEventsEmail">Events Email</label>
+                            <input type="email" id="appEventsEmail" placeholder="e.g., events@dsog.org">
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="saveAppSettings()">
+                            <i class="fas fa-save"></i> Save Settings
+                        </button>
+                        <button class="btn btn-secondary" onclick="loadAppSettings()">
+                            <i class="fas fa-sync-alt"></i> Load Current
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event Categories Section -->
+            <div id="eventCategories" class="content-section">
+                <div class="form-section">
+                    <h3><i class="fas fa-tags"></i> Manage Event Categories</h3>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="categoryId">Category ID *</label>
+                            <input type="text" id="categoryId" placeholder="e.g., bootcamp">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="categoryName">Category Name *</label>
+                            <input type="text" id="categoryName" placeholder="e.g., Startup Bootcamp">
                         </div>
                     </div>
                     
                     <div class="form-group">
-                        <label for="eventDescription">Description *</label>
-                        <textarea id="eventDescription" placeholder="Enter event description"></textarea>
+                        <label for="categoryDescription">Description</label>
+                        <textarea id="categoryDescription" placeholder="Enter category description"></textarea>
                     </div>
                     
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="eventImageUrl">Image URL</label>
-                            <input type="text" id="eventImageUrl" placeholder="Enter image URL">
+                            <label for="categoryIcon">Icon Class *</label>
+                            <input type="text" id="categoryIcon" placeholder="e.g., fas fa-graduation-cap" value="fas fa-">
                         </div>
                         
                         <div class="form-group">
-                            <label for="eventRegistrationUrl">Registration URL</label>
-                            <input type="text" id="eventRegistrationUrl" placeholder="Enter registration URL">
+                            <label for="categoryFrequency">Frequency</label>
+                            <input type="text" id="categoryFrequency" placeholder="e.g., Quarterly">
                         </div>
                     </div>
                     
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="eventActive" checked>
-                        <label for="eventActive">Event is active</label>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="categoryOrder">Display Order</label>
+                            <input type="number" id="categoryOrder" value="1">
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="categoryActive" checked>
+                            <label for="categoryActive">Category is active</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="saveEventCategory()">
+                            <i class="fas fa-save"></i> Save Category
+                        </button>
+                        <button class="btn btn-secondary" onclick="clearCategoryForm()">
+                            <i class="fas fa-times"></i> Clear Form
+                        </button>
+                    </div>
+                </div>
+
+                <div class="data-table-container">
+                    <div class="data-table-header">
+                        <h3>Event Categories</h3>
+                        <button class="btn btn-small btn-secondary" onclick="loadEventCategories()">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Frequency</th>
+                                <th>Order</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categoriesTable">
+                            <!-- Categories will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Events Section (Enhanced) -->
+            <div id="events" class="content-section">
+                <div class="form-section-tabs" id="eventsFormTabs">
+                    <button class="form-tab active" onclick="showEventTab('basic')">Basic Info</button>
+                    <button class="form-tab" onclick="showEventTab('details')">Details</button>
+                    <button class="form-tab" onclick="showEventTab('media')">Media & Links</button>
+                </div>
+                
+                <div class="form-section">
+                    <div id="eventTabBasic" class="event-tab active">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="eventTitle">Event Title *</label>
+                                <input type="text" id="eventTitle" placeholder="Enter event title">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="eventCategory">Category *</label>
+                                <select id="eventCategory">
+                                    <!-- Populated dynamically -->
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="eventDate">Date *</label>
+                                <input type="date" id="eventDate">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="eventDuration">Duration</label>
+                                <input type="text" id="eventDuration" placeholder="e.g., 3 Months Intensive Program">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="eventSubtitle">Subtitle</label>
+                            <input type="text" id="eventSubtitle" placeholder="Enter event subtitle">
+                        </div>
+                    </div>
+                    
+                    <div id="eventTabDetails" class="event-tab" style="display: none;">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="eventVenue">Venue</label>
+                                <input type="text" id="eventVenue" placeholder="Enter venue">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="eventMaxParticipants">Max Participants</label>
+                                <input type="number" id="eventMaxParticipants" placeholder="e.g., 30">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="eventDescription">Description *</label>
+                            <textarea id="eventDescription" placeholder="Enter event description" rows="5"></textarea>
+                        </div>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="eventFrequency">Frequency</label>
+                                <select id="eventFrequency">
+                                    <option value="one-time">One-time</option>
+                                    <option value="monthly">Monthly</option>
+                                    <option value="quarterly">Quarterly</option>
+                                    <option value="annual">Annual</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="eventOrder">Display Order</label>
+                                <input type="number" id="eventOrder" value="1">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="eventTabMedia" class="event-tab" style="display: none;">
+                        <div class="form-group">
+                            <label for="eventImageUrl">Image URL</label>
+                            <input type="text" id="eventImageUrl" placeholder="Enter image URL">
+                            <div class="image-preview" id="eventImagePreview">
+                                <span>No image preview</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="eventRegistrationUrl">Registration URL *</label>
+                            <input type="text" id="eventRegistrationUrl" placeholder="Enter registration URL">
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="eventActive" checked>
+                            <label for="eventActive">Event is active</label>
+                        </div>
                     </div>
                     
                     <div class="form-actions">
@@ -1012,8 +863,8 @@
                 </div>
             </div>
 
-            <!-- Training Programs Section -->
-            <div id="training" class="content-section">
+            <!-- Training Programs Section (Enhanced) -->
+            <div id="trainingPrograms" class="content-section">
                 <div class="form-section">
                     <h3><i class="fas fa-graduation-cap"></i> Manage Training Programs</h3>
                     
@@ -1044,9 +895,16 @@
                         <textarea id="trainingResults" placeholder="Enter long-term results"></textarea>
                     </div>
                     
-                    <div class="form-group">
-                        <label for="trainingIcon">Icon Class (Font Awesome)</label>
-                        <input type="text" id="trainingIcon" placeholder="e.g., fas fa-briefcase">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="trainingIcon">Icon Class (Font Awesome)</label>
+                            <input type="text" id="trainingIcon" placeholder="e.g., fas fa-briefcase" value="fas fa-">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="trainingOrder">Display Order</label>
+                            <input type="number" id="trainingOrder" value="1">
+                        </div>
                     </div>
                     
                     <div class="checkbox-group">
@@ -1076,6 +934,7 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Duration</th>
+                                <th>Order</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -1087,7 +946,71 @@
                 </div>
             </div>
 
-            <!-- Team Members Section -->
+            <!-- Training Schedules Section -->
+            <div id="trainingSchedules" class="content-section">
+                <div class="form-section">
+                    <h3><i class="fas fa-clock"></i> Manage Training Schedules</h3>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="scheduleQuarter">Quarter *</label>
+                            <select id="scheduleQuarter">
+                                <option value="q1">Q1 (Jan-Mar)</option>
+                                <option value="q2">Q2 (Apr-Jun)</option>
+                                <option value="q3">Q3 (Jul-Sep)</option>
+                                <option value="q4">Q4 (Oct-Dec)</option>
+                                <option value="online">Online Programs</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="scheduleName">Schedule Name</label>
+                            <input type="text" id="scheduleName" placeholder="e.g., Quarter 1 (Jan-Mar)">
+                        </div>
+                    </div>
+                    
+                    <div class="nested-section">
+                        <div class="nested-section-header">
+                            <h4>Program Schedule</h4>
+                            <button type="button" class="btn btn-small btn-secondary" onclick="addProgramToSchedule()">
+                                <i class="fas fa-plus"></i> Add Program
+                            </button>
+                        </div>
+                        
+                        <div id="scheduleProgramsContainer">
+                            <!-- Dynamic program rows will be added here -->
+                        </div>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="scheduleActive" checked>
+                        <label for="scheduleActive">Schedule is active</label>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="saveTrainingSchedule()">
+                            <i class="fas fa-save"></i> Save Schedule
+                        </button>
+                        <button class="btn btn-secondary" onclick="clearScheduleForm()">
+                            <i class="fas fa-times"></i> Clear Form
+                        </button>
+                    </div>
+                </div>
+
+                <div class="data-table-container">
+                    <div class="data-table-header">
+                        <h3>Training Schedules</h3>
+                        <button class="btn btn-small btn-secondary" onclick="loadTrainingSchedules()">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                    <div id="schedulesAccordion">
+                        <!-- Schedules will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Members Section (Enhanced) -->
             <div id="team" class="content-section">
                 <div class="form-section">
                     <h3><i class="fas fa-users"></i> Manage Team Members</h3>
@@ -1116,8 +1039,23 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="teamLinkedin">LinkedIn URL</label>
-                            <input type="text" id="teamLinkedin" placeholder="Enter LinkedIn URL">
+                            <label for="teamOrder">Display Order</label>
+                            <input type="number" id="teamOrder" value="1">
+                        </div>
+                    </div>
+                    
+                    <div class="nested-section">
+                        <h4>Social Media Links</h4>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="teamLinkedin">LinkedIn URL</label>
+                                <input type="text" id="teamLinkedin" placeholder="Enter LinkedIn URL">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="teamTwitter">Twitter URL</label>
+                                <input type="text" id="teamTwitter" placeholder="Enter Twitter URL">
+                            </div>
                         </div>
                     </div>
                     
@@ -1148,6 +1086,7 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Role</th>
+                                <th>Order</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -1159,7 +1098,7 @@
                 </div>
             </div>
 
-            <!-- Testimonials Section -->
+            <!-- Testimonials Section (Enhanced) -->
             <div id="testimonials" class="content-section">
                 <div class="form-section">
                     <h3><i class="fas fa-comment"></i> Manage Testimonials</h3>
@@ -1211,9 +1150,16 @@
                         </div>
                     </div>
                     
-                    <div class="form-group">
-                        <label for="testimonialImageUrl">Image URL</label>
-                        <input type="text" id="testimonialImageUrl" placeholder="Enter image URL">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="testimonialImageUrl">Image URL</label>
+                            <input type="text" id="testimonialImageUrl" placeholder="Enter image URL">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="testimonialOrder">Display Order</label>
+                            <input type="number" id="testimonialOrder" value="1">
+                        </div>
                     </div>
                     
                     <div class="checkbox-group">
@@ -1244,6 +1190,7 @@
                                 <th>Name</th>
                                 <th>Role</th>
                                 <th>Rating</th>
+                                <th>Order</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -1255,7 +1202,135 @@
                 </div>
             </div>
 
-            <!-- Statistics Section -->
+            <!-- Home Page Content Section -->
+            <div id="homePage" class="content-section">
+                <div class="form-section">
+                    <h3><i class="fas fa-home"></i> Home Page Content</h3>
+                    
+                    <div class="tab-navigation">
+                        <button class="tab-btn active" onclick="showHomeTab('hero')">Hero Section</button>
+                        <button class="tab-btn" onclick="showHomeTab('approach')">Approach Section</button>
+                    </div>
+                    
+                    <div id="homeHeroTab" class="home-tab active">
+                        <div class="form-group">
+                            <label for="homeMissionBadge">Mission Badge Text</label>
+                            <input type="text" id="homeMissionBadge" placeholder="e.g., EMPOWERING BUSINESSES & ENTREPRENEURS">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="homeMainTitle">Main Title *</label>
+                            <input type="text" id="homeMainTitle" placeholder="e.g., Become What You Believe!">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="homeSubtitle">Subtitle</label>
+                            <textarea id="homeSubtitle" placeholder="Enter subtitle text" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="homeCategoryTags">Category Tags (comma separated)</label>
+                            <div class="tag-input" id="homeTagsContainer">
+                                <input type="text" id="homeTagInput" placeholder="Type a tag and press Enter">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="homeApproachTab" class="home-tab" style="display: none;">
+                        <div class="form-group">
+                            <label for="homeApproachTitle">Approach Title</label>
+                            <input type="text" id="homeApproachTitle" placeholder="e.g., How We Empower Entrepreneurs">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="homeApproachSubtitle">Approach Subtitle</label>
+                            <textarea id="homeApproachSubtitle" placeholder="Enter approach subtitle" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="nested-section">
+                            <div class="nested-section-header">
+                                <h4>Approach Cards</h4>
+                                <button type="button" class="btn btn-small btn-secondary" onclick="addApproachCard()">
+                                    <i class="fas fa-plus"></i> Add Card
+                                </button>
+                            </div>
+                            
+                            <div id="approachCardsContainer">
+                                <!-- Dynamic cards will be added here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="saveHomePageContent()">
+                            <i class="fas fa-save"></i> Save Home Page
+                        </button>
+                        <button class="btn btn-secondary" onclick="loadHomePageContent()">
+                            <i class="fas fa-sync-alt"></i> Load Current
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Training Page Content Section -->
+            <div id="trainingPage" class="content-section">
+                <div class="form-section">
+                    <h3><i class="fas fa-chalkboard-teacher"></i> Training Page Content</h3>
+                    
+                    <div class="tab-navigation">
+                        <button class="tab-btn active" onclick="showTrainingTab('hero')">Hero Section</button>
+                        <button class="tab-btn" onclick="showTrainingTab('outcomes')">Outcomes Section</button>
+                    </div>
+                    
+                    <div id="trainingHeroTab" class="training-tab active">
+                        <div class="form-group">
+                            <label for="trainingPageBadge">Badge Text</label>
+                            <input type="text" id="trainingPageBadge" placeholder="e.g., STRUCTURED BUSINESS EDUCATION">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="trainingPageTitle">Main Title *</label>
+                            <input type="text" id="trainingPageTitle" placeholder="e.g., Master Your Business Skills with DSOG Training">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="trainingPageSubtitle">Subtitle</label>
+                            <textarea id="trainingPageSubtitle" placeholder="Enter subtitle text" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="trainingPageHighlights">Highlights (one per line)</label>
+                            <textarea id="trainingPageHighlights" placeholder="Enter highlights, one per line" rows="4"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div id="trainingOutcomesTab" class="training-tab" style="display: none;">
+                        <div class="nested-section">
+                            <div class="nested-section-header">
+                                <h4>Outcome Metrics</h4>
+                                <button type="button" class="btn btn-small btn-secondary" onclick="addOutcomeMetric()">
+                                    <i class="fas fa-plus"></i> Add Metric
+                                </button>
+                            </div>
+                            
+                            <div id="outcomesContainer">
+                                <!-- Dynamic outcome metrics will be added here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="saveTrainingPageContent()">
+                            <i class="fas fa-save"></i> Save Training Page
+                        </button>
+                        <button class="btn btn-secondary" onclick="loadTrainingPageContent()">
+                            <i class="fas fa-sync-alt"></i> Load Current
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Section (Enhanced) -->
             <div id="stats" class="content-section">
                 <div class="form-section">
                     <h3><i class="fas fa-chart-bar"></i> Update Statistics</h3>
@@ -1301,6 +1376,11 @@
                         <input type="number" id="statsCareerAdvancement" placeholder="e.g., 70">
                     </div>
                     
+                    <div class="form-group">
+                        <label for="statsLastUpdated">Last Updated</label>
+                        <input type="date" id="statsLastUpdated">
+                    </div>
+                    
                     <div class="form-actions">
                         <button class="btn btn-primary" onclick="saveStatistics()">
                             <i class="fas fa-save"></i> Update Statistics
@@ -1312,7 +1392,7 @@
                 </div>
             </div>
 
-            <!-- FAQ Section -->
+            <!-- FAQ Section (Enhanced) -->
             <div id="faq" class="content-section">
                 <div class="form-section">
                     <h3><i class="fas fa-question-circle"></i> Manage FAQs</h3>
@@ -1339,9 +1419,16 @@
                         <textarea id="faqAnswer" placeholder="Enter answer"></textarea>
                     </div>
                     
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="faqActive" checked>
-                        <label for="faqActive">FAQ is active</label>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="faqOrder">Display Order</label>
+                            <input type="number" id="faqOrder" value="1">
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="faqActive" checked>
+                            <label for="faqActive">FAQ is active</label>
+                        </div>
                     </div>
                     
                     <div class="form-actions">
@@ -1366,6 +1453,7 @@
                             <tr>
                                 <th>Question</th>
                                 <th>Category</th>
+                                <th>Order</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -1374,6 +1462,96 @@
                             <!-- FAQs will be populated here -->
                         </tbody>
                     </table>
+                </div>
+            </div>
+
+            <!-- Data Import/Export Section -->
+            <div id="dataImportExport" class="content-section">
+                <div class="form-section">
+                    <h3><i class="fas fa-database"></i> Data Tools</h3>
+                    
+                    <div class="tab-navigation">
+                        <button class="tab-btn active" onclick="showDataTab('export')">Export Data</button>
+                        <button class="tab-btn" onclick="showDataTab('import')">Import Data</button>
+                        <button class="tab-btn" onclick="showDataTab('backup')">Backup/Restore</button>
+                    </div>
+                    
+                    <div id="dataExportTab" class="data-tab active">
+                        <div class="form-group">
+                            <label>Export Options</label>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="exportAll" checked>
+                                <label for="exportAll">Export All Data</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="exportEvents">
+                                <label for="exportEvents">Events Only</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="exportTraining">
+                                <label for="exportTraining">Training Data Only</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="exportContent">
+                                <label for="exportContent">Content Only</label>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary" onclick="exportData()">
+                            <i class="fas fa-download"></i> Export Data as JSON
+                        </button>
+                        
+                        <div id="exportResult" class="json-viewer" style="margin-top: var(--space-xl); display: none;"></div>
+                    </div>
+                    
+                    <div id="dataImportTab" class="data-tab" style="display: none;">
+                        <div class="form-group">
+                            <label for="importJson">Paste JSON Data</label>
+                            <textarea id="importJson" placeholder="Paste your JSON data here" rows="10"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Import Options</label>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="importMerge" checked>
+                                <label for="importMerge">Merge with existing data</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="importReplace">
+                                <label for="importReplace">Replace all data</label>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary" onclick="importData()">
+                            <i class="fas fa-upload"></i> Import Data
+                        </button>
+                        
+                        <button class="btn btn-secondary" onclick="loadCurrentDataForImport()">
+                            <i class="fas fa-sync-alt"></i> Load Current Data
+                        </button>
+                    </div>
+                    
+                    <div id="dataBackupTab" class="data-tab" style="display: none;">
+                        <div class="form-group">
+                            <label>Backup Management</label>
+                            <p style="color: var(--text-secondary); margin-bottom: var(--space-md);">
+                                Create a backup of all your data or restore from a previous backup.
+                            </p>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button class="btn btn-primary" onclick="createBackup()">
+                                <i class="fas fa-save"></i> Create Backup
+                            </button>
+                            <button class="btn btn-secondary" onclick="restoreBackup()">
+                                <i class="fas fa-history"></i> Restore Backup
+                            </button>
+                        </div>
+                        
+                        <div id="backupList" style="margin-top: var(--space-xl);">
+                            <!-- Backup list will be populated here -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1399,6 +1577,11 @@
         // Global variables
         let currentUser = null;
         let currentEditingId = null;
+        let currentEditingType = null;
+        let homePageTags = [];
+        let approachCards = [];
+        let outcomeMetrics = [];
+        let schedulePrograms = [];
 
         // DOM Elements
         const loginScreen = document.getElementById('loginScreen');
@@ -1458,6 +1641,7 @@
             // Setup admin panel
             setupAdminPanel();
             loadDashboardData();
+            populateCategoryDropdown();
         }
 
         // Setup admin panel
@@ -1496,6 +1680,12 @@
             document.getElementById('adminPassword').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') loginBtn.click();
             });
+            
+            // Initialize tag input
+            initTagInput();
+            
+            // Initialize image preview
+            initImagePreview();
         }
 
         // Switch section
@@ -1507,22 +1697,37 @@
             
             const titles = {
                 'dashboard': 'Dashboard Overview',
+                'appSettings': 'App Settings',
+                'eventCategories': 'Event Categories',
                 'events': 'Events Management',
-                'training': 'Training Programs',
+                'trainingPrograms': 'Training Programs',
+                'trainingSchedules': 'Training Schedules',
                 'team': 'Team Members',
                 'testimonials': 'Testimonials',
+                'homePage': 'Home Page Content',
+                'trainingPage': 'Training Page Content',
                 'stats': 'Statistics',
-                'faq': 'FAQs Management'
+                'faq': 'FAQs Management',
+                'dataImportExport': 'Data Tools'
             };
             document.getElementById('pageTitle').textContent = titles[sectionId] || 'Admin Panel';
             
             // Load section data
-            if (sectionId === 'events') loadEvents();
-            else if (sectionId === 'training') loadTrainingPrograms();
-            else if (sectionId === 'team') loadTeamMembers();
-            else if (sectionId === 'testimonials') loadTestimonials();
-            else if (sectionId === 'stats') loadStatistics();
-            else if (sectionId === 'faq') loadFAQs();
+            switch(sectionId) {
+                case 'dashboard': loadDashboardData(); break;
+                case 'appSettings': loadAppSettings(); break;
+                case 'eventCategories': loadEventCategories(); break;
+                case 'events': loadEvents(); break;
+                case 'trainingPrograms': loadTrainingPrograms(); break;
+                case 'trainingSchedules': loadTrainingSchedules(); break;
+                case 'team': loadTeamMembers(); break;
+                case 'testimonials': loadTestimonials(); break;
+                case 'homePage': loadHomePageContent(); break;
+                case 'trainingPage': loadTrainingPageContent(); break;
+                case 'stats': loadStatistics(); break;
+                case 'faq': loadFAQs(); break;
+                case 'dataImportExport': loadBackups(); break;
+            }
         }
 
         // Update theme icon
@@ -1553,6 +1758,7 @@
                 const data = snapshot.val();
                 
                 if (data) {
+                    // Update counts
                     document.getElementById('totalEvents').textContent = 
                         Object.keys(data.upcomingEvents || {}).length;
                     document.getElementById('totalTraining').textContent = 
@@ -1561,13 +1767,223 @@
                         Object.keys(data.teamMembers || {}).length;
                     document.getElementById('totalTestimonials').textContent = 
                         Object.keys(data.testimonials || {}).length;
+                    
+                    // Update quick stats
+                    const stats = data.stats || {};
+                    document.getElementById('statsEntrepreneurs').textContent = 
+                        stats.entrepreneursTrained || '0';
+                    document.getElementById('statsEventsHosted').textContent = 
+                        stats.eventsHosted || '0';
+                    document.getElementById('statsStartups').textContent = 
+                        stats.startupsSupported || '0';
+                    document.getElementById('statsSatisfaction').textContent = 
+                        (stats.satisfactionRate || '0') + '%';
                 }
             } catch (error) {
                 console.error('Error loading dashboard:', error);
             }
         }
 
+        // ==================== APP SETTINGS ====================
+        async function loadAppSettings() {
+            try {
+                const snapshot = await db.ref('appSettings').once('value');
+                const settings = snapshot.val();
+                
+                if (settings) {
+                    document.getElementById('appVersion').value = settings.version || '';
+                    document.getElementById('appMaintenance').value = settings.maintenance ? 'true' : 'false';
+                    document.getElementById('appWhatsapp').value = settings.whatsappNumber || '';
+                    document.getElementById('appPhone').value = settings.phoneNumber || '';
+                    document.getElementById('appContactEmail').value = settings.contactEmail || '';
+                    document.getElementById('appEventsEmail').value = settings.eventsEmail || '';
+                }
+            } catch (error) {
+                showMessage('Error loading settings: ' + error.message, 'error');
+            }
+        }
+
+        async function saveAppSettings() {
+            const settingsData = {
+                version: document.getElementById('appVersion').value.trim(),
+                maintenance: document.getElementById('appMaintenance').value === 'true',
+                whatsappNumber: document.getElementById('appWhatsapp').value.trim(),
+                phoneNumber: document.getElementById('appPhone').value.trim(),
+                contactEmail: document.getElementById('appContactEmail').value.trim(),
+                eventsEmail: document.getElementById('appEventsEmail').value.trim()
+            };
+
+            if (!settingsData.version || !settingsData.whatsappNumber || !settingsData.contactEmail) {
+                showMessage('Please fill in required fields', 'error');
+                return;
+            }
+
+            try {
+                await db.ref('appSettings').set(settingsData);
+                showMessage('Settings updated successfully!', 'success');
+            } catch (error) {
+                showMessage('Error saving settings: ' + error.message, 'error');
+            }
+        }
+
+        // ==================== EVENT CATEGORIES ====================
+        async function loadEventCategories() {
+            try {
+                const snapshot = await db.ref('eventCategories').once('value');
+                const categories = snapshot.val();
+                const table = document.getElementById('categoriesTable');
+                table.innerHTML = '';
+                
+                if (categories) {
+                    Object.entries(categories).forEach(([id, category]) => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${category.id || id}</td>
+                            <td>${category.name || 'No name'}</td>
+                            <td>${category.frequency || 'N/A'}</td>
+                            <td>${category.order || '0'}</td>
+                            <td>
+                                <span class="status-badge ${category.active ? 'status-active' : 'status-inactive'}">
+                                    ${category.active ? 'Active' : 'Inactive'}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="table-actions">
+                                    <button class="action-btn edit" onclick="editEventCategory('${id}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn delete" onclick="deleteEventCategory('${id}')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        `;
+                        table.appendChild(row);
+                    });
+                } else {
+                    table.innerHTML = '<tr><td colspan="6" style="text-align: center;">No categories found</td></tr>';
+                }
+                
+                // Update dropdown
+                populateCategoryDropdown();
+            } catch (error) {
+                showMessage('Error loading categories: ' + error.message, 'error');
+            }
+        }
+
+        async function populateCategoryDropdown() {
+            try {
+                const snapshot = await db.ref('eventCategories').once('value');
+                const categories = snapshot.val();
+                const dropdown = document.getElementById('eventCategory');
+                dropdown.innerHTML = '<option value="">Select Category</option>';
+                
+                if (categories) {
+                    Object.values(categories).forEach(category => {
+                        if (category.active !== false) {
+                            const option = document.createElement('option');
+                            option.value = category.id;
+                            option.textContent = category.name;
+                            dropdown.appendChild(option);
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error populating categories:', error);
+            }
+        }
+
+        async function saveEventCategory() {
+            const categoryData = {
+                id: document.getElementById('categoryId').value.trim(),
+                name: document.getElementById('categoryName').value.trim(),
+                description: document.getElementById('categoryDescription').value.trim(),
+                icon: document.getElementById('categoryIcon').value.trim(),
+                frequency: document.getElementById('categoryFrequency').value.trim(),
+                order: parseInt(document.getElementById('categoryOrder').value) || 0,
+                active: document.getElementById('categoryActive').checked
+            };
+
+            if (!categoryData.id || !categoryData.name || !categoryData.icon) {
+                showMessage('Please fill in required fields (ID, Name, Icon)', 'error');
+                return;
+            }
+
+            try {
+                if (currentEditingId) {
+                    await db.ref(`eventCategories/${currentEditingId}`).update(categoryData);
+                    showMessage('Category updated!', 'success');
+                    currentEditingId = null;
+                } else {
+                    await db.ref(`eventCategories/${categoryData.id}`).set(categoryData);
+                    showMessage('Category created!', 'success');
+                }
+
+                clearCategoryForm();
+                loadEventCategories();
+            } catch (error) {
+                showMessage('Error saving category: ' + error.message, 'error');
+            }
+        }
+
+        async function editEventCategory(categoryId) {
+            try {
+                const snapshot = await db.ref(`eventCategories/${categoryId}`).once('value');
+                const category = snapshot.val();
+                
+                if (category) {
+                    document.getElementById('categoryId').value = category.id || categoryId;
+                    document.getElementById('categoryName').value = category.name || '';
+                    document.getElementById('categoryDescription').value = category.description || '';
+                    document.getElementById('categoryIcon').value = category.icon || '';
+                    document.getElementById('categoryFrequency').value = category.frequency || '';
+                    document.getElementById('categoryOrder').value = category.order || 1;
+                    document.getElementById('categoryActive').checked = category.active !== false;
+                    
+                    currentEditingId = categoryId;
+                    showMessage('Editing category: ' + category.name, 'info');
+                }
+            } catch (error) {
+                showMessage('Error loading category: ' + error.message, 'error');
+            }
+        }
+
+        async function deleteEventCategory(categoryId) {
+            if (!confirm('Delete this event category?')) return;
+            
+            try {
+                await db.ref(`eventCategories/${categoryId}`).remove();
+                showMessage('Category deleted!', 'success');
+                loadEventCategories();
+            } catch (error) {
+                showMessage('Error deleting category: ' + error.message, 'error');
+            }
+        }
+
+        function clearCategoryForm() {
+            document.getElementById('categoryId').value = '';
+            document.getElementById('categoryName').value = '';
+            document.getElementById('categoryDescription').value = '';
+            document.getElementById('categoryIcon').value = 'fas fa-';
+            document.getElementById('categoryFrequency').value = '';
+            document.getElementById('categoryOrder').value = '1';
+            document.getElementById('categoryActive').checked = true;
+            currentEditingId = null;
+        }
+
         // ==================== EVENTS MANAGEMENT ====================
+        function showEventTab(tabName) {
+            document.querySelectorAll('.event-tab').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            document.querySelectorAll('.form-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.getElementById(`eventTab${tabName.charAt(0).toUpperCase() + tabName.slice(1)}`).style.display = 'block';
+            event.target.classList.add('active');
+        }
+
         async function loadEvents() {
             try {
                 const snapshot = await db.ref('upcomingEvents').once('value');
@@ -1619,23 +2035,24 @@
                 description: document.getElementById('eventDescription').value.trim(),
                 imageUrl: document.getElementById('eventImageUrl').value.trim(),
                 registrationUrl: document.getElementById('eventRegistrationUrl').value.trim(),
+                subtitle: document.getElementById('eventSubtitle').value.trim(),
+                frequency: document.getElementById('eventFrequency').value,
+                order: parseInt(document.getElementById('eventOrder').value) || 1,
                 active: document.getElementById('eventActive').checked,
                 lastUpdated: new Date().toISOString()
             };
 
-            if (!eventData.title || !eventData.date || !eventData.description) {
-                showMessage('Please fill in required fields (Title, Date, Description)', 'error');
+            if (!eventData.title || !eventData.date || !eventData.description || !eventData.registrationUrl) {
+                showMessage('Please fill in required fields', 'error');
                 return;
             }
 
             try {
                 if (currentEditingId) {
-                    // Update existing event
                     await db.ref(`upcomingEvents/${currentEditingId}`).update(eventData);
                     showMessage('Event updated successfully!', 'success');
                     currentEditingId = null;
                 } else {
-                    // Create new event
                     const newId = 'event_' + Date.now();
                     eventData.id = newId;
                     await db.ref(`upcomingEvents/${newId}`).set(eventData);
@@ -1657,7 +2074,7 @@
                 
                 if (event) {
                     document.getElementById('eventTitle').value = event.title || '';
-                    document.getElementById('eventCategory').value = event.category || 'bootcamp';
+                    document.getElementById('eventCategory').value = event.category || '';
                     document.getElementById('eventDate').value = event.date || '';
                     document.getElementById('eventDuration').value = event.duration || '';
                     document.getElementById('eventVenue').value = event.venue || '';
@@ -1665,7 +2082,13 @@
                     document.getElementById('eventDescription').value = event.description || '';
                     document.getElementById('eventImageUrl').value = event.imageUrl || '';
                     document.getElementById('eventRegistrationUrl').value = event.registrationUrl || '';
+                    document.getElementById('eventSubtitle').value = event.subtitle || '';
+                    document.getElementById('eventFrequency').value = event.frequency || 'one-time';
+                    document.getElementById('eventOrder').value = event.order || 1;
                     document.getElementById('eventActive').checked = event.active !== false;
+                    
+                    // Update image preview
+                    updateImagePreview('eventImagePreview', event.imageUrl);
                     
                     currentEditingId = eventId;
                     showMessage('Editing event: ' + event.title, 'info');
@@ -1690,7 +2113,7 @@
 
         function clearEventForm() {
             document.getElementById('eventTitle').value = '';
-            document.getElementById('eventCategory').value = 'bootcamp';
+            document.getElementById('eventCategory').value = '';
             document.getElementById('eventDate').value = '';
             document.getElementById('eventDuration').value = '';
             document.getElementById('eventVenue').value = '';
@@ -1698,7 +2121,15 @@
             document.getElementById('eventDescription').value = '';
             document.getElementById('eventImageUrl').value = '';
             document.getElementById('eventRegistrationUrl').value = '';
+            document.getElementById('eventSubtitle').value = '';
+            document.getElementById('eventFrequency').value = 'one-time';
+            document.getElementById('eventOrder').value = '1';
             document.getElementById('eventActive').checked = true;
+            
+            // Reset tabs
+            showEventTab('basic');
+            updateImagePreview('eventImagePreview', '');
+            
             currentEditingId = null;
         }
 
@@ -1716,6 +2147,7 @@
                         row.innerHTML = `
                             <td>${program.name || 'No name'}</td>
                             <td>${program.duration || 'No duration'}</td>
+                            <td>${program.order || '0'}</td>
                             <td>
                                 <span class="status-badge ${program.active ? 'status-active' : 'status-inactive'}">
                                     ${program.active ? 'Active' : 'Inactive'}
@@ -1735,7 +2167,7 @@
                         table.appendChild(row);
                     });
                 } else {
-                    table.innerHTML = '<tr><td colspan="4" style="text-align: center;">No training programs found</td></tr>';
+                    table.innerHTML = '<tr><td colspan="5" style="text-align: center;">No training programs found</td></tr>';
                 }
             } catch (error) {
                 showMessage('Error loading training programs: ' + error.message, 'error');
@@ -1755,6 +2187,7 @@
                 objectives: objectives,
                 longTermResults: document.getElementById('trainingResults').value.trim(),
                 icon: document.getElementById('trainingIcon').value.trim() || 'fas fa-graduation-cap',
+                order: parseInt(document.getElementById('trainingOrder').value) || 1,
                 active: document.getElementById('trainingActive').checked,
                 lastUpdated: new Date().toISOString()
             };
@@ -1798,6 +2231,7 @@
                         : '';
                     document.getElementById('trainingResults').value = program.longTermResults || '';
                     document.getElementById('trainingIcon').value = program.icon || 'fas fa-graduation-cap';
+                    document.getElementById('trainingOrder').value = program.order || 1;
                     document.getElementById('trainingActive').checked = program.active !== false;
                     
                     currentEditingId = programId;
@@ -1827,9 +2261,165 @@
             document.getElementById('trainingDescription').value = '';
             document.getElementById('trainingObjectives').value = '';
             document.getElementById('trainingResults').value = '';
-            document.getElementById('trainingIcon').value = '';
+            document.getElementById('trainingIcon').value = 'fas fa-';
+            document.getElementById('trainingOrder').value = '1';
             document.getElementById('trainingActive').checked = true;
             currentEditingId = null;
+        }
+
+        // ==================== TRAINING SCHEDULES ====================
+        async function loadTrainingSchedules() {
+            try {
+                const snapshot = await db.ref('trainingSchedules').once('value');
+                const schedules = snapshot.val();
+                const container = document.getElementById('schedulesAccordion');
+                container.innerHTML = '';
+                
+                if (schedules) {
+                    Object.entries(schedules).forEach(([quarterId, quarter]) => {
+                        const quarterCard = document.createElement('div');
+                        quarterCard.className = 'form-section';
+                        quarterCard.style.marginBottom = 'var(--space-lg)';
+                        
+                        let programsHtml = '';
+                        if (quarter.programs) {
+                            Object.values(quarter.programs).forEach(program => {
+                                programsHtml += `
+                                    <tr>
+                                        <td>${program.programName || 'N/A'}</td>
+                                        <td>${program.startDate || 'N/A'}</td>
+                                        <td>${program.duration || 'N/A'}</td>
+                                        <td>${program.schedule || 'N/A'}</td>
+                                        <td>
+                                            <button class="action-btn edit" onclick="editScheduleProgram('${quarterId}', '${program.id}')">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteScheduleProgram('${quarterId}', '${program.id}')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `;
+                            });
+                        }
+                        
+                        quarterCard.innerHTML = `
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-md);">
+                                <h3 style="margin: 0;">${quarter.name || quarterId}</h3>
+                                <div>
+                                    <button class="btn btn-small btn-secondary" onclick="editTrainingSchedule('${quarterId}')">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                    <button class="btn btn-small btn-danger" onclick="deleteTrainingSchedule('${quarterId}')">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </div>
+                            </div>
+                            <table style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>Program</th>
+                                        <th>Start Date</th>
+                                        <th>Duration</th>
+                                        <th>Schedule</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${programsHtml || '<tr><td colspan="5">No programs scheduled</td></tr>'}
+                                </tbody>
+                            </table>
+                        `;
+                        
+                        container.appendChild(quarterCard);
+                    });
+                } else {
+                    container.innerHTML = '<div class="form-section"><p style="text-align: center;">No training schedules found</p></div>';
+                }
+            } catch (error) {
+                showMessage('Error loading schedules: ' + error.message, 'error');
+            }
+        }
+
+        function addProgramToSchedule() {
+            const container = document.getElementById('scheduleProgramsContainer');
+            const programId = 'program_' + Date.now();
+            
+            const programDiv = document.createElement('div');
+            programDiv.className = 'array-item';
+            programDiv.id = programId;
+            programDiv.innerHTML = `
+                <div class="array-item-content">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); margin-bottom: var(--space-sm);">
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Program Name</label>
+                            <input type="text" class="schedule-program-name" placeholder="Program Name" style="width: 100%;">
+                        </div>
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Start Date</label>
+                            <input type="date" class="schedule-start-date" style="width: 100%;">
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md);">
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Duration</label>
+                            <input type="text" class="schedule-duration" placeholder="e.g., 8 Weeks" style="width: 100%;">
+                        </div>
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Schedule</label>
+                            <input type="text" class="schedule-schedule" placeholder="e.g., Mon & Wed, 6-8 PM" style="width: 100%;">
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="action-btn delete" onclick="this.parentElement.remove()">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+            
+            container.appendChild(programDiv);
+        }
+
+        async function saveTrainingSchedule() {
+            const quarterData = {
+                quarter: document.getElementById('scheduleQuarter').value,
+                name: document.getElementById('scheduleName').value.trim() || document.getElementById('scheduleQuarter').options[document.getElementById('scheduleQuarter').selectedIndex].text,
+                active: document.getElementById('scheduleActive').checked
+            };
+
+            // Collect programs
+            const programs = {};
+            const programElements = document.querySelectorAll('#scheduleProgramsContainer .array-item');
+            
+            programElements.forEach((element, index) => {
+                const programId = 'schedule_' + Date.now() + '_' + index;
+                programs[programId] = {
+                    id: programId,
+                    programName: element.querySelector('.schedule-program-name').value,
+                    startDate: element.querySelector('.schedule-start-date').value,
+                    duration: element.querySelector('.schedule-duration').value,
+                    schedule: element.querySelector('.schedule-schedule').value,
+                    active: true,
+                    order: index + 1
+                };
+            });
+
+            quarterData.programs = programs;
+
+            try {
+                await db.ref(`trainingSchedules/${quarterData.quarter}`).set(quarterData);
+                showMessage('Training schedule saved!', 'success');
+                clearScheduleForm();
+                loadTrainingSchedules();
+            } catch (error) {
+                showMessage('Error saving schedule: ' + error.message, 'error');
+            }
+        }
+
+        function clearScheduleForm() {
+            document.getElementById('scheduleQuarter').value = 'q1';
+            document.getElementById('scheduleName').value = '';
+            document.getElementById('scheduleActive').checked = true;
+            document.getElementById('scheduleProgramsContainer').innerHTML = '';
         }
 
         // ==================== TEAM MEMBERS ====================
@@ -1846,6 +2436,7 @@
                         row.innerHTML = `
                             <td>${member.name || 'No name'}</td>
                             <td>${member.role || 'No role'}</td>
+                            <td>${member.order || '0'}</td>
                             <td>
                                 <span class="status-badge ${member.active ? 'status-active' : 'status-inactive'}">
                                     ${member.active ? 'Active' : 'Inactive'}
@@ -1865,7 +2456,7 @@
                         table.appendChild(row);
                     });
                 } else {
-                    table.innerHTML = '<tr><td colspan="4" style="text-align: center;">No team members found</td></tr>';
+                    table.innerHTML = '<tr><td colspan="5" style="text-align: center;">No team members found</td></tr>';
                 }
             } catch (error) {
                 showMessage('Error loading team: ' + error.message, 'error');
@@ -1878,8 +2469,10 @@
                 role: document.getElementById('teamRole').value.trim(),
                 bio: document.getElementById('teamBio').value.trim(),
                 imageUrl: document.getElementById('teamImageUrl').value.trim(),
+                order: parseInt(document.getElementById('teamOrder').value) || 1,
                 social: {
-                    linkedin: document.getElementById('teamLinkedin').value.trim()
+                    linkedin: document.getElementById('teamLinkedin').value.trim(),
+                    twitter: document.getElementById('teamTwitter').value.trim()
                 },
                 active: document.getElementById('teamActive').checked,
                 lastUpdated: new Date().toISOString()
@@ -1920,7 +2513,9 @@
                     document.getElementById('teamRole').value = member.role || '';
                     document.getElementById('teamBio').value = member.bio || '';
                     document.getElementById('teamImageUrl').value = member.imageUrl || '';
+                    document.getElementById('teamOrder').value = member.order || 1;
                     document.getElementById('teamLinkedin').value = member.social?.linkedin || '';
+                    document.getElementById('teamTwitter').value = member.social?.twitter || '';
                     document.getElementById('teamActive').checked = member.active !== false;
                     
                     currentEditingId = memberId;
@@ -1949,7 +2544,9 @@
             document.getElementById('teamRole').value = '';
             document.getElementById('teamBio').value = '';
             document.getElementById('teamImageUrl').value = '';
+            document.getElementById('teamOrder').value = '1';
             document.getElementById('teamLinkedin').value = '';
+            document.getElementById('teamTwitter').value = '';
             document.getElementById('teamActive').checked = true;
             currentEditingId = null;
         }
@@ -1969,6 +2566,7 @@
                             <td>${testimonial.name || 'No name'}</td>
                             <td>${testimonial.role || 'No role'}</td>
                             <td>${'★'.repeat(testimonial.rating || 0)}</td>
+                            <td>${testimonial.order || '0'}</td>
                             <td>
                                 <span class="status-badge ${testimonial.active ? 'status-active' : 'status-inactive'}">
                                     ${testimonial.active ? 'Active' : 'Inactive'}
@@ -1988,7 +2586,7 @@
                         table.appendChild(row);
                     });
                 } else {
-                    table.innerHTML = '<tr><td colspan="5" style="text-align: center;">No testimonials found</td></tr>';
+                    table.innerHTML = '<tr><td colspan="6" style="text-align: center;">No testimonials found</td></tr>';
                 }
             } catch (error) {
                 showMessage('Error loading testimonials: ' + error.message, 'error');
@@ -2005,6 +2603,7 @@
                 rating: parseInt(document.getElementById('testimonialRating').value) || 5,
                 imageUrl: document.getElementById('testimonialImageUrl').value.trim(),
                 date: document.getElementById('testimonialDate').value || new Date().toISOString().split('T')[0],
+                order: parseInt(document.getElementById('testimonialOrder').value) || 1,
                 active: document.getElementById('testimonialActive').checked,
                 lastUpdated: new Date().toISOString()
             };
@@ -2048,6 +2647,7 @@
                     document.getElementById('testimonialRating').value = testimonial.rating || 5;
                     document.getElementById('testimonialImageUrl').value = testimonial.imageUrl || '';
                     document.getElementById('testimonialDate').value = testimonial.date || '';
+                    document.getElementById('testimonialOrder').value = testimonial.order || 1;
                     document.getElementById('testimonialActive').checked = testimonial.active !== false;
                     
                     currentEditingId = testimonialId;
@@ -2080,8 +2680,349 @@
             document.getElementById('testimonialRating').value = '5';
             document.getElementById('testimonialImageUrl').value = '';
             document.getElementById('testimonialDate').value = '';
+            document.getElementById('testimonialOrder').value = '1';
             document.getElementById('testimonialActive').checked = true;
             currentEditingId = null;
+        }
+
+        // ==================== HOME PAGE CONTENT ====================
+        function showHomeTab(tabName) {
+            document.querySelectorAll('.home-tab').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            document.querySelectorAll('.tab-btn').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.getElementById(`home${tabName.charAt(0).toUpperCase() + tabName.slice(1)}Tab`).style.display = 'block';
+            event.target.classList.add('active');
+        }
+
+        function initTagInput() {
+            const tagInput = document.getElementById('homeTagInput');
+            const tagsContainer = document.getElementById('homeTagsContainer');
+            
+            tagInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const tag = tagInput.value.trim();
+                    if (tag) {
+                        addTag(tag);
+                        tagInput.value = '';
+                    }
+                }
+            });
+            
+            // Remove tag when clicking remove button
+            tagsContainer.addEventListener('click', function(e) {
+                if (e.target.classList.contains('tag-remove')) {
+                    e.target.parentElement.remove();
+                }
+            });
+        }
+
+        function addTag(tag) {
+            const tagsContainer = document.getElementById('homeTagsContainer');
+            const tagElement = document.createElement('span');
+            tagElement.className = 'tag';
+            tagElement.innerHTML = `
+                ${tag}
+                <span class="tag-remove">&times;</span>
+            `;
+            tagsContainer.insertBefore(tagElement, document.getElementById('homeTagInput'));
+        }
+
+        function getTags() {
+            const tags = [];
+            document.querySelectorAll('#homeTagsContainer .tag').forEach(tag => {
+                tags.push(tag.textContent.replace('×', '').trim());
+            });
+            return tags;
+        }
+
+        function setTags(tags) {
+            const tagsContainer = document.getElementById('homeTagsContainer');
+            // Clear existing tags except input
+            const existingTags = tagsContainer.querySelectorAll('.tag');
+            existingTags.forEach(tag => tag.remove());
+            
+            // Add new tags
+            tags.forEach(tag => addTag(tag));
+        }
+
+        function addApproachCard() {
+            const container = document.getElementById('approachCardsContainer');
+            const cardId = Date.now();
+            
+            const cardDiv = document.createElement('div');
+            cardDiv.className = 'array-item';
+            cardDiv.innerHTML = `
+                <div class="array-item-content">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); margin-bottom: var(--space-sm);">
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Title</label>
+                            <input type="text" class="approach-card-title" placeholder="Card Title" style="width: 100%;">
+                        </div>
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Tag</label>
+                            <input type="text" class="approach-card-tag" placeholder="e.g., ENGAGEMENT" style="width: 100%;">
+                        </div>
+                    </div>
+                    <div>
+                        <label style="font-size: 0.8rem; color: var(--text-secondary);">Description</label>
+                        <textarea class="approach-card-description" placeholder="Card description" rows="2" style="width: 100%;"></textarea>
+                    </div>
+                    <div style="margin-top: var(--space-sm);">
+                        <label style="font-size: 0.8rem; color: var(--text-secondary);">Icon Class</label>
+                        <input type="text" class="approach-card-icon" placeholder="fas fa-users" value="fas fa-" style="width: 100%;">
+                    </div>
+                </div>
+                <button type="button" class="action-btn delete" onclick="this.parentElement.remove()">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+            
+            container.appendChild(cardDiv);
+        }
+
+        function getApproachCards() {
+            const cards = [];
+            document.querySelectorAll('#approachCardsContainer .array-item').forEach(card => {
+                cards.push({
+                    title: card.querySelector('.approach-card-title').value,
+                    description: card.querySelector('.approach-card-description').value,
+                    tag: card.querySelector('.approach-card-tag').value,
+                    icon: card.querySelector('.approach-card-icon').value
+                });
+            });
+            return cards;
+        }
+
+        function setApproachCards(cards) {
+            const container = document.getElementById('approachCardsContainer');
+            container.innerHTML = '';
+            
+            cards.forEach(card => {
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'array-item';
+                cardDiv.innerHTML = `
+                    <div class="array-item-content">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); margin-bottom: var(--space-sm);">
+                            <div>
+                                <label style="font-size: 0.8rem; color: var(--text-secondary);">Title</label>
+                                <input type="text" class="approach-card-title" value="${card.title || ''}" style="width: 100%;">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.8rem; color: var(--text-secondary);">Tag</label>
+                                <input type="text" class="approach-card-tag" value="${card.tag || ''}" style="width: 100%;">
+                            </div>
+                        </div>
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Description</label>
+                            <textarea class="approach-card-description" rows="2" style="width: 100%;">${card.description || ''}</textarea>
+                        </div>
+                        <div style="margin-top: var(--space-sm);">
+                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Icon Class</label>
+                            <input type="text" class="approach-card-icon" value="${card.icon || 'fas fa-'}" style="width: 100%;">
+                        </div>
+                    </div>
+                    <button type="button" class="action-btn delete" onclick="this.parentElement.remove()">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                `;
+                
+                container.appendChild(cardDiv);
+            });
+        }
+
+        async function loadHomePageContent() {
+            try {
+                const snapshot = await db.ref('homePageContent').once('value');
+                const content = snapshot.val();
+                
+                if (content) {
+                    const hero = content.hero || {};
+                    const approach = content.approach || {};
+                    
+                    // Hero section
+                    document.getElementById('homeMissionBadge').value = hero.missionBadge || '';
+                    document.getElementById('homeMainTitle').value = hero.mainTitle || '';
+                    document.getElementById('homeSubtitle').value = hero.subtitle || '';
+                    setTags(hero.categoryTags || []);
+                    
+                    // Approach section
+                    document.getElementById('homeApproachTitle').value = approach.title || '';
+                    document.getElementById('homeApproachSubtitle').value = approach.subtitle || '';
+                    setApproachCards(approach.cards || []);
+                    
+                    showMessage('Home page content loaded!', 'success');
+                }
+            } catch (error) {
+                showMessage('Error loading home page: ' + error.message, 'error');
+            }
+        }
+
+        async function saveHomePageContent() {
+            const homeData = {
+                hero: {
+                    missionBadge: document.getElementById('homeMissionBadge').value.trim(),
+                    mainTitle: document.getElementById('homeMainTitle').value.trim(),
+                    subtitle: document.getElementById('homeSubtitle').value.trim(),
+                    categoryTags: getTags()
+                },
+                approach: {
+                    title: document.getElementById('homeApproachTitle').value.trim(),
+                    subtitle: document.getElementById('homeApproachSubtitle').value.trim(),
+                    cards: getApproachCards()
+                }
+            };
+
+            try {
+                await db.ref('homePageContent').set(homeData);
+                showMessage('Home page content saved!', 'success');
+            } catch (error) {
+                showMessage('Error saving home page: ' + error.message, 'error');
+            }
+        }
+
+        // ==================== TRAINING PAGE CONTENT ====================
+        function showTrainingTab(tabName) {
+            document.querySelectorAll('.training-tab').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            document.querySelectorAll('.tab-btn').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.getElementById(`training${tabName.charAt(0).toUpperCase() + tabName.slice(1)}Tab`).style.display = 'block';
+            event.target.classList.add('active');
+        }
+
+        function addOutcomeMetric() {
+            const container = document.getElementById('outcomesContainer');
+            const metricId = Date.now();
+            
+            const metricDiv = document.createElement('div');
+            metricDiv.className = 'array-item';
+            metricDiv.innerHTML = `
+                <div class="array-item-content">
+                    <div style="display: grid; grid-template-columns: 100px 1fr; gap: var(--space-md); align-items: end;">
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Percentage</label>
+                            <input type="number" class="outcome-percentage" placeholder="95" min="0" max="100" style="width: 100%;">
+                        </div>
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Title</label>
+                            <input type="text" class="outcome-title" placeholder="e.g., Completion Rate" style="width: 100%;">
+                        </div>
+                    </div>
+                    <div style="margin-top: var(--space-sm);">
+                        <label style="font-size: 0.8rem; color: var(--text-secondary);">Description</label>
+                        <textarea class="outcome-description" placeholder="Description of this metric" rows="2" style="width: 100%;"></textarea>
+                    </div>
+                </div>
+                <button type="button" class="action-btn delete" onclick="this.parentElement.remove()">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+            
+            container.appendChild(metricDiv);
+        }
+
+        function getOutcomeMetrics() {
+            const metrics = [];
+            document.querySelectorAll('#outcomesContainer .array-item').forEach(metric => {
+                metrics.push({
+                    percentage: parseInt(metric.querySelector('.outcome-percentage').value) || 0,
+                    title: metric.querySelector('.outcome-title').value,
+                    description: metric.querySelector('.outcome-description').value
+                });
+            });
+            return metrics;
+        }
+
+        function setOutcomeMetrics(metrics) {
+            const container = document.getElementById('outcomesContainer');
+            container.innerHTML = '';
+            
+            metrics.forEach(metric => {
+                const metricDiv = document.createElement('div');
+                metricDiv.className = 'array-item';
+                metricDiv.innerHTML = `
+                    <div class="array-item-content">
+                        <div style="display: grid; grid-template-columns: 100px 1fr; gap: var(--space-md); align-items: end;">
+                            <div>
+                                <label style="font-size: 0.8rem; color: var(--text-secondary);">Percentage</label>
+                                <input type="number" class="outcome-percentage" value="${metric.percentage || 0}" style="width: 100%;">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.8rem; color: var(--text-secondary);">Title</label>
+                                <input type="text" class="outcome-title" value="${metric.title || ''}" style="width: 100%;">
+                            </div>
+                        </div>
+                        <div style="margin-top: var(--space-sm);">
+                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Description</label>
+                            <textarea class="outcome-description" rows="2" style="width: 100%;">${metric.description || ''}</textarea>
+                        </div>
+                    </div>
+                    <button type="button" class="action-btn delete" onclick="this.parentElement.remove()">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                `;
+                
+                container.appendChild(metricDiv);
+            });
+        }
+
+        async function loadTrainingPageContent() {
+            try {
+                const snapshot = await db.ref('trainingPageContent').once('value');
+                const content = snapshot.val();
+                
+                if (content) {
+                    const hero = content.hero || {};
+                    const outcomes = content.outcomes || [];
+                    
+                    // Hero section
+                    document.getElementById('trainingPageBadge').value = hero.badge || '';
+                    document.getElementById('trainingPageTitle').value = hero.title || '';
+                    document.getElementById('trainingPageSubtitle').value = hero.subtitle || '';
+                    document.getElementById('trainingPageHighlights').value = Array.isArray(hero.highlights) 
+                        ? hero.highlights.join('\n') 
+                        : '';
+                    
+                    // Outcomes section
+                    setOutcomeMetrics(outcomes);
+                    
+                    showMessage('Training page content loaded!', 'success');
+                }
+            } catch (error) {
+                showMessage('Error loading training page: ' + error.message, 'error');
+            }
+        }
+
+        async function saveTrainingPageContent() {
+            const highlights = document.getElementById('trainingPageHighlights').value
+                .split('\n')
+                .filter(line => line.trim())
+                .map(line => line.trim());
+
+            const trainingData = {
+                hero: {
+                    badge: document.getElementById('trainingPageBadge').value.trim(),
+                    title: document.getElementById('trainingPageTitle').value.trim(),
+                    subtitle: document.getElementById('trainingPageSubtitle').value.trim(),
+                    highlights: highlights
+                },
+                outcomes: getOutcomeMetrics()
+            };
+
+            try {
+                await db.ref('trainingPageContent').set(trainingData);
+                showMessage('Training page content saved!', 'success');
+            } catch (error) {
+                showMessage('Error saving training page: ' + error.message, 'error');
+            }
         }
 
         // ==================== STATISTICS ====================
@@ -2098,6 +3039,10 @@
                     document.getElementById('statsBusinessGrowthRate').value = stats.businessGrowthRate || '';
                     document.getElementById('statsSatisfactionRate').value = stats.satisfactionRate || '';
                     document.getElementById('statsCareerAdvancement').value = stats.careerAdvancement || '';
+                    document.getElementById('statsLastUpdated').value = stats.lastUpdated || '';
+                    
+                    // Update dashboard quick stats
+                    loadDashboardData();
                 }
             } catch (error) {
                 showMessage('Error loading statistics: ' + error.message, 'error');
@@ -2113,12 +3058,13 @@
                 businessGrowthRate: parseInt(document.getElementById('statsBusinessGrowthRate').value) || 0,
                 satisfactionRate: parseInt(document.getElementById('statsSatisfactionRate').value) || 0,
                 careerAdvancement: parseInt(document.getElementById('statsCareerAdvancement').value) || 0,
-                lastUpdated: new Date().toISOString()
+                lastUpdated: document.getElementById('statsLastUpdated').value || new Date().toISOString().split('T')[0]
             };
 
             try {
                 await db.ref('stats').set(statsData);
                 showMessage('Statistics updated successfully!', 'success');
+                loadDashboardData();
             } catch (error) {
                 showMessage('Error saving statistics: ' + error.message, 'error');
             }
@@ -2138,6 +3084,7 @@
                         row.innerHTML = `
                             <td>${faq.question || 'No question'}</td>
                             <td>${faq.category || 'No category'}</td>
+                            <td>${faq.order || '0'}</td>
                             <td>
                                 <span class="status-badge ${faq.active ? 'status-active' : 'status-inactive'}">
                                     ${faq.active ? 'Active' : 'Inactive'}
@@ -2157,7 +3104,7 @@
                         table.appendChild(row);
                     });
                 } else {
-                    table.innerHTML = '<tr><td colspan="4" style="text-align: center;">No FAQs found</td></tr>';
+                    table.innerHTML = '<tr><td colspan="5" style="text-align: center;">No FAQs found</td></tr>';
                 }
             } catch (error) {
                 showMessage('Error loading FAQs: ' + error.message, 'error');
@@ -2169,6 +3116,7 @@
                 question: document.getElementById('faqQuestion').value.trim(),
                 answer: document.getElementById('faqAnswer').value.trim(),
                 category: document.getElementById('faqCategory').value,
+                order: parseInt(document.getElementById('faqOrder').value) || 1,
                 active: document.getElementById('faqActive').checked,
                 lastUpdated: new Date().toISOString()
             };
@@ -2206,6 +3154,7 @@
                     document.getElementById('faqQuestion').value = faq.question || '';
                     document.getElementById('faqAnswer').value = faq.answer || '';
                     document.getElementById('faqCategory').value = faq.category || 'general';
+                    document.getElementById('faqOrder').value = faq.order || 1;
                     document.getElementById('faqActive').checked = faq.active !== false;
                     
                     currentEditingId = faqId;
@@ -2232,12 +3181,217 @@
             document.getElementById('faqQuestion').value = '';
             document.getElementById('faqAnswer').value = '';
             document.getElementById('faqCategory').value = 'registration';
+            document.getElementById('faqOrder').value = '1';
             document.getElementById('faqActive').checked = true;
             currentEditingId = null;
         }
 
+        // ==================== DATA TOOLS ====================
+        function showDataTab(tabName) {
+            document.querySelectorAll('.data-tab').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            document.querySelectorAll('.tab-btn').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.getElementById(`data${tabName.charAt(0).toUpperCase() + tabName.slice(1)}Tab`).style.display = 'block';
+            event.target.classList.add('active');
+        }
+
+        async function exportData() {
+            try {
+                const snapshot = await db.ref('/').once('value');
+                const allData = snapshot.val();
+                
+                const exportResult = document.getElementById('exportResult');
+                exportResult.textContent = JSON.stringify(allData, null, 2);
+                exportResult.style.display = 'block';
+                
+                // Create download link
+                const dataStr = JSON.stringify(allData, null, 2);
+                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                const exportFileDefaultName = `dsog-data-${new Date().toISOString().split('T')[0]}.json`;
+                
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileDefaultName);
+                linkElement.click();
+                
+                showMessage('Data exported successfully!', 'success');
+            } catch (error) {
+                showMessage('Error exporting data: ' + error.message, 'error');
+            }
+        }
+
+        async function loadCurrentDataForImport() {
+            try {
+                const snapshot = await db.ref('/').once('value');
+                const allData = snapshot.val();
+                document.getElementById('importJson').value = JSON.stringify(allData, null, 2);
+                showMessage('Current data loaded into import field', 'info');
+            } catch (error) {
+                showMessage('Error loading current data: ' + error.message, 'error');
+            }
+        }
+
+        async function importData() {
+            const jsonText = document.getElementById('importJson').value.trim();
+            if (!jsonText) {
+                showMessage('Please paste JSON data', 'error');
+                return;
+            }
+
+            try {
+                const data = JSON.parse(jsonText);
+                const merge = document.getElementById('importMerge').checked;
+                const replace = document.getElementById('importReplace').checked;
+
+                if (replace) {
+                    // Replace all data
+                    await db.ref('/').set(data);
+                    showMessage('All data replaced successfully!', 'success');
+                } else if (merge) {
+                    // Merge data
+                    for (const [key, value] of Object.entries(data)) {
+                        await db.ref(key).set(value);
+                    }
+                    showMessage('Data merged successfully!', 'success');
+                }
+
+                // Refresh all sections
+                loadDashboardData();
+                populateCategoryDropdown();
+                
+            } catch (error) {
+                showMessage('Error importing data: ' + error.message, 'error');
+            }
+        }
+
+        async function createBackup() {
+            try {
+                const snapshot = await db.ref('/').once('value');
+                const allData = snapshot.val();
+                const backupId = 'backup_' + Date.now();
+                
+                await db.ref(`backups/${backupId}`).set({
+                    data: allData,
+                    timestamp: new Date().toISOString(),
+                    name: `Backup ${new Date().toLocaleString()}`
+                });
+                
+                showMessage('Backup created successfully!', 'success');
+                loadBackups();
+            } catch (error) {
+                showMessage('Error creating backup: ' + error.message, 'error');
+            }
+        }
+
+        async function loadBackups() {
+            try {
+                const snapshot = await db.ref('backups').once('value');
+                const backups = snapshot.val();
+                const container = document.getElementById('backupList');
+                container.innerHTML = '';
+                
+                if (backups) {
+                    Object.entries(backups).forEach(([id, backup]) => {
+                        const backupDiv = document.createElement('div');
+                        backupDiv.className = 'array-item';
+                        backupDiv.innerHTML = `
+                            <div class="array-item-content">
+                                <div style="font-weight: 500;">${backup.name || 'Unnamed Backup'}</div>
+                                <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                                    ${backup.timestamp ? new Date(backup.timestamp).toLocaleString() : 'Unknown date'}
+                                </div>
+                            </div>
+                            <div>
+                                <button class="action-btn edit" onclick="restoreBackup('${id}')" title="Restore">
+                                    <i class="fas fa-history"></i>
+                                </button>
+                                <button class="action-btn delete" onclick="deleteBackup('${id}')" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        `;
+                        container.appendChild(backupDiv);
+                    });
+                } else {
+                    container.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">No backups found</p>';
+                }
+            } catch (error) {
+                console.error('Error loading backups:', error);
+            }
+        }
+
+        async function restoreBackup(backupId) {
+            if (!backupId) {
+                showMessage('Please select a backup to restore', 'error');
+                return;
+            }
+
+            if (!confirm('Restoring this backup will overwrite all current data. Continue?')) {
+                return;
+            }
+
+            try {
+                const snapshot = await db.ref(`backups/${backupId}`).once('value');
+                const backup = snapshot.val();
+                
+                if (backup && backup.data) {
+                    await db.ref('/').set(backup.data);
+                    showMessage('Backup restored successfully!', 'success');
+                    
+                    // Refresh all sections
+                    loadDashboardData();
+                    populateCategoryDropdown();
+                }
+            } catch (error) {
+                showMessage('Error restoring backup: ' + error.message, 'error');
+            }
+        }
+
+        async function deleteBackup(backupId) {
+            if (!confirm('Delete this backup?')) return;
+            
+            try {
+                await db.ref(`backups/${backupId}`).remove();
+                showMessage('Backup deleted!', 'success');
+                loadBackups();
+            } catch (error) {
+                showMessage('Error deleting backup: ' + error.message, 'error');
+            }
+        }
+
+        // ==================== UTILITY FUNCTIONS ====================
+        function initImagePreview() {
+            const imageUrlInput = document.getElementById('eventImageUrl');
+            if (imageUrlInput) {
+                imageUrlInput.addEventListener('input', function() {
+                    updateImagePreview('eventImagePreview', this.value);
+                });
+            }
+        }
+
+        function updateImagePreview(previewId, imageUrl) {
+            const preview = document.getElementById(previewId);
+            if (imageUrl) {
+                preview.innerHTML = `<img src="${imageUrl}" alt="Preview" onerror="this.parentElement.innerHTML='<span>Invalid image URL</span>'">`;
+            } else {
+                preview.innerHTML = '<span>No image preview</span>';
+            }
+        }
+
         // Make functions global
         window.switchSection = switchSection;
+        window.saveAppSettings = saveAppSettings;
+        window.loadAppSettings = loadAppSettings;
+        window.loadEventCategories = loadEventCategories;
+        window.saveEventCategory = saveEventCategory;
+        window.clearCategoryForm = clearCategoryForm;
+        window.editEventCategory = editEventCategory;
+        window.deleteEventCategory = deleteEventCategory;
+        window.showEventTab = showEventTab;
         window.saveEvent = saveEvent;
         window.clearEventForm = clearEventForm;
         window.editEvent = editEvent;
@@ -2248,6 +3402,10 @@
         window.editTrainingProgram = editTrainingProgram;
         window.deleteTrainingProgram = deleteTrainingProgram;
         window.loadTrainingPrograms = loadTrainingPrograms;
+        window.loadTrainingSchedules = loadTrainingSchedules;
+        window.addProgramToSchedule = addProgramToSchedule;
+        window.saveTrainingSchedule = saveTrainingSchedule;
+        window.clearScheduleForm = clearScheduleForm;
         window.saveTeamMember = saveTeamMember;
         window.clearTeamForm = clearTeamForm;
         window.editTeamMember = editTeamMember;
@@ -2258,6 +3416,14 @@
         window.editTestimonial = editTestimonial;
         window.deleteTestimonial = deleteTestimonial;
         window.loadTestimonials = loadTestimonials;
+        window.showHomeTab = showHomeTab;
+        window.addApproachCard = addApproachCard;
+        window.loadHomePageContent = loadHomePageContent;
+        window.saveHomePageContent = saveHomePageContent;
+        window.showTrainingTab = showTrainingTab;
+        window.addOutcomeMetric = addOutcomeMetric;
+        window.loadTrainingPageContent = loadTrainingPageContent;
+        window.saveTrainingPageContent = saveTrainingPageContent;
         window.saveStatistics = saveStatistics;
         window.loadStatistics = loadStatistics;
         window.saveFAQ = saveFAQ;
@@ -2265,6 +3431,14 @@
         window.editFAQ = editFAQ;
         window.deleteFAQ = deleteFAQ;
         window.loadFAQs = loadFAQs;
+        window.showDataTab = showDataTab;
+        window.exportData = exportData;
+        window.loadCurrentDataForImport = loadCurrentDataForImport;
+        window.importData = importData;
+        window.createBackup = createBackup;
+        window.restoreBackup = restoreBackup;
+        window.deleteBackup = deleteBackup;
+        window.loadBackups = loadBackups;
     </script>
 </body>
 </html>
