@@ -2017,598 +2017,778 @@
 
     <!-- JavaScript -->
     <script>
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyDb5ZFHbo7lGM8ph0oBxFVTHRF5C5C_DWU",
-            authDomain: "dsog-events.firebaseapp.com",
-            databaseURL: "https://dsog-events-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "dsog-events",
-            storageBucket: "dsog-events.firebasestorage.app",
-            messagingSenderId: "1075977932287",
-            appId: "1:1075977932287:web:b2bf4d1c0083d2dac8ebca"
-        };
+    // Firebase Configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyDb5ZFHbo7lGM8ph0oBxFVTHRF5C5C_DWU",
+        authDomain: "dsog-events.firebaseapp.com",
+        databaseURL: "https://dsog-events-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "dsog-events",
+        storageBucket: "dsog-events.firebasestorage.app",
+        messagingSenderId: "1075977932287",
+        appId: "1:1075977932287:web:b2bf4d1c0083d2dac8ebca"
+    };
 
-        // Initialize Firebase
+    // Initialize Firebase
+    let db;
+    try {
         firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+        db = firebase.database();
+        console.log('Firebase initialized successfully');
+    } catch (error) {
+        console.error('Firebase initialization error:', error);
+        // Fallback to localStorage
+        db = null;
+    }
 
-        // Initialize the website
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 DSOG Website Version 7.0.0');
-            
-            // Initialize all components
-            initializeTheme();
-            initializeNavigation();
-            initializeAnimations();
-            initializeScrollEffects();
-            
-            // Load dynamic content from Firebase
-            loadHomePageContent();
-            loadEvents();
-            loadStatistics();
-            loadTeamMembers();
-            loadTestimonials();
-            
-            // Set current year
-            document.getElementById('currentYear').textContent = new Date().getFullYear();
-            
-            console.log('Website initialized successfully');
-        });
+    // Cache management
+    const CACHE_KEY = 'dsog_website_cache';
+    const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
-        // Theme Toggle
-        function initializeTheme() {
-            const themeToggle = document.getElementById('themeToggle');
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-            
-            const savedTheme = localStorage.getItem('theme');
-            const systemTheme = prefersDark.matches ? 'dark' : 'light';
-            const initialTheme = savedTheme || systemTheme;
-            
-            document.documentElement.setAttribute('data-theme', initialTheme);
-            updateThemeIcon(initialTheme);
-            
-            themeToggle.addEventListener('click', () => {
-                const currentTheme = document.documentElement.getAttribute('data-theme');
-                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-                
-                document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
-                document.documentElement.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-                updateThemeIcon(newTheme);
-                
-                setTimeout(() => {
-                    document.body.style.transition = '';
-                }, 300);
-            });
-            
-            prefersDark.addEventListener('change', (e) => {
-                if (!localStorage.getItem('theme')) {
-                    const newTheme = e.matches ? 'dark' : 'light';
-                    document.documentElement.setAttribute('data-theme', newTheme);
-                    updateThemeIcon(newTheme);
-                }
-            });
-            
-            function updateThemeIcon(theme) {
-                const icon = themeToggle.querySelector('i');
-                if (theme === 'dark') {
-                    icon.className = 'fas fa-sun';
-                    themeToggle.setAttribute('aria-label', 'Switch to light theme');
-                } else {
-                    icon.className = 'fas fa-moon';
-                    themeToggle.setAttribute('aria-label', 'Switch to dark theme');
-                }
-            }
+    // Initialize the website
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('🚀 DSOG Website Version 7.0.0');
+        
+        // Initialize all components
+        initializeTheme();
+        initializeNavigation();
+        initializeAnimations();
+        initializeScrollEffects();
+        
+        // Set current year
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        // Try to load from cache first for faster display
+        const cachedData = getCachedData();
+        if (cachedData && !isCacheExpired(cachedData.timestamp)) {
+            console.log('Loading from cache');
+            displayCachedData(cachedData);
+        } else {
+            console.log('Cache empty or expired, loading from Firebase');
+        }
+        
+        // Always try to load fresh data from Firebase
+        loadAllData();
+        
+        console.log('Website initialized successfully');
+    });
+
+    // ==================== CACHE MANAGEMENT ====================
+    function getCachedData() {
+        try {
+            const cached = localStorage.getItem(CACHE_KEY);
+            return cached ? JSON.parse(cached) : null;
+        } catch (error) {
+            console.error('Error reading cache:', error);
+            return null;
+        }
+    }
+
+    function saveToCache(data) {
+        try {
+            const cacheData = {
+                timestamp: Date.now(),
+                data: data
+            };
+            localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
+            console.log('Data saved to cache');
+        } catch (error) {
+            console.error('Error saving to cache:', error);
+        }
+    }
+
+    function isCacheExpired(timestamp) {
+        return Date.now() - timestamp > CACHE_DURATION;
+    }
+
+    function displayCachedData(cachedData) {
+        const data = cachedData.data;
+        
+        // Display home page content
+        if (data.homePageContent) {
+            updateHomePageContent(data.homePageContent);
+        }
+        
+        // Display events
+        if (data.events) {
+            displayEvents(data.events);
+        }
+        
+        // Display statistics
+        if (data.stats) {
+            displayStatistics(data.stats);
+        }
+        
+        // Display team members
+        if (data.teamMembers) {
+            displayTeamMembers(data.teamMembers);
+        }
+        
+        // Display testimonials
+        if (data.testimonials) {
+            displayTestimonials(data.testimonials);
+        }
+    }
+
+    // ==================== DATA LOADING ====================
+    async function loadAllData() {
+        if (!db) {
+            console.error('Firebase not available, using cached data only');
+            return;
         }
 
-        // Navigation
-        function initializeNavigation() {
-            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-            const navLinks = document.getElementById('navLinks');
+        try {
+            console.log('Loading all data from Firebase...');
             
-            if (mobileMenuBtn && navLinks) {
-                mobileMenuBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    navLinks.classList.toggle('active');
-                    const icon = this.querySelector('i');
-                    icon.className = navLinks.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
-                    this.setAttribute('aria-expanded', navLinks.classList.contains('active'));
-                    
-                    if (navLinks.classList.contains('active')) {
-                        document.body.style.overflow = 'hidden';
-                    } else {
-                        document.body.style.overflow = '';
-                    }
-                });
+            // Load all data at once
+            const snapshot = await db.ref('/').once('value');
+            const allData = snapshot.val();
+            
+            if (allData) {
+                console.log('Firebase data loaded successfully');
+                
+                // Save to cache
+                saveToCache(allData);
+                
+                // Update UI with fresh data
+                if (allData.homePageContent) {
+                    updateHomePageContent(allData.homePageContent);
+                }
+                
+                if (allData.upcomingEvents) {
+                    displayEvents(allData.upcomingEvents);
+                }
+                
+                if (allData.stats) {
+                    displayStatistics(allData.stats);
+                }
+                
+                if (allData.teamMembers) {
+                    displayTeamMembers(allData.teamMembers);
+                }
+                
+                if (allData.testimonials) {
+                    displayTestimonials(allData.testimonials);
+                }
+                
+                // Show success message
+                showNotification('Content updated successfully', 'success');
+            } else {
+                console.log('No data found in Firebase');
+                showNotification('No data available', 'warning');
+            }
+        } catch (error) {
+            console.error('Error loading data from Firebase:', error);
+            showNotification('Error loading content. Using cached data.', 'error');
+            
+            // Try to use cached data
+            const cachedData = getCachedData();
+            if (cachedData) {
+                displayCachedData(cachedData);
+            }
+        }
+    }
 
-                document.addEventListener('click', function(event) {
-                    if (!navLinks.contains(event.target) && !mobileMenuBtn.contains(event.target) && navLinks.classList.contains('active')) {
-                        navLinks.classList.remove('active');
-                        mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
-                        mobileMenuBtn.setAttribute('aria-expanded', 'false');
-                        document.body.style.overflow = '';
-                    }
-                });
-
-                navLinks.querySelectorAll('a').forEach(link => {
-                    link.addEventListener('click', () => {
-                        if (window.innerWidth <= 1024) {
-                            navLinks.classList.remove('active');
-                            mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
-                            mobileMenuBtn.setAttribute('aria-expanded', 'false');
-                            document.body.style.overflow = '';
-                        }
+    // ==================== UI UPDATES ====================
+    function updateHomePageContent(content) {
+        try {
+            // Update hero section
+            if (content.hero) {
+                document.getElementById('heroTitle').textContent = content.hero.mainTitle || 'Become What You Believe!';
+                document.getElementById('heroSubtitle').textContent = content.hero.subtitle || 'DSOG empowers businesses, startups, and young entrepreneurs through transformative training, impactful events, and real startup opportunities that turn learning into successful enterprises.';
+                
+                // Update category tags
+                const categoryTags = document.getElementById('categoryTags');
+                if (content.hero.categoryTags && Array.isArray(content.hero.categoryTags)) {
+                    categoryTags.innerHTML = '';
+                    content.hero.categoryTags.forEach(tag => {
+                        const tagElement = document.createElement('span');
+                        tagElement.className = 'category-tag';
+                        tagElement.textContent = tag;
+                        categoryTags.appendChild(tagElement);
                     });
-                });
-                
-                window.addEventListener('resize', () => {
-                    if (window.innerWidth > 1024) {
-                        navLinks.classList.remove('active');
-                        mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
-                        mobileMenuBtn.setAttribute('aria-expanded', 'false');
-                        document.body.style.overflow = '';
-                    }
-                });
+                }
             }
-
-            // Header scroll effect
-            const header = document.getElementById('header');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 50) {
-                    header.classList.add('scrolled');
-                } else {
-                    header.classList.remove('scrolled');
-                }
-            });
-
-            // Smooth scroll for anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    const href = this.getAttribute('href');
-                    
-                    if (href.startsWith('#') && href !== '#') {
-                        e.preventDefault();
-                        
-                        const targetId = href.substring(1);
-                        const targetElement = document.getElementById(targetId);
-                        
-                        if (targetElement) {
-                            const headerHeight = document.getElementById('header').offsetHeight;
-                            const targetPosition = targetElement.offsetTop - headerHeight - 20;
-                            
-                            window.scrollTo({
-                                top: targetPosition,
-                                behavior: 'smooth'
-                            });
-                            
-                            history.pushState(null, '', href);
-                        }
-                    }
-                });
-            });
-        }
-
-        // Animations
-        function initializeAnimations() {
-            const animatedElements = document.querySelectorAll('.animate-on-scroll');
             
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const delay = entry.target.dataset.delay || 0;
-                        setTimeout(() => {
-                            entry.target.classList.add('animated');
-                        }, delay);
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            });
-            
-            animatedElements.forEach((element, index) => {
-                element.dataset.delay = index * 100;
-                observer.observe(element);
-            });
-        }
-
-        // Scroll Effects
-        function initializeScrollEffects() {
-            let lastScroll = 0;
-            window.addEventListener('scroll', () => {
-                const currentScroll = window.pageYOffset;
-                
-                // Add parallax effect to hero
-                const hero = document.querySelector('.hero');
-                if (hero) {
-                    const scrolled = window.pageYOffset;
-                    const rate = scrolled * -0.5;
-                    hero.style.transform = `translate3d(0, ${rate}px, 0)`;
+            // Update approach section
+            if (content.approach) {
+                const subtitleEl = document.getElementById('approachSubtitle');
+                if (subtitleEl) {
+                    subtitleEl.textContent = content.approach.subtitle || 'We engage people through events aimed at shaping their business acuity, train professionals, and provide startup opportunities to practice what they\'ve learned.';
                 }
                 
-                lastScroll = currentScroll;
-            });
-        }
-
-        // ==================== FIREBASE DATA LOADING ====================
-
-        // Load Home Page Content
-        async function loadHomePageContent() {
-            try {
-                const snapshot = await database.ref('homePageContent').once('value');
-                const content = snapshot.val();
-                
-                if (content) {
-                    // Update hero section
-                    if (content.hero) {
-                        document.getElementById('heroTitle').textContent = content.hero.mainTitle || 'Become What You Believe!';
-                        document.getElementById('heroSubtitle').textContent = content.hero.subtitle || 'DSOG empowers businesses, startups, and young entrepreneurs through transformative training, impactful events, and real startup opportunities that turn learning into successful enterprises.';
-                        
-                        // Update category tags
-                        const categoryTags = document.getElementById('categoryTags');
-                        if (content.hero.categoryTags && Array.isArray(content.hero.categoryTags)) {
-                            categoryTags.innerHTML = '';
-                            content.hero.categoryTags.forEach(tag => {
-                                const tagElement = document.createElement('span');
-                                tagElement.className = 'category-tag';
-                                tagElement.textContent = tag;
-                                categoryTags.appendChild(tagElement);
-                            });
-                        }
-                    }
-                    
-                    // Update approach section
-                    if (content.approach) {
-                        document.getElementById('approachSubtitle').textContent = content.approach.subtitle || 'We engage people through events aimed at shaping their business acuity, train professionals, and provide startup opportunities to practice what they\'ve learned.';
-                        
-                        // Update approach cards
-                        const approachCards = document.getElementById('approachCards');
-                        if (content.approach.cards && Array.isArray(content.approach.cards)) {
-                            approachCards.innerHTML = '';
-                            content.approach.cards.forEach((card, index) => {
-                                const cardElement = document.createElement('div');
-                                cardElement.className = 'approach-card animate-on-scroll';
-                                cardElement.dataset.delay = index * 100;
-                                cardElement.innerHTML = `
-                                    <div class="approach-icon">
-                                        <i class="${card.icon || 'fas fa-users'}"></i>
-                                    </div>
-                                    <span class="approach-tag">${card.tag || 'ENGAGEMENT'}</span>
-                                    <h3>${card.title || 'Transformative Events'}</h3>
-                                    <p>${card.description || 'We organize impactful events that engage entrepreneurs in hands-on experiences, networking opportunities, and practical business challenges that shape their business acuity.'}</p>
-                                `;
-                                approachCards.appendChild(cardElement);
-                            });
-                            
-                            // Re-initialize animations for new elements
-                            setTimeout(() => {
-                                initializeAnimations();
-                            }, 100);
-                        }
-                    }
-                }
-                
-                console.log('Home page content loaded');
-            } catch (error) {
-                console.error('Error loading home page content:', error);
-                showDefaultContent();
-            }
-        }
-
-        // Load Events
-        async function loadEvents() {
-            try {
-                const snapshot = await database.ref('upcomingEvents').orderByChild('active').equalTo(true).once('value');
-                const events = snapshot.val();
-                const eventsGrid = document.getElementById('eventsGrid');
-                
-                eventsGrid.innerHTML = '';
-                
-                if (events) {
-                    const eventEntries = Object.entries(events);
-                    
-                    // Sort events by date (ascending)
-                    eventEntries.sort(([, a], [, b]) => new Date(a.date || '9999-12-31') - new Date(b.date || '9999-12-31'));
-                    
-                    // Display only active events
-                    const activeEvents = eventEntries.filter(([, event]) => event.active !== false);
-                    
-                    if (activeEvents.length > 0) {
-                        activeEvents.forEach(([id, event], index) => {
-                            const eventCard = createEventCard(event, index);
-                            eventsGrid.appendChild(eventCard);
-                        });
-                    } else {
-                        eventsGrid.innerHTML = `
-                            <div class="event-card" style="grid-column: 1 / -1; text-align: center; padding: var(--space-2xl);">
-                                <div class="event-content">
-                                    <h3>No Upcoming Events</h3>
-                                    <p>Check back soon for our upcoming events and workshops!</p>
-                                    <a href="contact.html" class="btn btn-primary" style="margin-top: var(--space-lg);">
-                                        <i class="fas fa-calendar-plus"></i> Propose an Event
-                                    </a>
-                                </div>
+                // Update approach cards
+                const approachCards = document.getElementById('approachCards');
+                if (approachCards && content.approach.cards && Array.isArray(content.approach.cards)) {
+                    approachCards.innerHTML = '';
+                    content.approach.cards.forEach((card, index) => {
+                        const cardElement = document.createElement('div');
+                        cardElement.className = 'approach-card animate-on-scroll';
+                        cardElement.dataset.delay = index * 100;
+                        cardElement.innerHTML = `
+                            <div class="approach-icon">
+                                <i class="${card.icon || 'fas fa-users'}"></i>
                             </div>
+                            <span class="approach-tag">${card.tag || 'ENGAGEMENT'}</span>
+                            <h3>${card.title || 'Transformative Events'}</h3>
+                            <p>${card.description || 'We organize impactful events that engage entrepreneurs in hands-on experiences, networking opportunities, and practical business challenges that shape their business acuity.'}</p>
                         `;
-                    }
-                } else {
-                    eventsGrid.innerHTML = `
-                        <div class="event-card" style="grid-column: 1 / -1; text-align: center; padding: var(--space-2xl);">
-                            <div class="event-content">
-                                <h3>No Events Available</h3>
-                                <p>We're currently planning our next events. Stay tuned!</p>
-                            </div>
-                        </div>
-                    `;
+                        approachCards.appendChild(cardElement);
+                    });
+                    
+                    // Re-initialize animations for new elements
+                    setTimeout(() => {
+                        initializeAnimations();
+                    }, 100);
                 }
-                
-                console.log('Events loaded:', Object.keys(events || {}).length);
-            } catch (error) {
-                console.error('Error loading events:', error);
-                document.getElementById('eventsGrid').innerHTML = `
+            }
+        } catch (error) {
+            console.error('Error updating home page content:', error);
+        }
+    }
+
+    function displayEvents(events) {
+        try {
+            const eventsGrid = document.getElementById('eventsGrid');
+            if (!eventsGrid) return;
+            
+            eventsGrid.innerHTML = '';
+            
+            // Convert events object to array and filter active ones
+            const eventsArray = Object.values(events || {})
+                .filter(event => event.active !== false)
+                .sort((a, b) => new Date(a.date || '9999-12-31') - new Date(b.date || '9999-12-31'));
+            
+            if (eventsArray.length > 0) {
+                eventsArray.forEach((event, index) => {
+                    const eventCard = createEventCard(event, index);
+                    eventsGrid.appendChild(eventCard);
+                });
+            } else {
+                eventsGrid.innerHTML = `
                     <div class="event-card" style="grid-column: 1 / -1; text-align: center; padding: var(--space-2xl);">
                         <div class="event-content">
-                            <h3>Error Loading Events</h3>
-                            <p>Please check your connection and try again.</p>
+                            <h3>No Upcoming Events</h3>
+                            <p>Check back soon for our upcoming events and workshops!</p>
+                            <a href="contact.html" class="btn btn-primary" style="margin-top: var(--space-lg);">
+                                <i class="fas fa-calendar-plus"></i> Propose an Event
+                            </a>
                         </div>
                     </div>
                 `;
             }
-        }
-
-        // Create Event Card
-        function createEventCard(event, index) {
-            const card = document.createElement('div');
-            card.className = `event-card animate-on-scroll ${event.category}-event`;
-            card.dataset.delay = index * 100;
             
-            // Format date
-            let dateText = 'Date TBD';
-            if (event.date) {
-                const eventDate = new Date(event.date);
-                dateText = eventDate.toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
+            console.log('Events displayed:', eventsArray.length);
+        } catch (error) {
+            console.error('Error displaying events:', error);
+        }
+    }
+
+    function displayStatistics(stats) {
+        try {
+            const statsGrid = document.getElementById('statsGrid');
+            if (!statsGrid) return;
+            
+            statsGrid.innerHTML = '';
+            
+            const statItems = [
+                { key: 'entrepreneursTrained', label: 'Entrepreneurs Trained', value: stats.entrepreneursTrained || 0 },
+                { key: 'eventsHosted', label: 'Events Hosted', value: stats.eventsHosted || 0 },
+                { key: 'startupsSupported', label: 'Startups Supported', value: stats.startupsSupported || 0 },
+                { key: 'completionRate', label: 'Completion Rate', value: stats.completionRate ? `${stats.completionRate}%` : '95%' },
+                { key: 'businessGrowthRate', label: 'Business Growth', value: stats.businessGrowthRate ? `${stats.businessGrowthRate}%` : '85%' },
+                { key: 'satisfactionRate', label: 'Satisfaction Rate', value: stats.satisfactionRate ? `${stats.satisfactionRate}%` : '90%' }
+            ];
+            
+            statItems.forEach(stat => {
+                if (stat.value && stat.value !== '0') {
+                    const statItem = document.createElement('div');
+                    statItem.className = 'stat-item animate-on-scroll';
+                    statItem.innerHTML = `
+                        <div class="stat-number">${stat.value}</div>
+                        <div class="text-small">${stat.label}</div>
+                    `;
+                    statsGrid.appendChild(statItem);
+                }
+            });
+            
+            if (statsGrid.children.length === 0) {
+                statsGrid.innerHTML = `
+                    <div class="stat-item" style="grid-column: 1 / -1; text-align: center;">
+                        <div class="stat-number">500+</div>
+                        <div class="text-small">Entrepreneurs Empowered</div>
+                    </div>
+                `;
             }
-            
-            // Get category name
-            const categoryNames = {
-                'bootcamp': 'Startup Bootcamp',
-                'inspiration': 'Become What You Believe',
-                'spiritual': 'The Making of an Icon'
-            };
-            
-            const categoryName = categoryNames[event.category] || event.category || 'Event';
-            
-            // Determine button style based on category
-            let btnClass = 'btn-primary';
-            if (event.category === 'inspiration') btnClass = 'btn-gold';
-            if (event.category === 'spiritual') btnClass = 'btn-spiritual';
-            
-            card.innerHTML = `
-                <div class="event-image-container">
-                    <img src="${event.imageUrl || 'https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp'}" 
-                         alt="${event.title || 'DSOG Event'}" 
-                         class="event-image">
-                    <div class="event-date-badge">
-                        <i class="fas fa-calendar"></i> ${dateText}
-                    </div>
-                </div>
-                <div class="event-content">
-                    <span class="event-category ${event.category}">${categoryName.toUpperCase()}</span>
-                    ${event.duration ? `<div class="duration-badge"><i class="fas fa-clock"></i> ${event.duration}</div>` : ''}
-                    <div class="event-details">
-                        <h4>${event.title || 'Upcoming Event'}</h4>
-                        ${event.subtitle ? `<p><strong>${event.subtitle}</strong></p>` : ''}
-                        <p>${event.description || 'Join us for this transformative event.'}</p>
-                        <div class="event-meta">
-                            ${event.venue ? `<div class="meta-item"><i class="fas fa-map-marker-alt"></i><span>${event.venue}</span></div>` : ''}
-                            ${event.maxParticipants ? `<div class="meta-item"><i class="fas fa-users"></i><span>Max: ${event.maxParticipants} Participants</span></div>` : ''}
-                        </div>
-                    </div>
-                    <div class="event-action">
-                        <a href="${event.registrationUrl || 'https://wa.me/254733737983'}" 
-                           target="_blank" 
-                           class="btn ${btnClass} btn-block">
-                            <i class="fas ${event.category === 'spiritual' ? 'fa-hands-praying' : event.category === 'inspiration' ? 'fa-fire' : 'fa-graduation-cap'}"></i> 
-                            ${event.category === 'spiritual' ? 'Discover Your Purpose' : event.category === 'inspiration' ? 'Ignite Your Journey' : 'Register Now'}
-                        </a>
-                    </div>
-                </div>
-            `;
-            
-            return card;
+        } catch (error) {
+            console.error('Error displaying statistics:', error);
         }
+    }
 
-        // Load Statistics
-        async function loadStatistics() {
+    function displayTeamMembers(team) {
+        try {
+            const teamGrid = document.getElementById('teamGrid');
+            if (!teamGrid) return;
+            
+            teamGrid.innerHTML = '';
+            
+            // Convert to array and filter active members
+            const teamArray = Object.values(team || {})
+                .filter(member => member.active !== false);
+            
+            if (teamArray.length > 0) {
+                teamArray.forEach((member, index) => {
+                    const memberCard = createTeamMemberCard(member, index);
+                    teamGrid.appendChild(memberCard);
+                });
+            } else {
+                teamGrid.innerHTML = `
+                    <div class="value-card" style="grid-column: 1 / -1; text-align: center;">
+                        <div class="value-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h4>Our Team</h4>
+                        <p>Meet our expert team dedicated to empowering entrepreneurs.</p>
+                    </div>
+                `;
+            }
+        } catch (error) {
+            console.error('Error displaying team members:', error);
+        }
+    }
+
+    function displayTestimonials(testimonials) {
+        try {
+            const testimonialsGrid = document.getElementById('testimonialsGrid');
+            if (!testimonialsGrid) return;
+            
+            testimonialsGrid.innerHTML = '';
+            
+            // Convert to array and filter active testimonials
+            const testimonialsArray = Object.values(testimonials || {})
+                .filter(testimonial => testimonial.active !== false);
+            
+            if (testimonialsArray.length > 0) {
+                // Take only first 3 testimonials
+                testimonialsArray.slice(0, 3).forEach((testimonial, index) => {
+                    const testimonialCard = createTestimonialCard(testimonial, index);
+                    testimonialsGrid.appendChild(testimonialCard);
+                });
+            } else {
+                testimonialsGrid.innerHTML = `
+                    <div class="service-card" style="grid-column: 1 / -1; text-align: center;">
+                        <div class="service-icon">
+                            <i class="fas fa-comment"></i>
+                        </div>
+                        <h3>Success Stories</h3>
+                        <p>Hear from our successful entrepreneurs and clients.</p>
+                    </div>
+                `;
+            }
+        } catch (error) {
+            console.error('Error displaying testimonials:', error);
+        }
+    }
+
+    // ==================== CARD CREATION FUNCTIONS ====================
+    function createEventCard(event, index) {
+        const card = document.createElement('div');
+        card.className = `event-card animate-on-scroll ${event.category}-event`;
+        card.dataset.delay = index * 100;
+        
+        // Format date
+        let dateText = 'Date TBD';
+        if (event.date) {
             try {
-                const snapshot = await database.ref('stats').once('value');
-                const stats = snapshot.val();
-                const statsGrid = document.getElementById('statsGrid');
-                
-                if (stats) {
-                    statsGrid.innerHTML = '';
-                    
-                    // Create stat items
-                    const statItems = [
-                        { key: 'entrepreneursTrained', label: 'Entrepreneurs Trained', value: stats.entrepreneursTrained || 0 },
-                        { key: 'eventsHosted', label: 'Events Hosted', value: stats.eventsHosted || 0 },
-                        { key: 'startupsSupported', label: 'Startups Supported', value: stats.startupsSupported || 0 },
-                        { key: 'completionRate', label: 'Completion Rate', value: stats.completionRate ? `${stats.completionRate}%` : '95%' },
-                        { key: 'businessGrowthRate', label: 'Business Growth', value: stats.businessGrowthRate ? `${stats.businessGrowthRate}%` : '85%' },
-                        { key: 'satisfactionRate', label: 'Satisfaction Rate', value: stats.satisfactionRate ? `${stats.satisfactionRate}%` : '90%' }
-                    ];
-                    
-                    statItems.forEach(stat => {
-                        if (stat.value) {
-                            const statItem = document.createElement('div');
-                            statItem.className = 'stat-item animate-on-scroll';
-                            statItem.innerHTML = `
-                                <div class="stat-number">${stat.value}</div>
-                                <div class="text-small">${stat.label}</div>
-                            `;
-                            statsGrid.appendChild(statItem);
-                        }
+                const eventDate = new Date(event.date);
+                if (!isNaN(eventDate.getTime())) {
+                    dateText = eventDate.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
                     });
                 }
             } catch (error) {
-                console.error('Error loading statistics:', error);
-                // Keep default stats
+                console.error('Error formatting date:', error);
             }
         }
-
-        // Load Team Members
-        async function loadTeamMembers() {
-            try {
-                const snapshot = await database.ref('teamMembers').orderByChild('active').equalTo(true).once('value');
-                const team = snapshot.val();
-                const teamGrid = document.getElementById('teamGrid');
-                
-                teamGrid.innerHTML = '';
-                
-                if (team) {
-                    const teamEntries = Object.entries(team);
-                    
-                    if (teamEntries.length > 0) {
-                        teamEntries.forEach(([id, member], index) => {
-                            if (member.active !== false) {
-                                const memberCard = createTeamMemberCard(member, index);
-                                teamGrid.appendChild(memberCard);
-                            }
-                        });
-                    } else {
-                        teamGrid.innerHTML = `
-                            <div class="value-card" style="grid-column: 1 / -1; text-align: center;">
-                                <div class="value-icon">
-                                    <i class="fas fa-users"></i>
-                                </div>
-                                <h4>Our Team</h4>
-                                <p>Meet our expert team dedicated to empowering entrepreneurs.</p>
-                            </div>
-                        `;
-                    }
-                }
-            } catch (error) {
-                console.error('Error loading team members:', error);
-            }
-        }
-
-        // Create Team Member Card
-        function createTeamMemberCard(member, index) {
-            const card = document.createElement('div');
-            card.className = 'value-card animate-on-scroll';
-            card.dataset.delay = index * 100;
-            
-            // Get first initial for avatar
-            const avatar = member.name ? member.name.charAt(0).toUpperCase() : 'T';
-            
-            card.innerHTML = `
-                <div class="value-icon">
-                    ${member.imageUrl ? 
-                        `<img src="${member.imageUrl}" alt="${member.name}" style="width: 70px; height: 70px; border-radius: var(--radius-lg); object-fit: cover;">` : 
-                        `<i class="fas fa-user-tie"></i>`
-                    }
+        
+        // Get category name
+        const categoryNames = {
+            'bootcamp': 'Startup Bootcamp',
+            'inspiration': 'Become What You Believe',
+            'spiritual': 'The Making of an Icon'
+        };
+        
+        const categoryName = categoryNames[event.category] || event.category || 'Event';
+        
+        // Determine button style
+        let btnClass = 'btn-primary';
+        if (event.category === 'inspiration') btnClass = 'btn-gold';
+        if (event.category === 'spiritual') btnClass = 'btn-spiritual';
+        
+        card.innerHTML = `
+            <div class="event-image-container">
+                <img src="${event.imageUrl || 'https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp'}" 
+                     alt="${event.title || 'DSOG Event'}" 
+                     class="event-image"
+                     onerror="this.src='https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp'">
+                <div class="event-date-badge">
+                    <i class="fas fa-calendar"></i> ${dateText}
                 </div>
-                <h4>${member.name || 'Team Member'}</h4>
-                <p><strong>${member.role || 'Team Member'}</strong></p>
-                <p style="font-size: 0.9rem; margin-top: var(--space-sm);">${member.bio || 'Expert in entrepreneurship and business development.'}</p>
-                ${member.social?.linkedin ? `
-                    <a href="${member.social.linkedin}" target="_blank" style="margin-top: var(--space-sm); color: var(--primary-red);">
-                        <i class="fab fa-linkedin"></i> LinkedIn
+            </div>
+            <div class="event-content">
+                <span class="event-category ${event.category}">${categoryName.toUpperCase()}</span>
+                ${event.duration ? `<div class="duration-badge"><i class="fas fa-clock"></i> ${event.duration}</div>` : ''}
+                <div class="event-details">
+                    <h4>${event.title || 'Upcoming Event'}</h4>
+                    ${event.subtitle ? `<p><strong>${event.subtitle}</strong></p>` : ''}
+                    <p>${event.description || 'Join us for this transformative event.'}</p>
+                    <div class="event-meta">
+                        ${event.venue ? `<div class="meta-item"><i class="fas fa-map-marker-alt"></i><span>${event.venue}</span></div>` : ''}
+                        ${event.maxParticipants ? `<div class="meta-item"><i class="fas fa-users"></i><span>Max: ${event.maxParticipants} Participants</span></div>` : ''}
+                    </div>
+                </div>
+                <div class="event-action">
+                    <a href="${event.registrationUrl || 'https://wa.me/254733737983'}" 
+                       target="_blank" 
+                       class="btn ${btnClass} btn-block">
+                        <i class="fas ${event.category === 'spiritual' ? 'fa-hands-praying' : event.category === 'inspiration' ? 'fa-fire' : 'fa-graduation-cap'}"></i> 
+                        ${event.category === 'spiritual' ? 'Discover Your Purpose' : event.category === 'inspiration' ? 'Ignite Your Journey' : 'Register Now'}
                     </a>
-                ` : ''}
-            `;
+                </div>
+            </div>
+        `;
+        
+        return card;
+    }
+
+    function createTeamMemberCard(member, index) {
+        const card = document.createElement('div');
+        card.className = 'value-card animate-on-scroll';
+        card.dataset.delay = index * 100;
+        
+        card.innerHTML = `
+            <div class="value-icon">
+                ${member.imageUrl ? 
+                    `<img src="${member.imageUrl}" alt="${member.name}" 
+                          style="width: 70px; height: 70px; border-radius: var(--radius-lg); object-fit: cover;"
+                          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">` : 
+                    ''
+                }
+                <i class="fas fa-user-tie" style="${member.imageUrl ? 'display: none;' : ''}"></i>
+            </div>
+            <h4>${member.name || 'Team Member'}</h4>
+            <p><strong>${member.role || 'Team Member'}</strong></p>
+            <p style="font-size: 0.9rem; margin-top: var(--space-sm);">${member.bio || 'Expert in entrepreneurship and business development.'}</p>
+            ${member.social?.linkedin ? `
+                <a href="${member.social.linkedin}" target="_blank" style="margin-top: var(--space-sm); color: var(--primary-red); text-decoration: none;">
+                    <i class="fab fa-linkedin"></i> LinkedIn
+                </a>
+            ` : ''}
+        `;
+        
+        return card;
+    }
+
+    function createTestimonialCard(testimonial, index) {
+        const card = document.createElement('div');
+        card.className = 'service-card animate-on-scroll';
+        card.dataset.delay = index * 100;
+        
+        // Create star rating
+        const rating = testimonial.rating || 5;
+        const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+        
+        card.innerHTML = `
+            <div class="service-icon">
+                ${testimonial.imageUrl ? 
+                    `<img src="${testimonial.imageUrl}" alt="${testimonial.name}" 
+                          style="width: 60px; height: 60px; border-radius: var(--radius-md); object-fit: cover;"
+                          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">` : 
+                    ''
+                }
+                <i class="fas fa-user" style="${testimonial.imageUrl ? 'display: none;' : ''}"></i>
+            </div>
+            <span class="service-tag">TESTIMONIAL</span>
+            <h3>${testimonial.name || 'Client'}</h3>
+            <p><strong>${testimonial.role || 'Entrepreneur'}</strong></p>
+            ${testimonial.company ? `<p style="color: var(--text-tertiary); font-size: 0.9rem;">${testimonial.company}</p>` : ''}
+            <div style="color: #ffc107; margin: var(--space-sm) 0; font-size: 1.1rem;">
+                ${stars}
+            </div>
+            <p style="font-style: italic; margin-top: var(--space-md);">"${testimonial.content || 'Great experience with DSOG!'}"</p>
+            ${testimonial.event ? `<p style="margin-top: var(--space-sm); font-size: 0.85rem; color: var(--primary-red);"><i class="fas fa-calendar"></i> ${testimonial.event}</p>` : ''}
+        `;
+        
+        return card;
+    }
+
+    // ==================== CORE FUNCTIONS ====================
+    function initializeTheme() {
+        const themeToggle = document.getElementById('themeToggle');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+        
+        const savedTheme = localStorage.getItem('theme');
+        const systemTheme = prefersDark.matches ? 'dark' : 'light';
+        const initialTheme = savedTheme || systemTheme;
+        
+        document.documentElement.setAttribute('data-theme', initialTheme);
+        updateThemeIcon(initialTheme);
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
             
-            return card;
+            document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+            
+            setTimeout(() => {
+                document.body.style.transition = '';
+            }, 300);
+        });
+        
+        prefersDark.addEventListener('change', (e) => {
+            if (!localStorage.getItem('theme')) {
+                const newTheme = e.matches ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                updateThemeIcon(newTheme);
+            }
+        });
+        
+        function updateThemeIcon(theme) {
+            const icon = themeToggle.querySelector('i');
+            if (theme === 'dark') {
+                icon.className = 'fas fa-sun';
+                themeToggle.setAttribute('aria-label', 'Switch to light theme');
+            } else {
+                icon.className = 'fas fa-moon';
+                themeToggle.setAttribute('aria-label', 'Switch to dark theme');
+            }
+        }
+    }
+
+    function initializeNavigation() {
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+        
+        if (mobileMenuBtn && navLinks) {
+            mobileMenuBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                navLinks.classList.toggle('active');
+                const icon = this.querySelector('i');
+                icon.className = navLinks.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
+                this.setAttribute('aria-expanded', navLinks.classList.contains('active'));
+                
+                if (navLinks.classList.contains('active')) {
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    document.body.style.overflow = '';
+                }
+            });
+
+            document.addEventListener('click', function(event) {
+                if (!navLinks.contains(event.target) && !mobileMenuBtn.contains(event.target) && navLinks.classList.contains('active')) {
+                    navLinks.classList.remove('active');
+                    mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                    document.body.style.overflow = '';
+                }
+            });
+
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth <= 1024) {
+                        navLinks.classList.remove('active');
+                        mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
+                        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                        document.body.style.overflow = '';
+                    }
+                });
+            });
+            
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 1024) {
+                    navLinks.classList.remove('active');
+                    mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                    document.body.style.overflow = '';
+                }
+            });
         }
 
-        // Load Testimonials
-        async function loadTestimonials() {
-            try {
-                const snapshot = await database.ref('testimonials').orderByChild('active').equalTo(true).once('value');
-                const testimonials = snapshot.val();
-                const testimonialsGrid = document.getElementById('testimonialsGrid');
+        // Header scroll effect
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
                 
-                testimonialsGrid.innerHTML = '';
-                
-                if (testimonials) {
-                    const testimonialEntries = Object.entries(testimonials);
+                if (href.startsWith('#') && href !== '#') {
+                    e.preventDefault();
                     
-                    if (testimonialEntries.length > 0) {
-                        // Take only first 3 testimonials
-                        testimonialEntries.slice(0, 3).forEach(([id, testimonial], index) => {
-                            if (testimonial.active !== false) {
-                                const testimonialCard = createTestimonialCard(testimonial, index);
-                                testimonialsGrid.appendChild(testimonialCard);
-                            }
+                    const targetId = href.substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        const headerHeight = document.getElementById('header').offsetHeight;
+                        const targetPosition = targetElement.offsetTop - headerHeight - 20;
+                        
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
                         });
-                    } else {
-                        testimonialsGrid.innerHTML = `
-                            <div class="service-card" style="grid-column: 1 / -1; text-align: center;">
-                                <div class="service-icon">
-                                    <i class="fas fa-comment"></i>
-                                </div>
-                                <h3>Success Stories</h3>
-                                <p>Hear from our successful entrepreneurs and clients.</p>
-                            </div>
-                        `;
+                        
+                        history.pushState(null, '', href);
                     }
                 }
-            } catch (error) {
-                console.error('Error loading testimonials:', error);
-            }
-        }
+            });
+        });
+    }
 
-        // Create Testimonial Card
-        function createTestimonialCard(testimonial, index) {
-            const card = document.createElement('div');
-            card.className = 'service-card animate-on-scroll';
-            card.dataset.delay = index * 100;
+    function initializeAnimations() {
+        const animatedElements = document.querySelectorAll('.animate-on-scroll');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const delay = entry.target.dataset.delay || 0;
+                    setTimeout(() => {
+                        entry.target.classList.add('animated');
+                    }, delay);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+        
+        animatedElements.forEach((element, index) => {
+            if (!element.dataset.delay) {
+                element.dataset.delay = index * 100;
+            }
+            observer.observe(element);
+        });
+    }
+
+    function initializeScrollEffects() {
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
             
-            // Create star rating
-            const rating = testimonial.rating || 5;
-            const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+            // Add parallax effect to hero
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                const scrolled = window.pageYOffset;
+                const rate = scrolled * -0.5;
+                hero.style.transform = `translate3d(0, ${rate}px, 0)`;
+            }
             
-            card.innerHTML = `
-                <div class="service-icon">
-                    ${testimonial.imageUrl ? 
-                        `<img src="${testimonial.imageUrl}" alt="${testimonial.name}" style="width: 60px; height: 60px; border-radius: var(--radius-md); object-fit: cover;">` : 
-                        `<i class="fas fa-user"></i>`
-                    }
-                </div>
-                <span class="service-tag">TESTIMONIAL</span>
-                <h3>${testimonial.name || 'Client'}</h3>
-                <p><strong>${testimonial.role || 'Entrepreneur'}</strong></p>
-                ${testimonial.company ? `<p style="color: var(--text-tertiary); font-size: 0.9rem;">${testimonial.company}</p>` : ''}
-                <div style="color: #ffc107; margin: var(--space-sm) 0; font-size: 1.1rem;">
-                    ${stars}
-                </div>
-                <p style="font-style: italic; margin-top: var(--space-md);">"${testimonial.content || 'Great experience with DSOG!'}"</p>
-                ${testimonial.event ? `<p style="margin-top: var(--space-sm); font-size: 0.85rem; color: var(--primary-red);"><i class="fas fa-calendar"></i> ${testimonial.event}</p>` : ''}
+            lastScroll = currentScroll;
+        });
+    }
+
+    function showNotification(message, type) {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: var(--radius-md);
+            background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#ffc107'};
+            color: white;
+            z-index: 10000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            animation: slideIn 0.3s ease;
+            font-size: 14px;
+        `;
+        
+        notification.innerHTML = `
+            <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+            ${message}
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }, 3000);
+        
+        // Add CSS for animations
+        if (!document.querySelector('#notification-styles')) {
+            const style = document.createElement('style');
+            style.id = 'notification-styles';
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
             `;
-            
-            return card;
+            document.head.appendChild(style);
         }
+    }
 
-        // Show default content if Firebase fails
-        function showDefaultContent() {
-            document.getElementById('heroTitle').textContent = 'Become What You Believe!';
-            document.getElementById('heroSubtitle').textContent = 'DSOG empowers businesses, startups, and young entrepreneurs through transformative training, impactful events, and real startup opportunities that turn learning into successful enterprises.';
+    // Force refresh data (for debugging)
+    window.refreshData = function() {
+        console.log('Manual refresh triggered');
+        localStorage.removeItem(CACHE_KEY);
+        loadAllData();
+    };
+
+    // Add refresh button for debugging (remove in production)
+    const refreshBtn = document.createElement('button');
+    refreshBtn.textContent = '🔄 Refresh Data';
+    refreshBtn.style.cssText = `
+        position: fixed;
+        bottom: 100px;
+        right: 20px;
+        padding: 10px 15px;
+        background: var(--primary-red);
+        color: white;
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        z-index: 1000;
+        font-size: 12px;
+        box-shadow: var(--shadow-md);
+    `;
+    refreshBtn.onclick = function() {
+        window.refreshData();
+    };
+    document.body.appendChild(refreshBtn);
+
+    // Touch optimizations
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', (event) => {
+        const now = Date.now();
+        if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
         }
-
-        // Touch optimizations
-        let lastTouchEnd = 0;
-        document.addEventListener('touchend', (event) => {
-            const now = Date.now();
-            if (now - lastTouchEnd <= 300) {
-                event.preventDefault();
-            }
-            lastTouchEnd = now;
-        }, false);
-    </script>
+        lastTouchEnd = now;
+    }, false);
+</script>
 </body>
 </html>
