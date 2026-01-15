@@ -2030,13 +2030,13 @@
 
     // Initialize Firebase
     let db;
+    let firebaseListeners = [];
     try {
         firebase.initializeApp(firebaseConfig);
         db = firebase.database();
-        console.log('Firebase initialized successfully');
+        console.log('Firebase initialized successfully - REAL-TIME MODE');
     } catch (error) {
         console.error('Firebase initialization error:', error);
-        // Fallback to localStorage
         db = null;
     }
 
@@ -2046,7 +2046,7 @@
 
     // Initialize the website
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('🚀 DSOG Website Version 7.0.0');
+        console.log('🚀 DSOG Website Version 7.0.0 - REAL-TIME UPDATES');
         
         // Initialize all components
         initializeTheme();
@@ -2060,17 +2060,104 @@
         // Try to load from cache first for faster display
         const cachedData = getCachedData();
         if (cachedData && !isCacheExpired(cachedData.timestamp)) {
-            console.log('Loading from cache');
+            console.log('Loading from cache for instant display');
             displayCachedData(cachedData);
         } else {
-            console.log('Cache empty or expired, loading from Firebase');
+            console.log('Cache empty or expired');
         }
         
-        // Always try to load fresh data from Firebase
-        loadAllData();
+        // Setup REAL-TIME listeners (this is the key change)
+        setupRealtimeListeners();
         
-        console.log('Website initialized successfully');
+        console.log('Website initialized with real-time updates');
     });
+
+    // ==================== REAL-TIME LISTENERS ====================
+    function setupRealtimeListeners() {
+        if (!db) {
+            console.error('Firebase not available, using cached data only');
+            return;
+        }
+
+        console.log('Setting up real-time Firebase listeners...');
+        
+        // Remove any existing listeners
+        removeAllListeners();
+        
+        // 1. Home Page Content Listener
+        const homePageRef = db.ref('homePageContent');
+        const homePageListener = homePageRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                console.log('Home page content updated in real-time');
+                updateHomePageContent(data);
+                saveToCachePartial('homePageContent', data);
+            }
+        });
+        firebaseListeners.push({ ref: homePageRef, listener: homePageListener });
+        
+        // 2. Events Listener
+        const eventsRef = db.ref('upcomingEvents');
+        const eventsListener = eventsRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            console.log('Events updated in real-time');
+            displayEvents(data);
+            saveToCachePartial('upcomingEvents', data);
+        });
+        firebaseListeners.push({ ref: eventsRef, listener: eventsListener });
+        
+        // 3. Statistics Listener
+        const statsRef = db.ref('stats');
+        const statsListener = statsRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            console.log('Statistics updated in real-time');
+            displayStatistics(data);
+            saveToCachePartial('stats', data);
+        });
+        firebaseListeners.push({ ref: statsRef, listener: statsListener });
+        
+        // 4. Team Members Listener
+        const teamRef = db.ref('teamMembers');
+        const teamListener = teamRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            console.log('Team members updated in real-time');
+            displayTeamMembers(data);
+            saveToCachePartial('teamMembers', data);
+        });
+        firebaseListeners.push({ ref: teamRef, listener: teamListener });
+        
+        // 5. Testimonials Listener
+        const testimonialsRef = db.ref('testimonials');
+        const testimonialsListener = testimonialsRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            console.log('Testimonials updated in real-time');
+            displayTestimonials(data);
+            saveToCachePartial('testimonials', data);
+        });
+        firebaseListeners.push({ ref: testimonialsRef, listener: testimonialsListener });
+        
+        // 6. App Settings Listener (for contact info, etc.)
+        const settingsRef = db.ref('appSettings');
+        const settingsListener = settingsRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                console.log('App settings updated in real-time');
+                updateContactInfo(data);
+                saveToCachePartial('appSettings', data);
+            }
+        });
+        firebaseListeners.push({ ref: settingsRef, listener: settingsListener });
+        
+        console.log(`Setup ${firebaseListeners.length} real-time listeners`);
+    }
+
+    function removeAllListeners() {
+        firebaseListeners.forEach(({ ref, listener }) => {
+            ref.off('value', listener);
+        });
+        firebaseListeners = [];
+        console.log('Removed all Firebase listeners');
+    }
 
     // ==================== CACHE MANAGEMENT ====================
     function getCachedData() {
@@ -2083,14 +2170,12 @@
         }
     }
 
-    function saveToCache(data) {
+    function saveToCachePartial(key, data) {
         try {
-            const cacheData = {
-                timestamp: Date.now(),
-                data: data
-            };
-            localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
-            console.log('Data saved to cache');
+            const cached = getCachedData() || { timestamp: Date.now(), data: {} };
+            cached.data[key] = data;
+            cached.timestamp = Date.now();
+            localStorage.setItem(CACHE_KEY, JSON.stringify(cached));
         } catch (error) {
             console.error('Error saving to cache:', error);
         }
@@ -2103,88 +2188,28 @@
     function displayCachedData(cachedData) {
         const data = cachedData.data;
         
-        // Display home page content
         if (data.homePageContent) {
             updateHomePageContent(data.homePageContent);
         }
         
-        // Display events
-        if (data.events) {
-            displayEvents(data.events);
+        if (data.upcomingEvents) {
+            displayEvents(data.upcomingEvents);
         }
         
-        // Display statistics
         if (data.stats) {
             displayStatistics(data.stats);
         }
         
-        // Display team members
         if (data.teamMembers) {
             displayTeamMembers(data.teamMembers);
         }
         
-        // Display testimonials
         if (data.testimonials) {
             displayTestimonials(data.testimonials);
         }
-    }
-
-    // ==================== DATA LOADING ====================
-    async function loadAllData() {
-        if (!db) {
-            console.error('Firebase not available, using cached data only');
-            return;
-        }
-
-        try {
-            console.log('Loading all data from Firebase...');
-            
-            // Load all data at once
-            const snapshot = await db.ref('/').once('value');
-            const allData = snapshot.val();
-            
-            if (allData) {
-                console.log('Firebase data loaded successfully');
-                
-                // Save to cache
-                saveToCache(allData);
-                
-                // Update UI with fresh data
-                if (allData.homePageContent) {
-                    updateHomePageContent(allData.homePageContent);
-                }
-                
-                if (allData.upcomingEvents) {
-                    displayEvents(allData.upcomingEvents);
-                }
-                
-                if (allData.stats) {
-                    displayStatistics(allData.stats);
-                }
-                
-                if (allData.teamMembers) {
-                    displayTeamMembers(allData.teamMembers);
-                }
-                
-                if (allData.testimonials) {
-                    displayTestimonials(allData.testimonials);
-                }
-                
-                // Show success message
-                showNotification('Content updated successfully', 'success');
-            } else {
-                console.log('No data found in Firebase');
-                showNotification('No data available', 'warning');
-            }
-        } catch (error) {
-            console.error('Error loading data from Firebase:', error);
-            showNotification('Error loading content. Using cached data.', 'error');
-            
-            // Try to use cached data
-            const cachedData = getCachedData();
-            if (cachedData) {
-                displayCachedData(cachedData);
-            }
+        
+        if (data.appSettings) {
+            updateContactInfo(data.appSettings);
         }
     }
 
@@ -2235,7 +2260,7 @@
                         approachCards.appendChild(cardElement);
                     });
                     
-                    // Re-initialize animations for new elements
+                    // Re-initialize animations
                     setTimeout(() => {
                         initializeAnimations();
                     }, 100);
@@ -2251,18 +2276,20 @@
             const eventsGrid = document.getElementById('eventsGrid');
             if (!eventsGrid) return;
             
-            eventsGrid.innerHTML = '';
-            
             // Convert events object to array and filter active ones
-            const eventsArray = Object.values(events || {})
+            const eventsArray = events ? Object.values(events)
                 .filter(event => event.active !== false)
-                .sort((a, b) => new Date(a.date || '9999-12-31') - new Date(b.date || '9999-12-31'));
+                .sort((a, b) => new Date(a.date || '9999-12-31') - new Date(b.date || '9999-12-31')) : [];
             
             if (eventsArray.length > 0) {
+                eventsGrid.innerHTML = '';
                 eventsArray.forEach((event, index) => {
                     const eventCard = createEventCard(event, index);
                     eventsGrid.appendChild(eventCard);
                 });
+                
+                // Show real-time update indicator
+                showUpdateIndicator('Events updated');
             } else {
                 eventsGrid.innerHTML = `
                     <div class="event-card" style="grid-column: 1 / -1; text-align: center; padding: var(--space-2xl);">
@@ -2291,18 +2318,19 @@
             statsGrid.innerHTML = '';
             
             const statItems = [
-                { key: 'entrepreneursTrained', label: 'Entrepreneurs Trained', value: stats.entrepreneursTrained || 0 },
-                { key: 'eventsHosted', label: 'Events Hosted', value: stats.eventsHosted || 0 },
-                { key: 'startupsSupported', label: 'Startups Supported', value: stats.startupsSupported || 0 },
-                { key: 'completionRate', label: 'Completion Rate', value: stats.completionRate ? `${stats.completionRate}%` : '95%' },
-                { key: 'businessGrowthRate', label: 'Business Growth', value: stats.businessGrowthRate ? `${stats.businessGrowthRate}%` : '85%' },
-                { key: 'satisfactionRate', label: 'Satisfaction Rate', value: stats.satisfactionRate ? `${stats.satisfactionRate}%` : '90%' }
+                { key: 'entrepreneursTrained', label: 'Entrepreneurs Trained', value: stats?.entrepreneursTrained || 0 },
+                { key: 'eventsHosted', label: 'Events Hosted', value: stats?.eventsHosted || 0 },
+                { key: 'startupsSupported', label: 'Startups Supported', value: stats?.startupsSupported || 0 },
+                { key: 'completionRate', label: 'Completion Rate', value: stats?.completionRate ? `${stats.completionRate}%` : '95%' },
+                { key: 'businessGrowthRate', label: 'Business Growth', value: stats?.businessGrowthRate ? `${stats.businessGrowthRate}%` : '85%' },
+                { key: 'satisfactionRate', label: 'Satisfaction Rate', value: stats?.satisfactionRate ? `${stats.satisfactionRate}%` : '90%' }
             ];
             
-            statItems.forEach(stat => {
+            statItems.forEach((stat, index) => {
                 if (stat.value && stat.value !== '0') {
                     const statItem = document.createElement('div');
                     statItem.className = 'stat-item animate-on-scroll';
+                    statItem.dataset.delay = index * 100;
                     statItem.innerHTML = `
                         <div class="stat-number">${stat.value}</div>
                         <div class="text-small">${stat.label}</div>
@@ -2311,13 +2339,14 @@
                 }
             });
             
-            if (statsGrid.children.length === 0) {
-                statsGrid.innerHTML = `
-                    <div class="stat-item" style="grid-column: 1 / -1; text-align: center;">
-                        <div class="stat-number">500+</div>
-                        <div class="text-small">Entrepreneurs Empowered</div>
-                    </div>
-                `;
+            // Re-initialize animations
+            setTimeout(() => {
+                initializeAnimations();
+            }, 100);
+            
+            // Show update indicator if stats changed
+            if (stats) {
+                showUpdateIndicator('Statistics updated');
             }
         } catch (error) {
             console.error('Error displaying statistics:', error);
@@ -2329,17 +2358,19 @@
             const teamGrid = document.getElementById('teamGrid');
             if (!teamGrid) return;
             
-            teamGrid.innerHTML = '';
-            
             // Convert to array and filter active members
-            const teamArray = Object.values(team || {})
-                .filter(member => member.active !== false);
+            const teamArray = team ? Object.values(team)
+                .filter(member => member.active !== false) : [];
             
             if (teamArray.length > 0) {
+                teamGrid.innerHTML = '';
                 teamArray.forEach((member, index) => {
                     const memberCard = createTeamMemberCard(member, index);
                     teamGrid.appendChild(memberCard);
                 });
+                
+                // Show real-time update indicator
+                showUpdateIndicator('Team updated');
             } else {
                 teamGrid.innerHTML = `
                     <div class="value-card" style="grid-column: 1 / -1; text-align: center;">
@@ -2361,18 +2392,20 @@
             const testimonialsGrid = document.getElementById('testimonialsGrid');
             if (!testimonialsGrid) return;
             
-            testimonialsGrid.innerHTML = '';
-            
             // Convert to array and filter active testimonials
-            const testimonialsArray = Object.values(testimonials || {})
-                .filter(testimonial => testimonial.active !== false);
+            const testimonialsArray = testimonials ? Object.values(testimonials)
+                .filter(testimonial => testimonial.active !== false) : [];
             
             if (testimonialsArray.length > 0) {
+                testimonialsGrid.innerHTML = '';
                 // Take only first 3 testimonials
                 testimonialsArray.slice(0, 3).forEach((testimonial, index) => {
                     const testimonialCard = createTestimonialCard(testimonial, index);
                     testimonialsGrid.appendChild(testimonialCard);
                 });
+                
+                // Show real-time update indicator
+                showUpdateIndicator('Testimonials updated');
             } else {
                 testimonialsGrid.innerHTML = `
                     <div class="service-card" style="grid-column: 1 / -1; text-align: center;">
@@ -2386,6 +2419,40 @@
             }
         } catch (error) {
             console.error('Error displaying testimonials:', error);
+        }
+    }
+
+    function updateContactInfo(settings) {
+        try {
+            // Update contact info in CTA section
+            if (settings.phoneNumber) {
+                const phoneElements = document.querySelectorAll('.text-medium');
+                phoneElements.forEach(el => {
+                    if (el.textContent.includes('0733 737 983')) {
+                        el.textContent = settings.phoneNumber;
+                    }
+                });
+            }
+            
+            if (settings.contactEmail) {
+                const emailElements = document.querySelectorAll('.text-medium');
+                emailElements.forEach(el => {
+                    if (el.textContent.includes('office.dsog@gmail.com')) {
+                        el.textContent = settings.contactEmail;
+                    }
+                });
+            }
+            
+            if (settings.eventsEmail) {
+                const eventsEmailElements = document.querySelectorAll('.text-medium');
+                eventsEmailElements.forEach(el => {
+                    if (el.textContent.includes('events@dsog.org')) {
+                        el.textContent = settings.eventsEmail;
+                    }
+                });
+            }
+        } catch (error) {
+            console.error('Error updating contact info:', error);
         }
     }
 
@@ -2698,85 +2765,136 @@
         });
     }
 
-    function showNotification(message, type) {
-        // Create notification element
-        const notification = document.createElement('div');
-        notification.className = `notification ${type}`;
-        notification.style.cssText = `
+    function showUpdateIndicator(message) {
+        // Create a subtle update indicator
+        const indicator = document.createElement('div');
+        indicator.className = 'update-indicator';
+        indicator.style.cssText = `
             position: fixed;
-            top: 20px;
+            bottom: 80px;
             right: 20px;
-            padding: 12px 20px;
-            border-radius: var(--radius-md);
-            background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#ffc107'};
+            padding: 8px 12px;
+            background: var(--primary-red);
             color: white;
-            z-index: 10000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            animation: slideIn 0.3s ease;
-            font-size: 14px;
+            border-radius: var(--radius-md);
+            font-size: 12px;
+            z-index: 9999;
+            box-shadow: var(--shadow-md);
+            animation: slideUp 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         `;
         
-        notification.innerHTML = `
-            <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+        indicator.innerHTML = `
+            <i class="fas fa-sync-alt fa-spin"></i>
             ${message}
         `;
         
-        document.body.appendChild(notification);
+        document.body.appendChild(indicator);
         
-        // Remove after 3 seconds
+        // Remove after 2 seconds
         setTimeout(() => {
-            notification.style.animation = 'slideOut 0.3s ease';
+            indicator.style.animation = 'slideDown 0.3s ease';
             setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.parentNode.removeChild(notification);
+                if (indicator.parentNode) {
+                    indicator.parentNode.removeChild(indicator);
                 }
             }, 300);
-        }, 3000);
+        }, 2000);
         
-        // Add CSS for animations
-        if (!document.querySelector('#notification-styles')) {
+        // Add CSS for animations if not already added
+        if (!document.querySelector('#update-indicator-styles')) {
             const style = document.createElement('style');
-            style.id = 'notification-styles';
+            style.id = 'update-indicator-styles';
             style.textContent = `
-                @keyframes slideIn {
-                    from { transform: translateX(100%); opacity: 0; }
-                    to { transform: translateX(0); opacity: 1; }
+                @keyframes slideUp {
+                    from { transform: translateY(20px); opacity: 0; }
+                    to { transform: translateY(0); opacity: 1; }
                 }
-                @keyframes slideOut {
-                    from { transform: translateX(0); opacity: 1; }
-                    to { transform: translateX(100%); opacity: 0; }
+                @keyframes slideDown {
+                    from { transform: translateY(0); opacity: 1; }
+                    to { transform: translateY(20px); opacity: 0; }
                 }
             `;
             document.head.appendChild(style);
         }
     }
 
-    // Force refresh data (for debugging)
+    // ==================== REAL-TIME TESTING ====================
+    // Add connection status indicator
+    function setupConnectionStatus() {
+        const connectionRef = db.ref('.info/connected');
+        connectionRef.on('value', (snap) => {
+            if (snap.val() === true) {
+                console.log('Connected to Firebase - Real-time updates active');
+                showConnectionStatus('connected');
+            } else {
+                console.log('Disconnected from Firebase');
+                showConnectionStatus('disconnected');
+            }
+        });
+    }
+
+    function showConnectionStatus(status) {
+        let statusEl = document.getElementById('firebase-status');
+        if (!statusEl) {
+            statusEl = document.createElement('div');
+            statusEl.id = 'firebase-status';
+            statusEl.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                left: 20px;
+                padding: 6px 10px;
+                border-radius: var(--radius-md);
+                font-size: 11px;
+                z-index: 9999;
+                background: ${status === 'connected' ? '#28a745' : '#dc3545'};
+                color: white;
+                box-shadow: var(--shadow-sm);
+            `;
+            document.body.appendChild(statusEl);
+        }
+        
+        statusEl.innerHTML = `
+            <i class="fas fa-${status === 'connected' ? 'check-circle' : 'exclamation-circle'}"></i>
+            Firebase: ${status === 'connected' ? 'Live' : 'Offline'}
+        `;
+        statusEl.style.background = status === 'connected' ? '#28a745' : '#dc3545';
+    }
+
+    // Initialize connection status
+    if (db) {
+        setupConnectionStatus();
+    }
+
+    // Manual refresh function
     window.refreshData = function() {
         console.log('Manual refresh triggered');
-        localStorage.removeItem(CACHE_KEY);
-        loadAllData();
+        removeAllListeners();
+        setupRealtimeListeners();
     };
 
-    // Add refresh button for debugging (remove in production)
+    // Add refresh button for testing (remove in production)
     const refreshBtn = document.createElement('button');
-    refreshBtn.textContent = '🔄 Refresh Data';
+    refreshBtn.textContent = '🔄 Reconnect';
     refreshBtn.style.cssText = `
         position: fixed;
-        bottom: 100px;
+        bottom: 120px;
         right: 20px;
-        padding: 10px 15px;
+        padding: 8px 12px;
         background: var(--primary-red);
         color: white;
         border: none;
         border-radius: var(--radius-md);
         cursor: pointer;
         z-index: 1000;
-        font-size: 12px;
+        font-size: 11px;
         box-shadow: var(--shadow-md);
     `;
     refreshBtn.onclick = function() {
         window.refreshData();
+        showUpdateIndicator('Reconnecting to Firebase...');
     };
     document.body.appendChild(refreshBtn);
 
