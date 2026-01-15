@@ -34,6 +34,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"></script>
+    
     <!-- Events Page Styles -->
     <style>
         /* Import CSS Variables from Home Page */
@@ -1068,6 +1072,62 @@
             font-weight: 600;
         }
 
+        /* ===== LOADING STATES ===== */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-4xl) 0;
+            text-align: center;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--primary-red);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: var(--space-lg);
+        }
+
+        .loading-text {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .loading-small {
+            width: 30px;
+            height: 30px;
+            border-width: 2px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-state {
+            text-align: center;
+            padding: var(--space-4xl) 0;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            margin: var(--space-xl) 0;
+        }
+
+        .error-icon {
+            font-size: 3rem;
+            color: var(--primary-red);
+            margin-bottom: var(--space-lg);
+        }
+
+        .no-events {
+            text-align: center;
+            padding: var(--space-4xl) 0;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
         /* ===== RESPONSIVE DESIGN ===== */
         @media (max-width: 1024px) {
             .nav-links {
@@ -1258,50 +1318,12 @@
                 <p>At DSOG, we believe in holistic transformation. Our events are carefully designed to address the complete entrepreneur - from practical business skills to personal inspiration and spiritual purpose.</p>
             </div>
             
-            <div class="event-categories">
-                <!-- Bootcamp Card -->
-                <div class="category-card bootcamp animate-on-scroll">
-                    <div class="category-icon">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <span class="category-tag">3-MONTH INTENSIVE</span>
-                    <h3>Startup Bootcamp</h3>
-                    <p>A comprehensive 3-month program transforming aspiring entrepreneurs into successful franchise business owners through hands-on training and mentorship.</p>
-                    <div style="margin-top: auto; padding-top: var(--space-md);">
-                        <a href="#bootcamp-details" class="btn btn-primary" style="width: 100%;">
-                            <i class="fas fa-info-circle"></i> Learn More
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- Inspiration Card -->
-                <div class="category-card inspiration animate-on-scroll">
-                    <div class="category-icon">
-                        <i class="fas fa-fire"></i>
-                    </div>
-                    <span class="category-tag">MONTHLY INSPIRATION</span>
-                    <h3 class="text-gradient-gold">Become What You Believe</h3>
-                    <p>Monthly inspiration summit for startups and established businesses to ignite passion, break through limits, and find renewed energy for sustainable growth.</p>
-                    <div style="margin-top: auto; padding-top: var(--space-md);">
-                        <a href="#inspiration-details" class="btn btn-gold" style="width: 100%;">
-                            <i class="fas fa-fire"></i> Get Inspired
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- Spiritual Card -->
-                <div class="category-card spiritual animate-on-scroll">
-                    <div class="category-icon">
-                        <i class="fas fa-hands-praying"></i>
-                    </div>
-                    <span class="category-tag">SPIRITUAL WORKSHOP</span>
-                    <h3 class="text-gradient-spiritual">The Making of an Icon</h3>
-                    <p>God-based workshop to discover divine purpose and align your business with God's plan. Transform into the icon you were created to be.</p>
-                    <div style="margin-top: auto; padding-top: var(--space-md);">
-                        <a href="#spiritual-details" class="btn btn-spiritual" style="width: 100%;">
-                            <i class="fas fa-star"></i> Discover Purpose
-                        </a>
-                    </div>
+            <!-- Event Categories (Loaded from Firebase) -->
+            <div id="eventCategories" class="event-categories">
+                <!-- Categories will be loaded here dynamically -->
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p class="loading-text">Loading event categories...</p>
                 </div>
             </div>
         </div>
@@ -1316,118 +1338,12 @@
                 <p class="lead">Each event is carefully designed to provide maximum value and transformation. Limited seats available for intimate experiences.</p>
             </div>
             
-            <div class="events-grid">
-                <!-- Bootcamp Event -->
-                <div id="bootcamp-details" class="event-card bootcamp animate-on-scroll">
-                    <img src="https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp" 
-                         alt="DSOG Franchise Startup Bootcamp" 
-                         class="event-image">
-                    <div class="event-date-badge">
-                        <i class="fas fa-calendar"></i> Feb 01, 2026
-                    </div>
-                    <div class="event-content">
-                        <div class="duration-badge">
-                            <i class="fas fa-clock"></i> 3-Month Intensive Program
-                        </div>
-                        <div class="event-details">
-                            <h3>DSOG Franchise Startup Bootcamp</h3>
-                            <p>Transform from aspiring entrepreneur to successful franchise owner. This 3-month intensive program provides hands-on training, mentorship, and practical experience in starting and scaling a franchise business.</p>
-                            <p><strong>What you'll gain:</strong> Complete business planning, franchise selection guidance, funding strategies, marketing plans, and ongoing mentorship.</p>
-                            <div class="event-meta">
-                                <div class="meta-item">
-                                    <i class="fas fa-users"></i>
-                                    <span>Limited to 12 Participants</span>
-                                </div>
-                                <div class="meta-item">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    <span>Hybrid: Virtual & On-site</span>
-                                </div>
-                                <div class="meta-item">
-                                    <i class="fas fa-clock"></i>
-                                    <span>Flexible Schedule</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event-action" style="margin-top: auto;">
-                            <a href="bootcamp.html" class="btn btn-primary btn-block">
-                                <i class="fas fa-graduation-cap"></i> Enroll in Bootcamp
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Inspiration Event -->
-                <div id="inspiration-details" class="event-card inspiration animate-on-scroll">
-                    <img src="https://i.postimg.cc/sgNRzKbd/20260114_1543_Image_Generation_simple_compose_01key8g91re75trpnnjn6j42z5_1.webp" 
-                         alt="Become What You Believe" 
-                         class="event-image">
-                    <div class="event-date-badge">
-                        <i class="fas fa-calendar"></i> First Saturday Monthly
-                    </div>
-                    <div class="event-content">
-                        <div class="event-details">
-                            <h3 class="text-gradient-gold">Become What You Believe</h3>
-                            <p><strong>Annual Monthly Event - For Startups & Established Business Leaders</strong></p>
-                            <p>An electrifying monthly summit designed to ignite the entrepreneurial fire within. For new entrepreneurs: break through your limits and launch with confidence. For established business leaders: rediscover your passion and find renewed energy to keep pushing forward.</p>
-                            <p><strong>Transformative Outcomes:</strong> Renewed vision, breakthrough strategies, sustainable energy, and practical growth techniques.</p>
-                            <div class="event-meta">
-                                <div class="meta-item">
-                                    <i class="fas fa-users"></i>
-                                    <span>Unlimited Participants</span>
-                                </div>
-                                <div class="meta-item">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    <span>Multiple Locations</span>
-                                </div>
-                                <div class="meta-item">
-                                    <i class="fas fa-calendar-alt"></i>
-                                    <span>Every First Saturday</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event-action" style="margin-top: auto;">
-                            <a href="contact.html?event=become-what-you-believe" class="btn btn-gold btn-block">
-                                <i class="fas fa-fire"></i> Ignite Your Journey
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Spiritual Event -->
-                <div id="spiritual-details" class="event-card spiritual animate-on-scroll">
-                    <img src="https://i.postimg.cc/kXw6d695/20260114-1617-Image-Generation-simple-compose-01keyad7jyf15rcfk3tz16wdbq-1.webp" 
-                         alt="The Making of an Icon" 
-                         class="event-image">
-                    <div class="event-date-badge">
-                        <i class="fas fa-calendar"></i> Last Weekend, Feb
-                    </div>
-                    <div class="event-content">
-                        <div class="event-details">
-                            <h3 class="text-gradient-spiritual">The Making of an Icon</h3>
-                            <div class="slogan">"Search within me O Lord"</div>
-                            <p>A God-based discussion workshop designed to help individuals discover and understand their divine purpose from the mind of God the Creator. This transformative session combines spiritual wisdom with practical application to help you align your business and personal life with God's plan.</p>
-                            <p><strong>Key Focus:</strong> Divine purpose discovery, spiritual-business alignment, character development, and icon creation through faith.</p>
-                            <div class="event-meta">
-                                <div class="meta-item">
-                                    <i class="fas fa-users"></i>
-                                    <span>Limited to 20 Participants</span>
-                                </div>
-                                <div class="meta-item">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    <span>Intimate Venue</span>
-                                </div>
-                                <div class="meta-item">
-                                    <i class="fas fa-clock"></i>
-                                    <span>Weekend Retreat</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event-action" style="margin-top: auto;">
-                            <a href="contact.html?event=making-of-an-icon" class="btn btn-spiritual btn-block">
-                                <i class="fas fa-hands-praying"></i> Discover Your Purpose
-                            </a>
-                        </div>
-                    </div>
+            <!-- Upcoming Events (Loaded from Firebase) -->
+            <div id="eventsGrid" class="events-grid">
+                <!-- Events will be loaded here dynamically -->
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p class="loading-text">Loading upcoming events...</p>
                 </div>
             </div>
         </div>
@@ -1629,8 +1545,321 @@
 
     <!-- JavaScript -->
     <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDb5ZFHbo7lGM8ph0oBxFVTHRF5C5C_DWU",
+            authDomain: "dsog-events.firebaseapp.com",
+            databaseURL: "https://dsog-events-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "dsog-events",
+            storageBucket: "dsog-events.firebasestorage.app",
+            messagingSenderId: "1075977932287",
+            appId: "1:1075977932287:web:b2bf4d1c0083d2dac8ebca"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // DOM Elements
+        const eventCategoriesContainer = document.getElementById('eventCategories');
+        const eventsGridContainer = document.getElementById('eventsGrid');
+
+        // Category class mapping
+        const categoryClasses = {
+            'bootcamp': 'bootcamp',
+            'inspiration': 'inspiration',
+            'spiritual': 'spiritual'
+        };
+
+        // Category gradient mapping
+        const categoryGradients = {
+            'bootcamp': 'text-gradient',
+            'inspiration': 'text-gradient-gold',
+            'spiritual': 'text-gradient-spiritual'
+        };
+
+        // Category button mapping
+        const categoryButtons = {
+            'bootcamp': 'btn-primary',
+            'inspiration': 'btn-gold',
+            'spiritual': 'btn-spiritual'
+        };
+
+        // Category icon mapping
+        const categoryIcons = {
+            'bootcamp': 'fas fa-graduation-cap',
+            'inspiration': 'fas fa-fire',
+            'spiritual': 'fas fa-hands-praying'
+        };
+
+        // Format date for display
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const options = { month: 'short', day: 'numeric', year: 'numeric' };
+            return date.toLocaleDateString('en-US', options);
+        }
+
+        // Format frequency for display
+        function formatFrequency(frequency) {
+            const frequencyMap = {
+                'monthly': 'Monthly',
+                'one-time': 'One-Time Event',
+                'weekly': 'Weekly',
+                'bi-weekly': 'Bi-Weekly'
+            };
+            return frequencyMap[frequency] || frequency;
+        }
+
+        // Render event categories
+        function renderCategories(categories) {
+            if (!categories || categories.length === 0) {
+                eventCategoriesContainer.innerHTML = `
+                    <div class="no-events">
+                        <i class="fas fa-calendar-times error-icon"></i>
+                        <h3>No Event Categories Available</h3>
+                        <p>Check back soon for upcoming event categories.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const activeCategories = categories.filter(cat => cat.active !== false);
+            
+            const categoriesHTML = activeCategories.map(category => {
+                const categoryClass = categoryClasses[category.id] || '';
+                const gradientClass = categoryGradients[category.id] || '';
+                const buttonClass = categoryButtons[category.id] || 'btn-primary';
+                const iconClass = categoryIcons[category.id] || 'fas fa-calendar-alt';
+
+                return `
+                    <div class="category-card ${categoryClass} animate-on-scroll">
+                        <div class="category-icon">
+                            <i class="${iconClass}"></i>
+                        </div>
+                        <span class="category-tag">${category.frequency || 'TRANSFORMATIVE'}</span>
+                        <h3 class="${gradientClass}">${category.name}</h3>
+                        <p>${category.description}</p>
+                        <div style="margin-top: auto; padding-top: var(--space-md);">
+                            <a href="#${category.id}-details" class="btn ${buttonClass}" style="width: 100%;">
+                                <i class="fas fa-info-circle"></i> Learn More
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            eventCategoriesContainer.innerHTML = categoriesHTML;
+        }
+
+        // Render upcoming events
+        function renderEvents(events) {
+            if (!events || events.length === 0) {
+                eventsGridContainer.innerHTML = `
+                    <div class="no-events">
+                        <i class="fas fa-calendar-times error-icon"></i>
+                        <h3>No Upcoming Events</h3>
+                        <p>Check back soon for upcoming events or contact us for more information.</p>
+                        <a href="contact.html" class="btn btn-primary" style="margin-top: var(--space-lg);">
+                            <i class="fas fa-envelope"></i> Contact Us
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort events by date (soonest first)
+            const sortedEvents = [...events].sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            const eventsHTML = sortedEvents.map(event => {
+                const categoryClass = categoryClasses[event.category] || '';
+                const gradientClass = categoryGradients[event.category] || '';
+                const buttonClass = categoryButtons[event.category] || 'btn-primary';
+                const formattedDate = formatDate(event.date);
+                const isSpiritual = event.category === 'spiritual';
+
+                return `
+                    <div id="${event.category}-details" class="event-card ${categoryClass} animate-on-scroll">
+                        <img src="${event.imageUrl}" 
+                             alt="${event.title}" 
+                             class="event-image">
+                        <div class="event-date-badge">
+                            <i class="fas fa-calendar"></i> ${formattedDate}
+                        </div>
+                        <div class="event-content">
+                            <div class="duration-badge">
+                                <i class="fas fa-clock"></i> ${event.duration}
+                            </div>
+                            <div class="event-details">
+                                <h3 class="${gradientClass}">${event.title}</h3>
+                                ${isSpiritual ? '<div class="slogan">"Search within me O Lord"</div>' : ''}
+                                <p><strong>${event.subtitle}</strong></p>
+                                <p>${event.description}</p>
+                                <div class="event-meta">
+                                    <div class="meta-item">
+                                        <i class="fas fa-users"></i>
+                                        <span>${event.maxParticipants > 0 ? `Limited to ${event.maxParticipants} Participants` : 'Unlimited Participants'}</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span>${event.venue}</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span>${formatFrequency(event.frequency)}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="event-action" style="margin-top: auto;">
+                                <a href="${event.registrationUrl}" 
+                                   target="_blank" 
+                                   class="btn ${buttonClass} btn-block">
+                                    <i class="fas fa-ticket-alt"></i> Register Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            eventsGridContainer.innerHTML = eventsHTML;
+        }
+
+        // Show error state
+        function showError(message) {
+            eventCategoriesContainer.innerHTML = `
+                <div class="error-state">
+                    <i class="fas fa-exclamation-triangle error-icon"></i>
+                    <h3>Unable to Load Events</h3>
+                    <p>${message}</p>
+                    <button onclick="loadEvents()" class="btn btn-primary" style="margin-top: var(--space-lg);">
+                        <i class="fas fa-redo"></i> Try Again
+                    </button>
+                </div>
+            `;
+            
+            eventsGridContainer.innerHTML = `
+                <div class="error-state">
+                    <i class="fas fa-exclamation-triangle error-icon"></i>
+                    <h3>Unable to Load Events</h3>
+                    <p>${message}</p>
+                    <button onclick="loadEvents()" class="btn btn-primary" style="margin-top: var(--space-lg);">
+                        <i class="fas fa-redo"></i> Try Again
+                    </button>
+                </div>
+            `;
+        }
+
+        // Load events from Firebase
+        async function loadEvents() {
+            try {
+                // Show loading state
+                eventCategoriesContainer.innerHTML = `
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <p class="loading-text">Loading event categories...</p>
+                    </div>
+                `;
+                
+                eventsGridContainer.innerHTML = `
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <p class="loading-text">Loading upcoming events...</p>
+                    </div>
+                `;
+
+                // Fetch data from Firebase
+                const categoriesRef = database.ref('eventCategories');
+                const eventsRef = database.ref('upcomingEvents');
+
+                // Use Promise.all to fetch both data sets concurrently
+                const [categoriesSnapshot, eventsSnapshot] = await Promise.all([
+                    categoriesRef.once('value'),
+                    eventsRef.once('value')
+                ]);
+
+                const categories = [];
+                const events = [];
+
+                // Process categories
+                categoriesSnapshot.forEach((childSnapshot) => {
+                    categories.push({
+                        id: childSnapshot.key,
+                        ...childSnapshot.val()
+                    });
+                });
+
+                // Process events
+                eventsSnapshot.forEach((childSnapshot) => {
+                    events.push({
+                        id: childSnapshot.key,
+                        ...childSnapshot.val()
+                    });
+                });
+
+                // Render the data
+                renderCategories(categories);
+                renderEvents(events);
+
+                // Initialize animations after rendering
+                setTimeout(initAnimations, 100);
+
+            } catch (error) {
+                console.error('Error loading events:', error);
+                showError('Failed to load events. Please check your internet connection and try again.');
+            }
+        }
+
+        // Initialize scroll animations
+        function initAnimations() {
+            const animatedElements = document.querySelectorAll('.animate-on-scroll');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const delay = entry.target.dataset.delay || 0;
+                        setTimeout(() => {
+                            entry.target.classList.add('animated');
+                        }, delay);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+            
+            animatedElements.forEach((element, index) => {
+                element.dataset.delay = index * 100;
+                observer.observe(element);
+            });
+        }
+
+        // Event Listeners for WhatsApp registration links
+        function setupWhatsAppLinks() {
+            document.querySelectorAll('a[href*="whatsapp"]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    if (href.includes('whatsapp')) {
+                        // Track which event they're interested in
+                        const eventType = this.closest('.event-card') ? 
+                            this.closest('.event-card').classList.contains('bootcamp') ? 'Bootcamp' :
+                            this.closest('.event-card').classList.contains('inspiration') ? 'Become What You Believe' :
+                            this.closest('.event-card').classList.contains('spiritual') ? 'The Making of an Icon' : 'DSOG Event' : 'DSOG Event';
+                        
+                        // Update the WhatsApp message to include event type
+                        const newHref = href.replace('DSOG%20event', encodeURIComponent(eventType));
+                        this.setAttribute('href', newHref);
+                    }
+                });
+            });
+        }
+
+        // DOM Content Loaded
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 DSOG Events Page Loaded');
+            console.log('🚀 DSOG Events Page Loaded - Firebase Integration Active');
+            
+            // Initialize Firebase and load events
+            loadEvents();
             
             // Theme Toggle
             const themeToggle = document.getElementById('themeToggle');
@@ -1753,47 +1982,30 @@
             // Set current year in footer
             document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-            // Scroll Animations
-            const animatedElements = document.querySelectorAll('.animate-on-scroll');
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const delay = entry.target.dataset.delay || 0;
-                        setTimeout(() => {
-                            entry.target.classList.add('animated');
-                        }, delay);
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            });
-            
-            animatedElements.forEach((element, index) => {
-                element.dataset.delay = index * 100;
-                observer.observe(element);
-            });
+            // Setup WhatsApp links
+            setupWhatsAppLinks();
 
-            // WhatsApp Registration with event-specific message
-            document.querySelectorAll('a[href*="whatsapp"]').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    const href = this.getAttribute('href');
-                    if (href.includes('whatsapp')) {
-                        // Track which event they're interested in
-                        const eventType = this.closest('.event-card') ? 
-                            this.closest('.event-card').classList.contains('bootcamp') ? 'Bootcamp' :
-                            this.closest('.event-card').classList.contains('inspiration') ? 'Become What You Believe' :
-                            this.closest('.event-card').classList.contains('spiritual') ? 'The Making of an Icon' : 'DSOG Event' : 'DSOG Event';
-                        
-                        // Update the WhatsApp message to include event type
-                        const newHref = href.replace('DSOG%20event', encodeURIComponent(eventType));
-                        this.setAttribute('href', newHref);
-                    }
+            // Real-time updates (optional - uncomment if you want live updates)
+            /*
+            const eventsRef = database.ref('upcomingEvents');
+            eventsRef.on('value', (snapshot) => {
+                console.log('Events updated in real-time');
+                const events = [];
+                snapshot.forEach((childSnapshot) => {
+                    events.push({
+                        id: childSnapshot.key,
+                        ...childSnapshot.val()
+                    });
                 });
+                renderEvents(events);
+                initAnimations();
+                setupWhatsAppLinks();
             });
+            */
         });
+
+        // Export loadEvents for retry button
+        window.loadEvents = loadEvents;
     </script>
 </body>
 </html>
