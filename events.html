@@ -2504,6 +2504,8 @@
             id: eventId,
             title: event.title || 'Upcoming Event',
             category: event.category || 'bootcamp',
+            date: event.date || '',
+            description: event.description || '',
             tickets: event.tickets || {}
         };
 
@@ -2729,6 +2731,10 @@
         document.getElementById('summaryTotal').textContent = `${currency} ${ticketPrice}`;
     }
 
+    // ============================================
+    // UPDATED VPAY INTEGRATION FUNCTIONS
+    // ============================================
+    
     function processPayment() {
         if (!selectedEvent || !selectedTicket) return;
         
@@ -2737,35 +2743,120 @@
         document.getElementById('ticketSummary').style.display = 'none';
         document.getElementById('paymentProcessing').style.display = 'block';
         
-        // Generate VPay link
+        // Generate VPay link with all necessary information
         const vpayLink = generateVPayLink();
         
-        // Simulate payment processing (in real implementation, this would redirect to VPay)
+        // Show a brief processing message, then redirect to VPay
         setTimeout(() => {
-            // Show success state
-            document.getElementById('paymentProcessing').style.display = 'none';
-            document.getElementById('paymentSuccess').style.display = 'block';
+            // Store payment details in localStorage for reference
+            storePaymentDetails();
             
-            // In real implementation, you would redirect to VPay:
-            // window.location.href = vpayLink;
-        }, 2000);
+            // Redirect to VPay payment page
+            window.open(vpayLink, '_blank');
+            
+            // Keep modal open and show payment instructions
+            showPaymentInstructions();
+        }, 1500);
     }
 
     function generateVPayLink() {
-        if (!selectedEvent || !selectedTicket) return '#';
+        if (!selectedEvent || !selectedTicket) return 'https://vpay.pages.dev/';
         
-        const eventTitle = encodeURIComponent(selectedEvent.title || 'Event');
-        const ticketName = encodeURIComponent(selectedTicket.name || 'Ticket');
+        const eventTitle = encodeURIComponent(selectedEvent.title || 'DSOG Event');
+        const ticketName = encodeURIComponent(selectedTicket.name || 'Event Ticket');
         const amount = selectedTicket.price || 0;
-        const currency = selectedTicket.currency || 'USD';
         const eventId = selectedEvent.id;
         const ticketId = selectedTicket.id;
         
-        // Generate a unique reference
+        // Generate a unique reference ID
         const reference = `DSOG-${eventId}-${ticketId}-${Date.now()}`;
         
-        // Construct VPay URL with parameters
-        return `https://vpay.pages.dev/payment?event=${eventTitle}&ticket=${ticketName}&amount=${amount}&currency=${currency}&ref=${reference}&callback=${encodeURIComponent(window.location.href)}`;
+        // Create a comprehensive description for the payment
+        const description = `DSOG Event Ticket: ${ticketName} for ${eventTitle}`;
+        
+        // URL encode all parameters
+        const encodedDescription = encodeURIComponent(description);
+        const encodedReference = encodeURIComponent(reference);
+        const encodedEventTitle = encodeURIComponent(eventTitle);
+        const encodedTicketName = encodeURIComponent(ticketName);
+        
+        // Construct VPay URL with all necessary parameters
+        // Since VPay doesn't accept parameters directly, we'll pass them in a way that can be displayed
+        return `https://vpay.pages.dev/#amount=${amount}&description=${encodedDescription}&reference=${encodedReference}&event=${encodedEventTitle}&ticket=${encodedTicketName}`;
+    }
+
+    function storePaymentDetails() {
+        if (!selectedEvent || !selectedTicket) return;
+        
+        const paymentDetails = {
+            event: selectedEvent.title || 'DSOG Event',
+            ticket: selectedTicket.name || 'Standard Ticket',
+            price: selectedTicket.price || 0,
+            currency: selectedTicket.currency || 'USD',
+            date: new Date().toISOString(),
+            reference: `DSOG-${selectedEvent.id}-${selectedTicket.id}-${Date.now()}`
+        };
+        
+        // Store in localStorage for reference
+        localStorage.setItem('dsog_last_payment', JSON.stringify(paymentDetails));
+        
+        // Also store in a list of recent payments
+        let recentPayments = JSON.parse(localStorage.getItem('dsog_recent_payments') || '[]');
+        recentPayments.unshift(paymentDetails);
+        // Keep only last 10 payments
+        if (recentPayments.length > 10) {
+            recentPayments = recentPayments.slice(0, 10);
+        }
+        localStorage.setItem('dsog_recent_payments', JSON.stringify(recentPayments));
+    }
+
+    function showPaymentInstructions() {
+        if (!selectedEvent || !selectedTicket) return;
+        
+        const amount = selectedTicket.price || 0;
+        const currency = selectedTicket.currency || 'USD';
+        const eventTitle = selectedEvent.title || 'DSOG Event';
+        const ticketName = selectedTicket.name || 'Standard Ticket';
+        
+        // Update payment processing message with instructions
+        document.getElementById('paymentProcessing').innerHTML = `
+            <div class="payment-processing">
+                <div class="success-icon" style="background: var(--primary-red);">
+                    <i class="fas fa-external-link-alt"></i>
+                </div>
+                <h4>Redirecting to VPay</h4>
+                <p>A new tab has been opened for payment processing.</p>
+                
+                <div style="margin-top: var(--space-lg); padding: var(--space-md); background: var(--bg-secondary); border-radius: var(--radius-md);">
+                    <h5 style="margin-bottom: var(--space-sm);">Payment Details:</h5>
+                    <div style="text-align: left; font-size: 0.9rem;">
+                        <p><strong>Event:</strong> ${eventTitle}</p>
+                        <p><strong>Ticket:</strong> ${ticketName}</p>
+                        <p><strong>Amount:</strong> ${currency} ${amount}</p>
+                        <p><strong>Reference:</strong> DSOG-${selectedEvent.id}-${selectedTicket.id}</p>
+                    </div>
+                </div>
+                
+                <div style="margin-top: var(--space-lg); padding: var(--space-md); background: var(--bg-tertiary); border-radius: var(--radius-md); font-size: 0.85rem;">
+                    <p><strong>Important:</strong> When on VPay:</p>
+                    <ol style="text-align: left; margin-top: var(--space-sm); padding-left: var(--space-lg);">
+                        <li>Select "Ticket Purchase" category</li>
+                        <li>Select "DSOG Stores" as business</li>
+                        <li>Enter amount: <strong>$${amount}</strong></li>
+                        <li>Complete payment with your preferred method</li>
+                    </ol>
+                </div>
+                
+                <div style="margin-top: var(--space-lg); display: flex; gap: var(--space-sm);">
+                    <button class="btn btn-secondary" onclick="closePaymentModal()" style="flex: 1;">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                    <button class="btn btn-primary" onclick="window.open('https://vpay.pages.dev/', '_blank')" style="flex: 2;">
+                        <i class="fas fa-external-link-alt"></i> Open VPay Again
+                    </button>
+                </div>
+            </div>
+        `;
     }
 
     function getDemoTickets() {
@@ -3100,6 +3191,28 @@
         .sold-out-option:hover {
             transform: none !important;
             border-color: var(--border-color) !important;
+        }
+        
+        /* Payment Modal Styles */
+        .payment-modal {
+            max-width: 500px;
+        }
+        
+        .vpay-button {
+            font-size: 1.1rem;
+            padding: 16px;
+        }
+        
+        .vpay-logo {
+            font-weight: 800;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+        
+        @media (max-width: 768px) {
+            .payment-modal {
+                margin: 20px;
+            }
         }
     `;
     document.head.appendChild(style);
