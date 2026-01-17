@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=0.95, maximum-scale=5.0, user-scalable=yes">
     
     <!-- SEO Meta Tags -->
-    <meta name="description" content="DSOG Events - Transformative business and spiritual events for entrepreneurs. Join our bootcamp, inspiration summit, and spiritual workshops to transform your life and business.">
-    <meta name="keywords" content="DSOG events, entrepreneurship bootcamp, business inspiration, spiritual purpose, startup training, business events, personal development">
+    <meta name="description" content="DSOG Events - Transformative business and spiritual events for entrepreneurs. Buy tickets for bootcamps, inspiration summits, and spiritual workshops.">
+    <meta name="keywords" content="DSOG events, entrepreneurship bootcamp tickets, business inspiration tickets, spiritual purpose workshops, event tickets, business event tickets">
     
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#C21807">
@@ -18,13 +18,13 @@
     <meta name="msapplication-TileColor" content="#C21807">
     
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="DSOG Events | Transform Your Business & Purpose">
-    <meta property="og:description" content="Join our transformative events: Bootcamp, Become What You Believe, and The Making of an Icon. Elevate your business and discover your divine purpose.">
+    <meta property="og:title" content="DSOG Events | Buy Tickets for Transformative Events">
+    <meta property="og:description" content="Purchase tickets for our transformative events: Bootcamp, Become What You Believe, and The Making of an Icon. Secure payment with VPay.">
     <meta property="og:image" content="https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp">
     <meta property="og:url" content="https://dsog.org/events">
     <meta property="og:type" content="website">
     
-    <title>DSOG Events | Transform Your Business & Purpose</title>
+    <title>DSOG Events | Buy Tickets for Transformative Events</title>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -153,6 +153,325 @@
             --medium-gray: #404040;
         }
 
+        /* ===== PAYMENT MODAL STYLES ===== */
+        .payment-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: var(--z-modal);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            padding: var(--space-md);
+        }
+
+        .payment-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .payment-modal {
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: translateY(20px) scale(0.95);
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-2xl);
+        }
+
+        .payment-modal-overlay.active .payment-modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .payment-modal-header {
+            padding: var(--space-xl);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--gradient-light);
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+        }
+
+        .payment-modal-header h3 {
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .payment-modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-smooth);
+        }
+
+        .payment-modal-close:hover {
+            background: var(--bg-tertiary);
+            color: var(--primary-red);
+        }
+
+        .payment-modal-content {
+            padding: var(--space-xl);
+        }
+
+        .ticket-option {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-md);
+            transition: var(--transition-smooth);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .ticket-option:hover {
+            border-color: var(--primary-red);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .ticket-option.selected {
+            border-color: var(--primary-red);
+            background: rgba(194, 24, 7, 0.05);
+            border-width: 2px;
+        }
+
+        .ticket-option-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--space-sm);
+        }
+
+        .ticket-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        .ticket-price {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-red);
+            display: flex;
+            align-items: baseline;
+            gap: var(--space-2xs);
+        }
+
+        .ticket-currency {
+            font-size: 1rem;
+            color: var(--text-tertiary);
+        }
+
+        .ticket-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: var(--space-sm);
+            line-height: 1.5;
+        }
+
+        .ticket-details {
+            display: flex;
+            gap: var(--space-md);
+            font-size: 0.85rem;
+            color: var(--text-tertiary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .ticket-detail {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .ticket-detail i {
+            color: var(--primary-red);
+        }
+
+        .ticket-availability {
+            font-size: 0.8rem;
+            padding: var(--space-2xs) var(--space-md);
+            border-radius: var(--radius-full);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .available {
+            background: rgba(45, 125, 70, 0.1);
+            color: var(--accent-green);
+            border: 1px solid rgba(45, 125, 70, 0.2);
+        }
+
+        .limited {
+            background: rgba(212, 175, 55, 0.1);
+            color: #B8860B;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .sold-out {
+            background: rgba(194, 24, 7, 0.1);
+            color: var(--primary-red);
+            border: 1px solid rgba(194, 24, 7, 0.2);
+        }
+
+        .payment-modal-footer {
+            padding: var(--space-xl);
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+        }
+
+        .ticket-summary {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: var(--space-xs) 0;
+        }
+
+        .summary-label {
+            color: var(--text-secondary);
+        }
+
+        .summary-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .summary-total {
+            border-top: 1px solid var(--border-color);
+            padding-top: var(--space-sm);
+            margin-top: var(--space-sm);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-red);
+        }
+
+        .vpay-button {
+            width: 100%;
+            padding: var(--space-lg);
+            background: var(--gradient-primary);
+            color: var(--white);
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            transition: var(--transition-smooth);
+        }
+
+        .vpay-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .vpay-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .vpay-logo {
+            font-weight: 800;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: var(--radius-sm);
+        }
+
+        .payment-security {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin-top: var(--space-md);
+            color: var(--text-tertiary);
+            font-size: 0.8rem;
+        }
+
+        .payment-security i {
+            color: var(--accent-green);
+        }
+
+        /* Payment Processing States */
+        .payment-processing {
+            text-align: center;
+            padding: var(--space-2xl);
+        }
+
+        .processing-spinner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--primary-red);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto var(--space-lg);
+        }
+
+        .payment-success {
+            text-align: center;
+            padding: var(--space-2xl);
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--space-lg);
+            font-size: 2.5rem;
+            color: var(--white);
+            animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            60% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
         /* ===== BASE STYLES ===== */
         *, *::before, *::after {
             margin: 0;
@@ -181,6 +500,10 @@
             min-height: 100vh;
             font-size: 0.9375rem;
             font-weight: 400;
+        }
+
+        body.payment-modal-open {
+            overflow: hidden;
         }
 
         /* ===== HEADER & NAVIGATION ===== */
@@ -661,6 +984,35 @@
             font-size: 0.8rem;
         }
 
+        /* Ticket Pricing */
+        .ticket-price-display {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            padding: var(--space-sm) var(--space-md);
+            margin: var(--space-md) 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid var(--border-color);
+        }
+
+        .price-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .price-amount {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary-red);
+        }
+
+        .price-note {
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+            margin-top: var(--space-xs);
+        }
+
         /* ===== REGISTRATION INFO ===== */
         .registration-info {
             background: var(--bg-primary);
@@ -1028,6 +1380,15 @@
             display: flex;
         }
 
+        .buy-ticket-btn {
+            margin-top: auto;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+        }
+
         /* ===== CONTAINER ===== */
         .container {
             width: 100%;
@@ -1202,6 +1563,10 @@
             .registration-container {
                 grid-template-columns: 1fr;
             }
+            
+            .payment-modal {
+                margin: var(--space-md);
+            }
         }
 
         @media (max-width: 480px) {
@@ -1234,6 +1599,16 @@
 
             .event-content {
                 padding: var(--space-lg);
+            }
+            
+            .ticket-option-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--space-xs);
+            }
+            
+            .ticket-price {
+                font-size: 1.25rem;
             }
         }
 
@@ -1283,23 +1658,90 @@
         </nav>
     </header>
 
+    <!-- Payment Modal -->
+    <div class="payment-modal-overlay" id="paymentModal">
+        <div class="payment-modal">
+            <div class="payment-modal-header">
+                <h3><i class="fas fa-ticket-alt"></i> Purchase Ticket</h3>
+                <button class="payment-modal-close" id="paymentModalClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="payment-modal-content">
+                <div id="ticketOptions">
+                    <!-- Ticket options will be loaded here -->
+                    <div class="loading">
+                        <div class="loading-spinner loading-small"></div>
+                        <p class="loading-text">Loading ticket options...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="payment-modal-footer">
+                <div id="ticketSummary" style="display: none;">
+                    <div class="ticket-summary">
+                        <div class="summary-item">
+                            <span class="summary-label">Ticket:</span>
+                            <span class="summary-value" id="summaryTicketName">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Price:</span>
+                            <span class="summary-value" id="summaryTicketPrice">-</span>
+                        </div>
+                        <div class="summary-item summary-total">
+                            <span class="summary-label">Total:</span>
+                            <span class="summary-value" id="summaryTotal">-</span>
+                        </div>
+                    </div>
+                    <button id="vpayButton" class="vpay-button" disabled>
+                        <i class="fas fa-lock"></i>
+                        <span class="vpay-logo">VPay</span>
+                        Pay Securely
+                    </button>
+                    <div class="payment-security">
+                        <i class="fas fa-shield-alt"></i>
+                        Secure payment powered by VPay
+                    </div>
+                </div>
+                <div id="paymentProcessing" style="display: none;">
+                    <div class="payment-processing">
+                        <div class="processing-spinner"></div>
+                        <h4>Processing Payment...</h4>
+                        <p>Please wait while we redirect you to VPay.</p>
+                    </div>
+                </div>
+                <div id="paymentSuccess" style="display: none;">
+                    <div class="payment-success">
+                        <div class="success-icon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <h4>Payment Successful!</h4>
+                        <p>Your ticket has been reserved. You will receive a confirmation email shortly.</p>
+                        <button class="btn btn-primary" id="closeSuccessBtn" style="margin-top: var(--space-lg);">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Events Hero Section -->
     <section class="events-hero">
         <div class="container">
             <div class="events-hero-content">
                 <div class="events-badge">
-                    <i class="fas fa-calendar-star"></i> TRANSFORMATIVE EVENTS
+                    <i class="fas fa-ticket-alt"></i> BUY TICKETS NOW
                 </div>
                 
-                <h1>Transform Your <span class="text-gradient">Business & Purpose</span></h1>
-                <p class="lead">Join our exclusive events designed to empower entrepreneurs, ignite passion, and discover divine purpose through practical training and spiritual guidance.</p>
+                <h1>Secure Your <span class="text-gradient">Transformative Experience</span></h1>
+                <p class="lead">Purchase tickets for our exclusive events designed to empower entrepreneurs, ignite passion, and discover divine purpose. Secure payment with VPay.</p>
                 
                 <div class="hero-buttons" style="margin-top: var(--space-2xl);">
                     <a href="#upcoming" class="btn btn-primary btn-large">
-                        <i class="fas fa-calendar-alt"></i> View All Events
+                        <i class="fas fa-calendar-alt"></i> View Events & Tickets
                     </a>
                     <a href="#registration" class="btn btn-secondary btn-large">
-                        <i class="fas fa-ticket-alt"></i> Register Now
+                        <i class="fas fa-info-circle"></i> How to Purchase
                     </a>
                 </div>
             </div>
@@ -1310,12 +1752,12 @@
     <section class="transformative-events">
         <div class="container">
             <div class="section-header">
-                <span class="section-subtitle">Our Event Portfolio</span>
-                <h2>Three Pillars of <span class="text-gradient">Transformation</span></h2>
+                <span class="section-subtitle">Ticket Categories</span>
+                <h2>Three Levels of <span class="text-gradient">Transformation</span></h2>
             </div>
             
             <div class="events-intro">
-                <p>At DSOG, we believe in holistic transformation. Our events are carefully designed to address the complete entrepreneur - from practical business skills to personal inspiration and spiritual purpose.</p>
+                <p>Choose from our three transformative event categories. Each offers unique benefits and experiences tailored to different stages of your entrepreneurial journey.</p>
             </div>
             
             <!-- Event Categories (Loaded from Firebase) -->
@@ -1333,9 +1775,9 @@
     <section id="upcoming" class="upcoming-events">
         <div class="container">
             <div class="section-header">
-                <span class="section-subtitle">Upcoming Sessions</span>
-                <h2>Join Our Next <span class="text-gradient">Transformative Events</span></h2>
-                <p class="lead">Each event is carefully designed to provide maximum value and transformation. Limited seats available for intimate experiences.</p>
+                <span class="section-subtitle">Available Tickets</span>
+                <h2>Purchase Tickets for <span class="text-gradient">Upcoming Events</span></h2>
+                <p class="lead">Each event offers different ticket options with secure payment processing through VPay. Limited seats available.</p>
             </div>
             
             <!-- Upcoming Events (Loaded from Firebase) -->
@@ -1343,7 +1785,7 @@
                 <!-- Events will be loaded here dynamically -->
                 <div class="loading">
                     <div class="loading-spinner"></div>
-                    <p class="loading-text">Loading upcoming events...</p>
+                    <p class="loading-text">Loading available events...</p>
                 </div>
             </div>
         </div>
@@ -1353,24 +1795,22 @@
     <section id="registration" class="registration-info">
         <div class="container">
             <div class="section-header">
-                <span class="section-subtitle">How to Join</span>
-                <h2>Simple <span class="text-gradient">Registration Process</span></h2>
-                <p class="lead">Securing your spot in our transformative events is quick and easy. Follow these simple steps to begin your journey.</p>
+                <span class="section-subtitle">Simple Purchase Process</span>
+                <h2>How to <span class="text-gradient">Buy Tickets</span></h2>
+                <p class="lead">Purchasing tickets for our transformative events is quick, easy, and secure. Follow these simple steps to secure your spot.</p>
             </div>
             
             <div class="registration-container">
                 <div class="registration-visual">
                     <div class="registration-icon">
-                        <i class="fas fa-calendar-check"></i>
+                        <i class="fas fa-credit-card"></i>
                     </div>
-                    <h3>Ready to Transform?</h3>
-                    <p>Take the first step toward your entrepreneurial and personal transformation today.</p>
+                    <h3>Secure Payment</h3>
+                    <p>All payments are processed securely through VPay. Your information is protected with bank-level security.</p>
                     <div style="margin-top: var(--space-lg);">
-                        <a href="https://wa.me/254733737983?text=I'm%20interested%20in%20joining%20a%20DSOG%20event" 
-                           target="_blank" 
-                           class="btn btn-primary btn-large">
-                            <i class="fab fa-whatsapp"></i> WhatsApp Registration
-                        </a>
+                        <button class="btn btn-primary btn-large" onclick="openPaymentModal()">
+                            <i class="fas fa-shopping-cart"></i> View Payment Demo
+                        </button>
                     </div>
                 </div>
                 
@@ -1378,32 +1818,32 @@
                     <div class="step-item animate-on-scroll">
                         <div class="step-number">1</div>
                         <div>
-                            <h4>Choose Your Event</h4>
-                            <p>Select from our three transformative events based on your needs and schedule.</p>
+                            <h4>Select Your Event</h4>
+                            <p>Choose from our upcoming events and click "Buy Ticket" to see available options.</p>
                         </div>
                     </div>
                     
                     <div class="step-item animate-on-scroll">
                         <div class="step-number">2</div>
                         <div>
-                            <h4>Contact Registration</h4>
-                            <p>Reach out via WhatsApp or email to confirm availability and receive payment details.</p>
+                            <h4>Choose Ticket Type</h4>
+                            <p>Select your preferred ticket option (Standard, VIP, Early Bird, etc.) in the payment modal.</p>
                         </div>
                     </div>
                     
                     <div class="step-item animate-on-scroll">
                         <div class="step-number">3</div>
                         <div>
-                            <h4>Secure Your Spot</h4>
-                            <p>Complete your registration with payment confirmation and receive event details.</p>
+                            <h4>Secure Payment</h4>
+                            <p>Complete your purchase securely through VPay's payment gateway. All major cards accepted.</p>
                         </div>
                     </div>
                     
                     <div class="step-item animate-on-scroll">
                         <div class="step-number">4</div>
                         <div>
-                            <h4>Prepare for Transformation</h4>
-                            <p>Receive pre-event materials and prepare for your life-changing experience.</p>
+                            <h4>Receive Confirmation</h4>
+                            <p>Get instant email confirmation and your ticket. Prepare for your transformative experience!</p>
                         </div>
                     </div>
                 </div>
@@ -1415,42 +1855,42 @@
     <section class="benefits-section">
         <div class="container">
             <div class="section-header">
-                <span class="section-subtitle">Why Join Our Events</span>
-                <h2>Life-Changing <span class="text-gradient">Benefits</span></h2>
-                <p class="lead">Our events are designed to provide holistic transformation that impacts every area of your life and business.</p>
+                <span class="section-subtitle">Ticket Benefits</span>
+                <h2>What Your <span class="text-gradient">Ticket Includes</span></h2>
+                <p class="lead">Every ticket purchase comes with these exclusive benefits and features for maximum value.</p>
             </div>
             
             <div class="benefits-grid">
                 <div class="benefit-card benefit-1 animate-on-scroll">
                     <div class="benefit-icon">
-                        <i class="fas fa-briefcase"></i>
+                        <i class="fas fa-user-check"></i>
                     </div>
-                    <h4>Practical Business Skills</h4>
-                    <p>Learn actionable strategies and techniques that you can implement immediately in your business.</p>
+                    <h4>Guaranteed Entry</h4>
+                    <p>Secure your spot with a guaranteed seat at the event of your choice.</p>
                 </div>
                 
                 <div class="benefit-card benefit-2 animate-on-scroll">
                     <div class="benefit-icon">
-                        <i class="fas fa-brain"></i>
+                        <i class="fas fa-file-certificate"></i>
                     </div>
-                    <h4>Mindset Transformation</h4>
-                    <p>Develop the entrepreneurial mindset needed to overcome challenges and achieve success.</p>
+                    <h4>Digital Certificate</h4>
+                    <p>Receive a certificate of participation or completion (where applicable).</p>
                 </div>
                 
                 <div class="benefit-card benefit-3 animate-on-scroll">
                     <div class="benefit-icon">
-                        <i class="fas fa-heart"></i>
+                        <i class="fas fa-book-open"></i>
                     </div>
-                    <h4>Purpose Discovery</h4>
-                    <p>Align your business with your divine purpose for greater fulfillment and impact.</p>
+                    <h4>Event Materials</h4>
+                    <p>Access to all event materials, handouts, and digital resources.</p>
                 </div>
                 
                 <div class="benefit-card benefit-4 animate-on-scroll">
                     <div class="benefit-icon">
                         <i class="fas fa-users"></i>
                     </div>
-                    <h4>Community Support</h4>
-                    <p>Join a network of like-minded entrepreneurs who support and encourage each other's growth.</p>
+                    <h4>Network Access</h4>
+                    <p>Join our exclusive community of like-minded entrepreneurs.</p>
                 </div>
             </div>
         </div>
@@ -1461,25 +1901,23 @@
         <div class="container">
             <div class="cta-content">
                 <div class="urgency-badge">
-                    <i class="fas fa-exclamation-circle"></i> LIMITED SPACES AVAILABLE
+                    <i class="fas fa-clock"></i> LIMITED TICKETS AVAILABLE
                 </div>
                 
-                <h2 style="color: var(--white);">Don't Miss Your <span style="color: var(--primary-gold);">Transformation Opportunity</span></h2>
-                <p class="lead">Join hundreds of entrepreneurs who have transformed their businesses and lives through our events. Your journey to success starts here.</p>
+                <h2 style="color: var(--white);">Secure Your <span style="color: var(--primary-gold);">Transformation Today</span></h2>
+                <p class="lead">Don't miss this opportunity to transform your business and life. Tickets are selling fast - secure yours now with our secure VPay payment system.</p>
                 
                 <div class="hero-buttons" style="margin-top: var(--space-2xl);">
-                    <a href="https://wa.me/254733737983?text=I%20want%20to%20register%20for%20a%20DSOG%20event" 
-                       target="_blank" 
-                       class="btn btn-gold btn-large">
-                        <i class="fab fa-whatsapp"></i> Register on WhatsApp
+                    <a href="#upcoming" class="btn btn-gold btn-large">
+                        <i class="fas fa-ticket-alt"></i> View Available Tickets
                     </a>
-                    <a href="contact.html" class="btn btn-secondary btn-large" style="background: rgba(255,255,255,0.1); color: var(--white); border-color: rgba(255,255,255,0.3);">
-                        <i class="fas fa-phone-alt"></i> Call for Inquiry
-                    </a>
+                    <button class="btn btn-secondary btn-large" onclick="openPaymentModal()" style="background: rgba(255,255,255,0.1); color: var(--white); border-color: rgba(255,255,255,0.3);">
+                        <i class="fas fa-credit-card"></i> Try Payment Demo
+                    </button>
                 </div>
                 
                 <div style="margin-top: var(--space-xl); font-size: 0.9rem; opacity: 0.9; color: rgba(255,255,255,0.9);">
-                    <p><i class="fas fa-check-circle"></i> All events include materials, certification, and post-event support</p>
+                    <p><i class="fas fa-lock"></i> Secure payment powered by VPay • <i class="fas fa-shield-alt"></i> 256-bit SSL encryption • <i class="fas fa-headset"></i> 24/7 support</p>
                 </div>
             </div>
         </div>
@@ -1493,21 +1931,21 @@
                     <img src="https://i.postimg.cc/kMZ1jTww/Untitled-design-4-removebg-preview.png" 
                          alt="DSOG" 
                          class="footer-logo">
-                    <p>Empowering entrepreneurs through transformative events that combine practical business training, inspirational guidance, and spiritual purpose discovery.</p>
+                    <p>Empowering entrepreneurs through transformative events with secure ticket purchasing through VPay payment gateway.</p>
                     <div class="events-badge" style="margin-top: var(--space-md); background: rgba(255,255,255,0.1); color: white;">
-                        <i class="fas fa-calendar-star"></i> TRANSFORMATIVE EVENTS
+                        <i class="fas fa-ticket-alt"></i> SECURE TICKETING
                     </div>
                 </div>
                 
                 <div class="footer-section">
-                    <h3>Our Events</h3>
+                    <h3>Event Tickets</h3>
                     <ul>
-                        <li><a href="#bootcamp-details">Startup Bootcamp (3-Month)</a></li>
-                        <li><a href="#inspiration-details">Become What You Believe</a></li>
-                        <li><a href="#spiritual-details">The Making of an Icon</a></li>
-                        <li><a href="#registration">Event Registration</a></li>
-                        <li><a href="bootcamp.html">Bootcamp Details</a></li>
-                        <li><a href="contact.html">Custom Events</a></li>
+                        <li><a href="#upcoming">Available Tickets</a></li>
+                        <li><a href="#bootcamp-details">Bootcamp Tickets</a></li>
+                        <li><a href="#inspiration-details">Inspiration Summit</a></li>
+                        <li><a href="#spiritual-details">Spiritual Workshop</a></li>
+                        <li><a href="#registration">How to Purchase</a></li>
+                        <li><a href="#ticket-faq">Ticket FAQ</a></li>
                     </ul>
                 </div>
                 
@@ -1517,28 +1955,28 @@
                         <li><a href="index.html">Home</a></li>
                         <li><a href="about.html">About DSOG</a></li>
                         <li><a href="enterprise.html">Enterprise Solutions</a></li>
-                        <li><a href="events.html">Events Calendar</a></li>
+                        <li><a href="events.html">Event Tickets</a></li>
                         <li><a href="training.html">Training Programs</a></li>
-                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="contact.html">Contact Support</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-section">
-                    <h3>Event Information</h3>
+                    <h3>Payment Information</h3>
                     <ul>
-                        <li><i class="fas fa-phone"></i> 0733 737 983</li>
-                        <li><i class="fas fa-envelope"></i> events@dsog.org</li>
-                        <li><i class="fab fa-whatsapp"></i> Event Registration</li>
-                        <li><i class="fas fa-map-marker-alt"></i> Nairobi, Kenya</li>
-                        <li><i class="fas fa-calendar-alt"></i> Multiple Dates</li>
-                        <li><i class="fas fa-user-check"></i> Limited Seats</li>
+                        <li><i class="fas fa-credit-card"></i> Secure VPay Gateway</li>
+                        <li><i class="fas fa-lock"></i> 256-bit SSL Encryption</li>
+                        <li><i class="fas fa-shield-alt"></i> PCI DSS Compliant</li>
+                        <li><i class="fas fa-headset"></i> 24/7 Payment Support</li>
+                        <li><i class="fas fa-envelope"></i> receipts@dsog.org</li>
+                        <li><i class="fas fa-phone"></i> Payment Inquiries</li>
                     </ul>
                 </div>
             </div>
             
             <div class="copyright">
-                <p>&copy; <span id="currentYear"></span> DSOG Events - Transformative Business & Purpose Events. All rights reserved.</p>
-                <p style="margin-top: var(--space-sm); font-size: 0.85rem;">Startup Bootcamp • Business Inspiration • Spiritual Purpose • Entrepreneur Training • Life Transformation</p>
+                <p>&copy; <span id="currentYear"></span> DSOG Events - Secure Ticketing System. All payments processed through VPay. All rights reserved.</p>
+                <p style="margin-top: var(--space-sm); font-size: 0.85rem;">Secure Payment • Instant Confirmation • Digital Tickets • Event Management • Customer Support</p>
             </div>
         </div>
     </footer>
@@ -1549,7 +1987,7 @@
     // FIREBASE CONFIGURATION & DATA LOADING
     // ============================================
     
-    // Firebase Configuration - Using the same config from home page
+    // Firebase Configuration
     const firebaseConfig = {
         apiKey: "AIzaSyDb5ZFHbo7lGM8ph0oBxFVTHRF5C5C_DWU",
         authDomain: "dsog-events.firebaseapp.com",
@@ -1563,17 +2001,20 @@
     // Initialize Firebase
     let db;
     let firebaseListeners = [];
+    let selectedEvent = null;
+    let selectedTicket = null;
+    
     try {
         firebase.initializeApp(firebaseConfig);
         db = firebase.database();
-        console.log('Firebase initialized successfully for Events Page - REAL-TIME MODE');
+        console.log('Firebase initialized successfully for Events Ticketing System');
     } catch (error) {
         console.error('Firebase initialization error:', error);
         db = null;
     }
 
     // Cache management
-    const CACHE_KEY = 'dsog_events_cache';
+    const CACHE_KEY = 'dsog_tickets_cache';
     const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
     // Category mapping
@@ -1602,35 +2043,291 @@
     };
 
     // ============================================
+    // PAYMENT MODAL MANAGEMENT
+    // ============================================
+    
+    function openPaymentModal(eventId = null, eventData = null) {
+        const modal = document.getElementById('paymentModal');
+        const body = document.body;
+        
+        if (eventId && eventData) {
+            selectedEvent = { id: eventId, ...eventData };
+            loadTicketOptions(eventData.tickets || {});
+        } else {
+            // Demo mode - show sample tickets
+            selectedEvent = {
+                id: 'demo',
+                title: 'Demo Event',
+                tickets: getDemoTickets()
+            };
+            loadTicketOptions(selectedEvent.tickets);
+        }
+        
+        resetPaymentModal();
+        modal.classList.add('active');
+        body.classList.add('payment-modal-open');
+        body.style.overflow = 'hidden';
+    }
+
+    function closePaymentModal() {
+        const modal = document.getElementById('paymentModal');
+        const body = document.body;
+        
+        modal.classList.remove('active');
+        body.classList.remove('payment-modal-open');
+        body.style.overflow = '';
+        
+        // Reset after animation completes
+        setTimeout(() => {
+            selectedEvent = null;
+            selectedTicket = null;
+            resetPaymentModal();
+        }, 300);
+    }
+
+    function resetPaymentModal() {
+        document.getElementById('ticketSummary').style.display = 'none';
+        document.getElementById('paymentProcessing').style.display = 'none';
+        document.getElementById('paymentSuccess').style.display = 'none';
+        document.getElementById('ticketOptions').style.display = 'block';
+        document.getElementById('vpayButton').disabled = true;
+        selectedTicket = null;
+    }
+
+    function loadTicketOptions(tickets) {
+        const container = document.getElementById('ticketOptions');
+        
+        if (!tickets || Object.keys(tickets).length === 0) {
+            container.innerHTML = `
+                <div class="no-tickets">
+                    <i class="fas fa-ticket-alt error-icon" style="font-size: 3rem; color: var(--text-tertiary); margin-bottom: var(--space-md);"></i>
+                    <h4>No Tickets Available</h4>
+                    <p>Ticket sales for this event have not started yet or are sold out.</p>
+                    <p style="margin-top: var(--space-md); font-size: 0.9rem; color: var(--text-tertiary);">
+                        Contact us for more information.
+                    </p>
+                </div>
+            `;
+            return;
+        }
+
+        // Convert tickets object to array
+        const ticketsArray = Object.entries(tickets).map(([id, ticket]) => ({ id, ...ticket }));
+        
+        // Sort tickets by price
+        ticketsArray.sort((a, b) => (a.price || 0) - (b.price || 0));
+        
+        const ticketsHTML = ticketsArray.map(ticket => {
+            const isSoldOut = (ticket.quantityAvailable && ticket.quantitySold && 
+                              ticket.quantitySold >= ticket.quantityAvailable);
+            const availabilityClass = isSoldOut ? 'sold-out' : 
+                                     (ticket.quantityAvailable && ticket.quantityAvailable < 20) ? 'limited' : 'available';
+            const availabilityText = isSoldOut ? 'Sold Out' : 
+                                   (ticket.quantityAvailable && ticket.quantityAvailable < 20) ? 
+                                   `Only ${ticket.quantityAvailable - (ticket.quantitySold || 0)} left` : 'Available';
+            
+            return `
+                <div class="ticket-option ${isSoldOut ? 'sold-out-option' : ''}" 
+                     onclick="${!isSoldOut ? `selectTicket('${ticket.id}', ${JSON.stringify(ticket).replace(/'/g, "\\'")})` : ''}">
+                    <div class="ticket-option-header">
+                        <div>
+                            <div class="ticket-name">${ticket.name || 'Standard Ticket'}</div>
+                            <div class="ticket-description">${ticket.description || 'Full access to event'}</div>
+                        </div>
+                        <div class="ticket-price">
+                            <span class="ticket-currency">${ticket.currency || 'USD'}</span>
+                            ${ticket.price || '0'}
+                        </div>
+                    </div>
+                    <div class="ticket-details">
+                        ${ticket.includes ? `
+                            <div class="ticket-detail">
+                                <i class="fas fa-check-circle"></i>
+                                <span>${ticket.includes}</span>
+                            </div>
+                        ` : ''}
+                        <div class="ticket-detail">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>${ticket.type || 'Standard'}</span>
+                        </div>
+                    </div>
+                    <div class="ticket-availability ${availabilityClass}">
+                        <i class="fas ${isSoldOut ? 'fa-times-circle' : 'fa-check-circle'}"></i>
+                        ${availabilityText}
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        container.innerHTML = ticketsHTML;
+    }
+
+    function selectTicket(ticketId, ticketData) {
+        selectedTicket = { id: ticketId, ...ticketData };
+        
+        // Update UI to show selected ticket
+        document.querySelectorAll('.ticket-option').forEach(option => {
+            option.classList.remove('selected');
+        });
+        
+        const selectedOption = document.querySelector(`.ticket-option[onclick*="${ticketId}"]`);
+        if (selectedOption) {
+            selectedOption.classList.add('selected');
+        }
+        
+        // Update summary
+        updateTicketSummary();
+        
+        // Show summary and enable payment button
+        document.getElementById('ticketSummary').style.display = 'block';
+        document.getElementById('vpayButton').disabled = false;
+    }
+
+    function updateTicketSummary() {
+        if (!selectedEvent || !selectedTicket) return;
+        
+        const ticketName = selectedTicket.name || 'Standard Ticket';
+        const ticketPrice = selectedTicket.price || 0;
+        const currency = selectedTicket.currency || 'USD';
+        
+        document.getElementById('summaryTicketName').textContent = ticketName;
+        document.getElementById('summaryTicketPrice').textContent = `${currency} ${ticketPrice}`;
+        document.getElementById('summaryTotal').textContent = `${currency} ${ticketPrice}`;
+    }
+
+    function processPayment() {
+        if (!selectedEvent || !selectedTicket) return;
+        
+        // Show processing state
+        document.getElementById('ticketOptions').style.display = 'none';
+        document.getElementById('ticketSummary').style.display = 'none';
+        document.getElementById('paymentProcessing').style.display = 'block';
+        
+        // Generate VPay link
+        const vpayLink = generateVPayLink();
+        
+        // Simulate payment processing (in real implementation, this would redirect to VPay)
+        setTimeout(() => {
+            // Show success state
+            document.getElementById('paymentProcessing').style.display = 'none';
+            document.getElementById('paymentSuccess').style.display = 'block';
+            
+            // In real implementation, you would redirect to VPay:
+            // window.location.href = vpayLink;
+        }, 2000);
+    }
+
+    function generateVPayLink() {
+        if (!selectedEvent || !selectedTicket) return '#';
+        
+        const eventTitle = encodeURIComponent(selectedEvent.title || 'Event');
+        const ticketName = encodeURIComponent(selectedTicket.name || 'Ticket');
+        const amount = selectedTicket.price || 0;
+        const currency = selectedTicket.currency || 'USD';
+        const eventId = selectedEvent.id;
+        const ticketId = selectedTicket.id;
+        
+        // Generate a unique reference
+        const reference = `DSOG-${eventId}-${ticketId}-${Date.now()}`;
+        
+        // Construct VPay URL with parameters
+        return `https://vpay.pages.dev/payment?event=${eventTitle}&ticket=${ticketName}&amount=${amount}&currency=${currency}&ref=${reference}&callback=${encodeURIComponent(window.location.href)}`;
+    }
+
+    function getDemoTickets() {
+        return {
+            standard: {
+                name: "Standard Ticket",
+                price: 100,
+                currency: "USD",
+                description: "Full access to event sessions and materials",
+                includes: "All sessions + Materials",
+                type: "Standard",
+                quantityAvailable: 50,
+                quantitySold: 25
+            },
+            vip: {
+                name: "VIP Ticket",
+                price: 250,
+                currency: "USD",
+                description: "VIP access with front row seating and networking dinner",
+                includes: "VIP + Dinner + Networking",
+                type: "VIP",
+                quantityAvailable: 20,
+                quantitySold: 15
+            },
+            earlybird: {
+                name: "Early Bird Ticket",
+                price: 75,
+                currency: "USD",
+                description: "Limited time discounted ticket",
+                includes: "All sessions + Materials",
+                type: "Early Bird",
+                quantityAvailable: 30,
+                quantitySold: 30
+            }
+        };
+    }
+
+    // ============================================
     // INITIALIZATION
     // ============================================
     
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('🚀 DSOG Events Page Loaded - Firebase Integration Active');
+        console.log('🚀 DSOG Events Ticketing System Loaded');
         
         // Initialize all features
         initializeTheme();
         initializeNavigation();
         initializeAnimations();
         initializeScrollEffects();
+        setupPaymentModalEvents();
         
         // Set current year
         document.getElementById('currentYear').textContent = new Date().getFullYear();
         
-        // Try to load from cache first for faster display
+        // Try to load from cache first
         const cachedData = getCachedData();
         if (cachedData && !isCacheExpired(cachedData.timestamp)) {
             console.log('Loading events from cache for instant display');
             displayCachedData(cachedData);
-        } else {
-            console.log('Cache empty or expired');
         }
         
         // Setup REAL-TIME listeners
         setupRealtimeListeners();
         
-        console.log('Events page initialized with real-time updates');
+        console.log('Ticketing system initialized with real-time updates');
     });
+
+    function setupPaymentModalEvents() {
+        const modal = document.getElementById('paymentModal');
+        const closeBtn = document.getElementById('paymentModalClose');
+        const vpayBtn = document.getElementById('vpayButton');
+        const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+        
+        // Close modal when clicking overlay
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closePaymentModal();
+            }
+        });
+        
+        // Close modal with button
+        closeBtn.addEventListener('click', closePaymentModal);
+        
+        // Process payment
+        vpayBtn.addEventListener('click', processPayment);
+        
+        // Close success message
+        closeSuccessBtn.addEventListener('click', closePaymentModal);
+        
+        // Close with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closePaymentModal();
+            }
+        });
+    }
 
     // ============================================
     // REAL-TIME LISTENERS
@@ -1642,7 +2339,7 @@
             return;
         }
 
-        console.log('Setting up real-time Firebase listeners for events...');
+        console.log('Setting up real-time Firebase listeners for ticketing...');
         
         // Remove any existing listeners
         removeAllListeners();
@@ -1659,29 +2356,17 @@
         });
         firebaseListeners.push({ ref: categoriesRef, listener: categoriesListener });
         
-        // 2. Upcoming Events Listener
+        // 2. Upcoming Events with Tickets Listener
         const eventsRef = db.ref('upcomingEvents');
         const eventsListener = eventsRef.on('value', (snapshot) => {
             const data = snapshot.val();
-            console.log('Upcoming events updated in real-time');
-            renderEvents(data);
+            console.log('Upcoming events with tickets updated in real-time');
+            renderEventsWithTickets(data);
             saveToCachePartial('upcomingEvents', data);
         });
         firebaseListeners.push({ ref: eventsRef, listener: eventsListener });
         
-        // 3. App Settings Listener (for contact info)
-        const settingsRef = db.ref('appSettings');
-        const settingsListener = settingsRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                console.log('App settings updated in real-time');
-                updateContactInfo(data);
-                saveToCachePartial('appSettings', data);
-            }
-        });
-        firebaseListeners.push({ ref: settingsRef, listener: settingsListener });
-        
-        console.log(`Setup ${firebaseListeners.length} real-time listeners for events`);
+        console.log(`Setup ${firebaseListeners.length} real-time listeners for ticketing system`);
     }
 
     function removeAllListeners() {
@@ -1729,11 +2414,7 @@
         }
         
         if (data.upcomingEvents) {
-            renderEvents(data.upcomingEvents);
-        }
-        
-        if (data.appSettings) {
-            updateContactInfo(data.appSettings);
+            renderEventsWithTickets(data.upcomingEvents);
         }
     }
 
@@ -1756,7 +2437,6 @@
             return;
         }
 
-        // Convert to array and filter active categories
         const categoriesArray = Object.values(categories)
             .filter(cat => cat.active !== false)
             .sort((a, b) => (a.order || 999) - (b.order || 999));
@@ -1785,7 +2465,7 @@
                     <p>${category.description}</p>
                     <div style="margin-top: auto; padding-top: var(--space-md);">
                         <a href="#${category.id}-details" class="btn ${config.button}" style="width: 100%;">
-                            <i class="fas fa-info-circle"></i> Learn More
+                            <i class="fas fa-ticket-alt"></i> View Tickets
                         </a>
                     </div>
                 </div>
@@ -1798,12 +2478,9 @@
         setTimeout(() => {
             initializeAnimations();
         }, 100);
-        
-        // Show update indicator
-        showUpdateIndicator('Categories updated');
     }
 
-    function renderEvents(events) {
+    function renderEventsWithTickets(events) {
         const eventsGrid = document.getElementById('eventsGrid');
         if (!eventsGrid) return;
         
@@ -1811,19 +2488,20 @@
             eventsGrid.innerHTML = `
                 <div class="no-events" style="grid-column: 1 / -1;">
                     <i class="fas fa-calendar-times error-icon"></i>
-                    <h3>No Upcoming Events</h3>
-                    <p>Check back soon for upcoming events or contact us for more information.</p>
-                    <a href="contact.html" class="btn btn-primary" style="margin-top: var(--space-lg);">
-                        <i class="fas fa-envelope"></i> Contact Us
-                    </a>
+                    <h3>No Events with Tickets Available</h3>
+                    <p>Check back soon for events with available tickets.</p>
+                    <button class="btn btn-primary" style="margin-top: var(--space-lg);" onclick="openPaymentModal()">
+                        <i class="fas fa-shopping-cart"></i> View Payment Demo
+                    </button>
                 </div>
             `;
             return;
         }
 
-        // Convert to array, filter active events, and sort by date
-        const eventsArray = Object.values(events)
-            .filter(event => event.active !== false)
+        // Convert to array, filter active events with tickets, and sort by date
+        const eventsArray = Object.entries(events)
+            .filter(([id, event]) => event.active !== false && event.tickets)
+            .map(([id, event]) => ({ id, ...event }))
             .sort((a, b) => {
                 try {
                     return new Date(a.date || '9999-12-31') - new Date(b.date || '9999-12-31');
@@ -1835,9 +2513,12 @@
         if (eventsArray.length === 0) {
             eventsGrid.innerHTML = `
                 <div class="no-events" style="grid-column: 1 / -1;">
-                    <i class="fas fa-calendar-times error-icon"></i>
-                    <h3>No Active Upcoming Events</h3>
-                    <p>All upcoming events are currently unavailable. Check back soon!</p>
+                    <i class="fas fa-ticket-alt error-icon"></i>
+                    <h3>No Tickets Available</h3>
+                    <p>All events are currently sold out or ticket sales have not started.</p>
+                    <button class="btn btn-primary" style="margin-top: var(--space-lg);" onclick="openPaymentModal()">
+                        <i class="fas fa-shopping-cart"></i> Try Payment Demo
+                    </button>
                 </div>
             `;
             return;
@@ -1847,6 +2528,13 @@
             const config = categoryConfig[event.category] || categoryConfig.bootcamp;
             const formattedDate = formatDate(event.date);
             const isSpiritual = event.category === 'spiritual';
+            
+            // Get lowest ticket price for display
+            const tickets = event.tickets ? Object.values(event.tickets) : [];
+            const lowestPrice = tickets.length > 0 ? 
+                Math.min(...tickets.map(t => t.price || 0)) : 0;
+            const currency = tickets.length > 0 ? (tickets[0].currency || 'USD') : 'USD';
+            const ticketCount = tickets.length;
 
             return `
                 <div id="${event.category}-details" class="event-card ${config.class} animate-on-scroll">
@@ -1866,6 +2554,19 @@
                             ${isSpiritual ? '<div class="slogan">"Search within me O Lord"</div>' : ''}
                             <p><strong>${event.subtitle || ''}</strong></p>
                             <p>${event.description}</p>
+                            
+                            <div class="ticket-price-display">
+                                <div class="price-label">
+                                    <i class="fas fa-ticket-alt"></i> Tickets from
+                                </div>
+                                <div class="price-amount">
+                                    ${currency} ${lowestPrice}
+                                </div>
+                            </div>
+                            <div class="price-note">
+                                <i class="fas fa-info-circle"></i> ${ticketCount} ticket option${ticketCount !== 1 ? 's' : ''} available
+                            </div>
+                            
                             <div class="event-meta">
                                 <div class="meta-item">
                                     <i class="fas fa-users"></i>
@@ -1876,17 +2577,15 @@
                                     <span>${event.venue || 'Venue TBD'}</span>
                                 </div>
                                 <div class="meta-item">
-                                    <i class="fas fa-calendar-alt"></i>
-                                    <span>${event.frequency ? (event.frequency.charAt(0).toUpperCase() + event.frequency.slice(1)) : 'One-time Event'}</span>
+                                    <i class="fas fa-ticket-alt"></i>
+                                    <span>${ticketCount} Ticket Types</span>
                                 </div>
                             </div>
                         </div>
-                        <div class="event-action" style="margin-top: auto;">
-                            <a href="${event.registrationUrl || `https://wa.me/254733737983?text=I'm%20interested%20in%20${encodeURIComponent(event.title)}`}" 
-                               target="_blank" 
-                               class="btn ${config.button} btn-block">
-                                <i class="${config.icon}"></i> Register Now
-                            </a>
+                        <div class="buy-ticket-btn">
+                            <button class="btn ${config.button} btn-block" onclick="openPaymentModal('${event.id}', ${JSON.stringify(event).replace(/'/g, "\\'")})">
+                                <i class="fas fa-shopping-cart"></i> Buy Tickets Now
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -1899,45 +2598,6 @@
         setTimeout(() => {
             initializeAnimations();
         }, 100);
-        
-        // Show update indicator
-        showUpdateIndicator('Events updated');
-    }
-
-    function updateContactInfo(settings) {
-        try {
-            // Update phone number in footer
-            if (settings.phoneNumber) {
-                const phoneElements = document.querySelectorAll('.footer-section ul li');
-                phoneElements.forEach(el => {
-                    if (el.textContent.includes('0733 737 983')) {
-                        el.innerHTML = `<i class="fas fa-phone"></i> ${settings.phoneNumber}`;
-                    }
-                });
-            }
-            
-            // Update email in footer
-            if (settings.eventsEmail) {
-                const emailElements = document.querySelectorAll('.footer-section ul li');
-                emailElements.forEach(el => {
-                    if (el.textContent.includes('events@dsog.org')) {
-                        el.innerHTML = `<i class="fas fa-envelope"></i> ${settings.eventsEmail}`;
-                    }
-                });
-            }
-            
-            // Update WhatsApp link
-            if (settings.whatsappNumber) {
-                const whatsappLinks = document.querySelectorAll('a[href*="whatsapp"]');
-                whatsappLinks.forEach(link => {
-                    const currentHref = link.getAttribute('href');
-                    const newHref = currentHref.replace(/wa\.me\/\d+/, `wa.me/${settings.whatsappNumber}`);
-                    link.setAttribute('href', newHref);
-                });
-            }
-        } catch (error) {
-            console.error('Error updating contact info:', error);
-        }
     }
 
     // ============================================
@@ -1969,64 +2629,8 @@
         return defaultImages[category] || defaultImages.bootcamp;
     }
 
-    function showUpdateIndicator(message) {
-        // Create a subtle update indicator
-        const indicator = document.createElement('div');
-        indicator.className = 'update-indicator';
-        indicator.style.cssText = `
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-            padding: 8px 12px;
-            background: var(--primary-red);
-            color: white;
-            border-radius: var(--radius-md);
-            font-size: 12px;
-            z-index: 9999;
-            box-shadow: var(--shadow-md);
-            animation: slideUp 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        `;
-        
-        indicator.innerHTML = `
-            <i class="fas fa-sync-alt fa-spin"></i>
-            ${message}
-        `;
-        
-        document.body.appendChild(indicator);
-        
-        // Remove after 2 seconds
-        setTimeout(() => {
-            indicator.style.animation = 'slideDown 0.3s ease';
-            setTimeout(() => {
-                if (indicator.parentNode) {
-                    indicator.parentNode.removeChild(indicator);
-                }
-            }, 300);
-        }, 2000);
-        
-        // Add CSS for animations if not already added
-        if (!document.querySelector('#update-indicator-styles')) {
-            const style = document.createElement('style');
-            style.id = 'update-indicator-styles';
-            style.textContent = `
-                @keyframes slideUp {
-                    from { transform: translateY(20px); opacity: 0; }
-                    to { transform: translateY(0); opacity: 1; }
-                }
-                @keyframes slideDown {
-                    from { transform: translateY(0); opacity: 1; }
-                    to { transform: translateY(20px); opacity: 0; }
-                }
-            `;
-            document.head.appendChild(style);
-        }
-    }
-
     // ============================================
-    // CORE FUNCTIONS (Same as home page)
+    // CORE FUNCTIONS
     // ============================================
     
     function initializeTheme() {
@@ -2199,88 +2803,14 @@
     }
 
     // ============================================
-    // REAL-TIME CONNECTION STATUS
+    // GLOBAL FUNCTIONS
     // ============================================
     
-    function setupConnectionStatus() {
-        if (!db) return;
-        
-        const connectionRef = db.ref('.info/connected');
-        connectionRef.on('value', (snap) => {
-            if (snap.val() === true) {
-                console.log('Connected to Firebase - Real-time updates active');
-                showConnectionStatus('connected');
-            } else {
-                console.log('Disconnected from Firebase');
-                showConnectionStatus('disconnected');
-            }
-        });
-    }
-
-    function showConnectionStatus(status) {
-        let statusEl = document.getElementById('firebase-status');
-        if (!statusEl) {
-            statusEl = document.createElement('div');
-            statusEl.id = 'firebase-status';
-            statusEl.style.cssText = `
-                position: fixed;
-                bottom: 20px;
-                left: 20px;
-                padding: 6px 10px;
-                border-radius: var(--radius-md);
-                font-size: 11px;
-                z-index: 9999;
-                background: ${status === 'connected' ? '#28a745' : '#dc3545'};
-                color: white;
-                box-shadow: var(--shadow-sm);
-            `;
-            document.body.appendChild(statusEl);
-        }
-        
-        statusEl.innerHTML = `
-            <i class="fas fa-${status === 'connected' ? 'check-circle' : 'exclamation-circle'}"></i>
-            Firebase: ${status === 'connected' ? 'Live' : 'Offline'}
-        `;
-        statusEl.style.background = status === 'connected' ? '#28a745' : '#dc3545';
-    }
-
-    // Initialize connection status
-    if (db) {
-        setupConnectionStatus();
-    }
-
-    // Manual refresh function for testing
-    window.refreshEventsData = function() {
-        console.log('Manual refresh triggered for events');
-        removeAllListeners();
-        setupRealtimeListeners();
-        showUpdateIndicator('Reconnecting to Firebase...');
-    };
-
-    // Add refresh button for testing (can remove in production)
-    const refreshBtn = document.createElement('button');
-    refreshBtn.textContent = '🔄 Reconnect Events';
-    refreshBtn.style.cssText = `
-        position: fixed;
-        bottom: 120px;
-        right: 20px;
-        padding: 8px 12px;
-        background: var(--primary-red);
-        color: white;
-        border: none;
-        border-radius: var(--radius-md);
-        cursor: pointer;
-        z-index: 1000;
-        font-size: 11px;
-        box-shadow: var(--shadow-md);
-    `;
-    refreshBtn.onclick = function() {
-        window.refreshEventsData();
-    };
-    document.body.appendChild(refreshBtn);
+    // Make openPaymentModal globally available for onclick handlers
+    window.openPaymentModal = openPaymentModal;
+    window.selectTicket = selectTicket;
 
     // Touch optimizations
-    let lastTouchEnd = 0;
     document.addEventListener('touchend', (event) => {
         const now = Date.now();
         if (now - lastTouchEnd <= 300) {
@@ -2288,6 +2818,8 @@
         }
         lastTouchEnd = now;
     }, false);
+    
+    let lastTouchEnd = 0;
 </script>
 </body>
 </html>
