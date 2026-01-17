@@ -2290,6 +2290,7 @@
         const eventsRef = db.ref('upcomingEvents');
         const eventsListener = eventsRef.on('value', (snapshot) => {
             const data = snapshot.val();
+            console.log('Events data from Firebase:', data);
             displayEventsWithTickets(data);
             saveToCachePartial('upcomingEvents', data);
             debouncedUpdate('Events');
@@ -2349,7 +2350,7 @@
     }
 
     // ============================================
-    // UI UPDATES - MATCHING HOME PAGE PATTERN
+    // UI UPDATES - USING ACTUAL FIREBASE DATA
     // ============================================
     function displayEventCategories(categories) {
         const categoriesContainer = document.getElementById('eventCategories');
@@ -2393,9 +2394,12 @@
             .filter(event => event.active !== false)
             .sort((a, b) => new Date(a.date || '9999-12-31') - new Date(b.date || '9999-12-31')) : [];
         
+        console.log('Processed events array:', eventsArray);
+        
         if (eventsArray.length > 0) {
             eventsGrid.innerHTML = '';
             eventsArray.forEach((event, index) => {
+                console.log(`Event ${index}:`, event.title, 'Tickets:', event.tickets);
                 const eventCard = createEventCard(event, index);
                 eventsGrid.appendChild(eventCard);
             });
@@ -2420,7 +2424,7 @@
     }
 
     // ============================================
-    // CARD CREATION FUNCTIONS - MATCHING HOME PAGE
+    // CARD CREATION FUNCTIONS - USING REAL DATA
     // ============================================
     function createCategoryCard(category, index) {
         const card = document.createElement('div');
@@ -2457,7 +2461,7 @@
 
     function createEventCard(event, index) {
         const card = document.createElement('div');
-        // Generate a unique ID if not provided
+        // Use the actual event ID from Firebase
         const eventId = event.id || `event-${Date.now()}-${index}`;
         card.id = `${event.category}-details`;
         card.className = `event-card animate-on-scroll ${event.category}-event`;
@@ -2494,12 +2498,25 @@
         if (event.category === 'inspiration') btnClass = 'btn-gold';
         if (event.category === 'spiritual') btnClass = 'btn-spiritual';
         
-        // Get lowest ticket price for display
+        // Get actual ticket pricing from Firebase data
         const tickets = event.tickets ? Object.values(event.tickets) : [];
-        const lowestPrice = tickets.length > 0 ? 
-            Math.min(...tickets.map(t => t.price || 0)) : 0;
-        const currency = tickets.length > 0 ? (tickets[0].currency || 'USD') : 'USD';
-        const ticketCount = tickets.length;
+        console.log(`Event "${event.title}" tickets:`, tickets);
+        
+        // Calculate lowest price from actual tickets
+        let lowestPrice = 0;
+        let currency = 'USD';
+        let ticketCount = 0;
+        
+        if (tickets.length > 0) {
+            // Convert prices to numbers and find the lowest
+            const prices = tickets.map(t => parseFloat(t.price) || 0).filter(price => price > 0);
+            lowestPrice = prices.length > 0 ? Math.min(...prices) : 0;
+            currency = tickets[0].currency || 'USD';
+            ticketCount = tickets.length;
+        }
+        
+        // Create a safe JSON string for the onclick handler
+        const safeEventData = JSON.stringify(event).replace(/"/g, '&quot;').replace(/'/g, "\\'");
 
         card.innerHTML = `
             <div class="event-image-container">
@@ -2540,7 +2557,7 @@
                     </div>
                 </div>
                 <div class="buy-ticket-btn">
-                    <button class="btn ${btnClass} btn-block" onclick="handleBuyTicketClick(event, '${eventId}')">
+                    <button class="btn ${btnClass} btn-block" onclick="handleBuyTicketClick(event, '${eventId}', '${safeEventData}')">
                         <i class="fas fa-shopping-cart"></i> Buy Tickets Now
                     </button>
                 </div>
@@ -2560,7 +2577,7 @@
     }
 
     // ============================================
-    // PAYMENT MODAL MANAGEMENT - UPDATED
+    // PAYMENT MODAL MANAGEMENT - USING REAL DATA
     // ============================================
     function openPaymentModal(eventId = null, eventData = null) {
         console.log('Opening payment modal with event:', eventId, eventData);
@@ -2569,10 +2586,22 @@
         const body = document.body;
         
         if (eventId && eventData) {
-            selectedEvent = { id: eventId, ...eventData };
-            loadTicketOptions(eventData.tickets || {});
+            selectedEvent = { 
+                id: eventId,
+                ...eventData 
+            };
+            
+            // Use actual tickets from Firebase
+            if (eventData.tickets && Object.keys(eventData.tickets).length > 0) {
+                console.log('Using actual tickets from database:', eventData.tickets);
+                loadTicketOptions(eventData.tickets);
+            } else {
+                console.warn('No tickets found in event data');
+                alert('No tickets available for this event. Please check back later.');
+                return;
+            }
         } else {
-            // Demo mode - show sample tickets
+            // Demo mode - only for testing
             selectedEvent = {
                 id: 'demo',
                 title: 'Demo Event',
@@ -2631,7 +2660,12 @@
         }
 
         // Convert tickets object to array
-        const ticketsArray = Object.entries(tickets).map(([id, ticket]) => ({ id, ...ticket }));
+        const ticketsArray = Object.entries(tickets).map(([id, ticket]) => ({ 
+            id, 
+            ...ticket,
+            // Ensure price is a number
+            price: parseFloat(ticket.price) || 0
+        }));
         
         // Sort tickets by price
         ticketsArray.sort((a, b) => (a.price || 0) - (b.price || 0));
@@ -2645,10 +2679,13 @@
                                    (ticket.quantityAvailable && ticket.quantityAvailable < 20) ? 
                                    `Only ${ticket.quantityAvailable - (ticket.quantitySold || 0)} left` : 'Available';
             
+            // Create a safe JSON string for the ticket data
+            const safeTicketData = JSON.stringify(ticket).replace(/"/g, '&quot;');
+            
             return `
                 <div class="ticket-option ${isSoldOut ? 'sold-out-option' : ''}" 
                      data-ticket-id="${ticket.id}"
-                     data-ticket-data='${JSON.stringify(ticket)}'>
+                     data-ticket-data='${safeTicketData}'>
                     <div class="ticket-option-header">
                         <div>
                             <div class="ticket-name">${ticket.name || 'Standard Ticket'}</div>
@@ -2687,8 +2724,13 @@
             ticketOptions.forEach(option => {
                 option.addEventListener('click', function() {
                     const ticketId = this.getAttribute('data-ticket-id');
-                    const ticketData = JSON.parse(this.getAttribute('data-ticket-data'));
-                    selectTicket(ticketId, ticketData);
+                    const ticketDataStr = this.getAttribute('data-ticket-data');
+                    try {
+                        const ticketData = JSON.parse(ticketDataStr.replace(/&quot;/g, '"'));
+                        selectTicket(ticketId, ticketData);
+                    } catch (error) {
+                        console.error('Error parsing ticket data:', error);
+                    }
                 });
             });
         }, 100);
@@ -2731,7 +2773,7 @@
     }
 
     // ============================================
-    // VPAY PAYMENT FUNCTIONS - SIMPLIFIED
+    // VPAY PAYMENT FUNCTIONS
     // ============================================
     
     function processPayment() {
@@ -2747,7 +2789,7 @@
         document.getElementById('ticketSummary').style.display = 'none';
         document.getElementById('paymentProcessing').style.display = 'block';
         
-        // Get payment details
+        // Get payment details from actual Firebase data
         const amount = selectedTicket.price || 0;
         const currency = selectedTicket.currency || 'USD';
         const eventTitle = selectedEvent.title || 'DSOG Event';
@@ -2773,7 +2815,7 @@
         // Create a clean description for VPay
         const description = `DSOG Event Ticket: ${ticketName}`;
         
-        // Create URL parameters (even if VPay doesn't use them, they might be visible)
+        // Create URL parameters
         const params = new URLSearchParams({
             amount: amount,
             description: description,
@@ -2802,7 +2844,7 @@
                         <div style="text-align: left; font-size: 0.9rem;">
                             <p><strong>Event:</strong> ${eventTitle}</p>
                             <p><strong>Ticket:</strong> ${ticketName}</p>
-                            <p><strong>Amount:</strong> $${amount}</p>
+                            <p><strong>Amount:</strong> ${selectedTicket.currency || 'USD'} ${amount}</p>
                         </div>
                     </div>
                     
@@ -2811,7 +2853,7 @@
                         <ol style="text-align: left; margin-top: var(--space-sm); padding-left: var(--space-lg);">
                             <li>Select "Ticket Purchase" or "Other" category</li>
                             <li>Select "DSOG Stores" as business</li>
-                            <li>Enter amount: <strong>$${amount}</strong></li>
+                            <li>Enter amount: <strong>${selectedTicket.currency || 'USD'} ${amount}</strong></li>
                             <li>Complete payment with your preferred method</li>
                             <li>Save your transaction reference number</li>
                         </ol>
@@ -2830,29 +2872,21 @@
         }, 1000);
     }
 
-    function handleBuyTicketClick(e, eventId) {
+    function handleBuyTicketClick(e, eventId, eventDataStr) {
         e.preventDefault();
         e.stopPropagation();
         
         console.log('Buy ticket clicked for event:', eventId);
         
-        // Find the event data
-        const eventCard = e.target.closest('.event-card');
-        if (eventCard) {
-            const eventTitle = eventCard.querySelector('h3')?.textContent || 'DSOG Event';
-            const eventCategory = eventCard.querySelector('.event-category')?.textContent || '';
-            const eventDescription = eventCard.querySelector('.event-details p')?.textContent || '';
-            
-            const eventData = {
-                id: eventId,
-                title: eventTitle,
-                category: eventCategory.toLowerCase().replace(/\s+/g, ''),
-                description: eventDescription,
-                tickets: getDemoTickets() // For now, use demo tickets
-            };
+        try {
+            // Parse the event data from the string
+            const eventData = JSON.parse(eventDataStr.replace(/&quot;/g, '"'));
+            console.log('Parsed event data:', eventData);
             
             openPaymentModal(eventId, eventData);
-        } else {
+        } catch (error) {
+            console.error('Error parsing event data:', error);
+            // Fallback to demo data if parsing fails
             openPaymentModal();
         }
     }
@@ -2918,7 +2952,7 @@
         // Close modal with button
         closeBtn.addEventListener('click', closePaymentModal);
         
-        // Process payment with VPay button - FIXED
+        // Process payment with VPay button
         vpayBtn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -3130,6 +3164,7 @@
     window.openPaymentModal = openPaymentModal;
     window.selectTicket = selectTicket;
     window.closePaymentModal = closePaymentModal;
+    window.handleBuyTicketClick = handleBuyTicketClick;
 
     // Touch device optimizations
     let lastTouchEnd = 0;
