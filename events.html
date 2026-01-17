@@ -32,15 +32,15 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
     
     <!-- Events Page Styles -->
     <style>
-        /* Import CSS Variables from Home Page */
+        /* ===== CSS CUSTOM PROPERTIES ===== */
         :root {
             /* Professional Color Palette */
             --primary-red: #C21807;
@@ -77,6 +77,7 @@
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
             --shadow-xl: 0 20px 25px -5px rgba(194, 24, 7, 0.05), 0 10px 10px -5px rgba(194, 24, 7, 0.02);
             --shadow-2xl: 0 25px 50px -12px rgba(194, 24, 7, 0.15);
+            --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.04);
             
             /* Advanced Gradients */
             --gradient-primary: linear-gradient(135deg, #C21807 0%, #E53935 100%);
@@ -90,12 +91,15 @@
             /* Animation Properties */
             --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            --transition-fast: all 0.15s ease-out;
+            --transition-slow: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             
             /* Border Radius System */
             --radius-sm: 6px;
             --radius-md: 10px;
             --radius-lg: 14px;
             --radius-xl: 18px;
+            --radius-2xl: 22px;
             --radius-full: 9999px;
             
             /* Spacing System */
@@ -109,6 +113,7 @@
             --space-2xl: 3rem;
             --space-3xl: 4rem;
             --space-4xl: 6rem;
+            --space-5xl: 8rem;
             
             /* Professional Typography */
             --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
@@ -124,13 +129,16 @@
             /* Glass Morphism */
             --glass-bg: rgba(255, 255, 255, 0.92);
             --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
             
             /* Z-index Layers */
             --z-negative: -1;
             --z-normal: 1;
             --z-dropdown: 100;
+            --z-sticky: 200;
             --z-fixed: 1000;
             --z-modal: 10000;
+            --z-tooltip: 100000;
         }
 
         /* Dark Theme Variables */
@@ -472,7 +480,7 @@
             100% { transform: scale(1); }
         }
 
-        /* ===== BASE STYLES ===== */
+        /* ===== CSS RESET & BASE STYLES ===== */
         *, *::before, *::after {
             margin: 0;
             padding: 0;
@@ -500,13 +508,41 @@
             min-height: 100vh;
             font-size: 0.9375rem;
             font-weight: 400;
+            letter-spacing: 0.01em;
         }
 
         body.payment-modal-open {
             overflow: hidden;
         }
 
-        /* ===== HEADER & NAVIGATION ===== */
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-full);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gradient-primary);
+            border-radius: var(--radius-full);
+            border: 2px solid var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-red);
+        }
+
+        /* Selection Color */
+        ::selection {
+            background: rgba(194, 24, 7, 0.2);
+            color: var(--text-primary);
+        }
+
+        /* ===== HEADER ===== */
         .header {
             position: fixed;
             top: 0;
@@ -526,6 +562,11 @@
             border-bottom: 1px solid rgba(64, 64, 64, 0.8);
         }
 
+        .header.scrolled {
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Navbar Container */
         .navbar {
             display: flex;
             align-items: center;
@@ -538,6 +579,7 @@
             gap: var(--space-xl);
         }
 
+        /* Logo */
         .logo {
             display: flex;
             align-items: center;
@@ -562,7 +604,7 @@
 
         .logo-text {
             font-family: var(--font-heading);
-            font-size: 1.375rem;
+            font-size: 1.5rem;
             font-weight: 800;
             color: var(--text-primary);
             letter-spacing: -0.02em;
@@ -575,6 +617,7 @@
             font-weight: 700;
         }
 
+        /* Main Navigation */
         .nav-links {
             display: flex;
             align-items: center;
@@ -595,7 +638,7 @@
             height: 100%;
             display: flex;
             align-items: center;
-            transition: var(--transition-smooth);
+            transition: var(--transition-fast);
             letter-spacing: 0.01em;
             white-space: nowrap;
         }
@@ -629,6 +672,7 @@
             width: 100%;
         }
 
+        /* Contact Button */
         .nav-links .btn-primary {
             font-size: 0.875rem;
             padding: var(--space-sm) var(--space-lg);
@@ -637,6 +681,7 @@
             flex-shrink: 0;
         }
 
+        /* Mobile Menu Button */
         .mobile-menu-btn {
             display: none;
             align-items: center;
@@ -653,6 +698,249 @@
             width: 44px;
             height: 44px;
             flex-shrink: 0;
+        }
+
+        .mobile-menu-btn:hover {
+            background: var(--bg-tertiary);
+        }
+
+        /* ===== TYPOGRAPHY ===== */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            margin-bottom: var(--space-md);
+            color: var(--text-primary);
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+        }
+
+        h2 {
+            font-size: clamp(1.875rem, 4vw, 2.75rem);
+            font-weight: 700;
+        }
+
+        h3 {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 600;
+        }
+
+        .text-gradient {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        .text-gradient-gold {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        .text-gradient-spiritual {
+            background: var(--gradient-spiritual);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        .lead {
+            font-size: clamp(1.125rem, 2vw, 1.25rem);
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-weight: 400;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        p {
+            margin-bottom: var(--space-md);
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-weight: 400;
+        }
+
+        .slogan {
+            font-family: var(--font-spiritual);
+            font-style: italic;
+            color: var(--text-tertiary);
+            font-size: 1.1rem;
+            margin-top: calc(var(--space-sm) * -1);
+            margin-bottom: var(--space-md);
+            position: relative;
+            padding-left: var(--space-lg);
+        }
+
+        .slogan::before {
+            content: '"';
+            position: absolute;
+            left: 0;
+            top: -5px;
+            font-size: 2rem;
+            color: var(--primary-red);
+            font-family: serif;
+        }
+
+        /* ===== LAYOUT & CONTAINERS ===== */
+        .container {
+            width: 100%;
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 0 var(--space-xl);
+        }
+
+        section {
+            padding: var(--space-4xl) 0;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--space-3xl);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .section-header h2 {
+            position: relative;
+            display: inline-block;
+            margin-bottom: var(--space-lg);
+        }
+
+        .section-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            color: var(--text-tertiary);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: var(--space-sm);
+            display: block;
+            font-weight: 600;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) var(--space-xl);
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-decoration: none;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+            letter-spacing: 0.02em;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: var(--white) !important;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-red);
+            border: 1px solid var(--primary-red);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-red);
+            color: var(--white) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(194, 24, 7, 0.2);
+        }
+
+        .btn-gold {
+            background: var(--gradient-gold);
+            color: var(--primary-dark) !important;
+            border: none;
+            font-weight: 700;
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-spiritual {
+            background: var(--gradient-spiritual);
+            color: var(--white) !important;
+            border: none;
+        }
+
+        .btn-spiritual:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(107, 70, 193, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary-red);
+            color: var(--primary-red);
+            transform: translateY(-2px);
+        }
+
+        .btn-small {
+            padding: var(--space-sm) var(--space-lg);
+            font-size: 0.85rem;
+        }
+
+        .btn-large {
+            padding: var(--space-lg) var(--space-2xl);
+            font-size: 1rem;
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        .buy-ticket-btn {
+            margin-top: auto;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
         }
 
         /* ===== EVENTS HERO ===== */
@@ -674,8 +962,8 @@
             right: 0;
             bottom: 0;
             background: 
-                radial-gradient(circle at 20% 80%, rgba(194, 24, 7, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.03) 0%, transparent 50%);
+                radial-gradient(circle at 20% 80%, rgba(194, 24, 7, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.02) 0%, transparent 50%);
             z-index: var(--z-negative);
         }
 
@@ -702,6 +990,14 @@
             margin-bottom: var(--space-xl);
             box-shadow: var(--shadow-lg);
             text-transform: uppercase;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: var(--space-md);
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: var(--space-2xl);
         }
 
         /* ===== TRANSFORMATIVE EVENTS ===== */
@@ -759,6 +1055,7 @@
         .category-card:hover {
             transform: translateY(-8px);
             box-shadow: var(--shadow-xl);
+            border-color: var(--primary-red);
         }
 
         .category-icon {
@@ -837,27 +1134,28 @@
             flex-direction: column;
         }
 
-        .event-card.bootcamp {
-            border-color: rgba(194, 24, 7, 0.3);
-        }
-
-        .event-card.inspiration {
-            border-color: rgba(212, 175, 55, 0.3);
-        }
-
-        .event-card.spiritual {
-            border-color: rgba(107, 70, 193, 0.3);
-        }
-
         .event-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
             box-shadow: var(--shadow-xl);
+            border-color: var(--primary-red);
+        }
+
+        .event-image-container {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
         }
 
         .event-image {
             width: 100%;
-            height: 220px;
+            height: 100%;
             object-fit: cover;
+            transition: var(--transition-smooth);
+        }
+
+        .event-card:hover .event-image {
+            transform: scale(1.05);
         }
 
         .event-date-badge {
@@ -876,16 +1174,16 @@
             color: var(--white);
         }
 
-        .bootcamp .event-date-badge {
+        .event-card.bootcamp-event .event-date-badge {
             background: var(--gradient-primary);
         }
 
-        .inspiration .event-date-badge {
+        .event-card.inspiration-event .event-date-badge {
             background: var(--gradient-gold);
             color: var(--primary-dark);
         }
 
-        .spiritual .event-date-badge {
+        .event-card.spiritual-event .event-date-badge {
             background: var(--gradient-spiritual);
         }
 
@@ -894,6 +1192,32 @@
             flex-grow: 1;
             display: flex;
             flex-direction: column;
+        }
+
+        .event-category {
+            display: inline-block;
+            padding: var(--space-2xs) var(--space-md);
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: var(--space-md);
+            letter-spacing: 0.05em;
+            align-self: flex-start;
+        }
+
+        .event-category.bootcamp {
+            background: rgba(194, 24, 7, 0.1);
+            color: var(--primary-red);
+        }
+
+        .event-category.inspiration {
+            background: rgba(212, 175, 55, 0.1);
+            color: #B8860B;
+        }
+
+        .event-category.spiritual {
+            background: rgba(107, 70, 193, 0.1);
+            color: var(--accent-purple);
         }
 
         .event-details {
@@ -905,83 +1229,16 @@
             line-height: 1.3;
         }
 
-        .spiritual .event-details h3 {
+        .spiritual-event .event-details h3 {
             font-family: var(--font-spiritual);
             font-weight: 700;
         }
 
-        .slogan {
-            font-family: var(--font-spiritual);
-            font-style: italic;
-            color: var(--text-tertiary);
-            font-size: 1.1rem;
-            margin-top: calc(var(--space-sm) * -1);
-            margin-bottom: var(--space-md);
-            position: relative;
-            padding-left: var(--space-lg);
-        }
-
-        .slogan::before {
-            content: '"';
-            position: absolute;
-            left: 0;
-            top: -5px;
-            font-size: 2rem;
-            color: var(--accent-purple);
-            font-family: serif;
-        }
-
-        .event-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--space-md);
+        .event-details p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
             margin-bottom: var(--space-lg);
-            padding-top: var(--space-md);
-            border-top: 1px solid var(--border-color);
-        }
-
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: var(--space-xs);
-            color: var(--text-tertiary);
-            font-size: 0.85rem;
-        }
-
-        .meta-item i {
-            width: 16px;
-        }
-
-        .bootcamp .meta-item i {
-            color: var(--primary-red);
-        }
-
-        .inspiration .meta-item i {
-            color: #B8860B;
-        }
-
-        .spiritual .meta-item i {
-            color: var(--accent-purple);
-        }
-
-        .duration-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-xs);
-            padding: var(--space-2xs) var(--space-md);
-            border-radius: var(--radius-full);
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-bottom: var(--space-sm);
-        }
-
-        .bootcamp .duration-badge {
-            background: rgba(194, 24, 7, 0.08);
-            color: var(--primary-red);
-        }
-
-        .duration-badge i {
-            font-size: 0.8rem;
         }
 
         /* Ticket Pricing */
@@ -1011,6 +1268,56 @@
             font-size: 0.8rem;
             color: var(--text-tertiary);
             margin-top: var(--space-xs);
+        }
+
+        .event-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+            padding-top: var(--space-md);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            color: var(--text-tertiary);
+            font-size: 0.85rem;
+        }
+
+        .meta-item i {
+            width: 16px;
+        }
+
+        .event-card .meta-item i {
+            color: var(--primary-red);
+        }
+
+        .spiritual-event .meta-item i {
+            color: var(--accent-purple);
+        }
+
+        .inspiration-event .meta-item i {
+            color: #B8860B;
+        }
+
+        .duration-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            background: rgba(194, 24, 7, 0.08);
+            color: var(--primary-red);
+            padding: var(--space-2xs) var(--space-md);
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: var(--space-sm);
+        }
+
+        .duration-badge i {
+            font-size: 0.8rem;
         }
 
         /* ===== REGISTRATION INFO ===== */
@@ -1251,186 +1558,17 @@
             margin-right: auto;
         }
 
-        /* ===== TYPOGRAPHY ===== */
-        h1, h2, h3, h4 {
-            font-family: var(--font-heading);
-            font-weight: 700;
-            line-height: 1.2;
-            letter-spacing: -0.02em;
-            margin-bottom: var(--space-md);
+        /* ===== ANIMATIONS ===== */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s var(--transition-smooth), 
+                        transform 0.6s var(--transition-smooth);
         }
 
-        h1 {
-            font-size: clamp(2.5rem, 5vw, 3.5rem);
-            font-weight: 800;
-        }
-
-        h2 {
-            font-size: clamp(1.875rem, 4vw, 2.75rem);
-        }
-
-        h3 {
-            font-size: clamp(1.5rem, 3vw, 2rem);
-        }
-
-        .text-gradient {
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            display: inline-block;
-        }
-
-        .text-gradient-gold {
-            background: var(--gradient-gold);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            display: inline-block;
-        }
-
-        .text-gradient-spiritual {
-            background: var(--gradient-spiritual);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            display: inline-block;
-        }
-
-        .lead {
-            font-size: clamp(1.125rem, 2vw, 1.25rem);
-            color: var(--text-secondary);
-            line-height: 1.6;
-            font-weight: 400;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* ===== BUTTONS ===== */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--space-sm);
-            padding: var(--space-md) var(--space-xl);
-            border-radius: var(--radius-md);
-            font-weight: 600;
-            font-size: 0.875rem;
-            text-decoration: none;
-            border: 1px solid transparent;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            white-space: nowrap;
-        }
-
-        .btn-primary {
-            background: var(--gradient-primary);
-            color: var(--white) !important;
-            border: none;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-xl);
-        }
-
-        .btn-gold {
-            background: var(--gradient-gold);
-            color: var(--primary-dark) !important;
-            border: none;
-            font-weight: 700;
-        }
-
-        .btn-gold:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
-        }
-
-        .btn-spiritual {
-            background: var(--gradient-spiritual);
-            color: var(--white) !important;
-            border: none;
-        }
-
-        .btn-spiritual:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(107, 70, 193, 0.3);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--primary-red);
-            border: 1px solid var(--primary-red);
-        }
-
-        .btn-secondary:hover {
-            background: var(--primary-red);
-            color: var(--white) !important;
-            transform: translateY(-2px);
-        }
-
-        .btn-large {
-            padding: var(--space-lg) var(--space-2xl);
-            font-size: 1rem;
-        }
-
-        .btn-block {
-            width: 100%;
-            display: flex;
-        }
-
-        .buy-ticket-btn {
-            margin-top: auto;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--space-sm);
-        }
-
-        /* ===== CONTAINER ===== */
-        .container {
-            width: 100%;
-            max-width: var(--container-width);
-            margin: 0 auto;
-            padding: 0 var(--space-xl);
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: var(--space-3xl);
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .section-header h2 {
-            position: relative;
-            display: inline-block;
-            margin-bottom: var(--space-lg);
-        }
-
-        .section-header h2::after {
-            content: '';
-            position: absolute;
-            bottom: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 3px;
-            background: var(--gradient-primary);
-            border-radius: 2px;
-        }
-
-        .section-subtitle {
-            color: var(--text-tertiary);
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: var(--space-sm);
-            display: block;
-            font-weight: 600;
+        .animate-on-scroll.animated {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         /* ===== LOADING STATES ===== */
@@ -1439,57 +1577,21 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: var(--space-4xl) 0;
-            text-align: center;
+            padding: var(--space-2xl);
+            color: var(--text-secondary);
         }
 
         .loading-spinner {
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             border: 3px solid var(--border-color);
             border-top-color: var(--primary-red);
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin-bottom: var(--space-lg);
+            margin-bottom: var(--space-md);
         }
 
-        .loading-text {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-        }
-
-        .loading-small {
-            width: 30px;
-            height: 30px;
-            border-width: 2px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .error-state {
-            text-align: center;
-            padding: var(--space-4xl) 0;
-            background: var(--bg-secondary);
-            border-radius: var(--radius-lg);
-            margin: var(--space-xl) 0;
-        }
-
-        .error-icon {
-            font-size: 3rem;
-            color: var(--primary-red);
-            margin-bottom: var(--space-lg);
-        }
-
-        .no-events {
-            text-align: center;
-            padding: var(--space-4xl) 0;
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-        }
-
-        /* ===== RESPONSIVE DESIGN ===== */
+        /* ===== MOBILE NAVIGATION ===== */
         @media (max-width: 1024px) {
             .nav-links {
                 position: fixed;
@@ -1529,6 +1631,10 @@
                 align-items: center;
             }
 
+            .nav-link:hover {
+                background: var(--bg-tertiary);
+            }
+
             .nav-link::after {
                 display: none;
             }
@@ -1543,13 +1649,36 @@
                 display: flex;
                 margin-left: auto;
             }
+
+            .navbar {
+                gap: var(--space-md);
+                padding: 0 var(--space-lg);
+            }
         }
 
+        /* ===== RESPONSIVE DESIGN ===== */
         @media (max-width: 768px) {
             :root {
                 --header-height: 64px;
+                --nav-item-spacing: 1.5rem;
                 --logo-size: 36px;
             }
+
+            .navbar {
+                padding: 0 var(--space-lg);
+            }
+
+            .logo-text {
+                font-size: 1.25rem;
+            }
+
+            .events-hero {
+                padding-top: var(--header-height);
+            }
+
+            h1 { font-size: 2.25rem; }
+            h2 { font-size: 1.75rem; }
+            h3 { font-size: 1.5rem; }
 
             .event-categories,
             .events-grid,
@@ -1560,10 +1689,17 @@
                 margin-right: auto;
             }
 
-            .registration-container {
-                grid-template-columns: 1fr;
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: var(--space-md);
             }
-            
+
+            .hero-buttons .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+
             .payment-modal {
                 margin: var(--space-md);
             }
@@ -1574,6 +1710,10 @@
                 --header-height: 60px;
                 --logo-size: 32px;
             }
+
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.5rem; }
+            h3 { font-size: 1.25rem; }
 
             .container {
                 padding: 0 var(--space-md);
@@ -1593,14 +1733,20 @@
                 font-size: 0.9rem;
             }
 
-            .event-image {
-                height: 180px;
+            .event-image-container {
+                height: 200px;
             }
 
             .event-content {
                 padding: var(--space-lg);
             }
-            
+
+            .event-date-badge {
+                top: var(--space-sm);
+                left: var(--space-sm);
+                font-size: 0.75rem;
+            }
+
             .ticket-option-header {
                 flex-direction: column;
                 align-items: flex-start;
@@ -1611,22 +1757,21 @@
                 font-size: 1.25rem;
             }
         }
-
-        /* Animation Classes */
-        .animate-on-scroll {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s var(--transition-smooth), 
-                        transform 0.6s var(--transition-smooth);
-        }
-
-        .animate-on-scroll.animated {
-            opacity: 1;
-            transform: translateY(0);
-        }
     </style>
 </head>
 <body>
+    <!-- Firebase Status Indicator -->
+    <div class="firebase-status" id="firebaseStatus" role="status" aria-live="polite">
+        <i class="fas fa-circle"></i>
+        <span>Live</span>
+    </div>
+
+    <!-- Data Update Indicator -->
+    <div class="data-update-indicator" id="dataUpdateIndicator" role="alert" aria-live="polite">
+        <i class="fas fa-sync-alt"></i>
+        <span>Updating content...</span>
+    </div>
+
     <!-- Theme Toggle -->
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
         <i class="fas fa-moon"></i>
@@ -1671,8 +1816,8 @@
                 <div id="ticketOptions">
                     <!-- Ticket options will be loaded here -->
                     <div class="loading">
-                        <div class="loading-spinner loading-small"></div>
-                        <p class="loading-text">Loading ticket options...</p>
+                        <div class="loading-spinner"></div>
+                        <p>Loading ticket options...</p>
                     </div>
                 </div>
             </div>
@@ -1736,7 +1881,7 @@
                 <h1>Secure Your <span class="text-gradient">Transformative Experience</span></h1>
                 <p class="lead">Purchase tickets for our exclusive events designed to empower entrepreneurs, ignite passion, and discover divine purpose. Secure payment with VPay.</p>
                 
-                <div class="hero-buttons" style="margin-top: var(--space-2xl);">
+                <div class="hero-buttons">
                     <a href="#upcoming" class="btn btn-primary btn-large">
                         <i class="fas fa-calendar-alt"></i> View Events & Tickets
                     </a>
@@ -1762,10 +1907,9 @@
             
             <!-- Event Categories (Loaded from Firebase) -->
             <div id="eventCategories" class="event-categories">
-                <!-- Categories will be loaded here dynamically -->
                 <div class="loading">
                     <div class="loading-spinner"></div>
-                    <p class="loading-text">Loading event categories...</p>
+                    <p>Loading event categories...</p>
                 </div>
             </div>
         </div>
@@ -1782,10 +1926,9 @@
             
             <!-- Upcoming Events (Loaded from Firebase) -->
             <div id="eventsGrid" class="events-grid">
-                <!-- Events will be loaded here dynamically -->
                 <div class="loading">
                     <div class="loading-spinner"></div>
-                    <p class="loading-text">Loading available events...</p>
+                    <p>Loading available events...</p>
                 </div>
             </div>
         </div>
@@ -1907,7 +2050,7 @@
                 <h2 style="color: var(--white);">Secure Your <span style="color: var(--primary-gold);">Transformation Today</span></h2>
                 <p class="lead">Don't miss this opportunity to transform your business and life. Tickets are selling fast - secure yours now with our secure VPay payment system.</p>
                 
-                <div class="hero-buttons" style="margin-top: var(--space-2xl);">
+                <div class="hero-buttons">
                     <a href="#upcoming" class="btn btn-gold btn-large">
                         <i class="fas fa-ticket-alt"></i> View Available Tickets
                     </a>
@@ -1983,551 +2126,369 @@
 
     <!-- JavaScript -->
     <script>
-    // ============================================
-    // FIREBASE CONFIGURATION & DATA LOADING
-    // ============================================
-    
-    // Firebase Configuration
-    const firebaseConfig = {
-        apiKey: "AIzaSyDb5ZFHbo7lGM8ph0oBxFVTHRF5C5C_DWU",
-        authDomain: "dsog-events.firebaseapp.com",
-        databaseURL: "https://dsog-events-default-rtdb.europe-west1.firebasedatabase.app",
-        projectId: "dsog-events",
-        storageBucket: "dsog-events.firebasestorage.app",
-        messagingSenderId: "1075977932287",
-        appId: "1:1075977932287:web:b2bf4d1c0083d2dac8ebca"
-    };
-
-    // Initialize Firebase
-    let db;
-    let firebaseListeners = [];
-    let selectedEvent = null;
-    let selectedTicket = null;
-    
-    try {
-        firebase.initializeApp(firebaseConfig);
-        db = firebase.database();
-        console.log('Firebase initialized successfully for Events Ticketing System');
-    } catch (error) {
-        console.error('Firebase initialization error:', error);
-        db = null;
-    }
-
-    // Cache management
-    const CACHE_KEY = 'dsog_tickets_cache';
-    const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
-
-    // Category mapping
-    const categoryConfig = {
-        'bootcamp': {
-            class: 'bootcamp',
-            gradient: 'text-gradient',
-            button: 'btn-primary',
-            icon: 'fas fa-graduation-cap',
-            badgeColor: 'var(--primary-red)'
-        },
-        'inspiration': {
-            class: 'inspiration',
-            gradient: 'text-gradient-gold',
-            button: 'btn-gold',
-            icon: 'fas fa-fire',
-            badgeColor: '#B8860B'
-        },
-        'spiritual': {
-            class: 'spiritual',
-            gradient: 'text-gradient-spiritual',
-            button: 'btn-spiritual',
-            icon: 'fas fa-hands-praying',
-            badgeColor: 'var(--accent-purple)'
-        }
-    };
-
-    // ============================================
-    // PAYMENT MODAL MANAGEMENT
-    // ============================================
-    
-    function openPaymentModal(eventId = null, eventData = null) {
-        const modal = document.getElementById('paymentModal');
-        const body = document.body;
-        
-        if (eventId && eventData) {
-            selectedEvent = { id: eventId, ...eventData };
-            loadTicketOptions(eventData.tickets || {});
-        } else {
-            // Demo mode - show sample tickets
-            selectedEvent = {
-                id: 'demo',
-                title: 'Demo Event',
-                tickets: getDemoTickets()
-            };
-            loadTicketOptions(selectedEvent.tickets);
-        }
-        
-        resetPaymentModal();
-        modal.classList.add('active');
-        body.classList.add('payment-modal-open');
-        body.style.overflow = 'hidden';
-    }
-
-    function closePaymentModal() {
-        const modal = document.getElementById('paymentModal');
-        const body = document.body;
-        
-        modal.classList.remove('active');
-        body.classList.remove('payment-modal-open');
-        body.style.overflow = '';
-        
-        // Reset after animation completes
-        setTimeout(() => {
-            selectedEvent = null;
-            selectedTicket = null;
-            resetPaymentModal();
-        }, 300);
-    }
-
-    function resetPaymentModal() {
-        document.getElementById('ticketSummary').style.display = 'none';
-        document.getElementById('paymentProcessing').style.display = 'none';
-        document.getElementById('paymentSuccess').style.display = 'none';
-        document.getElementById('ticketOptions').style.display = 'block';
-        document.getElementById('vpayButton').disabled = true;
-        selectedTicket = null;
-    }
-
-    function loadTicketOptions(tickets) {
-        const container = document.getElementById('ticketOptions');
-        
-        if (!tickets || Object.keys(tickets).length === 0) {
-            container.innerHTML = `
-                <div class="no-tickets">
-                    <i class="fas fa-ticket-alt error-icon" style="font-size: 3rem; color: var(--text-tertiary); margin-bottom: var(--space-md);"></i>
-                    <h4>No Tickets Available</h4>
-                    <p>Ticket sales for this event have not started yet or are sold out.</p>
-                    <p style="margin-top: var(--space-md); font-size: 0.9rem; color: var(--text-tertiary);">
-                        Contact us for more information.
-                    </p>
-                </div>
-            `;
-            return;
-        }
-
-        // Convert tickets object to array
-        const ticketsArray = Object.entries(tickets).map(([id, ticket]) => ({ id, ...ticket }));
-        
-        // Sort tickets by price
-        ticketsArray.sort((a, b) => (a.price || 0) - (b.price || 0));
-        
-        const ticketsHTML = ticketsArray.map(ticket => {
-            const isSoldOut = (ticket.quantityAvailable && ticket.quantitySold && 
-                              ticket.quantitySold >= ticket.quantityAvailable);
-            const availabilityClass = isSoldOut ? 'sold-out' : 
-                                     (ticket.quantityAvailable && ticket.quantityAvailable < 20) ? 'limited' : 'available';
-            const availabilityText = isSoldOut ? 'Sold Out' : 
-                                   (ticket.quantityAvailable && ticket.quantityAvailable < 20) ? 
-                                   `Only ${ticket.quantityAvailable - (ticket.quantitySold || 0)} left` : 'Available';
-            
-            return `
-                <div class="ticket-option ${isSoldOut ? 'sold-out-option' : ''}" 
-                     onclick="${!isSoldOut ? `selectTicket('${ticket.id}', ${JSON.stringify(ticket).replace(/'/g, "\\'")})` : ''}">
-                    <div class="ticket-option-header">
-                        <div>
-                            <div class="ticket-name">${ticket.name || 'Standard Ticket'}</div>
-                            <div class="ticket-description">${ticket.description || 'Full access to event'}</div>
-                        </div>
-                        <div class="ticket-price">
-                            <span class="ticket-currency">${ticket.currency || 'USD'}</span>
-                            ${ticket.price || '0'}
-                        </div>
-                    </div>
-                    <div class="ticket-details">
-                        ${ticket.includes ? `
-                            <div class="ticket-detail">
-                                <i class="fas fa-check-circle"></i>
-                                <span>${ticket.includes}</span>
-                            </div>
-                        ` : ''}
-                        <div class="ticket-detail">
-                            <i class="fas fa-calendar-check"></i>
-                            <span>${ticket.type || 'Standard'}</span>
-                        </div>
-                    </div>
-                    <div class="ticket-availability ${availabilityClass}">
-                        <i class="fas ${isSoldOut ? 'fa-times-circle' : 'fa-check-circle'}"></i>
-                        ${availabilityText}
-                    </div>
-                </div>
-            `;
-        }).join('');
-
-        container.innerHTML = ticketsHTML;
-    }
-
-    function selectTicket(ticketId, ticketData) {
-        selectedTicket = { id: ticketId, ...ticketData };
-        
-        // Update UI to show selected ticket
-        document.querySelectorAll('.ticket-option').forEach(option => {
-            option.classList.remove('selected');
-        });
-        
-        const selectedOption = document.querySelector(`.ticket-option[onclick*="${ticketId}"]`);
-        if (selectedOption) {
-            selectedOption.classList.add('selected');
-        }
-        
-        // Update summary
-        updateTicketSummary();
-        
-        // Show summary and enable payment button
-        document.getElementById('ticketSummary').style.display = 'block';
-        document.getElementById('vpayButton').disabled = false;
-    }
-
-    function updateTicketSummary() {
-        if (!selectedEvent || !selectedTicket) return;
-        
-        const ticketName = selectedTicket.name || 'Standard Ticket';
-        const ticketPrice = selectedTicket.price || 0;
-        const currency = selectedTicket.currency || 'USD';
-        
-        document.getElementById('summaryTicketName').textContent = ticketName;
-        document.getElementById('summaryTicketPrice').textContent = `${currency} ${ticketPrice}`;
-        document.getElementById('summaryTotal').textContent = `${currency} ${ticketPrice}`;
-    }
-
-    function processPayment() {
-        if (!selectedEvent || !selectedTicket) return;
-        
-        // Show processing state
-        document.getElementById('ticketOptions').style.display = 'none';
-        document.getElementById('ticketSummary').style.display = 'none';
-        document.getElementById('paymentProcessing').style.display = 'block';
-        
-        // Generate VPay link
-        const vpayLink = generateVPayLink();
-        
-        // Simulate payment processing (in real implementation, this would redirect to VPay)
-        setTimeout(() => {
-            // Show success state
-            document.getElementById('paymentProcessing').style.display = 'none';
-            document.getElementById('paymentSuccess').style.display = 'block';
-            
-            // In real implementation, you would redirect to VPay:
-            // window.location.href = vpayLink;
-        }, 2000);
-    }
-
-    function generateVPayLink() {
-        if (!selectedEvent || !selectedTicket) return '#';
-        
-        const eventTitle = encodeURIComponent(selectedEvent.title || 'Event');
-        const ticketName = encodeURIComponent(selectedTicket.name || 'Ticket');
-        const amount = selectedTicket.price || 0;
-        const currency = selectedTicket.currency || 'USD';
-        const eventId = selectedEvent.id;
-        const ticketId = selectedTicket.id;
-        
-        // Generate a unique reference
-        const reference = `DSOG-${eventId}-${ticketId}-${Date.now()}`;
-        
-        // Construct VPay URL with parameters
-        return `https://vpay.pages.dev/payment?event=${eventTitle}&ticket=${ticketName}&amount=${amount}&currency=${currency}&ref=${reference}&callback=${encodeURIComponent(window.location.href)}`;
-    }
-
-    function getDemoTickets() {
-        return {
-            standard: {
-                name: "Standard Ticket",
-                price: 100,
-                currency: "USD",
-                description: "Full access to event sessions and materials",
-                includes: "All sessions + Materials",
-                type: "Standard",
-                quantityAvailable: 50,
-                quantitySold: 25
-            },
-            vip: {
-                name: "VIP Ticket",
-                price: 250,
-                currency: "USD",
-                description: "VIP access with front row seating and networking dinner",
-                includes: "VIP + Dinner + Networking",
-                type: "VIP",
-                quantityAvailable: 20,
-                quantitySold: 15
-            },
-            earlybird: {
-                name: "Early Bird Ticket",
-                price: 75,
-                currency: "USD",
-                description: "Limited time discounted ticket",
-                includes: "All sessions + Materials",
-                type: "Early Bird",
-                quantityAvailable: 30,
-                quantitySold: 30
-            }
+        // ============================================
+        // FIREBASE CONFIGURATION
+        // ============================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyDb5ZFHbo7lGM8ph0oBxFVTHRF5C5C_DWU",
+            authDomain: "dsog-events.firebaseapp.com",
+            databaseURL: "https://dsog-events-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "dsog-events",
+            storageBucket: "dsog-events.firebasestorage.app",
+            messagingSenderId: "1075977932287",
+            appId: "1:1075977932287:web:b2bf4d1c0083d2dac8ebca"
         };
-    }
 
-    // ============================================
-    // INITIALIZATION
-    // ============================================
-    
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('🚀 DSOG Events Ticketing System Loaded');
-        
-        // Initialize all features
-        initializeTheme();
-        initializeNavigation();
-        initializeAnimations();
-        initializeScrollEffects();
-        setupPaymentModalEvents();
-        
-        // Set current year
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
-        
-        // Try to load from cache first
-        const cachedData = getCachedData();
-        if (cachedData && !isCacheExpired(cachedData.timestamp)) {
-            console.log('Loading events from cache for instant display');
-            displayCachedData(cachedData);
-        }
-        
-        // Setup REAL-TIME listeners
-        setupRealtimeListeners();
-        
-        console.log('Ticketing system initialized with real-time updates');
-    });
+        // Initialize Firebase
+        let db;
+        let firebaseListeners = [];
+        let isFirebaseInitialized = false;
+        let selectedEvent = null;
+        let selectedTicket = null;
 
-    function setupPaymentModalEvents() {
-        const modal = document.getElementById('paymentModal');
-        const closeBtn = document.getElementById('paymentModalClose');
-        const vpayBtn = document.getElementById('vpayButton');
-        const closeSuccessBtn = document.getElementById('closeSuccessBtn');
-        
-        // Close modal when clicking overlay
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                closePaymentModal();
-            }
-        });
-        
-        // Close modal with button
-        closeBtn.addEventListener('click', closePaymentModal);
-        
-        // Process payment
-        vpayBtn.addEventListener('click', processPayment);
-        
-        // Close success message
-        closeSuccessBtn.addEventListener('click', closePaymentModal);
-        
-        // Close with Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && modal.classList.contains('active')) {
-                closePaymentModal();
-            }
-        });
-    }
-
-    // ============================================
-    // REAL-TIME LISTENERS
-    // ============================================
-    
-    function setupRealtimeListeners() {
-        if (!db) {
-            console.error('Firebase not available, using cached data only');
-            return;
-        }
-
-        console.log('Setting up real-time Firebase listeners for ticketing...');
-        
-        // Remove any existing listeners
-        removeAllListeners();
-        
-        // 1. Event Categories Listener
-        const categoriesRef = db.ref('eventCategories');
-        const categoriesListener = categoriesRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                console.log('Event categories updated in real-time');
-                renderCategories(data);
-                saveToCachePartial('eventCategories', data);
-            }
-        });
-        firebaseListeners.push({ ref: categoriesRef, listener: categoriesListener });
-        
-        // 2. Upcoming Events with Tickets Listener
-        const eventsRef = db.ref('upcomingEvents');
-        const eventsListener = eventsRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            console.log('Upcoming events with tickets updated in real-time');
-            renderEventsWithTickets(data);
-            saveToCachePartial('upcomingEvents', data);
-        });
-        firebaseListeners.push({ ref: eventsRef, listener: eventsListener });
-        
-        console.log(`Setup ${firebaseListeners.length} real-time listeners for ticketing system`);
-    }
-
-    function removeAllListeners() {
-        firebaseListeners.forEach(({ ref, listener }) => {
-            ref.off('value', listener);
-        });
-        firebaseListeners = [];
-        console.log('Removed all Firebase listeners');
-    }
-
-    // ============================================
-    // CACHE MANAGEMENT
-    // ============================================
-    
-    function getCachedData() {
         try {
-            const cached = localStorage.getItem(CACHE_KEY);
-            return cached ? JSON.parse(cached) : null;
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.database();
+            isFirebaseInitialized = true;
+            console.log('Firebase initialized successfully for Events Ticketing');
         } catch (error) {
-            console.error('Error reading cache:', error);
-            return null;
-        }
-    }
-
-    function saveToCachePartial(key, data) {
-        try {
-            const cached = getCachedData() || { timestamp: Date.now(), data: {} };
-            cached.data[key] = data;
-            cached.timestamp = Date.now();
-            localStorage.setItem(CACHE_KEY, JSON.stringify(cached));
-        } catch (error) {
-            console.error('Error saving to cache:', error);
-        }
-    }
-
-    function isCacheExpired(timestamp) {
-        return Date.now() - timestamp > CACHE_DURATION;
-    }
-
-    function displayCachedData(cachedData) {
-        const data = cachedData.data;
-        
-        if (data.eventCategories) {
-            renderCategories(data.eventCategories);
-        }
-        
-        if (data.upcomingEvents) {
-            renderEventsWithTickets(data.upcomingEvents);
-        }
-    }
-
-    // ============================================
-    // RENDER FUNCTIONS
-    // ============================================
-    
-    function renderCategories(categories) {
-        const categoriesContainer = document.getElementById('eventCategories');
-        if (!categoriesContainer) return;
-        
-        if (!categories || Object.keys(categories).length === 0) {
-            categoriesContainer.innerHTML = `
-                <div class="no-events" style="grid-column: 1 / -1;">
-                    <i class="fas fa-calendar-times error-icon"></i>
-                    <h3>No Event Categories Available</h3>
-                    <p>Check back soon for upcoming event categories.</p>
-                </div>
-            `;
-            return;
+            console.error('Firebase initialization error:', error);
+            isFirebaseInitialized = false;
         }
 
-        const categoriesArray = Object.values(categories)
-            .filter(cat => cat.active !== false)
-            .sort((a, b) => (a.order || 999) - (b.order || 999));
-        
-        if (categoriesArray.length === 0) {
-            categoriesContainer.innerHTML = `
-                <div class="no-events" style="grid-column: 1 / -1;">
-                    <i class="fas fa-calendar-times error-icon"></i>
-                    <h3>No Active Event Categories</h3>
-                    <p>All event categories are currently unavailable.</p>
-                </div>
-            `;
-            return;
-        }
+        // Cache management
+        const CACHE_KEY = 'dsog_tickets_cache';
+        const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
-        const categoriesHTML = categoriesArray.map((category, index) => {
-            const config = categoryConfig[category.id] || categoryConfig.bootcamp;
+        // Update management
+        let lastUpdateTime = 0;
+        const UPDATE_DEBOUNCE_TIME = 2000; // 2 seconds between updates
+        let updateTimeout = null;
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 DSOG Events Ticketing System Loaded');
             
-            return `
-                <div class="category-card ${config.class} animate-on-scroll" id="${category.id}-category">
-                    <div class="category-icon">
-                        <i class="${category.icon || config.icon}"></i>
-                    </div>
-                    <span class="category-tag">${category.frequency || 'TRANSFORMATIVE'}</span>
-                    <h3 class="${config.gradient}">${category.name}</h3>
-                    <p>${category.description}</p>
-                    <div style="margin-top: auto; padding-top: var(--space-md);">
-                        <a href="#${category.id}-details" class="btn ${config.button}" style="width: 100%;">
-                            <i class="fas fa-ticket-alt"></i> View Tickets
-                        </a>
-                    </div>
-                </div>
-            `;
-        }).join('');
-
-        categoriesContainer.innerHTML = categoriesHTML;
-        
-        // Re-initialize animations
-        setTimeout(() => {
+            // Initialize all components
+            initializeTheme();
+            initializeNavigation();
             initializeAnimations();
-        }, 100);
-    }
+            initializeScrollEffects();
+            setupPaymentModalEvents();
+            
+            // Set current year
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            // Load from cache first for instant display
+            const cachedData = getCachedData();
+            if (cachedData && !isCacheExpired(cachedData.timestamp)) {
+                console.log('Loading from cache for instant display');
+                displayCachedData(cachedData);
+            }
+            
+            // Initialize Firebase connection
+            if (isFirebaseInitialized) {
+                initializeFirebaseConnection();
+                setupRealtimeListeners();
+            } else {
+                showFirebaseStatus('offline');
+                console.warn('Firebase not available, using cached data only');
+            }
+            
+            console.log('Ticketing system initialized with real-time updates');
+        });
 
-    function renderEventsWithTickets(events) {
-        const eventsGrid = document.getElementById('eventsGrid');
-        if (!eventsGrid) return;
-        
-        if (!events || Object.keys(events).length === 0) {
-            eventsGrid.innerHTML = `
-                <div class="no-events" style="grid-column: 1 / -1;">
-                    <i class="fas fa-calendar-times error-icon"></i>
-                    <h3>No Events with Tickets Available</h3>
-                    <p>Check back soon for events with available tickets.</p>
-                    <button class="btn btn-primary" style="margin-top: var(--space-lg);" onclick="openPaymentModal()">
-                        <i class="fas fa-shopping-cart"></i> View Payment Demo
-                    </button>
-                </div>
-            `;
-            return;
-        }
-
-        // Convert to array, filter active events with tickets, and sort by date
-        const eventsArray = Object.entries(events)
-            .filter(([id, event]) => event.active !== false && event.tickets)
-            .map(([id, event]) => ({ id, ...event }))
-            .sort((a, b) => {
-                try {
-                    return new Date(a.date || '9999-12-31') - new Date(b.date || '9999-12-31');
-                } catch {
-                    return 0;
+        // ============================================
+        // FIREBASE CONNECTION MANAGEMENT
+        // ============================================
+        function initializeFirebaseConnection() {
+            if (!isFirebaseInitialized) return;
+            
+            // Monitor connection status
+            const connectedRef = db.ref('.info/connected');
+            connectedRef.on('value', (snap) => {
+                if (snap.val() === true) {
+                    showFirebaseStatus('online');
+                    console.log('Connected to Firebase - Real-time updates active');
+                } else {
+                    showFirebaseStatus('offline');
+                    console.log('Disconnected from Firebase - Using cached data');
                 }
             });
-        
-        if (eventsArray.length === 0) {
-            eventsGrid.innerHTML = `
-                <div class="no-events" style="grid-column: 1 / -1;">
-                    <i class="fas fa-ticket-alt error-icon"></i>
-                    <h3>No Tickets Available</h3>
-                    <p>All events are currently sold out or ticket sales have not started.</p>
-                    <button class="btn btn-primary" style="margin-top: var(--space-lg);" onclick="openPaymentModal()">
-                        <i class="fas fa-shopping-cart"></i> Try Payment Demo
-                    </button>
-                </div>
-            `;
-            return;
         }
 
-        const eventsHTML = eventsArray.map((event, index) => {
-            const config = categoryConfig[event.category] || categoryConfig.bootcamp;
-            const formattedDate = formatDate(event.date);
-            const isSpiritual = event.category === 'spiritual';
+        function showFirebaseStatus(status) {
+            const statusEl = document.getElementById('firebaseStatus');
+            if (!statusEl) return;
+            
+            if (status === 'online') {
+                statusEl.classList.remove('offline');
+                statusEl.innerHTML = '<i class="fas fa-circle"></i><span>Live</span>';
+                statusEl.setAttribute('aria-label', 'Connected to live updates');
+            } else {
+                statusEl.classList.add('offline');
+                statusEl.innerHTML = '<i class="fas fa-circle"></i><span>Offline</span>';
+                statusEl.setAttribute('aria-label', 'Using cached data - offline mode');
+            }
+        }
+
+        function showUpdateIndicator(type) {
+            const now = Date.now();
+            if (now - lastUpdateTime < UPDATE_DEBOUNCE_TIME) return;
+            
+            lastUpdateTime = now;
+            
+            const indicator = document.getElementById('dataUpdateIndicator');
+            if (!indicator) return;
+            
+            indicator.querySelector('span').textContent = `${type} updated`;
+            indicator.classList.add('show');
+            
+            // Auto-hide after 3 seconds
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 3000);
+        }
+
+        // ============================================
+        // SILENT REAL-TIME UPDATES
+        // ============================================
+        function setupRealtimeListeners() {
+            if (!isFirebaseInitialized) return;
+            
+            console.log('Setting up silent real-time listeners for ticketing...');
+            
+            // Remove any existing listeners
+            removeAllListeners();
+            
+            // Debounced update function
+            const debouncedUpdate = (type) => {
+                if (updateTimeout) clearTimeout(updateTimeout);
+                
+                updateTimeout = setTimeout(() => {
+                    showUpdateIndicator(type);
+                }, UPDATE_DEBOUNCE_TIME);
+            };
+            
+            // 1. Event Categories Listener
+            const categoriesRef = db.ref('eventCategories');
+            const categoriesListener = categoriesRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    displayEventCategories(data);
+                    saveToCachePartial('eventCategories', data);
+                    debouncedUpdate('Categories');
+                }
+            });
+            firebaseListeners.push({ ref: categoriesRef, listener: categoriesListener });
+            
+            // 2. Upcoming Events Listener
+            const eventsRef = db.ref('upcomingEvents');
+            const eventsListener = eventsRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                displayEventsWithTickets(data);
+                saveToCachePartial('upcomingEvents', data);
+                debouncedUpdate('Events');
+            });
+            firebaseListeners.push({ ref: eventsRef, listener: eventsListener });
+            
+            console.log(`Setup ${firebaseListeners.length} silent real-time listeners for ticketing`);
+        }
+
+        function removeAllListeners() {
+            firebaseListeners.forEach(({ ref, listener }) => {
+                if (ref && listener) {
+                    ref.off('value', listener);
+                }
+            });
+            firebaseListeners = [];
+        }
+
+        // ============================================
+        // CACHE MANAGEMENT
+        // ============================================
+        function getCachedData() {
+            try {
+                const cached = localStorage.getItem(CACHE_KEY);
+                return cached ? JSON.parse(cached) : null;
+            } catch (error) {
+                console.error('Error reading cache:', error);
+                return null;
+            }
+        }
+
+        function saveToCachePartial(key, data) {
+            try {
+                const cached = getCachedData() || { timestamp: Date.now(), data: {} };
+                cached.data[key] = data;
+                cached.timestamp = Date.now();
+                localStorage.setItem(CACHE_KEY, JSON.stringify(cached));
+            } catch (error) {
+                console.error('Error saving to cache:', error);
+            }
+        }
+
+        function isCacheExpired(timestamp) {
+            return Date.now() - timestamp > CACHE_DURATION;
+        }
+
+        function displayCachedData(cachedData) {
+            const data = cachedData.data;
+            
+            if (data.eventCategories) {
+                displayEventCategories(data.eventCategories);
+            }
+            
+            if (data.upcomingEvents) {
+                displayEventsWithTickets(data.upcomingEvents);
+            }
+        }
+
+        // ============================================
+        // UI UPDATES - MATCHING HOME PAGE PATTERN
+        // ============================================
+        function displayEventCategories(categories) {
+            const categoriesContainer = document.getElementById('eventCategories');
+            if (!categoriesContainer) return;
+            
+            // Convert to array and filter active categories
+            const categoriesArray = categories ? Object.values(categories)
+                .filter(cat => cat.active !== false)
+                .sort((a, b) => (a.order || 999) - (b.order || 999)) : [];
+            
+            if (categoriesArray.length > 0) {
+                categoriesContainer.innerHTML = '';
+                categoriesArray.forEach((category, index) => {
+                    const categoryCard = createCategoryCard(category, index);
+                    categoriesContainer.appendChild(categoryCard);
+                });
+                
+                // Initialize animations for new cards
+                setTimeout(() => {
+                    initializeAnimations();
+                }, 100);
+            } else {
+                categoriesContainer.innerHTML = `
+                    <div class="category-card" style="grid-column: 1 / -1; text-align: center; padding: var(--space-2xl);">
+                        <div class="category-icon" style="background: var(--gradient-primary);">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h3>Event Categories</h3>
+                        <p>Our event categories will be available soon. Check back for updates!</p>
+                    </div>
+                `;
+            }
+        }
+
+        function displayEventsWithTickets(events) {
+            const eventsGrid = document.getElementById('eventsGrid');
+            if (!eventsGrid) return;
+            
+            // Convert events object to array and filter active ones
+            const eventsArray = events ? Object.values(events)
+                .filter(event => event.active !== false)
+                .sort((a, b) => new Date(a.date || '9999-12-31') - new Date(b.date || '9999-12-31')) : [];
+            
+            if (eventsArray.length > 0) {
+                eventsGrid.innerHTML = '';
+                eventsArray.forEach((event, index) => {
+                    const eventCard = createEventCard(event, index);
+                    eventsGrid.appendChild(eventCard);
+                });
+                
+                // Initialize animations for new cards
+                setTimeout(() => {
+                    initializeAnimations();
+                }, 100);
+            } else {
+                eventsGrid.innerHTML = `
+                    <div class="event-card" style="grid-column: 1 / -1; text-align: center; padding: var(--space-2xl);">
+                        <div class="event-content">
+                            <h3>No Events with Tickets Available</h3>
+                            <p>Check back soon for events with available tickets.</p>
+                            <button class="btn btn-primary" style="margin-top: var(--space-lg);" onclick="openPaymentModal()">
+                                <i class="fas fa-shopping-cart"></i> View Payment Demo
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // ============================================
+        // CARD CREATION FUNCTIONS - MATCHING HOME PAGE
+        // ============================================
+        function createCategoryCard(category, index) {
+            const card = document.createElement('div');
+            card.className = `category-card ${category.id || 'bootcamp'} animate-on-scroll`;
+            card.id = `${category.id}-category`;
+            card.dataset.delay = index * 100;
+            
+            // Determine button style and icon based on category
+            let btnClass = 'btn-primary';
+            let icon = category.icon || 'fas fa-graduation-cap';
+            
+            if (category.id === 'inspiration') {
+                btnClass = 'btn-gold';
+            } else if (category.id === 'spiritual') {
+                btnClass = 'btn-spiritual';
+            }
+            
+            card.innerHTML = `
+                <div class="category-icon">
+                    <i class="${icon}"></i>
+                </div>
+                <span class="category-tag">${category.frequency || 'TRANSFORMATIVE'}</span>
+                <h3 class="${category.id === 'inspiration' ? 'text-gradient-gold' : category.id === 'spiritual' ? 'text-gradient-spiritual' : 'text-gradient'}">${category.name || 'Event Category'}</h3>
+                <p>${category.description || 'Join us for this transformative event category.'}</p>
+                <div style="margin-top: auto; padding-top: var(--space-md);">
+                    <a href="#${category.id}-details" class="btn ${btnClass}" style="width: 100%;">
+                        <i class="fas fa-ticket-alt"></i> View Tickets
+                    </a>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function createEventCard(event, index) {
+            const card = document.createElement('div');
+            card.id = `${event.category}-details`;
+            card.className = `event-card animate-on-scroll ${event.category}-event`;
+            card.dataset.delay = index * 100;
+            
+            // Format date
+            let dateText = 'Date TBD';
+            if (event.date) {
+                try {
+                    const eventDate = new Date(event.date);
+                    if (!isNaN(eventDate.getTime())) {
+                        dateText = eventDate.toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error formatting date:', error);
+                }
+            }
+            
+            // Get category name
+            const categoryNames = {
+                'bootcamp': 'Startup Bootcamp',
+                'inspiration': 'Become What You Believe',
+                'spiritual': 'The Making of an Icon'
+            };
+            
+            const categoryName = categoryNames[event.category] || event.category || 'Event';
+            
+            // Determine button style
+            let btnClass = 'btn-primary';
+            if (event.category === 'inspiration') btnClass = 'btn-gold';
+            if (event.category === 'spiritual') btnClass = 'btn-spiritual';
             
             // Get lowest ticket price for display
             const tickets = event.tickets ? Object.values(event.tickets) : [];
@@ -2536,25 +2497,26 @@
             const currency = tickets.length > 0 ? (tickets[0].currency || 'USD') : 'USD';
             const ticketCount = tickets.length;
 
-            return `
-                <div id="${event.category}-details" class="event-card ${config.class} animate-on-scroll">
+            card.innerHTML = `
+                <div class="event-image-container">
                     <img src="${event.imageUrl || getDefaultImage(event.category)}" 
-                         alt="${event.title}" 
+                         alt="${event.title || 'DSOG Event'}" 
                          class="event-image"
                          onerror="this.src='${getDefaultImage(event.category)}'">
                     <div class="event-date-badge">
-                        <i class="fas fa-calendar"></i> ${formattedDate}
+                        <i class="fas fa-calendar"></i> ${dateText}
                     </div>
-                    <div class="event-content">
-                        <div class="duration-badge">
-                            <i class="fas fa-clock"></i> ${event.duration || 'TBD'}
-                        </div>
-                        <div class="event-details">
-                            <h3 class="${config.gradient}">${event.title}</h3>
-                            ${isSpiritual ? '<div class="slogan">"Search within me O Lord"</div>' : ''}
-                            <p><strong>${event.subtitle || ''}</strong></p>
-                            <p>${event.description}</p>
-                            
+                </div>
+                <div class="event-content">
+                    <span class="event-category ${event.category}">${categoryName.toUpperCase()}</span>
+                    ${event.duration ? `<div class="duration-badge"><i class="fas fa-clock"></i> ${event.duration}</div>` : ''}
+                    <div class="event-details">
+                        <h3>${event.title || 'Upcoming Event'}</h3>
+                        ${event.category === 'spiritual' ? '<div class="slogan">"Search within me O Lord"</div>' : ''}
+                        ${event.subtitle ? `<p><strong>${event.subtitle}</strong></p>` : ''}
+                        <p>${event.description || 'Join us for this transformative event.'}</p>
+                        
+                        ${tickets.length > 0 ? `
                             <div class="ticket-price-display">
                                 <div class="price-label">
                                     <i class="fas fa-ticket-alt"></i> Tickets from
@@ -2566,260 +2528,544 @@
                             <div class="price-note">
                                 <i class="fas fa-info-circle"></i> ${ticketCount} ticket option${ticketCount !== 1 ? 's' : ''} available
                             </div>
-                            
-                            <div class="event-meta">
-                                <div class="meta-item">
-                                    <i class="fas fa-users"></i>
-                                    <span>${event.maxParticipants > 0 ? `Limited to ${event.maxParticipants} Participants` : 'Unlimited Participants'}</span>
-                                </div>
-                                <div class="meta-item">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    <span>${event.venue || 'Venue TBD'}</span>
-                                </div>
-                                <div class="meta-item">
-                                    <i class="fas fa-ticket-alt"></i>
-                                    <span>${ticketCount} Ticket Types</span>
-                                </div>
-                            </div>
+                        ` : ''}
+                        
+                        <div class="event-meta">
+                            ${event.venue ? `<div class="meta-item"><i class="fas fa-map-marker-alt"></i><span>${event.venue}</span></div>` : ''}
+                            ${event.maxParticipants ? `<div class="meta-item"><i class="fas fa-users"></i><span>Max: ${event.maxParticipants} Participants</span></div>` : ''}
                         </div>
-                        <div class="buy-ticket-btn">
-                            <button class="btn ${config.button} btn-block" onclick="openPaymentModal('${event.id}', ${JSON.stringify(event).replace(/'/g, "\\'")})">
-                                <i class="fas fa-shopping-cart"></i> Buy Tickets Now
-                            </button>
-                        </div>
+                    </div>
+                    <div class="buy-ticket-btn">
+                        <button class="btn ${btnClass} btn-block" onclick="openPaymentModal('${event.id}', ${JSON.stringify(event).replace(/'/g, "\\'")})">
+                            <i class="fas fa-shopping-cart"></i> Buy Tickets Now
+                        </button>
                     </div>
                 </div>
             `;
-        }).join('');
-
-        eventsGrid.innerHTML = eventsHTML;
-        
-        // Re-initialize animations
-        setTimeout(() => {
-            initializeAnimations();
-        }, 100);
-    }
-
-    // ============================================
-    // HELPER FUNCTIONS
-    // ============================================
-    
-    function formatDate(dateString) {
-        try {
-            const date = new Date(dateString);
-            if (isNaN(date.getTime())) {
-                return 'Date TBD';
-            }
-            return date.toLocaleDateString('en-US', { 
-                month: 'short', 
-                day: 'numeric', 
-                year: 'numeric' 
-            });
-        } catch (error) {
-            return 'Date TBD';
+            
+            return card;
         }
-    }
 
-    function getDefaultImage(category) {
-        const defaultImages = {
-            'bootcamp': 'https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp',
-            'inspiration': 'https://i.postimg.cc/sgNRzKbd/20260114-1543-Image-Generation-simple-compose-01key8g91re75trpnnjn6j42z5-1.webp',
-            'spiritual': 'https://i.postimg.cc/kXw6d695/20260114-1617-Image-Generation-simple-compose-01keyad7jyf15rcfk3tz16wdbq-1.webp'
-        };
-        return defaultImages[category] || defaultImages.bootcamp;
-    }
+        function getDefaultImage(category) {
+            const defaultImages = {
+                'bootcamp': 'https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp',
+                'inspiration': 'https://i.postimg.cc/sgNRzKbd/20260114_1543_Image_Generation_simple_compose_01key8g91re75trpnnjn6j42z5_1.webp',
+                'spiritual': 'https://i.postimg.cc/kXw6d695/20260114-1617-Image-Generation-simple-compose-01keyad7jyf15rcfk3tz16wdbq-1.webp'
+            };
+            return defaultImages[category] || defaultImages.bootcamp;
+        }
 
-    // ============================================
-    // CORE FUNCTIONS
-    // ============================================
-    
-    function initializeTheme() {
-        const themeToggle = document.getElementById('themeToggle');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-        
-        const savedTheme = localStorage.getItem('theme');
-        const systemTheme = prefersDark.matches ? 'dark' : 'light';
-        const initialTheme = savedTheme || systemTheme;
-        
-        document.documentElement.setAttribute('data-theme', initialTheme);
-        updateThemeIcon(initialTheme);
-        
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        // ============================================
+        // PAYMENT MODAL MANAGEMENT
+        // ============================================
+        function openPaymentModal(eventId = null, eventData = null) {
+            const modal = document.getElementById('paymentModal');
+            const body = document.body;
             
-            document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateThemeIcon(newTheme);
-            
-            setTimeout(() => {
-                document.body.style.transition = '';
-            }, 300);
-        });
-        
-        prefersDark.addEventListener('change', (e) => {
-            if (!localStorage.getItem('theme')) {
-                const newTheme = e.matches ? 'dark' : 'light';
-                document.documentElement.setAttribute('data-theme', newTheme);
-                updateThemeIcon(newTheme);
-            }
-        });
-        
-        function updateThemeIcon(theme) {
-            const icon = themeToggle.querySelector('i');
-            if (theme === 'dark') {
-                icon.className = 'fas fa-sun';
-                themeToggle.setAttribute('aria-label', 'Switch to light theme');
+            if (eventId && eventData) {
+                selectedEvent = { id: eventId, ...eventData };
+                loadTicketOptions(eventData.tickets || {});
             } else {
-                icon.className = 'fas fa-moon';
-                themeToggle.setAttribute('aria-label', 'Switch to dark theme');
+                // Demo mode - show sample tickets
+                selectedEvent = {
+                    id: 'demo',
+                    title: 'Demo Event',
+                    tickets: getDemoTickets()
+                };
+                loadTicketOptions(selectedEvent.tickets);
+            }
+            
+            resetPaymentModal();
+            modal.classList.add('active');
+            body.classList.add('payment-modal-open');
+            body.style.overflow = 'hidden';
+        }
+
+        function closePaymentModal() {
+            const modal = document.getElementById('paymentModal');
+            const body = document.body;
+            
+            modal.classList.remove('active');
+            body.classList.remove('payment-modal-open');
+            body.style.overflow = '';
+            
+            // Reset after animation completes
+            setTimeout(() => {
+                selectedEvent = null;
+                selectedTicket = null;
+                resetPaymentModal();
+            }, 300);
+        }
+
+        function resetPaymentModal() {
+            document.getElementById('ticketSummary').style.display = 'none';
+            document.getElementById('paymentProcessing').style.display = 'none';
+            document.getElementById('paymentSuccess').style.display = 'none';
+            document.getElementById('ticketOptions').style.display = 'block';
+            document.getElementById('vpayButton').disabled = true;
+            selectedTicket = null;
+        }
+
+        function loadTicketOptions(tickets) {
+            const container = document.getElementById('ticketOptions');
+            
+            if (!tickets || Object.keys(tickets).length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: var(--space-xl);">
+                        <i class="fas fa-ticket-alt" style="font-size: 3rem; color: var(--text-tertiary); margin-bottom: var(--space-md);"></i>
+                        <h4>No Tickets Available</h4>
+                        <p>Ticket sales for this event have not started yet or are sold out.</p>
+                        <p style="margin-top: var(--space-md); font-size: 0.9rem; color: var(--text-tertiary);">
+                            Contact us for more information.
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Convert tickets object to array
+            const ticketsArray = Object.entries(tickets).map(([id, ticket]) => ({ id, ...ticket }));
+            
+            // Sort tickets by price
+            ticketsArray.sort((a, b) => (a.price || 0) - (b.price || 0));
+            
+            const ticketsHTML = ticketsArray.map(ticket => {
+                const isSoldOut = (ticket.quantityAvailable && ticket.quantitySold && 
+                                  ticket.quantitySold >= ticket.quantityAvailable);
+                const availabilityClass = isSoldOut ? 'sold-out' : 
+                                         (ticket.quantityAvailable && ticket.quantityAvailable < 20) ? 'limited' : 'available';
+                const availabilityText = isSoldOut ? 'Sold Out' : 
+                                       (ticket.quantityAvailable && ticket.quantityAvailable < 20) ? 
+                                       `Only ${ticket.quantityAvailable - (ticket.quantitySold || 0)} left` : 'Available';
+                
+                return `
+                    <div class="ticket-option ${isSoldOut ? 'sold-out-option' : ''}" 
+                         onclick="${!isSoldOut ? `selectTicket('${ticket.id}', ${JSON.stringify(ticket).replace(/'/g, "\\'")})` : ''}">
+                        <div class="ticket-option-header">
+                            <div>
+                                <div class="ticket-name">${ticket.name || 'Standard Ticket'}</div>
+                                <div class="ticket-description">${ticket.description || 'Full access to event'}</div>
+                            </div>
+                            <div class="ticket-price">
+                                <span class="ticket-currency">${ticket.currency || 'USD'}</span>
+                                ${ticket.price || '0'}
+                            </div>
+                        </div>
+                        <div class="ticket-details">
+                            ${ticket.includes ? `
+                                <div class="ticket-detail">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>${ticket.includes}</span>
+                                </div>
+                            ` : ''}
+                            <div class="ticket-detail">
+                                <i class="fas fa-calendar-check"></i>
+                                <span>${ticket.type || 'Standard'}</span>
+                            </div>
+                        </div>
+                        <div class="ticket-availability ${availabilityClass}">
+                            <i class="fas ${isSoldOut ? 'fa-times-circle' : 'fa-check-circle'}"></i>
+                            ${availabilityText}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = ticketsHTML;
+        }
+
+        function selectTicket(ticketId, ticketData) {
+            selectedTicket = { id: ticketId, ...ticketData };
+            
+            // Update UI to show selected ticket
+            document.querySelectorAll('.ticket-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            const selectedOption = document.querySelector(`.ticket-option[onclick*="${ticketId}"]`);
+            if (selectedOption) {
+                selectedOption.classList.add('selected');
+            }
+            
+            // Update summary
+            updateTicketSummary();
+            
+            // Show summary and enable payment button
+            document.getElementById('ticketSummary').style.display = 'block';
+            document.getElementById('vpayButton').disabled = false;
+        }
+
+        function updateTicketSummary() {
+            if (!selectedEvent || !selectedTicket) return;
+            
+            const ticketName = selectedTicket.name || 'Standard Ticket';
+            const ticketPrice = selectedTicket.price || 0;
+            const currency = selectedTicket.currency || 'USD';
+            
+            document.getElementById('summaryTicketName').textContent = ticketName;
+            document.getElementById('summaryTicketPrice').textContent = `${currency} ${ticketPrice}`;
+            document.getElementById('summaryTotal').textContent = `${currency} ${ticketPrice}`;
+        }
+
+        function processPayment() {
+            if (!selectedEvent || !selectedTicket) return;
+            
+            // Show processing state
+            document.getElementById('ticketOptions').style.display = 'none';
+            document.getElementById('ticketSummary').style.display = 'none';
+            document.getElementById('paymentProcessing').style.display = 'block';
+            
+            // Generate VPay link
+            const vpayLink = generateVPayLink();
+            
+            // Simulate payment processing (in real implementation, this would redirect to VPay)
+            setTimeout(() => {
+                // Show success state
+                document.getElementById('paymentProcessing').style.display = 'none';
+                document.getElementById('paymentSuccess').style.display = 'block';
+                
+                // In real implementation, you would redirect to VPay:
+                // window.location.href = vpayLink;
+            }, 2000);
+        }
+
+        function generateVPayLink() {
+            if (!selectedEvent || !selectedTicket) return '#';
+            
+            const eventTitle = encodeURIComponent(selectedEvent.title || 'Event');
+            const ticketName = encodeURIComponent(selectedTicket.name || 'Ticket');
+            const amount = selectedTicket.price || 0;
+            const currency = selectedTicket.currency || 'USD';
+            const eventId = selectedEvent.id;
+            const ticketId = selectedTicket.id;
+            
+            // Generate a unique reference
+            const reference = `DSOG-${eventId}-${ticketId}-${Date.now()}`;
+            
+            // Construct VPay URL with parameters
+            return `https://vpay.pages.dev/payment?event=${eventTitle}&ticket=${ticketName}&amount=${amount}&currency=${currency}&ref=${reference}&callback=${encodeURIComponent(window.location.href)}`;
+        }
+
+        function getDemoTickets() {
+            return {
+                standard: {
+                    name: "Standard Ticket",
+                    price: 100,
+                    currency: "USD",
+                    description: "Full access to event sessions and materials",
+                    includes: "All sessions + Materials",
+                    type: "Standard",
+                    quantityAvailable: 50,
+                    quantitySold: 25
+                },
+                vip: {
+                    name: "VIP Ticket",
+                    price: 250,
+                    currency: "USD",
+                    description: "VIP access with front row seating and networking dinner",
+                    includes: "VIP + Dinner + Networking",
+                    type: "VIP",
+                    quantityAvailable: 20,
+                    quantitySold: 15
+                },
+                earlybird: {
+                    name: "Early Bird Ticket",
+                    price: 75,
+                    currency: "USD",
+                    description: "Limited time discounted ticket",
+                    includes: "All sessions + Materials",
+                    type: "Early Bird",
+                    quantityAvailable: 30,
+                    quantitySold: 30
+                }
+            };
+        }
+
+        function setupPaymentModalEvents() {
+            const modal = document.getElementById('paymentModal');
+            const closeBtn = document.getElementById('paymentModalClose');
+            const vpayBtn = document.getElementById('vpayButton');
+            const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+            
+            // Close modal when clicking overlay
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closePaymentModal();
+                }
+            });
+            
+            // Close modal with button
+            closeBtn.addEventListener('click', closePaymentModal);
+            
+            // Process payment
+            vpayBtn.addEventListener('click', processPayment);
+            
+            // Close success message
+            closeSuccessBtn.addEventListener('click', closePaymentModal);
+            
+            // Close with Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    closePaymentModal();
+                }
+            });
+        }
+
+        // ============================================
+        // CORE FUNCTIONS - MATCHING HOME PAGE
+        // ============================================
+        function initializeTheme() {
+            const themeToggle = document.getElementById('themeToggle');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+            
+            const savedTheme = localStorage.getItem('theme');
+            const systemTheme = prefersDark.matches ? 'dark' : 'light';
+            const initialTheme = savedTheme || systemTheme;
+            
+            document.documentElement.setAttribute('data-theme', initialTheme);
+            updateThemeIcon(initialTheme);
+            
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                
+                document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateThemeIcon(newTheme);
+                
+                setTimeout(() => {
+                    document.body.style.transition = '';
+                }, 300);
+            });
+            
+            prefersDark.addEventListener('change', (e) => {
+                if (!localStorage.getItem('theme')) {
+                    const newTheme = e.matches ? 'dark' : 'light';
+                    document.documentElement.setAttribute('data-theme', newTheme);
+                    updateThemeIcon(newTheme);
+                }
+            });
+            
+            function updateThemeIcon(theme) {
+                const icon = themeToggle.querySelector('i');
+                if (theme === 'dark') {
+                    icon.className = 'fas fa-sun';
+                    themeToggle.setAttribute('aria-label', 'Switch to light theme');
+                } else {
+                    icon.className = 'fas fa-moon';
+                    themeToggle.setAttribute('aria-label', 'Switch to dark theme');
+                }
             }
         }
-    }
 
-    function initializeNavigation() {
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const navLinks = document.getElementById('navLinks');
-        
-        if (mobileMenuBtn && navLinks) {
-            mobileMenuBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                navLinks.classList.toggle('active');
-                const icon = this.querySelector('i');
-                icon.className = navLinks.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
-                this.setAttribute('aria-expanded', navLinks.classList.contains('active'));
-                
-                if (navLinks.classList.contains('active')) {
-                    document.body.style.overflow = 'hidden';
-                } else {
-                    document.body.style.overflow = '';
-                }
-            });
+        function initializeNavigation() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (mobileMenuBtn && navLinks) {
+                mobileMenuBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    navLinks.classList.toggle('active');
+                    const icon = this.querySelector('i');
+                    icon.className = navLinks.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
+                    this.setAttribute('aria-expanded', navLinks.classList.contains('active'));
+                    
+                    if (navLinks.classList.contains('active')) {
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        document.body.style.overflow = '';
+                    }
+                });
 
-            document.addEventListener('click', function(event) {
-                if (!navLinks.contains(event.target) && !mobileMenuBtn.contains(event.target) && navLinks.classList.contains('active')) {
-                    navLinks.classList.remove('active');
-                    mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
-                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
-                    document.body.style.overflow = '';
-                }
-            });
-
-            navLinks.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => {
-                    if (window.innerWidth <= 1024) {
+                document.addEventListener('click', function(event) {
+                    if (!navLinks.contains(event.target) && !mobileMenuBtn.contains(event.target) && navLinks.classList.contains('active')) {
                         navLinks.classList.remove('active');
                         mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
                         mobileMenuBtn.setAttribute('aria-expanded', 'false');
                         document.body.style.overflow = '';
                     }
                 });
+
+                navLinks.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        if (window.innerWidth <= 1024) {
+                            navLinks.classList.remove('active');
+                            mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
+                            mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                            document.body.style.overflow = '';
+                        }
+                    });
+                });
+                
+                window.addEventListener('resize', () => {
+                    if (window.innerWidth > 1024) {
+                        navLinks.classList.remove('active');
+                        mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
+                        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                        document.body.style.overflow = '';
+                    }
+                });
+            }
+
+            // Header scroll effect
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    
+                    if (href.startsWith('#') && href !== '#') {
+                        e.preventDefault();
+                        
+                        const targetId = href.substring(1);
+                        const targetElement = document.getElementById(targetId);
+                        
+                        if (targetElement) {
+                            const headerHeight = document.getElementById('header').offsetHeight;
+                            const targetPosition = targetElement.offsetTop - headerHeight - 20;
+                            
+                            window.scrollTo({
+                                top: targetPosition,
+                                behavior: 'smooth'
+                            });
+                            
+                            history.pushState(null, '', href);
+                        }
+                    }
+                });
+            });
+        }
+
+        function initializeAnimations() {
+            const animatedElements = document.querySelectorAll('.animate-on-scroll');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const delay = entry.target.dataset.delay || 0;
+                        setTimeout(() => {
+                            entry.target.classList.add('animated');
+                        }, delay);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
             });
             
-            window.addEventListener('resize', () => {
-                if (window.innerWidth > 1024) {
-                    navLinks.classList.remove('active');
-                    mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
-                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
-                    document.body.style.overflow = '';
+            animatedElements.forEach((element, index) => {
+                if (!element.dataset.delay) {
+                    element.dataset.delay = index * 100;
                 }
+                observer.observe(element);
             });
         }
 
-        // Header scroll effect
-        const header = document.getElementById('header');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
-
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                const href = this.getAttribute('href');
-                
-                if (href.startsWith('#') && href !== '#') {
-                    e.preventDefault();
-                    
-                    const targetId = href.substring(1);
-                    const targetElement = document.getElementById(targetId);
-                    
-                    if (targetElement) {
-                        const headerHeight = document.getElementById('header').offsetHeight;
-                        const targetPosition = targetElement.offsetTop - headerHeight - 20;
-                        
-                        window.scrollTo({
-                            top: targetPosition,
-                            behavior: 'smooth'
-                        });
-                        
-                        history.pushState(null, '', href);
-                    }
-                }
-            });
-        });
-    }
-
-    function initializeAnimations() {
-        const animatedElements = document.querySelectorAll('.animate-on-scroll');
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const delay = entry.target.dataset.delay || 0;
-                    setTimeout(() => {
-                        entry.target.classList.add('animated');
-                    }, delay);
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        });
-        
-        animatedElements.forEach((element, index) => {
-            if (!element.dataset.delay) {
-                element.dataset.delay = index * 100;
-            }
-            observer.observe(element);
-        });
-    }
-
-    function initializeScrollEffects() {
-        // Add parallax effect to hero
-        const hero = document.querySelector('.events-hero');
-        if (hero) {
+        function initializeScrollEffects() {
+            let lastScroll = 0;
             window.addEventListener('scroll', () => {
-                const scrolled = window.pageYOffset;
-                const rate = scrolled * -0.5;
-                hero.style.transform = `translate3d(0, ${rate}px, 0)`;
+                const currentScroll = window.pageYOffset;
+                
+                // Add parallax effect to hero
+                const hero = document.querySelector('.events-hero');
+                if (hero) {
+                    const scrolled = window.pageYOffset;
+                    const rate = scrolled * -0.5;
+                    hero.style.transform = `translate3d(0, ${rate}px, 0)`;
+                }
+                
+                lastScroll = currentScroll;
             });
         }
-    }
 
-    // ============================================
-    // GLOBAL FUNCTIONS
-    // ============================================
-    
-    // Make openPaymentModal globally available for onclick handlers
-    window.openPaymentModal = openPaymentModal;
-    window.selectTicket = selectTicket;
+        // ============================================
+        // GLOBAL FUNCTIONS
+        // ============================================
+        // Make functions globally available for onclick handlers
+        window.openPaymentModal = openPaymentModal;
+        window.selectTicket = selectTicket;
+        window.processPayment = processPayment;
 
-    // Touch optimizations
-    document.addEventListener('touchend', (event) => {
-        const now = Date.now();
-        if (now - lastTouchEnd <= 300) {
-            event.preventDefault();
-        }
-        lastTouchEnd = now;
-    }, false);
-    
-    let lastTouchEnd = 0;
-</script>
+        // Touch device optimizations
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(event) {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+
+        // Add CSS for firebase-status and data-update-indicator
+        const style = document.createElement('style');
+        style.textContent = `
+            .firebase-status {
+                position: fixed;
+                bottom: 20px;
+                left: 20px;
+                padding: 8px 12px;
+                border-radius: var(--radius-md);
+                font-size: 12px;
+                z-index: 9999;
+                background: #28a745;
+                color: white;
+                box-shadow: var(--shadow-sm);
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                transition: var(--transition-smooth);
+            }
+            
+            .firebase-status.offline {
+                background: #dc3545;
+            }
+            
+            .firebase-status i {
+                font-size: 10px;
+            }
+            
+            .data-update-indicator {
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                padding: 12px 16px;
+                background: var(--primary-red);
+                color: white;
+                border-radius: var(--radius-lg);
+                font-size: 14px;
+                z-index: 10000;
+                box-shadow: var(--shadow-lg);
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                transform: translateX(120%);
+                transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            }
+            
+            .data-update-indicator.show {
+                transform: translateX(0);
+            }
+            
+            .data-update-indicator i {
+                animation: spin 1s linear infinite;
+            }
+            
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
 </body>
 </html>
