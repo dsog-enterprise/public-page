@@ -16,10 +16,6 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Trix Editor for rich text -->
-    <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.0/dist/trix.css">
-    <script type="text/javascript" src="https://unpkg.com/trix@2.0.0/dist/trix.umd.min.js"></script>
-    
     <style>
         :root {
             --primary-red: #C21807;
@@ -710,81 +706,37 @@
             }
         }
 
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .admin-sidebar {
-                display: none;
-            }
-            
-            .admin-main {
-                margin-left: 0;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .admin-main {
-                padding: var(--space-md);
-            }
-            
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .form-actions {
-                flex-direction: column;
-            }
-            
-            .quick-actions {
-                flex-direction: column;
-            }
-            
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            table {
-                display: block;
-                overflow-x: auto;
-            }
-        }
-        /* All previous styles remain the same, adding new ones for additional sections */
-        
-        /* Trix Editor Styling */
-        trix-toolbar {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-bottom: none;
-            border-radius: var(--radius-md) var(--radius-md) 0 0;
-            padding: var(--space-sm);
-        }
-        
-        trix-editor {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 0 0 var(--radius-md) var(--radius-md);
-            min-height: 150px;
-            padding: var(--space-md);
-            color: var(--text-primary);
-            font-family: var(--font-primary);
-        }
-        
-        /* Array items styling */
-        .array-item {
+        /* Ticket Management */
+        .ticket-section {
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
-            padding: var(--space-md);
-            margin-bottom: var(--space-sm);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-md);
+        }
+
+        .ticket-section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: var(--space-md);
         }
-        
-        .array-item-content {
-            flex: 1;
-            padding-right: var(--space-md);
+
+        .ticket-type-badge {
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: 600;
         }
-        
+
+        .ticket-type-badge.early_bird { background: rgba(40, 167, 69, 0.1); color: var(--success); }
+        .ticket-type-badge.standard { background: rgba(23, 162, 184, 0.1); color: var(--info); }
+        .ticket-type-badge.vip { background: rgba(111, 66, 193, 0.1); color: #6B46C1; }
+        .ticket-type-badge.general { background: rgba(108, 117, 125, 0.1); color: var(--dark-gray); }
+        .ticket-type-badge.premium { background: rgba(255, 193, 7, 0.1); color: var(--warning); }
+        .ticket-type-badge.donation { background: rgba(220, 53, 69, 0.1); color: var(--danger); }
+        .ticket-type-badge.sponsor { background: rgba(194, 24, 7, 0.1); color: var(--primary-red); }
+
         /* Tab navigation for sections */
         .tab-navigation {
             display: flex;
@@ -813,7 +765,7 @@
             background: var(--primary-red);
             color: white;
         }
-        
+
         /* Image preview */
         .image-preview {
             width: 100%;
@@ -833,49 +785,40 @@
             max-height: 100%;
             object-fit: cover;
         }
-        
-        /* Sortable lists */
-        .sortable-list {
-            list-style: none;
-            padding: 0;
+
+        /* Nested form sections */
+        .nested-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+            margin-top: var(--space-md);
         }
         
-        .sortable-item {
+        .nested-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-md);
+        }
+
+        /* Array items styling */
+        .array-item {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
             padding: var(--space-md);
             margin-bottom: var(--space-sm);
-            cursor: move;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: var(--space-md);
         }
         
-        .sortable-item:hover {
-            border-color: var(--primary-red);
-        }
-        
-        .sortable-handle {
-            color: var(--text-secondary);
-            cursor: move;
-        }
-        
-        /* Multi-select for array fields */
-        .array-input-container {
-            margin-bottom: var(--space-md);
-        }
-        
-        .array-input-group {
-            display: flex;
-            gap: var(--space-sm);
-            margin-bottom: var(--space-sm);
-        }
-        
-        .array-input-group input {
+        .array-item-content {
             flex: 1;
+            padding-right: var(--space-md);
         }
-        
+
         /* Tag input */
         .tag-input {
             display: flex;
@@ -915,23 +858,7 @@
         .tag-input input:focus {
             outline: none;
         }
-        
-        /* Nested form sections */
-        .nested-section {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            padding: var(--space-lg);
-            margin-top: var(--space-md);
-        }
-        
-        .nested-section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--space-md);
-        }
-        
+
         /* Dashboard improvements */
         .dashboard-cards {
             display: grid;
@@ -976,7 +903,7 @@
             color: var(--text-secondary);
             font-size: 0.9rem;
         }
-        
+
         /* Quick stats */
         .quick-stats {
             display: grid;
@@ -1005,77 +932,7 @@
             font-size: 0.85rem;
             margin-top: var(--space-xs);
         }
-        
-        /* Enhanced form styling */
-        .form-section-tabs {
-            display: flex;
-            gap: var(--space-md);
-            margin-bottom: var(--space-xl);
-            overflow-x: auto;
-        }
-        
-        .form-tab {
-            padding: var(--space-md) var(--space-lg);
-            background: transparent;
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            color: var(--text-secondary);
-            white-space: nowrap;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        
-        .form-tab:hover {
-            background: var(--bg-secondary);
-        }
-        
-        .form-tab.active {
-            background: var(--primary-red);
-            color: white;
-            border-color: var(--primary-red);
-        }
-        
-        /* Color picker */
-        .color-picker {
-            width: 100%;
-            height: 44px;
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border-color);
-            cursor: pointer;
-        }
-        
-        /* Progress bar */
-        .progress-bar {
-            height: 6px;
-            background: var(--bg-secondary);
-            border-radius: 3px;
-            overflow: hidden;
-            margin-top: var(--space-sm);
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: var(--primary-red);
-            border-radius: 3px;
-            transition: width 0.3s ease;
-        }
-        
-        /* Loading overlay */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            flex-direction: column;
-            color: white;
-        }
-        
+
         /* JSON viewer */
         .json-viewer {
             background: var(--bg-secondary);
@@ -1087,11 +944,42 @@
             max-height: 400px;
             overflow-y: auto;
         }
-        
-        /* Responsive improvements */
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .admin-sidebar {
+                display: none;
+            }
+            
+            .admin-main {
+                margin-left: 0;
+            }
+        }
+
         @media (max-width: 768px) {
-            .form-section-tabs {
-                flex-wrap: wrap;
+            .admin-main {
+                padding: var(--space-md);
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .quick-actions {
+                flex-direction: column;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
             }
             
             .dashboard-cards {
@@ -1454,12 +1342,13 @@
                 </div>
             </div>
 
-            <!-- Events Section (Enhanced) -->
+            <!-- Events Section (Enhanced with Ticket Management) -->
             <div id="events" class="content-section">
-                <div class="form-section-tabs" id="eventsFormTabs">
-                    <button class="form-tab active" onclick="showEventTab('basic')">Basic Info</button>
-                    <button class="form-tab" onclick="showEventTab('details')">Details</button>
-                    <button class="form-tab" onclick="showEventTab('media')">Media & Links</button>
+                <div class="tab-navigation" id="eventsFormTabs">
+                    <button class="tab-btn active" onclick="showEventTab('basic')">Basic Info</button>
+                    <button class="tab-btn" onclick="showEventTab('details')">Details</button>
+                    <button class="tab-btn" onclick="showEventTab('tickets')">Tickets</button>
+                    <button class="tab-btn" onclick="showEventTab('media')">Media & Links</button>
                 </div>
                 
                 <div class="form-section">
@@ -1532,6 +1421,24 @@
                         </div>
                     </div>
                     
+                    <div id="eventTabTickets" class="event-tab" style="display: none;">
+                        <div class="nested-section-header">
+                            <h4>Event Tickets</h4>
+                            <button type="button" class="btn btn-small btn-primary" onclick="addTicketType()">
+                                <i class="fas fa-plus"></i> Add Ticket Type
+                            </button>
+                        </div>
+                        
+                        <div id="ticketsContainer">
+                            <!-- Ticket types will be added here -->
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="eventRegistrationUrl">Default Registration URL</label>
+                            <input type="text" id="eventRegistrationUrl" placeholder="Enter registration URL">
+                        </div>
+                    </div>
+                    
                     <div id="eventTabMedia" class="event-tab" style="display: none;">
                         <div class="form-group">
                             <label for="eventImageUrl">Image URL</label>
@@ -1539,11 +1446,6 @@
                             <div class="image-preview" id="eventImagePreview">
                                 <span>No image preview</span>
                             </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="eventRegistrationUrl">Registration URL *</label>
-                            <input type="text" id="eventRegistrationUrl" placeholder="Enter registration URL">
                         </div>
                         
                         <div class="checkbox-group">
@@ -1578,6 +1480,7 @@
                                 <th>Title</th>
                                 <th>Category</th>
                                 <th>Date</th>
+                                <th>Tickets</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -1589,20 +1492,32 @@
                 </div>
             </div>
 
-            <!-- Training Programs Section (Enhanced) -->
+            <!-- Training Programs Section -->
             <div id="trainingPrograms" class="content-section">
                 <div class="form-section">
                     <h3><i class="fas fa-graduation-cap"></i> Manage Training Programs</h3>
                     
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="trainingName">Program Name *</label>
-                            <input type="text" id="trainingName" placeholder="Enter program name">
+                            <label for="trainingId">Program ID</label>
+                            <input type="text" id="trainingId" placeholder="Auto-generated">
                         </div>
                         
                         <div class="form-group">
+                            <label for="trainingName">Program Name *</label>
+                            <input type="text" id="trainingName" placeholder="Enter program name">
+                        </div>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
                             <label for="trainingDuration">Duration</label>
                             <input type="text" id="trainingDuration" placeholder="e.g., 8 WEEKS">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="trainingIcon">Icon Class (Font Awesome)</label>
+                            <input type="text" id="trainingIcon" placeholder="e.g., fas fa-briefcase" value="fas fa-">
                         </div>
                     </div>
                     
@@ -1623,19 +1538,14 @@
                     
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="trainingIcon">Icon Class (Font Awesome)</label>
-                            <input type="text" id="trainingIcon" placeholder="e.g., fas fa-briefcase" value="fas fa-">
-                        </div>
-                        
-                        <div class="form-group">
                             <label for="trainingOrder">Display Order</label>
                             <input type="number" id="trainingOrder" value="1">
                         </div>
-                    </div>
-                    
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="trainingActive" checked>
-                        <label for="trainingActive">Program is active</label>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="trainingActive" checked>
+                            <label for="trainingActive">Program is active</label>
+                        </div>
                     </div>
                     
                     <div class="form-actions">
@@ -1736,7 +1646,7 @@
                 </div>
             </div>
 
-            <!-- Team Members Section (Enhanced) -->
+            <!-- Team Members Section -->
             <div id="team" class="content-section">
                 <div class="form-section">
                     <h3><i class="fas fa-users"></i> Manage Team Members</h3>
@@ -1824,7 +1734,7 @@
                 </div>
             </div>
 
-            <!-- Testimonials Section (Enhanced) -->
+            <!-- Testimonials Section -->
             <div id="testimonials" class="content-section">
                 <div class="form-section">
                     <h3><i class="fas fa-comment"></i> Manage Testimonials</h3>
@@ -2056,7 +1966,7 @@
                 </div>
             </div>
 
-            <!-- Statistics Section (Enhanced) -->
+            <!-- Statistics Section -->
             <div id="stats" class="content-section">
                 <div class="form-section">
                     <h3><i class="fas fa-chart-bar"></i> Update Statistics</h3>
@@ -2118,7 +2028,7 @@
                 </div>
             </div>
 
-            <!-- FAQ Section (Enhanced) -->
+            <!-- FAQ Section -->
             <div id="faq" class="content-section">
                 <div class="form-section">
                     <h3><i class="fas fa-question-circle"></i> Manage FAQs</h3>
@@ -2702,12 +2612,185 @@
             document.querySelectorAll('.event-tab').forEach(tab => {
                 tab.style.display = 'none';
             });
-            document.querySelectorAll('.form-tab').forEach(tab => {
+            document.querySelectorAll('.tab-btn').forEach(tab => {
                 tab.classList.remove('active');
             });
             
-            document.getElementById(`eventTab${tabName.charAt(0).toUpperCase() + tabName.slice(1)}`).style.display = 'block';
+            const tabElements = {
+                'basic': 'eventTabBasic',
+                'details': 'eventTabDetails',
+                'tickets': 'eventTabTickets',
+                'media': 'eventTabMedia'
+            };
+            
+            document.getElementById(tabElements[tabName]).style.display = 'block';
             event.target.classList.add('active');
+        }
+
+        function addTicketType() {
+            const container = document.getElementById('ticketsContainer');
+            const ticketId = 'ticket_' + Date.now();
+            
+            const ticketDiv = document.createElement('div');
+            ticketDiv.className = 'ticket-section';
+            ticketDiv.id = ticketId;
+            ticketDiv.innerHTML = `
+                <div class="ticket-section-header">
+                    <h4>New Ticket Type</h4>
+                    <button type="button" class="action-btn delete" onclick="this.parentElement.parentElement.remove()">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Ticket Type</label>
+                        <select class="ticket-type">
+                            <option value="early_bird">Early Bird</option>
+                            <option value="standard">Standard</option>
+                            <option value="vip">VIP</option>
+                            <option value="general">General</option>
+                            <option value="premium">Premium</option>
+                            <option value="donation">Donation</option>
+                            <option value="sponsor">Sponsor</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Ticket Name</label>
+                        <input type="text" class="ticket-name" placeholder="e.g., Early Bird Bootcamp Ticket">
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Price</label>
+                        <input type="number" class="ticket-price" placeholder="e.g., 500">
+                    </div>
+                    <div class="form-group">
+                        <label>Currency</label>
+                        <select class="ticket-currency">
+                            <option value="USD">USD ($)</option>
+                            <option value="KES">KES (KSh)</option>
+                            <option value="EUR">EUR (€)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Quantity Available</label>
+                        <input type="number" class="ticket-quantity-available" placeholder="e.g., 10">
+                    </div>
+                    <div class="form-group">
+                        <label>Quantity Sold</label>
+                        <input type="number" class="ticket-quantity-sold" placeholder="e.g., 0">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea class="ticket-description" placeholder="Describe this ticket type" rows="2"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Includes (comma separated)</label>
+                    <input type="text" class="ticket-includes" placeholder="e.g., Full bootcamp access + Materials + Mentorship">
+                </div>
+                <div class="form-group">
+                    <label>VPay Link</label>
+                    <input type="text" class="ticket-vpay-link" placeholder="https://vpay.pages.dev/payment/...">
+                </div>
+            `;
+            
+            container.appendChild(ticketDiv);
+        }
+
+        function getTicketsData() {
+            const tickets = {};
+            document.querySelectorAll('#ticketsContainer .ticket-section').forEach(ticket => {
+                const type = ticket.querySelector('.ticket-type').value;
+                tickets[type] = {
+                    type: type,
+                    name: ticket.querySelector('.ticket-name').value,
+                    price: parseFloat(ticket.querySelector('.ticket-price').value) || 0,
+                    currency: ticket.querySelector('.ticket-currency').value,
+                    quantityAvailable: parseInt(ticket.querySelector('.ticket-quantity-available').value) || 0,
+                    quantitySold: parseInt(ticket.querySelector('.ticket-quantity-sold').value) || 0,
+                    description: ticket.querySelector('.ticket-description').value,
+                    includes: ticket.querySelector('.ticket-includes').value,
+                    vpayLink: ticket.querySelector('.ticket-vpay-link').value
+                };
+            });
+            return tickets;
+        }
+
+        function setTicketsData(tickets) {
+            const container = document.getElementById('ticketsContainer');
+            container.innerHTML = '';
+            
+            Object.entries(tickets).forEach(([type, ticket]) => {
+                const ticketDiv = document.createElement('div');
+                ticketDiv.className = 'ticket-section';
+                ticketDiv.innerHTML = `
+                    <div class="ticket-section-header">
+                        <h4>${ticket.name || type}</h4>
+                        <button type="button" class="action-btn delete" onclick="this.parentElement.parentElement.remove()">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Ticket Type</label>
+                            <select class="ticket-type">
+                                <option value="early_bird" ${type === 'early_bird' ? 'selected' : ''}>Early Bird</option>
+                                <option value="standard" ${type === 'standard' ? 'selected' : ''}>Standard</option>
+                                <option value="vip" ${type === 'vip' ? 'selected' : ''}>VIP</option>
+                                <option value="general" ${type === 'general' ? 'selected' : ''}>General</option>
+                                <option value="premium" ${type === 'premium' ? 'selected' : ''}>Premium</option>
+                                <option value="donation" ${type === 'donation' ? 'selected' : ''}>Donation</option>
+                                <option value="sponsor" ${type === 'sponsor' ? 'selected' : ''}>Sponsor</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Ticket Name</label>
+                            <input type="text" class="ticket-name" value="${ticket.name || ''}">
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Price</label>
+                            <input type="number" class="ticket-price" value="${ticket.price || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Currency</label>
+                            <select class="ticket-currency">
+                                <option value="USD" ${ticket.currency === 'USD' ? 'selected' : ''}>USD ($)</option>
+                                <option value="KES" ${ticket.currency === 'KES' ? 'selected' : ''}>KES (KSh)</option>
+                                <option value="EUR" ${ticket.currency === 'EUR' ? 'selected' : ''}>EUR (€)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Quantity Available</label>
+                            <input type="number" class="ticket-quantity-available" value="${ticket.quantityAvailable || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Quantity Sold</label>
+                            <input type="number" class="ticket-quantity-sold" value="${ticket.quantitySold || ''}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea class="ticket-description" rows="2">${ticket.description || ''}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Includes (comma separated)</label>
+                        <input type="text" class="ticket-includes" value="${ticket.includes || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>VPay Link</label>
+                        <input type="text" class="ticket-vpay-link" value="${ticket.vpayLink || ''}">
+                    </div>
+                `;
+                
+                container.appendChild(ticketDiv);
+            });
         }
 
         async function loadEvents() {
@@ -2719,11 +2802,13 @@
                 
                 if (events) {
                     Object.entries(events).forEach(([id, event]) => {
+                        const ticketCount = event.tickets ? Object.keys(event.tickets).length : 0;
                         const row = document.createElement('tr');
                         row.innerHTML = `
                             <td>${event.title || 'No title'}</td>
                             <td>${event.category || 'No category'}</td>
                             <td>${event.date || 'No date'}</td>
+                            <td>${ticketCount} ticket type(s)</td>
                             <td>
                                 <span class="status-badge ${event.active ? 'status-active' : 'status-inactive'}">
                                     ${event.active ? 'Active' : 'Inactive'}
@@ -2743,7 +2828,7 @@
                         table.appendChild(row);
                     });
                 } else {
-                    table.innerHTML = '<tr><td colspan="5" style="text-align: center;">No events found</td></tr>';
+                    table.innerHTML = '<tr><td colspan="6" style="text-align: center;">No events found</td></tr>';
                 }
             } catch (error) {
                 showMessage('Error loading events: ' + error.message, 'error');
@@ -2751,6 +2836,8 @@
         }
 
         async function saveEvent() {
+            const tickets = getTicketsData();
+            
             const eventData = {
                 title: document.getElementById('eventTitle').value.trim(),
                 category: document.getElementById('eventCategory').value,
@@ -2768,7 +2855,12 @@
                 lastUpdated: new Date().toISOString()
             };
 
-            if (!eventData.title || !eventData.date || !eventData.description || !eventData.registrationUrl) {
+            // Only add tickets if there are any
+            if (Object.keys(tickets).length > 0) {
+                eventData.tickets = tickets;
+            }
+
+            if (!eventData.title || !eventData.date || !eventData.description) {
                 showMessage('Please fill in required fields', 'error');
                 return;
             }
@@ -2813,6 +2905,13 @@
                     document.getElementById('eventOrder').value = event.order || 1;
                     document.getElementById('eventActive').checked = event.active !== false;
                     
+                    // Set tickets if they exist
+                    if (event.tickets) {
+                        setTicketsData(event.tickets);
+                    } else {
+                        document.getElementById('ticketsContainer').innerHTML = '';
+                    }
+                    
                     // Update image preview
                     updateImagePreview('eventImagePreview', event.imageUrl);
                     
@@ -2851,6 +2950,9 @@
             document.getElementById('eventFrequency').value = 'one-time';
             document.getElementById('eventOrder').value = '1';
             document.getElementById('eventActive').checked = true;
+            
+            // Clear tickets
+            document.getElementById('ticketsContainer').innerHTML = '';
             
             // Reset tabs
             showEventTab('basic');
@@ -2949,6 +3051,7 @@
                 const program = snapshot.val();
                 
                 if (program) {
+                    document.getElementById('trainingId').value = programId;
                     document.getElementById('trainingName').value = program.name || '';
                     document.getElementById('trainingDuration').value = program.duration || '';
                     document.getElementById('trainingDescription').value = program.description || '';
@@ -2982,6 +3085,7 @@
         }
 
         function clearTrainingForm() {
+            document.getElementById('trainingId').value = '';
             document.getElementById('trainingName').value = '';
             document.getElementById('trainingDuration').value = '';
             document.getElementById('trainingDescription').value = '';
@@ -3420,7 +3524,12 @@
                 tab.classList.remove('active');
             });
             
-            document.getElementById(`home${tabName.charAt(0).toUpperCase() + tabName.slice(1)}Tab`).style.display = 'block';
+            const tabElements = {
+                'hero': 'homeHeroTab',
+                'approach': 'homeApproachTab'
+            };
+            
+            document.getElementById(tabElements[tabName]).style.display = 'block';
             event.target.classList.add('active');
         }
 
@@ -3620,7 +3729,12 @@
                 tab.classList.remove('active');
             });
             
-            document.getElementById(`training${tabName.charAt(0).toUpperCase() + tabName.slice(1)}Tab`).style.display = 'block';
+            const tabElements = {
+                'hero': 'trainingHeroTab',
+                'outcomes': 'trainingOutcomesTab'
+            };
+            
+            document.getElementById(tabElements[tabName]).style.display = 'block';
             event.target.classList.add('active');
         }
 
@@ -3921,7 +4035,13 @@
                 tab.classList.remove('active');
             });
             
-            document.getElementById(`data${tabName.charAt(0).toUpperCase() + tabName.slice(1)}Tab`).style.display = 'block';
+            const tabElements = {
+                'export': 'dataExportTab',
+                'import': 'dataImportTab',
+                'backup': 'dataBackupTab'
+            };
+            
+            document.getElementById(tabElements[tabName]).style.display = 'block';
             event.target.classList.add('active');
         }
 
@@ -4118,6 +4238,7 @@
         window.editEventCategory = editEventCategory;
         window.deleteEventCategory = deleteEventCategory;
         window.showEventTab = showEventTab;
+        window.addTicketType = addTicketType;
         window.saveEvent = saveEvent;
         window.clearEventForm = clearEventForm;
         window.editEvent = editEvent;
