@@ -2126,790 +2126,815 @@
 
     <!-- JavaScript -->
     <script>
-        // ============================================
-        // FIREBASE CONFIGURATION
-        // ============================================
-        const firebaseConfig = {
-            apiKey: "AIzaSyDb5ZFHbo7lGM8ph0oBxFVTHRF5C5C_DWU",
-            authDomain: "dsog-events.firebaseapp.com",
-            databaseURL: "https://dsog-events-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "dsog-events",
-            storageBucket: "dsog-events.firebasestorage.app",
-            messagingSenderId: "1075977932287",
-            appId: "1:1075977932287:web:b2bf4d1c0083d2dac8ebca"
-        };
+    // ============================================
+    // FIREBASE CONFIGURATION
+    // ============================================
+    const firebaseConfig = {
+        apiKey: "AIzaSyDb5ZFHbo7lGM8ph0oBxFVTHRF5C5C_DWU",
+        authDomain: "dsog-events.firebaseapp.com",
+        databaseURL: "https://dsog-events-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "dsog-events",
+        storageBucket: "dsog-events.firebasestorage.app",
+        messagingSenderId: "1075977932287",
+        appId: "1:1075977932287:web:b2bf4d1c0083d2dac8ebca"
+    };
 
-        // Initialize Firebase
-        let db;
-        let firebaseListeners = [];
-        let isFirebaseInitialized = false;
-        let selectedEvent = null;
-        let selectedTicket = null;
+    // Initialize Firebase
+    let db;
+    let firebaseListeners = [];
+    let isFirebaseInitialized = false;
+    let selectedEvent = null;
+    let selectedTicket = null;
 
-        try {
-            firebase.initializeApp(firebaseConfig);
-            db = firebase.database();
-            isFirebaseInitialized = true;
-            console.log('Firebase initialized successfully for Events Ticketing');
-        } catch (error) {
-            console.error('Firebase initialization error:', error);
-            isFirebaseInitialized = false;
+    try {
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.database();
+        isFirebaseInitialized = true;
+        console.log('Firebase initialized successfully for Events Ticketing');
+    } catch (error) {
+        console.error('Firebase initialization error:', error);
+        isFirebaseInitialized = false;
+    }
+
+    // Cache management
+    const CACHE_KEY = 'dsog_tickets_cache';
+    const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
+    // Update management
+    let lastUpdateTime = 0;
+    const UPDATE_DEBOUNCE_TIME = 2000; // 2 seconds between updates
+    let updateTimeout = null;
+
+    // ============================================
+    // INITIALIZATION
+    // ============================================
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('🚀 DSOG Events Ticketing System Loaded');
+        
+        // Initialize all components
+        initializeTheme();
+        initializeNavigation();
+        initializeAnimations();
+        initializeScrollEffects();
+        setupPaymentModalEvents();
+        
+        // Set current year
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        // Load from cache first for instant display
+        const cachedData = getCachedData();
+        if (cachedData && !isCacheExpired(cachedData.timestamp)) {
+            console.log('Loading from cache for instant display');
+            displayCachedData(cachedData);
         }
+        
+        // Initialize Firebase connection
+        if (isFirebaseInitialized) {
+            initializeFirebaseConnection();
+            setupRealtimeListeners();
+        } else {
+            showFirebaseStatus('offline');
+            console.warn('Firebase not available, using cached data only');
+        }
+        
+        console.log('Ticketing system initialized with real-time updates');
+    });
 
-        // Cache management
-        const CACHE_KEY = 'dsog_tickets_cache';
-        const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
-
-        // Update management
-        let lastUpdateTime = 0;
-        const UPDATE_DEBOUNCE_TIME = 2000; // 2 seconds between updates
-        let updateTimeout = null;
-
-        // ============================================
-        // INITIALIZATION
-        // ============================================
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 DSOG Events Ticketing System Loaded');
-            
-            // Initialize all components
-            initializeTheme();
-            initializeNavigation();
-            initializeAnimations();
-            initializeScrollEffects();
-            setupPaymentModalEvents();
-            
-            // Set current year
-            document.getElementById('currentYear').textContent = new Date().getFullYear();
-            
-            // Load from cache first for instant display
-            const cachedData = getCachedData();
-            if (cachedData && !isCacheExpired(cachedData.timestamp)) {
-                console.log('Loading from cache for instant display');
-                displayCachedData(cachedData);
-            }
-            
-            // Initialize Firebase connection
-            if (isFirebaseInitialized) {
-                initializeFirebaseConnection();
-                setupRealtimeListeners();
+    // ============================================
+    // FIREBASE CONNECTION MANAGEMENT
+    // ============================================
+    function initializeFirebaseConnection() {
+        if (!isFirebaseInitialized) return;
+        
+        // Monitor connection status
+        const connectedRef = db.ref('.info/connected');
+        connectedRef.on('value', (snap) => {
+            if (snap.val() === true) {
+                showFirebaseStatus('online');
+                console.log('Connected to Firebase - Real-time updates active');
             } else {
                 showFirebaseStatus('offline');
-                console.warn('Firebase not available, using cached data only');
+                console.log('Disconnected from Firebase - Using cached data');
             }
-            
-            console.log('Ticketing system initialized with real-time updates');
         });
+    }
 
-        // ============================================
-        // FIREBASE CONNECTION MANAGEMENT
-        // ============================================
-        function initializeFirebaseConnection() {
-            if (!isFirebaseInitialized) return;
-            
-            // Monitor connection status
-            const connectedRef = db.ref('.info/connected');
-            connectedRef.on('value', (snap) => {
-                if (snap.val() === true) {
-                    showFirebaseStatus('online');
-                    console.log('Connected to Firebase - Real-time updates active');
-                } else {
-                    showFirebaseStatus('offline');
-                    console.log('Disconnected from Firebase - Using cached data');
-                }
-            });
+    function showFirebaseStatus(status) {
+        const statusEl = document.getElementById('firebaseStatus');
+        if (!statusEl) return;
+        
+        if (status === 'online') {
+            statusEl.classList.remove('offline');
+            statusEl.innerHTML = '<i class="fas fa-circle"></i><span>Live</span>';
+            statusEl.setAttribute('aria-label', 'Connected to live updates');
+        } else {
+            statusEl.classList.add('offline');
+            statusEl.innerHTML = '<i class="fas fa-circle"></i><span>Offline</span>';
+            statusEl.setAttribute('aria-label', 'Using cached data - offline mode');
         }
+    }
 
-        function showFirebaseStatus(status) {
-            const statusEl = document.getElementById('firebaseStatus');
-            if (!statusEl) return;
+    function showUpdateIndicator(type) {
+        const now = Date.now();
+        if (now - lastUpdateTime < UPDATE_DEBOUNCE_TIME) return;
+        
+        lastUpdateTime = now;
+        
+        const indicator = document.getElementById('dataUpdateIndicator');
+        if (!indicator) return;
+        
+        indicator.querySelector('span').textContent = `${type} updated`;
+        indicator.classList.add('show');
+        
+        // Auto-hide after 3 seconds
+        setTimeout(() => {
+            indicator.classList.remove('show');
+        }, 3000);
+    }
+
+    // ============================================
+    // SILENT REAL-TIME UPDATES
+    // ============================================
+    function setupRealtimeListeners() {
+        if (!isFirebaseInitialized) return;
+        
+        console.log('Setting up silent real-time listeners for ticketing...');
+        
+        // Remove any existing listeners
+        removeAllListeners();
+        
+        // Debounced update function
+        const debouncedUpdate = (type) => {
+            if (updateTimeout) clearTimeout(updateTimeout);
             
-            if (status === 'online') {
-                statusEl.classList.remove('offline');
-                statusEl.innerHTML = '<i class="fas fa-circle"></i><span>Live</span>';
-                statusEl.setAttribute('aria-label', 'Connected to live updates');
-            } else {
-                statusEl.classList.add('offline');
-                statusEl.innerHTML = '<i class="fas fa-circle"></i><span>Offline</span>';
-                statusEl.setAttribute('aria-label', 'Using cached data - offline mode');
+            updateTimeout = setTimeout(() => {
+                showUpdateIndicator(type);
+            }, UPDATE_DEBOUNCE_TIME);
+        };
+        
+        // 1. Event Categories Listener
+        const categoriesRef = db.ref('eventCategories');
+        const categoriesListener = categoriesRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                displayEventCategories(data);
+                saveToCachePartial('eventCategories', data);
+                debouncedUpdate('Categories');
             }
-        }
+        });
+        firebaseListeners.push({ ref: categoriesRef, listener: categoriesListener });
+        
+        // 2. Upcoming Events Listener
+        const eventsRef = db.ref('upcomingEvents');
+        const eventsListener = eventsRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            displayEventsWithTickets(data);
+            saveToCachePartial('upcomingEvents', data);
+            debouncedUpdate('Events');
+        });
+        firebaseListeners.push({ ref: eventsRef, listener: eventsListener });
+        
+        console.log(`Setup ${firebaseListeners.length} silent real-time listeners for ticketing`);
+    }
 
-        function showUpdateIndicator(type) {
-            const now = Date.now();
-            if (now - lastUpdateTime < UPDATE_DEBOUNCE_TIME) return;
+    function removeAllListeners() {
+        firebaseListeners.forEach(({ ref, listener }) => {
+            if (ref && listener) {
+                ref.off('value', listener);
+            }
+        });
+        firebaseListeners = [];
+    }
+
+    // ============================================
+    // CACHE MANAGEMENT
+    // ============================================
+    function getCachedData() {
+        try {
+            const cached = localStorage.getItem(CACHE_KEY);
+            return cached ? JSON.parse(cached) : null;
+        } catch (error) {
+            console.error('Error reading cache:', error);
+            return null;
+        }
+    }
+
+    function saveToCachePartial(key, data) {
+        try {
+            const cached = getCachedData() || { timestamp: Date.now(), data: {} };
+            cached.data[key] = data;
+            cached.timestamp = Date.now();
+            localStorage.setItem(CACHE_KEY, JSON.stringify(cached));
+        } catch (error) {
+            console.error('Error saving to cache:', error);
+        }
+    }
+
+    function isCacheExpired(timestamp) {
+        return Date.now() - timestamp > CACHE_DURATION;
+    }
+
+    function displayCachedData(cachedData) {
+        const data = cachedData.data;
+        
+        if (data.eventCategories) {
+            displayEventCategories(data.eventCategories);
+        }
+        
+        if (data.upcomingEvents) {
+            displayEventsWithTickets(data.upcomingEvents);
+        }
+    }
+
+    // ============================================
+    // UI UPDATES - MATCHING HOME PAGE PATTERN
+    // ============================================
+    function displayEventCategories(categories) {
+        const categoriesContainer = document.getElementById('eventCategories');
+        if (!categoriesContainer) return;
+        
+        // Convert to array and filter active categories
+        const categoriesArray = categories ? Object.values(categories)
+            .filter(cat => cat.active !== false)
+            .sort((a, b) => (a.order || 999) - (b.order || 999)) : [];
+        
+        if (categoriesArray.length > 0) {
+            categoriesContainer.innerHTML = '';
+            categoriesArray.forEach((category, index) => {
+                const categoryCard = createCategoryCard(category, index);
+                categoriesContainer.appendChild(categoryCard);
+            });
             
-            lastUpdateTime = now;
-            
-            const indicator = document.getElementById('dataUpdateIndicator');
-            if (!indicator) return;
-            
-            indicator.querySelector('span').textContent = `${type} updated`;
-            indicator.classList.add('show');
-            
-            // Auto-hide after 3 seconds
+            // Initialize animations for new cards
             setTimeout(() => {
-                indicator.classList.remove('show');
-            }, 3000);
-        }
-
-        // ============================================
-        // SILENT REAL-TIME UPDATES
-        // ============================================
-        function setupRealtimeListeners() {
-            if (!isFirebaseInitialized) return;
-            
-            console.log('Setting up silent real-time listeners for ticketing...');
-            
-            // Remove any existing listeners
-            removeAllListeners();
-            
-            // Debounced update function
-            const debouncedUpdate = (type) => {
-                if (updateTimeout) clearTimeout(updateTimeout);
-                
-                updateTimeout = setTimeout(() => {
-                    showUpdateIndicator(type);
-                }, UPDATE_DEBOUNCE_TIME);
-            };
-            
-            // 1. Event Categories Listener
-            const categoriesRef = db.ref('eventCategories');
-            const categoriesListener = categoriesRef.on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    displayEventCategories(data);
-                    saveToCachePartial('eventCategories', data);
-                    debouncedUpdate('Categories');
-                }
-            });
-            firebaseListeners.push({ ref: categoriesRef, listener: categoriesListener });
-            
-            // 2. Upcoming Events Listener
-            const eventsRef = db.ref('upcomingEvents');
-            const eventsListener = eventsRef.on('value', (snapshot) => {
-                const data = snapshot.val();
-                displayEventsWithTickets(data);
-                saveToCachePartial('upcomingEvents', data);
-                debouncedUpdate('Events');
-            });
-            firebaseListeners.push({ ref: eventsRef, listener: eventsListener });
-            
-            console.log(`Setup ${firebaseListeners.length} silent real-time listeners for ticketing`);
-        }
-
-        function removeAllListeners() {
-            firebaseListeners.forEach(({ ref, listener }) => {
-                if (ref && listener) {
-                    ref.off('value', listener);
-                }
-            });
-            firebaseListeners = [];
-        }
-
-        // ============================================
-        // CACHE MANAGEMENT
-        // ============================================
-        function getCachedData() {
-            try {
-                const cached = localStorage.getItem(CACHE_KEY);
-                return cached ? JSON.parse(cached) : null;
-            } catch (error) {
-                console.error('Error reading cache:', error);
-                return null;
-            }
-        }
-
-        function saveToCachePartial(key, data) {
-            try {
-                const cached = getCachedData() || { timestamp: Date.now(), data: {} };
-                cached.data[key] = data;
-                cached.timestamp = Date.now();
-                localStorage.setItem(CACHE_KEY, JSON.stringify(cached));
-            } catch (error) {
-                console.error('Error saving to cache:', error);
-            }
-        }
-
-        function isCacheExpired(timestamp) {
-            return Date.now() - timestamp > CACHE_DURATION;
-        }
-
-        function displayCachedData(cachedData) {
-            const data = cachedData.data;
-            
-            if (data.eventCategories) {
-                displayEventCategories(data.eventCategories);
-            }
-            
-            if (data.upcomingEvents) {
-                displayEventsWithTickets(data.upcomingEvents);
-            }
-        }
-
-        // ============================================
-        // UI UPDATES - MATCHING HOME PAGE PATTERN
-        // ============================================
-        function displayEventCategories(categories) {
-            const categoriesContainer = document.getElementById('eventCategories');
-            if (!categoriesContainer) return;
-            
-            // Convert to array and filter active categories
-            const categoriesArray = categories ? Object.values(categories)
-                .filter(cat => cat.active !== false)
-                .sort((a, b) => (a.order || 999) - (b.order || 999)) : [];
-            
-            if (categoriesArray.length > 0) {
-                categoriesContainer.innerHTML = '';
-                categoriesArray.forEach((category, index) => {
-                    const categoryCard = createCategoryCard(category, index);
-                    categoriesContainer.appendChild(categoryCard);
-                });
-                
-                // Initialize animations for new cards
-                setTimeout(() => {
-                    initializeAnimations();
-                }, 100);
-            } else {
-                categoriesContainer.innerHTML = `
-                    <div class="category-card" style="grid-column: 1 / -1; text-align: center; padding: var(--space-2xl);">
-                        <div class="category-icon" style="background: var(--gradient-primary);">
-                            <i class="fas fa-calendar-alt"></i>
-                        </div>
-                        <h3>Event Categories</h3>
-                        <p>Our event categories will be available soon. Check back for updates!</p>
+                initializeAnimations();
+            }, 100);
+        } else {
+            categoriesContainer.innerHTML = `
+                <div class="category-card" style="grid-column: 1 / -1; text-align: center; padding: var(--space-2xl);">
+                    <div class="category-icon" style="background: var(--gradient-primary);">
+                        <i class="fas fa-calendar-alt"></i>
                     </div>
-                `;
-            }
-        }
-
-        function displayEventsWithTickets(events) {
-            const eventsGrid = document.getElementById('eventsGrid');
-            if (!eventsGrid) return;
-            
-            // Convert events object to array and filter active ones
-            const eventsArray = events ? Object.values(events)
-                .filter(event => event.active !== false)
-                .sort((a, b) => new Date(a.date || '9999-12-31') - new Date(b.date || '9999-12-31')) : [];
-            
-            if (eventsArray.length > 0) {
-                eventsGrid.innerHTML = '';
-                eventsArray.forEach((event, index) => {
-                    const eventCard = createEventCard(event, index);
-                    eventsGrid.appendChild(eventCard);
-                });
-                
-                // Initialize animations for new cards
-                setTimeout(() => {
-                    initializeAnimations();
-                }, 100);
-            } else {
-                eventsGrid.innerHTML = `
-                    <div class="event-card" style="grid-column: 1 / -1; text-align: center; padding: var(--space-2xl);">
-                        <div class="event-content">
-                            <h3>No Events with Tickets Available</h3>
-                            <p>Check back soon for events with available tickets.</p>
-                            <button class="btn btn-primary" style="margin-top: var(--space-lg);" onclick="openPaymentModal()">
-                                <i class="fas fa-shopping-cart"></i> View Payment Demo
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }
-        }
-
-        // ============================================
-        // CARD CREATION FUNCTIONS - MATCHING HOME PAGE
-        // ============================================
-        function createCategoryCard(category, index) {
-            const card = document.createElement('div');
-            card.className = `category-card ${category.id || 'bootcamp'} animate-on-scroll`;
-            card.id = `${category.id}-category`;
-            card.dataset.delay = index * 100;
-            
-            // Determine button style and icon based on category
-            let btnClass = 'btn-primary';
-            let icon = category.icon || 'fas fa-graduation-cap';
-            
-            if (category.id === 'inspiration') {
-                btnClass = 'btn-gold';
-            } else if (category.id === 'spiritual') {
-                btnClass = 'btn-spiritual';
-            }
-            
-            card.innerHTML = `
-                <div class="category-icon">
-                    <i class="${icon}"></i>
-                </div>
-                <span class="category-tag">${category.frequency || 'TRANSFORMATIVE'}</span>
-                <h3 class="${category.id === 'inspiration' ? 'text-gradient-gold' : category.id === 'spiritual' ? 'text-gradient-spiritual' : 'text-gradient'}">${category.name || 'Event Category'}</h3>
-                <p>${category.description || 'Join us for this transformative event category.'}</p>
-                <div style="margin-top: auto; padding-top: var(--space-md);">
-                    <a href="#${category.id}-details" class="btn ${btnClass}" style="width: 100%;">
-                        <i class="fas fa-ticket-alt"></i> View Tickets
-                    </a>
+                    <h3>Event Categories</h3>
+                    <p>Our event categories will be available soon. Check back for updates!</p>
                 </div>
             `;
-            
-            return card;
         }
+    }
 
-        function createEventCard(event, index) {
-            const card = document.createElement('div');
-            card.id = `${event.category}-details`;
-            card.className = `event-card animate-on-scroll ${event.category}-event`;
-            card.dataset.delay = index * 100;
+    function displayEventsWithTickets(events) {
+        const eventsGrid = document.getElementById('eventsGrid');
+        if (!eventsGrid) return;
+        
+        // Convert events object to array and filter active ones
+        const eventsArray = events ? Object.values(events)
+            .filter(event => event.active !== false)
+            .sort((a, b) => new Date(a.date || '9999-12-31') - new Date(b.date || '9999-12-31')) : [];
+        
+        if (eventsArray.length > 0) {
+            eventsGrid.innerHTML = '';
+            eventsArray.forEach((event, index) => {
+                const eventCard = createEventCard(event, index);
+                eventsGrid.appendChild(eventCard);
+            });
             
-            // Format date
-            let dateText = 'Date TBD';
-            if (event.date) {
-                try {
-                    const eventDate = new Date(event.date);
-                    if (!isNaN(eventDate.getTime())) {
-                        dateText = eventDate.toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'short',
-                            day: 'numeric'
-                        });
-                    }
-                } catch (error) {
-                    console.error('Error formatting date:', error);
-                }
-            }
-            
-            // Get category name
-            const categoryNames = {
-                'bootcamp': 'Startup Bootcamp',
-                'inspiration': 'Become What You Believe',
-                'spiritual': 'The Making of an Icon'
-            };
-            
-            const categoryName = categoryNames[event.category] || event.category || 'Event';
-            
-            // Determine button style
-            let btnClass = 'btn-primary';
-            if (event.category === 'inspiration') btnClass = 'btn-gold';
-            if (event.category === 'spiritual') btnClass = 'btn-spiritual';
-            
-            // Get lowest ticket price for display
-            const tickets = event.tickets ? Object.values(event.tickets) : [];
-            const lowestPrice = tickets.length > 0 ? 
-                Math.min(...tickets.map(t => t.price || 0)) : 0;
-            const currency = tickets.length > 0 ? (tickets[0].currency || 'USD') : 'USD';
-            const ticketCount = tickets.length;
-
-            card.innerHTML = `
-                <div class="event-image-container">
-                    <img src="${event.imageUrl || getDefaultImage(event.category)}" 
-                         alt="${event.title || 'DSOG Event'}" 
-                         class="event-image"
-                         onerror="this.src='${getDefaultImage(event.category)}'">
-                    <div class="event-date-badge">
-                        <i class="fas fa-calendar"></i> ${dateText}
-                    </div>
-                </div>
-                <div class="event-content">
-                    <span class="event-category ${event.category}">${categoryName.toUpperCase()}</span>
-                    ${event.duration ? `<div class="duration-badge"><i class="fas fa-clock"></i> ${event.duration}</div>` : ''}
-                    <div class="event-details">
-                        <h3>${event.title || 'Upcoming Event'}</h3>
-                        ${event.category === 'spiritual' ? '<div class="slogan">"Search within me O Lord"</div>' : ''}
-                        ${event.subtitle ? `<p><strong>${event.subtitle}</strong></p>` : ''}
-                        <p>${event.description || 'Join us for this transformative event.'}</p>
-                        
-                        ${tickets.length > 0 ? `
-                            <div class="ticket-price-display">
-                                <div class="price-label">
-                                    <i class="fas fa-ticket-alt"></i> Tickets from
-                                </div>
-                                <div class="price-amount">
-                                    ${currency} ${lowestPrice}
-                                </div>
-                            </div>
-                            <div class="price-note">
-                                <i class="fas fa-info-circle"></i> ${ticketCount} ticket option${ticketCount !== 1 ? 's' : ''} available
-                            </div>
-                        ` : ''}
-                        
-                        <div class="event-meta">
-                            ${event.venue ? `<div class="meta-item"><i class="fas fa-map-marker-alt"></i><span>${event.venue}</span></div>` : ''}
-                            ${event.maxParticipants ? `<div class="meta-item"><i class="fas fa-users"></i><span>Max: ${event.maxParticipants} Participants</span></div>` : ''}
-                        </div>
-                    </div>
-                    <div class="buy-ticket-btn">
-                        <button class="btn ${btnClass} btn-block" onclick="openPaymentModal('${event.id}', ${JSON.stringify(event).replace(/'/g, "\\'")})">
-                            <i class="fas fa-shopping-cart"></i> Buy Tickets Now
+            // Initialize animations for new cards
+            setTimeout(() => {
+                initializeAnimations();
+            }, 100);
+        } else {
+            eventsGrid.innerHTML = `
+                <div class="event-card" style="grid-column: 1 / -1; text-align: center; padding: var(--space-2xl);">
+                    <div class="event-content">
+                        <h3>No Events with Tickets Available</h3>
+                        <p>Check back soon for events with available tickets.</p>
+                        <button class="btn btn-primary" style="margin-top: var(--space-lg);" onclick="openPaymentModal()">
+                            <i class="fas fa-shopping-cart"></i> View Payment Demo
                         </button>
                     </div>
                 </div>
             `;
-            
-            return card;
         }
+    }
 
-        function getDefaultImage(category) {
-            const defaultImages = {
-                'bootcamp': 'https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp',
-                'inspiration': 'https://i.postimg.cc/sgNRzKbd/20260114_1543_Image_Generation_simple_compose_01key8g91re75trpnnjn6j42z5_1.webp',
-                'spiritual': 'https://i.postimg.cc/kXw6d695/20260114-1617-Image-Generation-simple-compose-01keyad7jyf15rcfk3tz16wdbq-1.webp'
-            };
-            return defaultImages[category] || defaultImages.bootcamp;
+    // ============================================
+    // CARD CREATION FUNCTIONS - MATCHING HOME PAGE
+    // ============================================
+    function createCategoryCard(category, index) {
+        const card = document.createElement('div');
+        card.className = `category-card ${category.id || 'bootcamp'} animate-on-scroll`;
+        card.id = `${category.id}-category`;
+        card.dataset.delay = index * 100;
+        
+        // Determine button style and icon based on category
+        let btnClass = 'btn-primary';
+        let icon = category.icon || 'fas fa-graduation-cap';
+        
+        if (category.id === 'inspiration') {
+            btnClass = 'btn-gold';
+        } else if (category.id === 'spiritual') {
+            btnClass = 'btn-spiritual';
         }
+        
+        card.innerHTML = `
+            <div class="category-icon">
+                <i class="${icon}"></i>
+            </div>
+            <span class="category-tag">${category.frequency || 'TRANSFORMATIVE'}</span>
+            <h3 class="${category.id === 'inspiration' ? 'text-gradient-gold' : category.id === 'spiritual' ? 'text-gradient-spiritual' : 'text-gradient'}">${category.name || 'Event Category'}</h3>
+            <p>${category.description || 'Join us for this transformative event category.'}</p>
+            <div style="margin-top: auto; padding-top: var(--space-md);">
+                <a href="#${category.id}-details" class="btn ${btnClass}" style="width: 100%;">
+                    <i class="fas fa-ticket-alt"></i> View Tickets
+                </a>
+            </div>
+        `;
+        
+        return card;
+    }
 
-        // ============================================
-        // PAYMENT MODAL MANAGEMENT
-        // ============================================
-        function openPaymentModal(eventId = null, eventData = null) {
-            const modal = document.getElementById('paymentModal');
-            const body = document.body;
-            
-            if (eventId && eventData) {
-                selectedEvent = { id: eventId, ...eventData };
-                loadTicketOptions(eventData.tickets || {});
-            } else {
-                // Demo mode - show sample tickets
-                selectedEvent = {
-                    id: 'demo',
-                    title: 'Demo Event',
-                    tickets: getDemoTickets()
-                };
-                loadTicketOptions(selectedEvent.tickets);
-            }
-            
-            resetPaymentModal();
-            modal.classList.add('active');
-            body.classList.add('payment-modal-open');
-            body.style.overflow = 'hidden';
-        }
-
-        function closePaymentModal() {
-            const modal = document.getElementById('paymentModal');
-            const body = document.body;
-            
-            modal.classList.remove('active');
-            body.classList.remove('payment-modal-open');
-            body.style.overflow = '';
-            
-            // Reset after animation completes
-            setTimeout(() => {
-                selectedEvent = null;
-                selectedTicket = null;
-                resetPaymentModal();
-            }, 300);
-        }
-
-        function resetPaymentModal() {
-            document.getElementById('ticketSummary').style.display = 'none';
-            document.getElementById('paymentProcessing').style.display = 'none';
-            document.getElementById('paymentSuccess').style.display = 'none';
-            document.getElementById('ticketOptions').style.display = 'block';
-            document.getElementById('vpayButton').disabled = true;
-            selectedTicket = null;
-        }
-
-        function loadTicketOptions(tickets) {
-            const container = document.getElementById('ticketOptions');
-            
-            if (!tickets || Object.keys(tickets).length === 0) {
-                container.innerHTML = `
-                    <div style="text-align: center; padding: var(--space-xl);">
-                        <i class="fas fa-ticket-alt" style="font-size: 3rem; color: var(--text-tertiary); margin-bottom: var(--space-md);"></i>
-                        <h4>No Tickets Available</h4>
-                        <p>Ticket sales for this event have not started yet or are sold out.</p>
-                        <p style="margin-top: var(--space-md); font-size: 0.9rem; color: var(--text-tertiary);">
-                            Contact us for more information.
-                        </p>
-                    </div>
-                `;
-                return;
-            }
-
-            // Convert tickets object to array
-            const ticketsArray = Object.entries(tickets).map(([id, ticket]) => ({ id, ...ticket }));
-            
-            // Sort tickets by price
-            ticketsArray.sort((a, b) => (a.price || 0) - (b.price || 0));
-            
-            const ticketsHTML = ticketsArray.map(ticket => {
-                const isSoldOut = (ticket.quantityAvailable && ticket.quantitySold && 
-                                  ticket.quantitySold >= ticket.quantityAvailable);
-                const availabilityClass = isSoldOut ? 'sold-out' : 
-                                         (ticket.quantityAvailable && ticket.quantityAvailable < 20) ? 'limited' : 'available';
-                const availabilityText = isSoldOut ? 'Sold Out' : 
-                                       (ticket.quantityAvailable && ticket.quantityAvailable < 20) ? 
-                                       `Only ${ticket.quantityAvailable - (ticket.quantitySold || 0)} left` : 'Available';
-                
-                return `
-                    <div class="ticket-option ${isSoldOut ? 'sold-out-option' : ''}" 
-                         onclick="${!isSoldOut ? `selectTicket('${ticket.id}', ${JSON.stringify(ticket).replace(/'/g, "\\'")})` : ''}">
-                        <div class="ticket-option-header">
-                            <div>
-                                <div class="ticket-name">${ticket.name || 'Standard Ticket'}</div>
-                                <div class="ticket-description">${ticket.description || 'Full access to event'}</div>
-                            </div>
-                            <div class="ticket-price">
-                                <span class="ticket-currency">${ticket.currency || 'USD'}</span>
-                                ${ticket.price || '0'}
-                            </div>
-                        </div>
-                        <div class="ticket-details">
-                            ${ticket.includes ? `
-                                <div class="ticket-detail">
-                                    <i class="fas fa-check-circle"></i>
-                                    <span>${ticket.includes}</span>
-                                </div>
-                            ` : ''}
-                            <div class="ticket-detail">
-                                <i class="fas fa-calendar-check"></i>
-                                <span>${ticket.type || 'Standard'}</span>
-                            </div>
-                        </div>
-                        <div class="ticket-availability ${availabilityClass}">
-                            <i class="fas ${isSoldOut ? 'fa-times-circle' : 'fa-check-circle'}"></i>
-                            ${availabilityText}
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-            container.innerHTML = ticketsHTML;
-        }
-
-        function selectTicket(ticketId, ticketData) {
-            selectedTicket = { id: ticketId, ...ticketData };
-            
-            // Update UI to show selected ticket
-            document.querySelectorAll('.ticket-option').forEach(option => {
-                option.classList.remove('selected');
-            });
-            
-            const selectedOption = document.querySelector(`.ticket-option[onclick*="${ticketId}"]`);
-            if (selectedOption) {
-                selectedOption.classList.add('selected');
-            }
-            
-            // Update summary
-            updateTicketSummary();
-            
-            // Show summary and enable payment button
-            document.getElementById('ticketSummary').style.display = 'block';
-            document.getElementById('vpayButton').disabled = false;
-        }
-
-        function updateTicketSummary() {
-            if (!selectedEvent || !selectedTicket) return;
-            
-            const ticketName = selectedTicket.name || 'Standard Ticket';
-            const ticketPrice = selectedTicket.price || 0;
-            const currency = selectedTicket.currency || 'USD';
-            
-            document.getElementById('summaryTicketName').textContent = ticketName;
-            document.getElementById('summaryTicketPrice').textContent = `${currency} ${ticketPrice}`;
-            document.getElementById('summaryTotal').textContent = `${currency} ${ticketPrice}`;
-        }
-
-        function processPayment() {
-            if (!selectedEvent || !selectedTicket) return;
-            
-            // Show processing state
-            document.getElementById('ticketOptions').style.display = 'none';
-            document.getElementById('ticketSummary').style.display = 'none';
-            document.getElementById('paymentProcessing').style.display = 'block';
-            
-            // Generate VPay link
-            const vpayLink = generateVPayLink();
-            
-            // Simulate payment processing (in real implementation, this would redirect to VPay)
-            setTimeout(() => {
-                // Show success state
-                document.getElementById('paymentProcessing').style.display = 'none';
-                document.getElementById('paymentSuccess').style.display = 'block';
-                
-                // In real implementation, you would redirect to VPay:
-                // window.location.href = vpayLink;
-            }, 2000);
-        }
-
-        function generateVPayLink() {
-            if (!selectedEvent || !selectedTicket) return '#';
-            
-            const eventTitle = encodeURIComponent(selectedEvent.title || 'Event');
-            const ticketName = encodeURIComponent(selectedTicket.name || 'Ticket');
-            const amount = selectedTicket.price || 0;
-            const currency = selectedTicket.currency || 'USD';
-            const eventId = selectedEvent.id;
-            const ticketId = selectedTicket.id;
-            
-            // Generate a unique reference
-            const reference = `DSOG-${eventId}-${ticketId}-${Date.now()}`;
-            
-            // Construct VPay URL with parameters
-            return `https://vpay.pages.dev/payment?event=${eventTitle}&ticket=${ticketName}&amount=${amount}&currency=${currency}&ref=${reference}&callback=${encodeURIComponent(window.location.href)}`;
-        }
-
-        function getDemoTickets() {
-            return {
-                standard: {
-                    name: "Standard Ticket",
-                    price: 100,
-                    currency: "USD",
-                    description: "Full access to event sessions and materials",
-                    includes: "All sessions + Materials",
-                    type: "Standard",
-                    quantityAvailable: 50,
-                    quantitySold: 25
-                },
-                vip: {
-                    name: "VIP Ticket",
-                    price: 250,
-                    currency: "USD",
-                    description: "VIP access with front row seating and networking dinner",
-                    includes: "VIP + Dinner + Networking",
-                    type: "VIP",
-                    quantityAvailable: 20,
-                    quantitySold: 15
-                },
-                earlybird: {
-                    name: "Early Bird Ticket",
-                    price: 75,
-                    currency: "USD",
-                    description: "Limited time discounted ticket",
-                    includes: "All sessions + Materials",
-                    type: "Early Bird",
-                    quantityAvailable: 30,
-                    quantitySold: 30
-                }
-            };
-        }
-
-        function setupPaymentModalEvents() {
-            const modal = document.getElementById('paymentModal');
-            const closeBtn = document.getElementById('paymentModalClose');
-            const vpayBtn = document.getElementById('vpayButton');
-            const closeSuccessBtn = document.getElementById('closeSuccessBtn');
-            
-            // Close modal when clicking overlay
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    closePaymentModal();
-                }
-            });
-            
-            // Close modal with button
-            closeBtn.addEventListener('click', closePaymentModal);
-            
-            // Process payment
-            vpayBtn.addEventListener('click', processPayment);
-            
-            // Close success message
-            closeSuccessBtn.addEventListener('click', closePaymentModal);
-            
-            // Close with Escape key
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && modal.classList.contains('active')) {
-                    closePaymentModal();
-                }
-            });
-        }
-
-        // ============================================
-        // CORE FUNCTIONS - MATCHING HOME PAGE
-        // ============================================
-        function initializeTheme() {
-            const themeToggle = document.getElementById('themeToggle');
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-            
-            const savedTheme = localStorage.getItem('theme');
-            const systemTheme = prefersDark.matches ? 'dark' : 'light';
-            const initialTheme = savedTheme || systemTheme;
-            
-            document.documentElement.setAttribute('data-theme', initialTheme);
-            updateThemeIcon(initialTheme);
-            
-            themeToggle.addEventListener('click', () => {
-                const currentTheme = document.documentElement.getAttribute('data-theme');
-                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-                
-                document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
-                document.documentElement.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-                updateThemeIcon(newTheme);
-                
-                setTimeout(() => {
-                    document.body.style.transition = '';
-                }, 300);
-            });
-            
-            prefersDark.addEventListener('change', (e) => {
-                if (!localStorage.getItem('theme')) {
-                    const newTheme = e.matches ? 'dark' : 'light';
-                    document.documentElement.setAttribute('data-theme', newTheme);
-                    updateThemeIcon(newTheme);
-                }
-            });
-            
-            function updateThemeIcon(theme) {
-                const icon = themeToggle.querySelector('i');
-                if (theme === 'dark') {
-                    icon.className = 'fas fa-sun';
-                    themeToggle.setAttribute('aria-label', 'Switch to light theme');
-                } else {
-                    icon.className = 'fas fa-moon';
-                    themeToggle.setAttribute('aria-label', 'Switch to dark theme');
-                }
-            }
-        }
-
-        function initializeNavigation() {
-            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-            const navLinks = document.getElementById('navLinks');
-            
-            if (mobileMenuBtn && navLinks) {
-                mobileMenuBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    navLinks.classList.toggle('active');
-                    const icon = this.querySelector('i');
-                    icon.className = navLinks.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
-                    this.setAttribute('aria-expanded', navLinks.classList.contains('active'));
-                    
-                    if (navLinks.classList.contains('active')) {
-                        document.body.style.overflow = 'hidden';
-                    } else {
-                        document.body.style.overflow = '';
-                    }
-                });
-
-                document.addEventListener('click', function(event) {
-                    if (!navLinks.contains(event.target) && !mobileMenuBtn.contains(event.target) && navLinks.classList.contains('active')) {
-                        navLinks.classList.remove('active');
-                        mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
-                        mobileMenuBtn.setAttribute('aria-expanded', 'false');
-                        document.body.style.overflow = '';
-                    }
-                });
-
-                navLinks.querySelectorAll('a').forEach(link => {
-                    link.addEventListener('click', () => {
-                        if (window.innerWidth <= 1024) {
-                            navLinks.classList.remove('active');
-                            mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
-                            mobileMenuBtn.setAttribute('aria-expanded', 'false');
-                            document.body.style.overflow = '';
-                        }
+    function createEventCard(event, index) {
+        const card = document.createElement('div');
+        // Generate a unique ID if not provided
+        const eventId = event.id || `event-${Date.now()}-${index}`;
+        card.id = `${event.category}-details`;
+        card.className = `event-card animate-on-scroll ${event.category}-event`;
+        card.dataset.delay = index * 100;
+        
+        // Format date
+        let dateText = 'Date TBD';
+        if (event.date) {
+            try {
+                const eventDate = new Date(event.date);
+                if (!isNaN(eventDate.getTime())) {
+                    dateText = eventDate.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
                     });
-                });
+                }
+            } catch (error) {
+                console.error('Error formatting date:', error);
+            }
+        }
+        
+        // Get category name
+        const categoryNames = {
+            'bootcamp': 'Startup Bootcamp',
+            'inspiration': 'Become What You Believe',
+            'spiritual': 'The Making of an Icon'
+        };
+        
+        const categoryName = categoryNames[event.category] || event.category || 'Event';
+        
+        // Determine button style
+        let btnClass = 'btn-primary';
+        if (event.category === 'inspiration') btnClass = 'btn-gold';
+        if (event.category === 'spiritual') btnClass = 'btn-spiritual';
+        
+        // Get lowest ticket price for display
+        const tickets = event.tickets ? Object.values(event.tickets) : [];
+        const lowestPrice = tickets.length > 0 ? 
+            Math.min(...tickets.map(t => t.price || 0)) : 0;
+        const currency = tickets.length > 0 ? (tickets[0].currency || 'USD') : 'USD';
+        const ticketCount = tickets.length;
+
+        // Create a clean event data object for the onclick handler
+        const cleanEventData = {
+            id: eventId,
+            title: event.title || 'Upcoming Event',
+            category: event.category || 'bootcamp',
+            tickets: event.tickets || {}
+        };
+
+        card.innerHTML = `
+            <div class="event-image-container">
+                <img src="${event.imageUrl || getDefaultImage(event.category)}" 
+                     alt="${event.title || 'DSOG Event'}" 
+                     class="event-image"
+                     onerror="this.src='${getDefaultImage(event.category)}'">
+                <div class="event-date-badge">
+                    <i class="fas fa-calendar"></i> ${dateText}
+                </div>
+            </div>
+            <div class="event-content">
+                <span class="event-category ${event.category}">${categoryName.toUpperCase()}</span>
+                ${event.duration ? `<div class="duration-badge"><i class="fas fa-clock"></i> ${event.duration}</div>` : ''}
+                <div class="event-details">
+                    <h3>${event.title || 'Upcoming Event'}</h3>
+                    ${event.category === 'spiritual' ? '<div class="slogan">"Search within me O Lord"</div>' : ''}
+                    ${event.subtitle ? `<p><strong>${event.subtitle}</strong></p>` : ''}
+                    <p>${event.description || 'Join us for this transformative event.'}</p>
+                    
+                    ${tickets.length > 0 ? `
+                        <div class="ticket-price-display">
+                            <div class="price-label">
+                                <i class="fas fa-ticket-alt"></i> Tickets from
+                            </div>
+                            <div class="price-amount">
+                                ${currency} ${lowestPrice}
+                            </div>
+                        </div>
+                        <div class="price-note">
+                            <i class="fas fa-info-circle"></i> ${ticketCount} ticket option${ticketCount !== 1 ? 's' : ''} available
+                        </div>
+                    ` : ''}
+                    
+                    <div class="event-meta">
+                        ${event.venue ? `<div class="meta-item"><i class="fas fa-map-marker-alt"></i><span>${event.venue}</span></div>` : ''}
+                        ${event.maxParticipants ? `<div class="meta-item"><i class="fas fa-users"></i><span>Max: ${event.maxParticipants} Participants</span></div>` : ''}
+                    </div>
+                </div>
+                <div class="buy-ticket-btn">
+                    <button class="btn ${btnClass} btn-block" data-event='${JSON.stringify(cleanEventData).replace(/'/g, "&apos;")}'>
+                        <i class="fas fa-shopping-cart"></i> Buy Tickets Now
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        // Add event listener to the button
+        const button = card.querySelector('button');
+        button.addEventListener('click', function() {
+            const eventData = JSON.parse(this.getAttribute('data-event').replace(/&apos;/g, "'"));
+            openPaymentModal(eventData.id, eventData);
+        });
+        
+        return card;
+    }
+
+    function getDefaultImage(category) {
+        const defaultImages = {
+            'bootcamp': 'https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp',
+            'inspiration': 'https://i.postimg.cc/sgNRzKbd/20260114_1543_Image_Generation_simple_compose_01key8g91re75trpnnjn6j42z5_1.webp',
+            'spiritual': 'https://i.postimg.cc/kXw6d695/20260114-1617-Image-Generation-simple-compose-01keyad7jyf15rcfk3tz16wdbq-1.webp'
+        };
+        return defaultImages[category] || defaultImages.bootcamp;
+    }
+
+    // ============================================
+    // PAYMENT MODAL MANAGEMENT
+    // ============================================
+    function openPaymentModal(eventId = null, eventData = null) {
+        const modal = document.getElementById('paymentModal');
+        const body = document.body;
+        
+        if (eventId && eventData) {
+            selectedEvent = { id: eventId, ...eventData };
+            loadTicketOptions(eventData.tickets || {});
+        } else {
+            // Demo mode - show sample tickets
+            selectedEvent = {
+                id: 'demo',
+                title: 'Demo Event',
+                tickets: getDemoTickets()
+            };
+            loadTicketOptions(selectedEvent.tickets);
+        }
+        
+        resetPaymentModal();
+        modal.classList.add('active');
+        body.classList.add('payment-modal-open');
+        body.style.overflow = 'hidden';
+    }
+
+    function closePaymentModal() {
+        const modal = document.getElementById('paymentModal');
+        const body = document.body;
+        
+        modal.classList.remove('active');
+        body.classList.remove('payment-modal-open');
+        body.style.overflow = '';
+        
+        // Reset after animation completes
+        setTimeout(() => {
+            selectedEvent = null;
+            selectedTicket = null;
+            resetPaymentModal();
+        }, 300);
+    }
+
+    function resetPaymentModal() {
+        document.getElementById('ticketSummary').style.display = 'none';
+        document.getElementById('paymentProcessing').style.display = 'none';
+        document.getElementById('paymentSuccess').style.display = 'none';
+        document.getElementById('ticketOptions').style.display = 'block';
+        document.getElementById('vpayButton').disabled = true;
+        selectedTicket = null;
+    }
+
+    function loadTicketOptions(tickets) {
+        const container = document.getElementById('ticketOptions');
+        
+        if (!tickets || Object.keys(tickets).length === 0) {
+            container.innerHTML = `
+                <div style="text-align: center; padding: var(--space-xl);">
+                    <i class="fas fa-ticket-alt" style="font-size: 3rem; color: var(--text-tertiary); margin-bottom: var(--space-md);"></i>
+                    <h4>No Tickets Available</h4>
+                    <p>Ticket sales for this event have not started yet or are sold out.</p>
+                    <p style="margin-top: var(--space-md); font-size: 0.9rem; color: var(--text-tertiary);">
+                        Contact us for more information.
+                    </p>
+                </div>
+            `;
+            return;
+        }
+
+        // Convert tickets object to array
+        const ticketsArray = Object.entries(tickets).map(([id, ticket]) => ({ id, ...ticket }));
+        
+        // Sort tickets by price
+        ticketsArray.sort((a, b) => (a.price || 0) - (b.price || 0));
+        
+        const ticketsHTML = ticketsArray.map(ticket => {
+            const isSoldOut = (ticket.quantityAvailable && ticket.quantitySold && 
+                              ticket.quantitySold >= ticket.quantityAvailable);
+            const availabilityClass = isSoldOut ? 'sold-out' : 
+                                     (ticket.quantityAvailable && ticket.quantityAvailable < 20) ? 'limited' : 'available';
+            const availabilityText = isSoldOut ? 'Sold Out' : 
+                                   (ticket.quantityAvailable && ticket.quantityAvailable < 20) ? 
+                                   `Only ${ticket.quantityAvailable - (ticket.quantitySold || 0)} left` : 'Available';
+            
+            return `
+                <div class="ticket-option ${isSoldOut ? 'sold-out-option' : ''}" 
+                     onclick="${!isSoldOut ? `selectTicket('${ticket.id}', ${JSON.stringify(ticket).replace(/'/g, "&apos;")})` : ''}">
+                    <div class="ticket-option-header">
+                        <div>
+                            <div class="ticket-name">${ticket.name || 'Standard Ticket'}</div>
+                            <div class="ticket-description">${ticket.description || 'Full access to event'}</div>
+                        </div>
+                        <div class="ticket-price">
+                            <span class="ticket-currency">${ticket.currency || 'USD'}</span>
+                            ${ticket.price || '0'}
+                        </div>
+                    </div>
+                    <div class="ticket-details">
+                        ${ticket.includes ? `
+                            <div class="ticket-detail">
+                                <i class="fas fa-check-circle"></i>
+                                <span>${ticket.includes}</span>
+                            </div>
+                        ` : ''}
+                        <div class="ticket-detail">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>${ticket.type || 'Standard'}</span>
+                        </div>
+                    </div>
+                    <div class="ticket-availability ${availabilityClass}">
+                        <i class="fas ${isSoldOut ? 'fa-times-circle' : 'fa-check-circle'}"></i>
+                        ${availabilityText}
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        container.innerHTML = ticketsHTML;
+    }
+
+    function selectTicket(ticketId, ticketData) {
+        // Fix the JSON string (replace &apos; with ')
+        const fixedTicketData = JSON.parse(ticketData.replace(/&apos;/g, "'"));
+        selectedTicket = { id: ticketId, ...fixedTicketData };
+        
+        // Update UI to show selected ticket
+        document.querySelectorAll('.ticket-option').forEach(option => {
+            option.classList.remove('selected');
+        });
+        
+        // Find and select the clicked ticket
+        const ticketOptions = document.querySelectorAll('.ticket-option');
+        ticketOptions.forEach(option => {
+            if (option.getAttribute('onclick') && option.getAttribute('onclick').includes(ticketId)) {
+                option.classList.add('selected');
+            }
+        });
+        
+        // Update summary
+        updateTicketSummary();
+        
+        // Show summary and enable payment button
+        document.getElementById('ticketSummary').style.display = 'block';
+        document.getElementById('vpayButton').disabled = false;
+    }
+
+    function updateTicketSummary() {
+        if (!selectedEvent || !selectedTicket) return;
+        
+        const ticketName = selectedTicket.name || 'Standard Ticket';
+        const ticketPrice = selectedTicket.price || 0;
+        const currency = selectedTicket.currency || 'USD';
+        
+        document.getElementById('summaryTicketName').textContent = ticketName;
+        document.getElementById('summaryTicketPrice').textContent = `${currency} ${ticketPrice}`;
+        document.getElementById('summaryTotal').textContent = `${currency} ${ticketPrice}`;
+    }
+
+    function processPayment() {
+        if (!selectedEvent || !selectedTicket) return;
+        
+        // Show processing state
+        document.getElementById('ticketOptions').style.display = 'none';
+        document.getElementById('ticketSummary').style.display = 'none';
+        document.getElementById('paymentProcessing').style.display = 'block';
+        
+        // Generate VPay link
+        const vpayLink = generateVPayLink();
+        
+        // Simulate payment processing (in real implementation, this would redirect to VPay)
+        setTimeout(() => {
+            // Show success state
+            document.getElementById('paymentProcessing').style.display = 'none';
+            document.getElementById('paymentSuccess').style.display = 'block';
+            
+            // In real implementation, you would redirect to VPay:
+            // window.location.href = vpayLink;
+        }, 2000);
+    }
+
+    function generateVPayLink() {
+        if (!selectedEvent || !selectedTicket) return '#';
+        
+        const eventTitle = encodeURIComponent(selectedEvent.title || 'Event');
+        const ticketName = encodeURIComponent(selectedTicket.name || 'Ticket');
+        const amount = selectedTicket.price || 0;
+        const currency = selectedTicket.currency || 'USD';
+        const eventId = selectedEvent.id;
+        const ticketId = selectedTicket.id;
+        
+        // Generate a unique reference
+        const reference = `DSOG-${eventId}-${ticketId}-${Date.now()}`;
+        
+        // Construct VPay URL with parameters
+        return `https://vpay.pages.dev/payment?event=${eventTitle}&ticket=${ticketName}&amount=${amount}&currency=${currency}&ref=${reference}&callback=${encodeURIComponent(window.location.href)}`;
+    }
+
+    function getDemoTickets() {
+        return {
+            standard: {
+                name: "Standard Ticket",
+                price: 100,
+                currency: "USD",
+                description: "Full access to event sessions and materials",
+                includes: "All sessions + Materials",
+                type: "Standard",
+                quantityAvailable: 50,
+                quantitySold: 25
+            },
+            vip: {
+                name: "VIP Ticket",
+                price: 250,
+                currency: "USD",
+                description: "VIP access with front row seating and networking dinner",
+                includes: "VIP + Dinner + Networking",
+                type: "VIP",
+                quantityAvailable: 20,
+                quantitySold: 15
+            },
+            earlybird: {
+                name: "Early Bird Ticket",
+                price: 75,
+                currency: "USD",
+                description: "Limited time discounted ticket",
+                includes: "All sessions + Materials",
+                type: "Early Bird",
+                quantityAvailable: 30,
+                quantitySold: 30
+            }
+        };
+    }
+
+    function setupPaymentModalEvents() {
+        const modal = document.getElementById('paymentModal');
+        const closeBtn = document.getElementById('paymentModalClose');
+        const vpayBtn = document.getElementById('vpayButton');
+        const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+        
+        // Close modal when clicking overlay
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closePaymentModal();
+            }
+        });
+        
+        // Close modal with button
+        closeBtn.addEventListener('click', closePaymentModal);
+        
+        // Process payment
+        vpayBtn.addEventListener('click', processPayment);
+        
+        // Close success message
+        if (closeSuccessBtn) {
+            closeSuccessBtn.addEventListener('click', closePaymentModal);
+        }
+        
+        // Close with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closePaymentModal();
+            }
+        });
+    }
+
+    // ============================================
+    // CORE FUNCTIONS - MATCHING HOME PAGE
+    // ============================================
+    function initializeTheme() {
+        const themeToggle = document.getElementById('themeToggle');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+        
+        const savedTheme = localStorage.getItem('theme');
+        const systemTheme = prefersDark.matches ? 'dark' : 'light';
+        const initialTheme = savedTheme || systemTheme;
+        
+        document.documentElement.setAttribute('data-theme', initialTheme);
+        updateThemeIcon(initialTheme);
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+            
+            setTimeout(() => {
+                document.body.style.transition = '';
+            }, 300);
+        });
+        
+        prefersDark.addEventListener('change', (e) => {
+            if (!localStorage.getItem('theme')) {
+                const newTheme = e.matches ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                updateThemeIcon(newTheme);
+            }
+        });
+        
+        function updateThemeIcon(theme) {
+            const icon = themeToggle.querySelector('i');
+            if (theme === 'dark') {
+                icon.className = 'fas fa-sun';
+                themeToggle.setAttribute('aria-label', 'Switch to light theme');
+            } else {
+                icon.className = 'fas fa-moon';
+                themeToggle.setAttribute('aria-label', 'Switch to dark theme');
+            }
+        }
+    }
+
+    function initializeNavigation() {
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+        
+        if (mobileMenuBtn && navLinks) {
+            mobileMenuBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                navLinks.classList.toggle('active');
+                const icon = this.querySelector('i');
+                icon.className = navLinks.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
+                this.setAttribute('aria-expanded', navLinks.classList.contains('active'));
                 
-                window.addEventListener('resize', () => {
-                    if (window.innerWidth > 1024) {
+                if (navLinks.classList.contains('active')) {
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    document.body.style.overflow = '';
+                }
+            });
+
+            document.addEventListener('click', function(event) {
+                if (!navLinks.contains(event.target) && !mobileMenuBtn.contains(event.target) && navLinks.classList.contains('active')) {
+                    navLinks.classList.remove('active');
+                    mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                    document.body.style.overflow = '';
+                }
+            });
+
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth <= 1024) {
                         navLinks.classList.remove('active');
                         mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
                         mobileMenuBtn.setAttribute('aria-expanded', 'false');
                         document.body.style.overflow = '';
                     }
                 });
-            }
+            });
+            
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 1024) {
+                    navLinks.classList.remove('active');
+                    mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                    document.body.style.overflow = '';
+                }
+            });
+        }
 
-            // Header scroll effect
-            const header = document.getElementById('header');
+        // Header scroll effect
+        const header = document.getElementById('header');
+        if (header) {
             window.addEventListener('scroll', () => {
                 if (window.scrollY > 50) {
                     header.classList.add('scrolled');
@@ -2917,155 +2942,167 @@
                     header.classList.remove('scrolled');
                 }
             });
+        }
 
-            // Smooth scroll for anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    const href = this.getAttribute('href');
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                
+                if (href.startsWith('#') && href !== '#') {
+                    e.preventDefault();
                     
-                    if (href.startsWith('#') && href !== '#') {
-                        e.preventDefault();
+                    const targetId = href.substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        const headerHeight = document.getElementById('header') ? document.getElementById('header').offsetHeight : 72;
+                        const targetPosition = targetElement.offsetTop - headerHeight - 20;
                         
-                        const targetId = href.substring(1);
-                        const targetElement = document.getElementById(targetId);
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
                         
-                        if (targetElement) {
-                            const headerHeight = document.getElementById('header').offsetHeight;
-                            const targetPosition = targetElement.offsetTop - headerHeight - 20;
-                            
-                            window.scrollTo({
-                                top: targetPosition,
-                                behavior: 'smooth'
-                            });
-                            
-                            history.pushState(null, '', href);
-                        }
+                        history.pushState(null, '', href);
                     }
-                });
-            });
-        }
-
-        function initializeAnimations() {
-            const animatedElements = document.querySelectorAll('.animate-on-scroll');
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const delay = entry.target.dataset.delay || 0;
-                        setTimeout(() => {
-                            entry.target.classList.add('animated');
-                        }, delay);
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            });
-            
-            animatedElements.forEach((element, index) => {
-                if (!element.dataset.delay) {
-                    element.dataset.delay = index * 100;
                 }
-                observer.observe(element);
             });
-        }
+        });
+    }
 
-        function initializeScrollEffects() {
-            let lastScroll = 0;
-            window.addEventListener('scroll', () => {
-                const currentScroll = window.pageYOffset;
-                
-                // Add parallax effect to hero
-                const hero = document.querySelector('.events-hero');
-                if (hero) {
-                    const scrolled = window.pageYOffset;
-                    const rate = scrolled * -0.5;
-                    hero.style.transform = `translate3d(0, ${rate}px, 0)`;
+    function initializeAnimations() {
+        const animatedElements = document.querySelectorAll('.animate-on-scroll');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const delay = entry.target.dataset.delay || 0;
+                    setTimeout(() => {
+                        entry.target.classList.add('animated');
+                    }, delay);
+                    observer.unobserve(entry.target);
                 }
-                
-                lastScroll = currentScroll;
             });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+        
+        animatedElements.forEach((element, index) => {
+            if (!element.dataset.delay) {
+                element.dataset.delay = index * 100;
+            }
+            observer.observe(element);
+        });
+    }
+
+    function initializeScrollEffects() {
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            // Add parallax effect to hero
+            const hero = document.querySelector('.events-hero');
+            if (hero) {
+                const scrolled = window.pageYOffset;
+                const rate = scrolled * -0.5;
+                hero.style.transform = `translate3d(0, ${rate}px, 0)`;
+            }
+            
+            lastScroll = currentScroll;
+        });
+    }
+
+    // ============================================
+    // GLOBAL FUNCTIONS
+    // ============================================
+    // Make functions globally available for onclick handlers
+    window.openPaymentModal = openPaymentModal;
+    window.selectTicket = selectTicket;
+    window.processPayment = processPayment;
+    window.closePaymentModal = closePaymentModal;
+
+    // Touch device optimizations
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function(event) {
+        const now = Date.now();
+        if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
         }
+        lastTouchEnd = now;
+    }, false);
 
-        // ============================================
-        // GLOBAL FUNCTIONS
-        // ============================================
-        // Make functions globally available for onclick handlers
-        window.openPaymentModal = openPaymentModal;
-        window.selectTicket = selectTicket;
-        window.processPayment = processPayment;
-
-        // Touch device optimizations
-        let lastTouchEnd = 0;
-        document.addEventListener('touchend', function(event) {
-            const now = Date.now();
-            if (now - lastTouchEnd <= 300) {
-                event.preventDefault();
-            }
-            lastTouchEnd = now;
-        }, false);
-
-        // Add CSS for firebase-status and data-update-indicator
-        const style = document.createElement('style');
-        style.textContent = `
-            .firebase-status {
-                position: fixed;
-                bottom: 20px;
-                left: 20px;
-                padding: 8px 12px;
-                border-radius: var(--radius-md);
-                font-size: 12px;
-                z-index: 9999;
-                background: #28a745;
-                color: white;
-                box-shadow: var(--shadow-sm);
-                display: flex;
-                align-items: center;
-                gap: 6px;
-                transition: var(--transition-smooth);
-            }
-            
-            .firebase-status.offline {
-                background: #dc3545;
-            }
-            
-            .firebase-status i {
-                font-size: 10px;
-            }
-            
-            .data-update-indicator {
-                position: fixed;
-                top: 100px;
-                right: 20px;
-                padding: 12px 16px;
-                background: var(--primary-red);
-                color: white;
-                border-radius: var(--radius-lg);
-                font-size: 14px;
-                z-index: 10000;
-                box-shadow: var(--shadow-lg);
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                transform: translateX(120%);
-                transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            }
-            
-            .data-update-indicator.show {
+    // Add CSS for firebase-status and data-update-indicator
+    const style = document.createElement('style');
+    style.textContent = `
+        .firebase-status {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            padding: 8px 12px;
+            border-radius: var(--radius-md);
+            font-size: 12px;
+            z-index: 9999;
+            background: #28a745;
+            color: white;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition-smooth);
+        }
+        
+        .firebase-status.offline {
+            background: #dc3545;
+        }
+        
+        .firebase-status i {
+            font-size: 10px;
+        }
+        
+        .data-update-indicator {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            padding: 12px 16px;
+            background: var(--primary-red);
+            color: white;
+            border-radius: var(--radius-lg);
+            font-size: 14px;
+            z-index: 10000;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transform: translateX(120%);
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .data-update-indicator.show {
                 transform: translateX(0);
-            }
-            
-            .data-update-indicator i {
-                animation: spin 1s linear infinite;
-            }
-            
-            @keyframes spin {
-                from { transform: rotate(0deg); }
-                to { transform: rotate(360deg); }
-            }
-        `;
-        document.head.appendChild(style);
-    </script>
+        }
+        
+        .data-update-indicator i {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .sold-out-option {
+            opacity: 0.6;
+            cursor: not-allowed !important;
+        }
+        
+        .sold-out-option:hover {
+            transform: none !important;
+            border-color: var(--border-color) !important;
+        }
+    `;
+    document.head.appendChild(style);
+</script>
 </body>
 </html>
