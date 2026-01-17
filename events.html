@@ -2176,7 +2176,6 @@
         initializeNavigation();
         initializeAnimations();
         initializeScrollEffects();
-        setupPaymentModalEvents();
         
         // Set current year
         document.getElementById('currentYear').textContent = new Date().getFullYear();
@@ -2198,6 +2197,9 @@
         }
         
         console.log('Ticketing system initialized with real-time updates');
+        
+        // Setup modal events after DOM is fully loaded
+        setTimeout(setupPaymentModalEvents, 100);
     });
 
     // ============================================
@@ -2499,16 +2501,6 @@
         const currency = tickets.length > 0 ? (tickets[0].currency || 'USD') : 'USD';
         const ticketCount = tickets.length;
 
-        // Create a clean event data object for the onclick handler
-        const cleanEventData = {
-            id: eventId,
-            title: event.title || 'Upcoming Event',
-            category: event.category || 'bootcamp',
-            date: event.date || '',
-            description: event.description || '',
-            tickets: event.tickets || {}
-        };
-
         card.innerHTML = `
             <div class="event-image-container">
                 <img src="${event.imageUrl || getDefaultImage(event.category)}" 
@@ -2548,19 +2540,12 @@
                     </div>
                 </div>
                 <div class="buy-ticket-btn">
-                    <button class="btn ${btnClass} btn-block" data-event='${JSON.stringify(cleanEventData).replace(/'/g, "&apos;")}'>
+                    <button class="btn ${btnClass} btn-block" onclick="handleBuyTicketClick(event, '${eventId}')">
                         <i class="fas fa-shopping-cart"></i> Buy Tickets Now
                     </button>
                 </div>
             </div>
         `;
-        
-        // Add event listener to the button
-        const button = card.querySelector('button');
-        button.addEventListener('click', function() {
-            const eventData = JSON.parse(this.getAttribute('data-event').replace(/&apos;/g, "'"));
-            openPaymentModal(eventData.id, eventData);
-        });
         
         return card;
     }
@@ -2575,9 +2560,11 @@
     }
 
     // ============================================
-    // PAYMENT MODAL MANAGEMENT
+    // PAYMENT MODAL MANAGEMENT - UPDATED
     // ============================================
     function openPaymentModal(eventId = null, eventData = null) {
+        console.log('Opening payment modal with event:', eventId, eventData);
+        
         const modal = document.getElementById('paymentModal');
         const body = document.body;
         
@@ -2621,7 +2608,8 @@
         document.getElementById('paymentProcessing').style.display = 'none';
         document.getElementById('paymentSuccess').style.display = 'none';
         document.getElementById('ticketOptions').style.display = 'block';
-        document.getElementById('vpayButton').disabled = true;
+        const vpayBtn = document.getElementById('vpayButton');
+        if (vpayBtn) vpayBtn.disabled = true;
         selectedTicket = null;
     }
 
@@ -2659,7 +2647,8 @@
             
             return `
                 <div class="ticket-option ${isSoldOut ? 'sold-out-option' : ''}" 
-                     onclick="${!isSoldOut ? `selectTicket('${ticket.id}', ${JSON.stringify(ticket).replace(/'/g, "&apos;")})` : ''}">
+                     data-ticket-id="${ticket.id}"
+                     data-ticket-data='${JSON.stringify(ticket)}'>
                     <div class="ticket-option-header">
                         <div>
                             <div class="ticket-name">${ticket.name || 'Standard Ticket'}</div>
@@ -2691,12 +2680,23 @@
         }).join('');
 
         container.innerHTML = ticketsHTML;
+        
+        // Add click handlers to ticket options
+        setTimeout(() => {
+            const ticketOptions = container.querySelectorAll('.ticket-option:not(.sold-out-option)');
+            ticketOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const ticketId = this.getAttribute('data-ticket-id');
+                    const ticketData = JSON.parse(this.getAttribute('data-ticket-data'));
+                    selectTicket(ticketId, ticketData);
+                });
+            });
+        }, 100);
     }
 
     function selectTicket(ticketId, ticketData) {
-        // Fix the JSON string (replace &apos; with ')
-        const fixedTicketData = JSON.parse(ticketData.replace(/&apos;/g, "'"));
-        selectedTicket = { id: ticketId, ...fixedTicketData };
+        console.log('Selecting ticket:', ticketId, ticketData);
+        selectedTicket = { id: ticketId, ...ticketData };
         
         // Update UI to show selected ticket
         document.querySelectorAll('.ticket-option').forEach(option => {
@@ -2704,19 +2704,18 @@
         });
         
         // Find and select the clicked ticket
-        const ticketOptions = document.querySelectorAll('.ticket-option');
-        ticketOptions.forEach(option => {
-            if (option.getAttribute('onclick') && option.getAttribute('onclick').includes(ticketId)) {
-                option.classList.add('selected');
-            }
-        });
+        const selectedOption = document.querySelector(`.ticket-option[data-ticket-id="${ticketId}"]`);
+        if (selectedOption) {
+            selectedOption.classList.add('selected');
+        }
         
         // Update summary
         updateTicketSummary();
         
         // Show summary and enable payment button
         document.getElementById('ticketSummary').style.display = 'block';
-        document.getElementById('vpayButton').disabled = false;
+        const vpayBtn = document.getElementById('vpayButton');
+        if (vpayBtn) vpayBtn.disabled = false;
     }
 
     function updateTicketSummary() {
@@ -2732,136 +2731,136 @@
     }
 
     // ============================================
-    // UPDATED VPAY INTEGRATION FUNCTIONS
+    // VPAY PAYMENT FUNCTIONS - SIMPLIFIED
     // ============================================
     
     function processPayment() {
-        if (!selectedEvent || !selectedTicket) return;
+        console.log('Processing payment...');
+        
+        if (!selectedEvent || !selectedTicket) {
+            alert('Please select a ticket first');
+            return;
+        }
         
         // Show processing state
         document.getElementById('ticketOptions').style.display = 'none';
         document.getElementById('ticketSummary').style.display = 'none';
         document.getElementById('paymentProcessing').style.display = 'block';
         
-        // Generate VPay link with all necessary information
-        const vpayLink = generateVPayLink();
-        
-        // Show a brief processing message, then redirect to VPay
-        setTimeout(() => {
-            // Store payment details in localStorage for reference
-            storePaymentDetails();
-            
-            // Redirect to VPay payment page
-            window.open(vpayLink, '_blank');
-            
-            // Keep modal open and show payment instructions
-            showPaymentInstructions();
-        }, 1500);
-    }
-
-    function generateVPayLink() {
-        if (!selectedEvent || !selectedTicket) return 'https://vpay.pages.dev/';
-        
-        const eventTitle = encodeURIComponent(selectedEvent.title || 'DSOG Event');
-        const ticketName = encodeURIComponent(selectedTicket.name || 'Event Ticket');
+        // Get payment details
         const amount = selectedTicket.price || 0;
-        const eventId = selectedEvent.id;
-        const ticketId = selectedTicket.id;
+        const currency = selectedTicket.currency || 'USD';
+        const eventTitle = selectedEvent.title || 'DSOG Event';
+        const ticketName = selectedTicket.name || 'Event Ticket';
         
-        // Generate a unique reference ID
-        const reference = `DSOG-${eventId}-${ticketId}-${Date.now()}`;
-        
-        // Create a comprehensive description for the payment
-        const description = `DSOG Event Ticket: ${ticketName} for ${eventTitle}`;
-        
-        // URL encode all parameters
-        const encodedDescription = encodeURIComponent(description);
-        const encodedReference = encodeURIComponent(reference);
-        const encodedEventTitle = encodeURIComponent(eventTitle);
-        const encodedTicketName = encodeURIComponent(ticketName);
-        
-        // Construct VPay URL with all necessary parameters
-        // Since VPay doesn't accept parameters directly, we'll pass them in a way that can be displayed
-        return `https://vpay.pages.dev/#amount=${amount}&description=${encodedDescription}&reference=${encodedReference}&event=${encodedEventTitle}&ticket=${encodedTicketName}`;
-    }
-
-    function storePaymentDetails() {
-        if (!selectedEvent || !selectedTicket) return;
-        
+        // Store payment details in localStorage for reference
         const paymentDetails = {
-            event: selectedEvent.title || 'DSOG Event',
-            ticket: selectedTicket.name || 'Standard Ticket',
-            price: selectedTicket.price || 0,
-            currency: selectedTicket.currency || 'USD',
+            event: eventTitle,
+            ticket: ticketName,
+            amount: amount,
+            currency: currency,
             date: new Date().toISOString(),
             reference: `DSOG-${selectedEvent.id}-${selectedTicket.id}-${Date.now()}`
         };
         
-        // Store in localStorage for reference
-        localStorage.setItem('dsog_last_payment', JSON.stringify(paymentDetails));
+        localStorage.setItem('dsog_payment_details', JSON.stringify(paymentDetails));
         
-        // Also store in a list of recent payments
-        let recentPayments = JSON.parse(localStorage.getItem('dsog_recent_payments') || '[]');
-        recentPayments.unshift(paymentDetails);
-        // Keep only last 10 payments
-        if (recentPayments.length > 10) {
-            recentPayments = recentPayments.slice(0, 10);
-        }
-        localStorage.setItem('dsog_recent_payments', JSON.stringify(recentPayments));
+        // Redirect to VPay
+        redirectToVPay(amount, eventTitle, ticketName);
     }
 
-    function showPaymentInstructions() {
-        if (!selectedEvent || !selectedTicket) return;
+    function redirectToVPay(amount, eventTitle, ticketName) {
+        // Create a clean description for VPay
+        const description = `DSOG Event Ticket: ${ticketName}`;
         
-        const amount = selectedTicket.price || 0;
-        const currency = selectedTicket.currency || 'USD';
-        const eventTitle = selectedEvent.title || 'DSOG Event';
-        const ticketName = selectedTicket.name || 'Standard Ticket';
+        // Create URL parameters (even if VPay doesn't use them, they might be visible)
+        const params = new URLSearchParams({
+            amount: amount,
+            description: description,
+            reference: `DSOG-${Date.now()}`,
+            event: eventTitle,
+            ticket: ticketName
+        });
         
-        // Update payment processing message with instructions
-        document.getElementById('paymentProcessing').innerHTML = `
-            <div class="payment-processing">
-                <div class="success-icon" style="background: var(--primary-red);">
-                    <i class="fas fa-external-link-alt"></i>
-                </div>
-                <h4>Redirecting to VPay</h4>
-                <p>A new tab has been opened for payment processing.</p>
-                
-                <div style="margin-top: var(--space-lg); padding: var(--space-md); background: var(--bg-secondary); border-radius: var(--radius-md);">
-                    <h5 style="margin-bottom: var(--space-sm);">Payment Details:</h5>
-                    <div style="text-align: left; font-size: 0.9rem;">
-                        <p><strong>Event:</strong> ${eventTitle}</p>
-                        <p><strong>Ticket:</strong> ${ticketName}</p>
-                        <p><strong>Amount:</strong> ${currency} ${amount}</p>
-                        <p><strong>Reference:</strong> DSOG-${selectedEvent.id}-${selectedTicket.id}</p>
+        // Construct VPay URL
+        const vpayUrl = `https://vpay.pages.dev/?${params.toString()}`;
+        
+        console.log('Redirecting to VPay:', vpayUrl);
+        
+        // Show instructions before redirecting
+        setTimeout(() => {
+            document.getElementById('paymentProcessing').innerHTML = `
+                <div class="payment-processing">
+                    <div class="success-icon" style="background: var(--primary-red);">
+                        <i class="fas fa-external-link-alt"></i>
+                    </div>
+                    <h4>Redirecting to VPay</h4>
+                    <p>You will be redirected to VPay for payment processing.</p>
+                    
+                    <div style="margin-top: var(--space-lg); padding: var(--space-md); background: var(--bg-secondary); border-radius: var(--radius-md);">
+                        <h5 style="margin-bottom: var(--space-sm);">Payment Details:</h5>
+                        <div style="text-align: left; font-size: 0.9rem;">
+                            <p><strong>Event:</strong> ${eventTitle}</p>
+                            <p><strong>Ticket:</strong> ${ticketName}</p>
+                            <p><strong>Amount:</strong> $${amount}</p>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: var(--space-lg); padding: var(--space-md); background: var(--bg-tertiary); border-radius: var(--radius-md); font-size: 0.85rem;">
+                        <p><strong>Important:</strong> When on VPay:</p>
+                        <ol style="text-align: left; margin-top: var(--space-sm); padding-left: var(--space-lg);">
+                            <li>Select "Ticket Purchase" or "Other" category</li>
+                            <li>Select "DSOG Stores" as business</li>
+                            <li>Enter amount: <strong>$${amount}</strong></li>
+                            <li>Complete payment with your preferred method</li>
+                            <li>Save your transaction reference number</li>
+                        </ol>
+                    </div>
+                    
+                    <div style="margin-top: var(--space-xl); display: flex; gap: var(--space-sm);">
+                        <button class="btn btn-secondary" onclick="closePaymentModal()" style="flex: 1;">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                        <button class="btn btn-primary" onclick="window.open('${vpayUrl}', '_blank')" style="flex: 2;">
+                            <i class="fas fa-external-link-alt"></i> Open VPay
+                        </button>
                     </div>
                 </div>
-                
-                <div style="margin-top: var(--space-lg); padding: var(--space-md); background: var(--bg-tertiary); border-radius: var(--radius-md); font-size: 0.85rem;">
-                    <p><strong>Important:</strong> When on VPay:</p>
-                    <ol style="text-align: left; margin-top: var(--space-sm); padding-left: var(--space-lg);">
-                        <li>Select "Ticket Purchase" category</li>
-                        <li>Select "DSOG Stores" as business</li>
-                        <li>Enter amount: <strong>$${amount}</strong></li>
-                        <li>Complete payment with your preferred method</li>
-                    </ol>
-                </div>
-                
-                <div style="margin-top: var(--space-lg); display: flex; gap: var(--space-sm);">
-                    <button class="btn btn-secondary" onclick="closePaymentModal()" style="flex: 1;">
-                        <i class="fas fa-times"></i> Close
-                    </button>
-                    <button class="btn btn-primary" onclick="window.open('https://vpay.pages.dev/', '_blank')" style="flex: 2;">
-                        <i class="fas fa-external-link-alt"></i> Open VPay Again
-                    </button>
-                </div>
-            </div>
-        `;
+            `;
+        }, 1000);
+    }
+
+    function handleBuyTicketClick(e, eventId) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        console.log('Buy ticket clicked for event:', eventId);
+        
+        // Find the event data
+        const eventCard = e.target.closest('.event-card');
+        if (eventCard) {
+            const eventTitle = eventCard.querySelector('h3')?.textContent || 'DSOG Event';
+            const eventCategory = eventCard.querySelector('.event-category')?.textContent || '';
+            const eventDescription = eventCard.querySelector('.event-details p')?.textContent || '';
+            
+            const eventData = {
+                id: eventId,
+                title: eventTitle,
+                category: eventCategory.toLowerCase().replace(/\s+/g, ''),
+                description: eventDescription,
+                tickets: getDemoTickets() // For now, use demo tickets
+            };
+            
+            openPaymentModal(eventId, eventData);
+        } else {
+            openPaymentModal();
+        }
     }
 
     function getDemoTickets() {
         return {
             standard: {
+                id: 'standard',
                 name: "Standard Ticket",
                 price: 100,
                 currency: "USD",
@@ -2872,6 +2871,7 @@
                 quantitySold: 25
             },
             vip: {
+                id: 'vip',
                 name: "VIP Ticket",
                 price: 250,
                 currency: "USD",
@@ -2882,6 +2882,7 @@
                 quantitySold: 15
             },
             earlybird: {
+                id: 'earlybird',
                 name: "Early Bird Ticket",
                 price: 75,
                 currency: "USD",
@@ -2889,16 +2890,23 @@
                 includes: "All sessions + Materials",
                 type: "Early Bird",
                 quantityAvailable: 30,
-                quantitySold: 30
+                quantitySold: 10
             }
         };
     }
 
     function setupPaymentModalEvents() {
+        console.log('Setting up payment modal events...');
+        
         const modal = document.getElementById('paymentModal');
         const closeBtn = document.getElementById('paymentModalClose');
         const vpayBtn = document.getElementById('vpayButton');
         const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+        
+        if (!modal || !closeBtn || !vpayBtn) {
+            console.error('Payment modal elements not found');
+            return;
+        }
         
         // Close modal when clicking overlay
         modal.addEventListener('click', (e) => {
@@ -2910,8 +2918,16 @@
         // Close modal with button
         closeBtn.addEventListener('click', closePaymentModal);
         
-        // Process payment
-        vpayBtn.addEventListener('click', processPayment);
+        // Process payment with VPay button - FIXED
+        vpayBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('VPay button clicked directly');
+            processPayment();
+        });
+        
+        // Also make it globally available
+        window.processPayment = processPayment;
         
         // Close success message
         if (closeSuccessBtn) {
@@ -2924,10 +2940,12 @@
                 closePaymentModal();
             }
         });
+        
+        console.log('Payment modal events setup complete');
     }
 
     // ============================================
-    // CORE FUNCTIONS - MATCHING HOME PAGE
+    // CORE FUNCTIONS
     // ============================================
     function initializeTheme() {
         const themeToggle = document.getElementById('themeToggle');
@@ -3111,7 +3129,6 @@
     // Make functions globally available for onclick handlers
     window.openPaymentModal = openPaymentModal;
     window.selectTicket = selectTicket;
-    window.processPayment = processPayment;
     window.closePaymentModal = closePaymentModal;
 
     // Touch device optimizations
@@ -3201,6 +3218,12 @@
         .vpay-button {
             font-size: 1.1rem;
             padding: 16px;
+            cursor: pointer;
+        }
+        
+        .vpay-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
         
         .vpay-logo {
@@ -3214,8 +3237,26 @@
                 margin: 20px;
             }
         }
+        
+        /* Additional styles for better UX */
+        .ticket-option {
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .ticket-option.selected {
+            border-color: var(--primary-red) !important;
+            background: rgba(194, 24, 7, 0.05) !important;
+        }
+        
+        .buy-ticket-btn button {
+            cursor: pointer;
+        }
     `;
     document.head.appendChild(style);
+    
+    // Debug helper
+    console.log('DSOG Events JavaScript loaded successfully');
 </script>
 </body>
 </html>
