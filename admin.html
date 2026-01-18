@@ -1009,7 +1009,7 @@
             box-shadow: 0 4px 8px rgba(239, 68, 68, 0.2);
         }
 
-        /* Tab Navigation */
+        /* Tab Navigation - FIXED */
         .tab-navigation {
             display: flex;
             gap: var(--space-sm);
@@ -1022,12 +1022,13 @@
             padding: var(--space-md) var(--space-xl);
             background: transparent;
             border: none;
-            border-radius: var(--radius-md);
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
             color: var(--text-secondary);
             font-weight: 600;
             cursor: pointer;
             transition: all var(--transition-fast);
             position: relative;
+            margin-bottom: -2px;
         }
         
         .tab-btn:hover {
@@ -1038,17 +1039,17 @@
         .tab-btn.active {
             background: rgba(194, 24, 7, 0.1);
             color: var(--primary-red);
+            border-bottom: 2px solid var(--primary-red);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
         }
         
-        .tab-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: var(--primary-red);
-            border-radius: var(--radius-sm);
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
         }
 
         /* Ticket Management */
@@ -1801,14 +1802,14 @@
                     <h3><i class="fas fa-calendar-alt"></i> Manage Events</h3>
                     
                     <div class="tab-navigation" id="eventTabs">
-                        <button class="tab-btn active" onclick="showEventTab('basic')">Basic Info</button>
-                        <button class="tab-btn" onclick="showEventTab('details')">Details</button>
-                        <button class="tab-btn" onclick="showEventTab('tickets')">Tickets</button>
-                        <button class="tab-btn" onclick="showEventTab('media')">Media & Links</button>
+                        <button class="tab-btn active" onclick="showTab('event', 'basic')">Basic Info</button>
+                        <button class="tab-btn" onclick="showTab('event', 'details')">Details</button>
+                        <button class="tab-btn" onclick="showTab('event', 'tickets')">Tickets</button>
+                        <button class="tab-btn" onclick="showTab('event', 'media')">Media & Links</button>
                     </div>
                     
                     <!-- Basic Info Tab -->
-                    <div id="eventTabBasic" class="event-tab active-tab">
+                    <div id="eventTabBasic" class="tab-content active">
                         <div class="form-grid">
                             <div class="form-group">
                                 <label for="eventTitle">Event Title *</label>
@@ -1842,7 +1843,7 @@
                     </div>
                     
                     <!-- Details Tab -->
-                    <div id="eventTabDetails" class="event-tab" style="display: none;">
+                    <div id="eventTabDetails" class="tab-content">
                         <div class="form-grid">
                             <div class="form-group">
                                 <label for="eventVenue">Venue</label>
@@ -1879,7 +1880,7 @@
                     </div>
                     
                     <!-- Tickets Tab (WORKING VERSION) -->
-                    <div id="eventTabTickets" class="event-tab" style="display: none;">
+                    <div id="eventTabTickets" class="tab-content">
                         <div class="nested-section">
                             <div class="nested-section-header">
                                 <h4>Event Tickets</h4>
@@ -1905,7 +1906,7 @@
                     </div>
                     
                     <!-- Media & Links Tab -->
-                    <div id="eventTabMedia" class="event-tab" style="display: none;">
+                    <div id="eventTabMedia" class="tab-content">
                         <div class="form-group">
                             <label for="eventImageUrl">Image URL</label>
                             <input type="text" id="eventImageUrl" class="form-control" placeholder="Enter image URL">
@@ -1971,14 +1972,14 @@
                     <h3><i class="fas fa-graduation-cap"></i> Bootcamp Content Management</h3>
                     
                     <div class="tab-navigation">
-                        <button class="tab-btn active" onclick="showBootcampTab('hero')">Hero Section</button>
-                        <button class="tab-btn" onclick="showBootcampTab('tracks')">Franchise Tracks</button>
-                        <button class="tab-btn" onclick="showBootcampTab('team')">Team Structure</button>
-                        <button class="tab-btn" onclick="showBootcampTab('schedule')">Schedule</button>
-                        <button class="tab-btn" onclick="showBootcampTab('application')">Application</button>
+                        <button class="tab-btn active" onclick="showTab('bootcamp', 'hero')">Hero Section</button>
+                        <button class="tab-btn" onclick="showTab('bootcamp', 'tracks')">Franchise Tracks</button>
+                        <button class="tab-btn" onclick="showTab('bootcamp', 'team')">Team Structure</button>
+                        <button class="tab-btn" onclick="showTab('bootcamp', 'schedule')">Schedule</button>
+                        <button class="tab-btn" onclick="showTab('bootcamp', 'application')">Application</button>
                     </div>
                     
-                    <div id="bootcampHeroTab" class="bootcamp-tab active-tab">
+                    <div id="bootcampTabHero" class="tab-content active">
                         <div class="form-group">
                             <label for="bootcampMissionBadge">Mission Badge</label>
                             <input type="text" id="bootcampMissionBadge" class="form-control" placeholder="e.g., PIONEER COHORT 1 • LIMITED SPOTS">
@@ -2032,7 +2033,7 @@
                         </div>
                     </div>
                     
-                    <div id="bootcampTracksTab" class="bootcamp-tab" style="display: none;">
+                    <div id="bootcampTabTracks" class="tab-content">
                         <div class="form-group">
                             <label for="bootcampTracksTitle">Tracks Title</label>
                             <input type="text" id="bootcampTracksTitle" class="form-control" placeholder="e.g., Franchise Specialization Tracks">
@@ -2056,7 +2057,7 @@
                         </div>
                     </div>
                     
-                    <div id="bootcampTeamTab" class="bootcamp-tab" style="display: none;">
+                    <div id="bootcampTabTeam" class="tab-content">
                         <div class="form-group">
                             <label for="bootcampTeamTitle">Team Structure Title</label>
                             <input type="text" id="bootcampTeamTitle" class="form-control" placeholder="e.g., Team-Based Franchise Structure">
@@ -2080,7 +2081,7 @@
                         </div>
                     </div>
                     
-                    <div id="bootcampScheduleTab" class="bootcamp-tab" style="display: none;">
+                    <div id="bootcampTabSchedule" class="tab-content">
                         <div class="form-group">
                             <label for="bootcampScheduleTitle">Schedule Title</label>
                             <input type="text" id="bootcampScheduleTitle" class="form-control" placeholder="e.g., 3-Month Bootcamp Schedule">
@@ -2104,7 +2105,7 @@
                         </div>
                     </div>
                     
-                    <div id="bootcampApplicationTab" class="bootcamp-tab" style="display: none;">
+                    <div id="bootcampTabApplication" class="tab-content">
                         <div class="form-group">
                             <label for="bootcampApplicationTitle">Application Form Title</label>
                             <input type="text" id="bootcampApplicationTitle" class="form-control" placeholder="e.g., Join Pioneer Cohort 1">
@@ -2504,11 +2505,11 @@
                     <h3><i class="fas fa-home"></i> Home Page Content</h3>
                     
                     <div class="tab-navigation">
-                        <button class="tab-btn active" onclick="showHomeTab('hero')">Hero Section</button>
-                        <button class="tab-btn" onclick="showHomeTab('approach')">Approach Section</button>
+                        <button class="tab-btn active" onclick="showTab('home', 'hero')">Hero Section</button>
+                        <button class="tab-btn" onclick="showTab('home', 'approach')">Approach Section</button>
                     </div>
                     
-                    <div id="homeHeroTab" class="home-tab active-tab">
+                    <div id="homeTabHero" class="tab-content active">
                         <div class="form-group">
                             <label for="homeMissionBadge">Mission Badge Text</label>
                             <input type="text" id="homeMissionBadge" class="form-control" placeholder="e.g., EMPOWERING BUSINESSES & ENTREPRENEURS">
@@ -2532,7 +2533,7 @@
                         </div>
                     </div>
                     
-                    <div id="homeApproachTab" class="home-tab" style="display: none;">
+                    <div id="homeTabApproach" class="tab-content">
                         <div class="form-group">
                             <label for="homeApproachTitle">Approach Title</label>
                             <input type="text" id="homeApproachTitle" class="form-control" placeholder="e.g., How We Empower Entrepreneurs">
@@ -2574,11 +2575,11 @@
                     <h3><i class="fas fa-chalkboard"></i> Training Page Content</h3>
                     
                     <div class="tab-navigation">
-                        <button class="tab-btn active" onclick="showTrainingTab('hero')">Hero Section</button>
-                        <button class="tab-btn" onclick="showTrainingTab('outcomes')">Outcomes Section</button>
+                        <button class="tab-btn active" onclick="showTab('training', 'hero')">Hero Section</button>
+                        <button class="tab-btn" onclick="showTab('training', 'outcomes')">Outcomes Section</button>
                     </div>
                     
-                    <div id="trainingHeroTab" class="training-tab active-tab">
+                    <div id="trainingTabHero" class="tab-content active">
                         <div class="form-group">
                             <label for="trainingPageBadge">Badge Text</label>
                             <input type="text" id="trainingPageBadge" class="form-control" placeholder="e.g., Structured Education For Your Business">
@@ -2600,7 +2601,7 @@
                         </div>
                     </div>
                     
-                    <div id="trainingOutcomesTab" class="training-tab" style="display: none;">
+                    <div id="trainingTabOutcomes" class="tab-content">
                         <div class="nested-section">
                             <div class="nested-section-header">
                                 <h4>Outcome Metrics</h4>
@@ -2773,12 +2774,12 @@
                     <h3><i class="fas fa-database"></i> Data Tools</h3>
                     
                     <div class="tab-navigation">
-                        <button class="tab-btn active" onclick="showDataTab('export')">Export Data</button>
-                        <button class="tab-btn" onclick="showDataTab('import')">Import Data</button>
-                        <button class="tab-btn" onclick="showDataTab('backup')">Backup/Restore</button>
+                        <button class="tab-btn active" onclick="showTab('data', 'export')">Export Data</button>
+                        <button class="tab-btn" onclick="showTab('data', 'import')">Import Data</button>
+                        <button class="tab-btn" onclick="showTab('data', 'backup')">Backup/Restore</button>
                     </div>
                     
-                    <div id="dataExportTab" class="data-tab active-tab">
+                    <div id="dataTabExport" class="tab-content active">
                         <div class="form-group">
                             <label>Export Options</label>
                             <div class="checkbox-group">
@@ -2806,7 +2807,7 @@
                         <div id="exportResult" class="json-viewer" style="margin-top: var(--space-xl); display: none;"></div>
                     </div>
                     
-                    <div id="dataImportTab" class="data-tab" style="display: none;">
+                    <div id="dataTabImport" class="tab-content">
                         <div class="form-group">
                             <label for="importJson">Paste JSON Data</label>
                             <textarea id="importJson" class="form-control" placeholder="Paste your JSON data here" rows="10"></textarea>
@@ -2833,7 +2834,7 @@
                         </button>
                     </div>
                     
-                    <div id="dataBackupTab" class="data-tab" style="display: none;">
+                    <div id="dataTabBackup" class="tab-content">
                         <div class="form-group">
                             <label>Backup Management</label>
                             <p style="color: var(--text-secondary); margin-bottom: var(--space-md);">
@@ -2880,7 +2881,6 @@
         let currentUser = null;
         let currentEditingId = null;
         let currentEventId = null;
-        let eventTickets = {};
 
         // DOM Elements
         const loginScreen = document.getElementById('loginScreen');
@@ -3109,6 +3109,35 @@
             }
         }
 
+        // Tab Navigation System - FIXED
+        function showTab(section, tabName) {
+            // Hide all tabs in the current section
+            const tabContents = document.querySelectorAll(`#${section} .tab-content`);
+            tabContents.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Deactivate all tab buttons in the current section
+            const tabButtons = document.querySelectorAll(`#${section} .tab-btn`);
+            tabButtons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            const tabId = `${section}Tab${tabName.charAt(0).toUpperCase() + tabName.slice(1)}`;
+            const tabElement = document.getElementById(tabId);
+            if (tabElement) {
+                tabElement.classList.add('active');
+            }
+            
+            // Activate corresponding button
+            tabButtons.forEach(btn => {
+                if (btn.textContent.toLowerCase().includes(tabName.toLowerCase())) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
         // ==================== EVENT TICKETS MANAGEMENT ====================
         function addTicketType() {
             const container = document.getElementById('ticketsContainer');
@@ -3307,25 +3336,6 @@
         }
 
         // ==================== EVENTS MANAGEMENT ====================
-        function showEventTab(tabName) {
-            document.querySelectorAll('.event-tab').forEach(tab => {
-                tab.style.display = 'none';
-            });
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            // Show selected tab
-            document.getElementById('eventTab' + tabName.charAt(0).toUpperCase() + tabName.slice(1)).style.display = 'block';
-            
-            // Activate selected tab button
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                if (btn.textContent.toLowerCase().includes(tabName.toLowerCase())) {
-                    btn.classList.add('active');
-                }
-            });
-        }
-
         async function loadEvents() {
             try {
                 const snapshot = await db.ref('upcomingEvents').once('value');
@@ -3464,7 +3474,7 @@
                     
                     // Show success message and switch to basic tab
                     showToast('Editing event: ' + event.title, 'info');
-                    showEventTab('basic');
+                    showTab('event', 'basic');
                 }
             } catch (error) {
                 showToast('Error loading event: ' + error.message, 'error');
@@ -3512,7 +3522,7 @@
             currentEventId = null;
             
             // Reset to basic tab
-            showEventTab('basic');
+            showTab('event', 'basic');
         }
 
         // ==================== UTILITY FUNCTIONS ====================
@@ -3615,7 +3625,7 @@
 
         // Make functions global
         window.switchSection = switchSection;
-        window.showEventTab = showEventTab;
+        window.showTab = showTab;
         window.addTicketType = addTicketType;
         window.updateTicketBadge = updateTicketBadge;
         window.checkTicketsEmpty = checkTicketsEmpty;
