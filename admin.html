@@ -1023,7 +1023,7 @@
             </button>
             
             <div class="login-footer">
-                <p>Version 7.0.0 | Complete Data Management</p>
+                <p>Version 10.0.0 | Complete Data Management</p>
             </div>
         </div>
     </div>
@@ -1059,6 +1059,10 @@
                     <div class="nav-link" data-section="events">
                         <i class="fas fa-calendar-alt"></i>
                         <span>Events</span>
+                    </div>
+                    <div class="nav-link" data-section="bootcamp">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Bootcamp Content</span>
                     </div>
                     <div class="nav-link" data-section="trainingPrograms">
                         <i class="fas fa-graduation-cap"></i>
@@ -1199,8 +1203,8 @@
                         <button class="btn btn-secondary" onclick="switchSection('team')">
                             <i class="fas fa-plus"></i> Add Team Member
                         </button>
-                        <button class="btn btn-secondary" onclick="switchSection('testimonials')">
-                            <i class="fas fa-plus"></i> Add Testimonial
+                        <button class="btn btn-secondary" onclick="switchSection('bootcamp')">
+                            <i class="fas fa-plus"></i> Edit Bootcamp
                         </button>
                     </div>
                 </div>
@@ -1214,7 +1218,7 @@
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="appVersion">App Version *</label>
-                            <input type="text" id="appVersion" placeholder="e.g., 7.0.0">
+                            <input type="text" id="appVersion" placeholder="e.g., 10.0.0">
                         </div>
                         
                         <div class="form-group">
@@ -1234,7 +1238,7 @@
                         
                         <div class="form-group">
                             <label for="appPhone">Phone Number</label>
-                            <input type="text" id="appPhone" placeholder="e.g., 0733 737 983">
+                            <input type="text" id="appPhone" placeholder="e.g., +254 733 737 983">
                         </div>
                     </div>
                     
@@ -1246,7 +1250,7 @@
                         
                         <div class="form-group">
                             <label for="appEventsEmail">Events Email</label>
-                            <input type="email" id="appEventsEmail" placeholder="e.g., events@dsog.org">
+                            <input type="email" id="appEventsEmail" placeholder="e.g., events.dsog@gmail.com">
                         </div>
                     </div>
                     
@@ -1342,46 +1346,53 @@
                 </div>
             </div>
 
-            <!-- Events Section (Enhanced with Ticket Management) -->
+            <!-- Events Section -->
             <div id="events" class="content-section">
                 <div class="tab-navigation" id="eventsFormTabs">
                     <button class="tab-btn active" onclick="showEventTab('basic')">Basic Info</button>
                     <button class="tab-btn" onclick="showEventTab('details')">Details</button>
                     <button class="tab-btn" onclick="showEventTab('tickets')">Tickets</button>
-                    <button class="tab-btn" onclick="showEventTab('media')">Media & Links</button>
+                    <button class="tab-btn" onclick="showEventTab('pricing')">Pricing</button>
                 </div>
                 
                 <div class="form-section">
                     <div id="eventTabBasic" class="event-tab active">
                         <div class="form-grid">
                             <div class="form-group">
+                                <label for="eventId">Event ID</label>
+                                <input type="text" id="eventId" placeholder="e.g., event_001" readonly>
+                            </div>
+                            
+                            <div class="form-group">
                                 <label for="eventTitle">Event Title *</label>
                                 <input type="text" id="eventTitle" placeholder="Enter event title">
                             </div>
-                            
+                        </div>
+                        
+                        <div class="form-grid">
                             <div class="form-group">
                                 <label for="eventCategory">Category *</label>
                                 <select id="eventCategory">
                                     <!-- Populated dynamically -->
                                 </select>
                             </div>
-                        </div>
-                        
-                        <div class="form-grid">
+                            
                             <div class="form-group">
                                 <label for="eventDate">Date *</label>
                                 <input type="date" id="eventDate">
                             </div>
-                            
-                            <div class="form-group">
-                                <label for="eventDuration">Duration</label>
-                                <input type="text" id="eventDuration" placeholder="e.g., 3 Months Intensive Program">
-                            </div>
                         </div>
                         
-                        <div class="form-group">
-                            <label for="eventSubtitle">Subtitle</label>
-                            <input type="text" id="eventSubtitle" placeholder="Enter event subtitle">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="eventDuration">Duration</label>
+                                <input type="text" id="eventDuration" placeholder="e.g., 1 Day">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="eventSubtitle">Subtitle</label>
+                                <input type="text" id="eventSubtitle" placeholder="Enter event subtitle">
+                            </div>
                         </div>
                     </div>
                     
@@ -1422,29 +1433,34 @@
                     </div>
                     
                     <div id="eventTabTickets" class="event-tab" style="display: none;">
-                        <div class="nested-section-header">
-                            <h4>Event Tickets</h4>
-                            <button type="button" class="btn btn-small btn-primary" onclick="addTicketType()">
-                                <i class="fas fa-plus"></i> Add Ticket Type
-                            </button>
-                        </div>
-                        
-                        <div id="ticketsContainer">
-                            <!-- Ticket types will be added here -->
-                        </div>
-                        
                         <div class="form-group">
-                            <label for="eventRegistrationUrl">Default Registration URL</label>
+                            <label for="eventRegistrationUrl">Registration URL</label>
                             <input type="text" id="eventRegistrationUrl" placeholder="Enter registration URL">
                         </div>
-                    </div>
-                    
-                    <div id="eventTabMedia" class="event-tab" style="display: none;">
+                        
                         <div class="form-group">
                             <label for="eventImageUrl">Image URL</label>
                             <input type="text" id="eventImageUrl" placeholder="Enter image URL">
                             <div class="image-preview" id="eventImagePreview">
                                 <span>No image preview</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="eventTabPricing" class="event-tab" style="display: none;">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="eventPricingCurrency">Currency</label>
+                                <select id="eventPricingCurrency">
+                                    <option value="KES">KES (Kenyan Shilling)</option>
+                                    <option value="USD">USD (US Dollar)</option>
+                                    <option value="EUR">EUR (Euro)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="eventDeadline">Application Deadline</label>
+                                <input type="date" id="eventDeadline">
                             </div>
                         </div>
                         
@@ -1480,7 +1496,6 @@
                                 <th>Title</th>
                                 <th>Category</th>
                                 <th>Date</th>
-                                <th>Tickets</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -1489,6 +1504,185 @@
                             <!-- Events will be populated here -->
                         </tbody>
                     </table>
+                </div>
+            </div>
+
+            <!-- Bootcamp Content Section -->
+            <div id="bootcamp" class="content-section">
+                <div class="form-section">
+                    <h3><i class="fas fa-graduation-cap"></i> Bootcamp Content Management</h3>
+                    
+                    <div class="tab-navigation">
+                        <button class="tab-btn active" onclick="showBootcampTab('hero')">Hero Section</button>
+                        <button class="tab-btn" onclick="showBootcampTab('tracks')">Franchise Tracks</button>
+                        <button class="tab-btn" onclick="showBootcampTab('team')">Team Structure</button>
+                        <button class="tab-btn" onclick="showBootcampTab('schedule')">Schedule</button>
+                        <button class="tab-btn" onclick="showBootcampTab('application')">Application</button>
+                    </div>
+                    
+                    <!-- Hero Section Tab -->
+                    <div id="bootcampHeroTab" class="bootcamp-tab active">
+                        <div class="form-group">
+                            <label for="bootcampMissionBadge">Mission Badge</label>
+                            <input type="text" id="bootcampMissionBadge" placeholder="e.g., PIONEER COHORT 1 • LIMITED SPOTS">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bootcampMainTitle">Main Title *</label>
+                            <input type="text" id="bootcampMainTitle" placeholder="e.g., From Scratch to Owning Your First DSOG Store">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bootcampSubtitle">Subtitle</label>
+                            <textarea id="bootcampSubtitle" placeholder="Enter bootcamp subtitle" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="bootcampSpecialPrice">Special Price</label>
+                                <input type="number" id="bootcampSpecialPrice" placeholder="e.g., 3500">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bootcampFuturePrice">Future Price</label>
+                                <input type="number" id="bootcampFuturePrice" placeholder="e.g., 25000">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bootcampCurrency">Currency</label>
+                            <select id="bootcampCurrency">
+                                <option value="KES">KES</option>
+                                <option value="USD">USD</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bootcampPricingDescription">Pricing Description</label>
+                            <textarea id="bootcampPricingDescription" placeholder="Describe the pricing" rows="2"></textarea>
+                        </div>
+                        
+                        <div class="nested-section">
+                            <div class="nested-section-header">
+                                <h4>Highlights</h4>
+                                <button type="button" class="btn btn-small btn-secondary" onclick="addBootcampHighlight()">
+                                    <i class="fas fa-plus"></i> Add Highlight
+                                </button>
+                            </div>
+                            <div id="bootcampHighlightsContainer">
+                                <!-- Highlights will be added here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Franchise Tracks Tab -->
+                    <div id="bootcampTracksTab" class="bootcamp-tab" style="display: none;">
+                        <div class="form-group">
+                            <label for="bootcampTracksTitle">Tracks Title</label>
+                            <input type="text" id="bootcampTracksTitle" placeholder="e.g., Franchise Specialization Tracks">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bootcampTracksSubtitle">Tracks Subtitle</label>
+                            <textarea id="bootcampTracksSubtitle" placeholder="Enter tracks subtitle" rows="2"></textarea>
+                        </div>
+                        
+                        <div class="nested-section">
+                            <div class="nested-section-header">
+                                <h4>Franchise Tracks</h4>
+                                <button type="button" class="btn btn-small btn-secondary" onclick="addFranchiseTrack()">
+                                    <i class="fas fa-plus"></i> Add Track
+                                </button>
+                            </div>
+                            <div id="franchiseTracksContainer">
+                                <!-- Franchise tracks will be added here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Team Structure Tab -->
+                    <div id="bootcampTeamTab" class="bootcamp-tab" style="display: none;">
+                        <div class="form-group">
+                            <label for="bootcampTeamTitle">Team Structure Title</label>
+                            <input type="text" id="bootcampTeamTitle" placeholder="e.g., Team-Based Franchise Structure">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bootcampTeamSubtitle">Team Structure Subtitle</label>
+                            <textarea id="bootcampTeamSubtitle" placeholder="Enter team structure subtitle" rows="2"></textarea>
+                        </div>
+                        
+                        <div class="nested-section">
+                            <div class="nested-section-header">
+                                <h4>Team Structure Items</h4>
+                                <button type="button" class="btn btn-small btn-secondary" onclick="addTeamStructure()">
+                                    <i class="fas fa-plus"></i> Add Team Item
+                                </button>
+                            </div>
+                            <div id="teamStructureContainer">
+                                <!-- Team structure items will be added here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Schedule Tab -->
+                    <div id="bootcampScheduleTab" class="bootcamp-tab" style="display: none;">
+                        <div class="form-group">
+                            <label for="bootcampScheduleTitle">Schedule Title</label>
+                            <input type="text" id="bootcampScheduleTitle" placeholder="e.g., 3-Month Bootcamp Schedule">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bootcampScheduleSubtitle">Schedule Subtitle</label>
+                            <textarea id="bootcampScheduleSubtitle" placeholder="Enter schedule subtitle" rows="2"></textarea>
+                        </div>
+                        
+                        <div class="nested-section">
+                            <div class="nested-section-header">
+                                <h4>Monthly Schedule</h4>
+                                <button type="button" class="btn btn-small btn-secondary" onclick="addMonthlySchedule()">
+                                    <i class="fas fa-plus"></i> Add Month
+                                </button>
+                            </div>
+                            <div id="monthlyScheduleContainer">
+                                <!-- Monthly schedule items will be added here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Application Tab -->
+                    <div id="bootcampApplicationTab" class="bootcamp-tab" style="display: none;">
+                        <div class="form-group">
+                            <label for="bootcampApplicationTitle">Application Form Title</label>
+                            <input type="text" id="bootcampApplicationTitle" placeholder="e.g., Join Pioneer Cohort 1">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bootcampApplicationSubtitle">Application Form Subtitle</label>
+                            <textarea id="bootcampApplicationSubtitle" placeholder="Enter application subtitle" rows="2"></textarea>
+                        </div>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="bootcampGoogleFormUrl">Google Form URL</label>
+                                <input type="text" id="bootcampGoogleFormUrl" placeholder="https://docs.google.com/forms/...">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bootcampApplicationDeadline">Application Deadline</label>
+                                <input type="date" id="bootcampApplicationDeadline">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="saveBootcampContent()">
+                            <i class="fas fa-save"></i> Save Bootcamp Content
+                        </button>
+                        <button class="btn btn-secondary" onclick="loadBootcampContent()">
+                            <i class="fas fa-sync-alt"></i> Load Current
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -1686,11 +1880,6 @@
                             <div class="form-group">
                                 <label for="teamLinkedin">LinkedIn URL</label>
                                 <input type="text" id="teamLinkedin" placeholder="Enter LinkedIn URL">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="teamTwitter">Twitter URL</label>
-                                <input type="text" id="teamTwitter" placeholder="Enter Twitter URL">
                             </div>
                         </div>
                     </div>
@@ -1921,7 +2110,7 @@
                     <div id="trainingHeroTab" class="training-tab active">
                         <div class="form-group">
                             <label for="trainingPageBadge">Badge Text</label>
-                            <input type="text" id="trainingPageBadge" placeholder="e.g., STRUCTURED BUSINESS EDUCATION">
+                            <input type="text" id="trainingPageBadge" placeholder="e.g., Structured Education For Your Business">
                         </div>
                         
                         <div class="form-group">
@@ -1974,31 +2163,31 @@
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="statsEntrepreneursTrained">Entrepreneurs Trained</label>
-                            <input type="number" id="statsEntrepreneursTrained" placeholder="e.g., 500">
+                            <input type="number" id="statsEntrepreneursTrained" placeholder="e.g., 120">
                         </div>
                         
                         <div class="form-group">
                             <label for="statsEventsHosted">Events Hosted</label>
-                            <input type="number" id="statsEventsHosted" placeholder="e.g., 50">
+                            <input type="number" id="statsEventsHosted" placeholder="e.g., 0">
                         </div>
                     </div>
                     
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="statsStartupsSupported">Startups Supported</label>
-                            <input type="number" id="statsStartupsSupported" placeholder="e.g., 30">
+                            <input type="number" id="statsStartupsSupported" placeholder="e.g., 55">
                         </div>
                         
                         <div class="form-group">
                             <label for="statsCompletionRate">Completion Rate (%)</label>
-                            <input type="number" id="statsCompletionRate" placeholder="e.g., 95">
+                            <input type="number" id="statsCompletionRate" placeholder="e.g., 89">
                         </div>
                     </div>
                     
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="statsBusinessGrowthRate">Business Growth Rate (%)</label>
-                            <input type="number" id="statsBusinessGrowthRate" placeholder="e.g., 85">
+                            <input type="number" id="statsBusinessGrowthRate" placeholder="e.g., 88">
                         </div>
                         
                         <div class="form-group">
@@ -2009,7 +2198,7 @@
                     
                     <div class="form-group">
                         <label for="statsCareerAdvancement">Career Advancement (%)</label>
-                        <input type="number" id="statsCareerAdvancement" placeholder="e.g., 70">
+                        <input type="number" id="statsCareerAdvancement" placeholder="e.g., 89">
                     </div>
                     
                     <div class="form-group">
@@ -2214,10 +2403,6 @@
         let currentUser = null;
         let currentEditingId = null;
         let currentEditingType = null;
-        let homePageTags = [];
-        let approachCards = [];
-        let outcomeMetrics = [];
-        let schedulePrograms = [];
 
         // DOM Elements
         const loginScreen = document.getElementById('loginScreen');
@@ -2319,9 +2504,6 @@
             
             // Initialize tag input
             initTagInput();
-            
-            // Initialize image preview
-            initImagePreview();
         }
 
         // Switch section
@@ -2336,6 +2518,7 @@
                 'appSettings': 'App Settings',
                 'eventCategories': 'Event Categories',
                 'events': 'Events Management',
+                'bootcamp': 'Bootcamp Content',
                 'trainingPrograms': 'Training Programs',
                 'trainingSchedules': 'Training Schedules',
                 'team': 'Team Members',
@@ -2354,6 +2537,7 @@
                 case 'appSettings': loadAppSettings(); break;
                 case 'eventCategories': loadEventCategories(); break;
                 case 'events': loadEvents(); break;
+                case 'bootcamp': loadBootcampContent(); break;
                 case 'trainingPrograms': loadTrainingPrograms(); break;
                 case 'trainingSchedules': loadTrainingSchedules(); break;
                 case 'team': loadTeamMembers(); break;
@@ -2607,189 +2791,24 @@
             currentEditingId = null;
         }
 
-        // ==================== EVENTS MANAGEMENT ====================
+        // ==================== EVENTS MANAGEMENT (FIXED) ====================
         function showEventTab(tabName) {
             document.querySelectorAll('.event-tab').forEach(tab => {
                 tab.style.display = 'none';
             });
-            document.querySelectorAll('.tab-btn').forEach(tab => {
-                tab.classList.remove('active');
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
             });
             
-            const tabElements = {
-                'basic': 'eventTabBasic',
-                'details': 'eventTabDetails',
-                'tickets': 'eventTabTickets',
-                'media': 'eventTabMedia'
-            };
+            // Show selected tab
+            document.getElementById('eventTab' + tabName.charAt(0).toUpperCase() + tabName.slice(1)).style.display = 'block';
             
-            document.getElementById(tabElements[tabName]).style.display = 'block';
-            event.target.classList.add('active');
-        }
-
-        function addTicketType() {
-            const container = document.getElementById('ticketsContainer');
-            const ticketId = 'ticket_' + Date.now();
-            
-            const ticketDiv = document.createElement('div');
-            ticketDiv.className = 'ticket-section';
-            ticketDiv.id = ticketId;
-            ticketDiv.innerHTML = `
-                <div class="ticket-section-header">
-                    <h4>New Ticket Type</h4>
-                    <button type="button" class="action-btn delete" onclick="this.parentElement.parentElement.remove()">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Ticket Type</label>
-                        <select class="ticket-type">
-                            <option value="early_bird">Early Bird</option>
-                            <option value="standard">Standard</option>
-                            <option value="vip">VIP</option>
-                            <option value="general">General</option>
-                            <option value="premium">Premium</option>
-                            <option value="donation">Donation</option>
-                            <option value="sponsor">Sponsor</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Ticket Name</label>
-                        <input type="text" class="ticket-name" placeholder="e.g., Early Bird Bootcamp Ticket">
-                    </div>
-                </div>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Price</label>
-                        <input type="number" class="ticket-price" placeholder="e.g., 500">
-                    </div>
-                    <div class="form-group">
-                        <label>Currency</label>
-                        <select class="ticket-currency">
-                            <option value="USD">USD ($)</option>
-                            <option value="KES">KES (KSh)</option>
-                            <option value="EUR">EUR (€)</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Quantity Available</label>
-                        <input type="number" class="ticket-quantity-available" placeholder="e.g., 10">
-                    </div>
-                    <div class="form-group">
-                        <label>Quantity Sold</label>
-                        <input type="number" class="ticket-quantity-sold" placeholder="e.g., 0">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea class="ticket-description" placeholder="Describe this ticket type" rows="2"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Includes (comma separated)</label>
-                    <input type="text" class="ticket-includes" placeholder="e.g., Full bootcamp access + Materials + Mentorship">
-                </div>
-                <div class="form-group">
-                    <label>VPay Link</label>
-                    <input type="text" class="ticket-vpay-link" placeholder="https://vpay.pages.dev/payment/...">
-                </div>
-            `;
-            
-            container.appendChild(ticketDiv);
-        }
-
-        function getTicketsData() {
-            const tickets = {};
-            document.querySelectorAll('#ticketsContainer .ticket-section').forEach(ticket => {
-                const type = ticket.querySelector('.ticket-type').value;
-                tickets[type] = {
-                    type: type,
-                    name: ticket.querySelector('.ticket-name').value,
-                    price: parseFloat(ticket.querySelector('.ticket-price').value) || 0,
-                    currency: ticket.querySelector('.ticket-currency').value,
-                    quantityAvailable: parseInt(ticket.querySelector('.ticket-quantity-available').value) || 0,
-                    quantitySold: parseInt(ticket.querySelector('.ticket-quantity-sold').value) || 0,
-                    description: ticket.querySelector('.ticket-description').value,
-                    includes: ticket.querySelector('.ticket-includes').value,
-                    vpayLink: ticket.querySelector('.ticket-vpay-link').value
-                };
-            });
-            return tickets;
-        }
-
-        function setTicketsData(tickets) {
-            const container = document.getElementById('ticketsContainer');
-            container.innerHTML = '';
-            
-            Object.entries(tickets).forEach(([type, ticket]) => {
-                const ticketDiv = document.createElement('div');
-                ticketDiv.className = 'ticket-section';
-                ticketDiv.innerHTML = `
-                    <div class="ticket-section-header">
-                        <h4>${ticket.name || type}</h4>
-                        <button type="button" class="action-btn delete" onclick="this.parentElement.parentElement.remove()">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Ticket Type</label>
-                            <select class="ticket-type">
-                                <option value="early_bird" ${type === 'early_bird' ? 'selected' : ''}>Early Bird</option>
-                                <option value="standard" ${type === 'standard' ? 'selected' : ''}>Standard</option>
-                                <option value="vip" ${type === 'vip' ? 'selected' : ''}>VIP</option>
-                                <option value="general" ${type === 'general' ? 'selected' : ''}>General</option>
-                                <option value="premium" ${type === 'premium' ? 'selected' : ''}>Premium</option>
-                                <option value="donation" ${type === 'donation' ? 'selected' : ''}>Donation</option>
-                                <option value="sponsor" ${type === 'sponsor' ? 'selected' : ''}>Sponsor</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Ticket Name</label>
-                            <input type="text" class="ticket-name" value="${ticket.name || ''}">
-                        </div>
-                    </div>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Price</label>
-                            <input type="number" class="ticket-price" value="${ticket.price || ''}">
-                        </div>
-                        <div class="form-group">
-                            <label>Currency</label>
-                            <select class="ticket-currency">
-                                <option value="USD" ${ticket.currency === 'USD' ? 'selected' : ''}>USD ($)</option>
-                                <option value="KES" ${ticket.currency === 'KES' ? 'selected' : ''}>KES (KSh)</option>
-                                <option value="EUR" ${ticket.currency === 'EUR' ? 'selected' : ''}>EUR (€)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Quantity Available</label>
-                            <input type="number" class="ticket-quantity-available" value="${ticket.quantityAvailable || ''}">
-                        </div>
-                        <div class="form-group">
-                            <label>Quantity Sold</label>
-                            <input type="number" class="ticket-quantity-sold" value="${ticket.quantitySold || ''}">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea class="ticket-description" rows="2">${ticket.description || ''}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Includes (comma separated)</label>
-                        <input type="text" class="ticket-includes" value="${ticket.includes || ''}">
-                    </div>
-                    <div class="form-group">
-                        <label>VPay Link</label>
-                        <input type="text" class="ticket-vpay-link" value="${ticket.vpayLink || ''}">
-                    </div>
-                `;
-                
-                container.appendChild(ticketDiv);
+            // Activate selected tab button
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            tabButtons.forEach(btn => {
+                if (btn.textContent.toLowerCase().includes(tabName.toLowerCase())) {
+                    btn.classList.add('active');
+                }
             });
         }
 
@@ -2802,13 +2821,11 @@
                 
                 if (events) {
                     Object.entries(events).forEach(([id, event]) => {
-                        const ticketCount = event.tickets ? Object.keys(event.tickets).length : 0;
                         const row = document.createElement('tr');
                         row.innerHTML = `
                             <td>${event.title || 'No title'}</td>
                             <td>${event.category || 'No category'}</td>
                             <td>${event.date || 'No date'}</td>
-                            <td>${ticketCount} ticket type(s)</td>
                             <td>
                                 <span class="status-badge ${event.active ? 'status-active' : 'status-inactive'}">
                                     ${event.active ? 'Active' : 'Inactive'}
@@ -2828,7 +2845,7 @@
                         table.appendChild(row);
                     });
                 } else {
-                    table.innerHTML = '<tr><td colspan="6" style="text-align: center;">No events found</td></tr>';
+                    table.innerHTML = '<tr><td colspan="5" style="text-align: center;">No events found</td></tr>';
                 }
             } catch (error) {
                 showMessage('Error loading events: ' + error.message, 'error');
@@ -2836,8 +2853,6 @@
         }
 
         async function saveEvent() {
-            const tickets = getTicketsData();
-            
             const eventData = {
                 title: document.getElementById('eventTitle').value.trim(),
                 category: document.getElementById('eventCategory').value,
@@ -2852,28 +2867,27 @@
                 frequency: document.getElementById('eventFrequency').value,
                 order: parseInt(document.getElementById('eventOrder').value) || 1,
                 active: document.getElementById('eventActive').checked,
-                lastUpdated: new Date().toISOString()
+                lastUpdated: new Date().toISOString(),
+                currency: document.getElementById('eventPricingCurrency').value,
+                deadline: document.getElementById('eventDeadline').value
             };
 
-            // Only add tickets if there are any
-            if (Object.keys(tickets).length > 0) {
-                eventData.tickets = tickets;
-            }
-
             if (!eventData.title || !eventData.date || !eventData.description) {
-                showMessage('Please fill in required fields', 'error');
+                showMessage('Please fill in required fields (Title, Date, Description)', 'error');
                 return;
             }
 
             try {
                 if (currentEditingId) {
+                    // Update existing event
                     await db.ref(`upcomingEvents/${currentEditingId}`).update(eventData);
                     showMessage('Event updated successfully!', 'success');
                     currentEditingId = null;
                 } else {
-                    const newId = 'event_' + Date.now();
-                    eventData.id = newId;
-                    await db.ref(`upcomingEvents/${newId}`).set(eventData);
+                    // Create new event
+                    const eventId = 'event_' + Date.now();
+                    eventData.id = eventId;
+                    await db.ref(`upcomingEvents/${eventId}`).set(eventData);
                     showMessage('Event created successfully!', 'success');
                 }
 
@@ -2891,6 +2905,7 @@
                 const event = snapshot.val();
                 
                 if (event) {
+                    document.getElementById('eventId').value = eventId;
                     document.getElementById('eventTitle').value = event.title || '';
                     document.getElementById('eventCategory').value = event.category || '';
                     document.getElementById('eventDate').value = event.date || '';
@@ -2904,19 +2919,16 @@
                     document.getElementById('eventFrequency').value = event.frequency || 'one-time';
                     document.getElementById('eventOrder').value = event.order || 1;
                     document.getElementById('eventActive').checked = event.active !== false;
-                    
-                    // Set tickets if they exist
-                    if (event.tickets) {
-                        setTicketsData(event.tickets);
-                    } else {
-                        document.getElementById('ticketsContainer').innerHTML = '';
-                    }
+                    document.getElementById('eventPricingCurrency').value = event.currency || 'KES';
+                    document.getElementById('eventDeadline').value = event.deadline || '';
                     
                     // Update image preview
                     updateImagePreview('eventImagePreview', event.imageUrl);
                     
                     currentEditingId = eventId;
+                    currentEditingType = 'event';
                     showMessage('Editing event: ' + event.title, 'info');
+                    showEventTab('basic');
                 }
             } catch (error) {
                 showMessage('Error loading event: ' + error.message, 'error');
@@ -2937,6 +2949,7 @@
         }
 
         function clearEventForm() {
+            document.getElementById('eventId').value = '';
             document.getElementById('eventTitle').value = '';
             document.getElementById('eventCategory').value = '';
             document.getElementById('eventDate').value = '';
@@ -2950,15 +2963,476 @@
             document.getElementById('eventFrequency').value = 'one-time';
             document.getElementById('eventOrder').value = '1';
             document.getElementById('eventActive').checked = true;
+            document.getElementById('eventPricingCurrency').value = 'KES';
+            document.getElementById('eventDeadline').value = '';
             
-            // Clear tickets
-            document.getElementById('ticketsContainer').innerHTML = '';
+            // Clear image preview
+            updateImagePreview('eventImagePreview', '');
             
             // Reset tabs
             showEventTab('basic');
-            updateImagePreview('eventImagePreview', '');
             
             currentEditingId = null;
+            currentEditingType = null;
+        }
+
+        // ==================== BOOTCAMP CONTENT ====================
+        function showBootcampTab(tabName) {
+            document.querySelectorAll('.bootcamp-tab').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById('bootcamp' + tabName.charAt(0).toUpperCase() + tabName.slice(1) + 'Tab').style.display = 'block';
+            
+            // Activate selected tab button
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            tabButtons.forEach(btn => {
+                if (btn.textContent.toLowerCase().includes(tabName.toLowerCase())) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        function addBootcampHighlight() {
+            const container = document.getElementById('bootcampHighlightsContainer');
+            const highlightId = Date.now();
+            
+            const highlightDiv = document.createElement('div');
+            highlightDiv.className = 'array-item';
+            highlightDiv.innerHTML = `
+                <div class="array-item-content">
+                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: var(--space-md);">
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Icon</label>
+                            <input type="text" class="highlight-icon" placeholder="fas fa-store" value="fas fa-" style="width: 100%;">
+                        </div>
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Text</label>
+                            <input type="text" class="highlight-text" placeholder="Highlight text" style="width: 100%;">
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="action-btn delete" onclick="this.parentElement.remove()">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+            
+            container.appendChild(highlightDiv);
+        }
+
+        function addFranchiseTrack() {
+            const container = document.getElementById('franchiseTracksContainer');
+            const trackId = Date.now();
+            
+            const trackDiv = document.createElement('div');
+            trackDiv.className = 'array-item';
+            trackDiv.innerHTML = `
+                <div class="array-item-content">
+                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: var(--space-md); margin-bottom: var(--space-sm);">
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-secondary);">ID</label>
+                            <input type="text" class="track-id" placeholder="fashion" style="width: 100%;">
+                        </div>
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Name</label>
+                            <input type="text" class="track-name" placeholder="Fashion & Accessories" style="width: 100%;">
+                        </div>
+                    </div>
+                    <div style="margin-bottom: var(--space-sm);">
+                        <label style="font-size: 0.8rem; color: var(--text-secondary);">Description</label>
+                        <textarea class="track-description" placeholder="Description" rows="2" style="width: 100%;"></textarea>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--space-md);">
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Icon</label>
+                            <input type="text" class="track-icon" placeholder="fas fa-tshirt" value="fas fa-" style="width: 100%;">
+                        </div>
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Badge</label>
+                            <input type="text" class="track-badge" placeholder="Supplier Discounts: 30-40%" style="width: 100%;">
+                        </div>
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Focus</label>
+                            <input type="text" class="track-focus" placeholder="Store layout design..." style="width: 100%;">
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="action-btn delete" onclick="this.parentElement.remove()">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+            
+            container.appendChild(trackDiv);
+        }
+
+        function addTeamStructure() {
+            const container = document.getElementById('teamStructureContainer');
+            const itemId = Date.now();
+            
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'array-item';
+            itemDiv.innerHTML = `
+                <div class="array-item-content">
+                    <div style="display: grid; grid-template-columns: 100px 2fr; gap: var(--space-md); margin-bottom: var(--space-sm);">
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Number</label>
+                            <input type="number" class="team-number" placeholder="3" style="width: 100%;">
+                        </div>
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Title</label>
+                            <input type="text" class="team-title" placeholder="Franchise Teams" style="width: 100%;">
+                        </div>
+                    </div>
+                    <div style="margin-bottom: var(--space-sm);">
+                        <label style="font-size: 0.8rem; color: var(--text-secondary);">Description</label>
+                        <textarea class="team-description" placeholder="Description" rows="2" style="width: 100%;"></textarea>
+                    </div>
+                    <div>
+                        <label style="font-size: 0.8rem; color: var(--text-secondary);">Benefits (one per line)</label>
+                        <textarea class="team-benefits" placeholder="Benefit 1\nBenefit 2" rows="3" style="width: 100%;"></textarea>
+                    </div>
+                </div>
+                <button type="button" class="action-btn delete" onclick="this.parentElement.remove()">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+            
+            container.appendChild(itemDiv);
+        }
+
+        function addMonthlySchedule() {
+            const container = document.getElementById('monthlyScheduleContainer');
+            const monthId = Date.now();
+            
+            const monthDiv = document.createElement('div');
+            monthDiv.className = 'array-item';
+            monthDiv.innerHTML = `
+                <div class="array-item-content">
+                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: var(--space-md); margin-bottom: var(--space-sm);">
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Name</label>
+                            <input type="text" class="month-name" placeholder="MONTH 1" style="width: 100%;">
+                        </div>
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Title</label>
+                            <input type="text" class="month-title" placeholder="The Foundation Phase" style="width: 100%;">
+                        </div>
+                    </div>
+                    <div style="margin-bottom: var(--space-sm);">
+                        <label style="font-size: 0.8rem; color: var(--text-secondary);">Focus</label>
+                        <textarea class="month-focus" placeholder="Focus area" rows="2" style="width: 100%;"></textarea>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md);">
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Team Work</label>
+                            <textarea class="month-team-work" placeholder="Team work description" rows="2" style="width: 100%;"></textarea>
+                        </div>
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Project</label>
+                            <input type="text" class="month-project" placeholder="Project name" style="width: 100%;">
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="action-btn delete" onclick="this.parentElement.remove()">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+            
+            container.appendChild(monthDiv);
+        }
+
+        async function loadBootcampContent() {
+            try {
+                const snapshot = await db.ref('bootcampContent').once('value');
+                const bootcamp = snapshot.val();
+                
+                if (bootcamp) {
+                    // Hero section
+                    const hero = bootcamp.hero || {};
+                    document.getElementById('bootcampMissionBadge').value = hero.missionBadge || '';
+                    document.getElementById('bootcampMainTitle').value = hero.mainTitle || '';
+                    document.getElementById('bootcampSubtitle').value = hero.subtitle || '';
+                    document.getElementById('bootcampSpecialPrice').value = hero.pricing?.specialPrice || '';
+                    document.getElementById('bootcampFuturePrice').value = hero.pricing?.futurePrice || '';
+                    document.getElementById('bootcampCurrency').value = hero.pricing?.currency || 'KES';
+                    document.getElementById('bootcampPricingDescription').value = hero.pricing?.description || '';
+                    
+                    // Clear and load highlights
+                    const highlightsContainer = document.getElementById('bootcampHighlightsContainer');
+                    highlightsContainer.innerHTML = '';
+                    if (hero.highlights) {
+                        hero.highlights.forEach(highlight => {
+                            const highlightDiv = document.createElement('div');
+                            highlightDiv.className = 'array-item';
+                            highlightDiv.innerHTML = `
+                                <div class="array-item-content">
+                                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: var(--space-md);">
+                                        <div>
+                                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Icon</label>
+                                            <input type="text" class="highlight-icon" value="${highlight.icon || ''}" style="width: 100%;">
+                                        </div>
+                                        <div>
+                                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Text</label>
+                                            <input type="text" class="highlight-text" value="${highlight.text || ''}" style="width: 100%;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="action-btn delete" onclick="this.parentElement.remove()">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            `;
+                            highlightsContainer.appendChild(highlightDiv);
+                        });
+                    }
+                    
+                    // Franchise tracks
+                    const tracks = bootcamp.franchiseTracks || {};
+                    document.getElementById('bootcampTracksTitle').value = tracks.title || '';
+                    document.getElementById('bootcampTracksSubtitle').value = tracks.subtitle || '';
+                    
+                    const tracksContainer = document.getElementById('franchiseTracksContainer');
+                    tracksContainer.innerHTML = '';
+                    if (tracks.tracks) {
+                        tracks.tracks.forEach(track => {
+                            const trackDiv = document.createElement('div');
+                            trackDiv.className = 'array-item';
+                            trackDiv.innerHTML = `
+                                <div class="array-item-content">
+                                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: var(--space-md); margin-bottom: var(--space-sm);">
+                                        <div>
+                                            <label style="font-size: 0.8rem; color: var(--text-secondary);">ID</label>
+                                            <input type="text" class="track-id" value="${track.id || ''}" style="width: 100%;">
+                                        </div>
+                                        <div>
+                                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Name</label>
+                                            <input type="text" class="track-name" value="${track.name || ''}" style="width: 100%;">
+                                        </div>
+                                    </div>
+                                    <div style="margin-bottom: var(--space-sm);">
+                                        <label style="font-size: 0.8rem; color: var(--text-secondary);">Description</label>
+                                        <textarea class="track-description" rows="2" style="width: 100%;">${track.description || ''}</textarea>
+                                    </div>
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--space-md);">
+                                        <div>
+                                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Icon</label>
+                                            <input type="text" class="track-icon" value="${track.icon || ''}" style="width: 100%;">
+                                        </div>
+                                        <div>
+                                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Badge</label>
+                                            <input type="text" class="track-badge" value="${track.badge || ''}" style="width: 100%;">
+                                        </div>
+                                        <div>
+                                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Focus</label>
+                                            <input type="text" class="track-focus" value="${track.focus || ''}" style="width: 100%;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="action-btn delete" onclick="this.parentElement.remove()">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            `;
+                            tracksContainer.appendChild(trackDiv);
+                        });
+                    }
+                    
+                    // Team structure
+                    const team = bootcamp.teamStructure || {};
+                    document.getElementById('bootcampTeamTitle').value = team.title || '';
+                    document.getElementById('bootcampTeamSubtitle').value = team.subtitle || '';
+                    
+                    const teamContainer = document.getElementById('teamStructureContainer');
+                    teamContainer.innerHTML = '';
+                    if (team.teams) {
+                        team.teams.forEach(teamItem => {
+                            const teamDiv = document.createElement('div');
+                            teamDiv.className = 'array-item';
+                            teamDiv.innerHTML = `
+                                <div class="array-item-content">
+                                    <div style="display: grid; grid-template-columns: 100px 2fr; gap: var(--space-md); margin-bottom: var(--space-sm);">
+                                        <div>
+                                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Number</label>
+                                            <input type="number" class="team-number" value="${teamItem.number || ''}" style="width: 100%;">
+                                        </div>
+                                        <div>
+                                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Title</label>
+                                            <input type="text" class="team-title" value="${teamItem.title || ''}" style="width: 100%;">
+                                        </div>
+                                    </div>
+                                    <div style="margin-bottom: var(--space-sm);">
+                                        <label style="font-size: 0.8rem; color: var(--text-secondary);">Description</label>
+                                        <textarea class="team-description" rows="2" style="width: 100%;">${teamItem.description || ''}</textarea>
+                                    </div>
+                                    <div>
+                                        <label style="font-size: 0.8rem; color: var(--text-secondary);">Benefits (one per line)</label>
+                                        <textarea class="team-benefits" rows="3" style="width: 100%;">${Array.isArray(teamItem.benefits) ? teamItem.benefits.join('\n') : ''}</textarea>
+                                    </div>
+                                </div>
+                                <button type="button" class="action-btn delete" onclick="this.parentElement.remove()">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            `;
+                            teamContainer.appendChild(teamDiv);
+                        });
+                    }
+                    
+                    // Schedule
+                    const schedule = bootcamp.schedule || {};
+                    document.getElementById('bootcampScheduleTitle').value = schedule.title || '';
+                    document.getElementById('bootcampScheduleSubtitle').value = schedule.subtitle || '';
+                    
+                    const scheduleContainer = document.getElementById('monthlyScheduleContainer');
+                    scheduleContainer.innerHTML = '';
+                    if (schedule.months) {
+                        schedule.months.forEach(month => {
+                            const monthDiv = document.createElement('div');
+                            monthDiv.className = 'array-item';
+                            monthDiv.innerHTML = `
+                                <div class="array-item-content">
+                                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: var(--space-md); margin-bottom: var(--space-sm);">
+                                        <div>
+                                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Name</label>
+                                            <input type="text" class="month-name" value="${month.name || ''}" style="width: 100%;">
+                                        </div>
+                                        <div>
+                                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Title</label>
+                                            <input type="text" class="month-title" value="${month.title || ''}" style="width: 100%;">
+                                        </div>
+                                    </div>
+                                    <div style="margin-bottom: var(--space-sm);">
+                                        <label style="font-size: 0.8rem; color: var(--text-secondary);">Focus</label>
+                                        <textarea class="month-focus" rows="2" style="width: 100%;">${month.focus || ''}</textarea>
+                                    </div>
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md);">
+                                        <div>
+                                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Team Work</label>
+                                            <textarea class="month-team-work" rows="2" style="width: 100%;">${month.teamWork || ''}</textarea>
+                                        </div>
+                                        <div>
+                                            <label style="font-size: 0.8rem; color: var(--text-secondary);">Project</label>
+                                            <input type="text" class="month-project" value="${month.project || ''}" style="width: 100%;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="action-btn delete" onclick="this.parentElement.remove()">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            `;
+                            scheduleContainer.appendChild(monthDiv);
+                        });
+                    }
+                    
+                    // Application form
+                    const application = bootcamp.applicationForm || {};
+                    document.getElementById('bootcampApplicationTitle').value = application.title || '';
+                    document.getElementById('bootcampApplicationSubtitle').value = application.subtitle || '';
+                    document.getElementById('bootcampGoogleFormUrl').value = application.googleFormUrl || '';
+                    document.getElementById('bootcampApplicationDeadline').value = application.deadline || '';
+                    
+                    showMessage('Bootcamp content loaded!', 'success');
+                }
+            } catch (error) {
+                showMessage('Error loading bootcamp content: ' + error.message, 'error');
+            }
+        }
+
+        async function saveBootcampContent() {
+            // Collect highlights
+            const highlights = [];
+            document.querySelectorAll('#bootcampHighlightsContainer .array-item').forEach(item => {
+                highlights.push({
+                    icon: item.querySelector('.highlight-icon').value,
+                    text: item.querySelector('.highlight-text').value
+                });
+            });
+            
+            // Collect franchise tracks
+            const tracks = [];
+            document.querySelectorAll('#franchiseTracksContainer .array-item').forEach(item => {
+                tracks.push({
+                    id: item.querySelector('.track-id').value,
+                    name: item.querySelector('.track-name').value,
+                    description: item.querySelector('.track-description').value,
+                    icon: item.querySelector('.track-icon').value,
+                    badge: item.querySelector('.track-badge').value,
+                    focus: item.querySelector('.track-focus').value,
+                    teamSize: "Team of 4 Required"
+                });
+            });
+            
+            // Collect team structure
+            const teamItems = [];
+            document.querySelectorAll('#teamStructureContainer .array-item').forEach(item => {
+                const benefits = item.querySelector('.team-benefits').value
+                    .split('\n')
+                    .filter(line => line.trim())
+                    .map(line => line.trim());
+                
+                teamItems.push({
+                    number: parseInt(item.querySelector('.team-number').value) || 0,
+                    title: item.querySelector('.team-title').value,
+                    description: item.querySelector('.team-description').value,
+                    benefits: benefits
+                });
+            });
+            
+            // Collect monthly schedule
+            const months = [];
+            document.querySelectorAll('#monthlyScheduleContainer .array-item').forEach(item => {
+                months.push({
+                    name: item.querySelector('.month-name').value,
+                    title: item.querySelector('.month-title').value,
+                    focus: item.querySelector('.month-focus').value,
+                    teamWork: item.querySelector('.month-team-work').value,
+                    project: item.querySelector('.month-project').value
+                });
+            });
+            
+            const bootcampData = {
+                hero: {
+                    missionBadge: document.getElementById('bootcampMissionBadge').value,
+                    mainTitle: document.getElementById('bootcampMainTitle').value,
+                    subtitle: document.getElementById('bootcampSubtitle').value,
+                    pricing: {
+                        specialPrice: parseFloat(document.getElementById('bootcampSpecialPrice').value) || 0,
+                        futurePrice: parseFloat(document.getElementById('bootcampFuturePrice').value) || 0,
+                        currency: document.getElementById('bootcampCurrency').value,
+                        description: document.getElementById('bootcampPricingDescription').value
+                    },
+                    highlights: highlights
+                },
+                franchiseTracks: {
+                    title: document.getElementById('bootcampTracksTitle').value,
+                    subtitle: document.getElementById('bootcampTracksSubtitle').value,
+                    tracks: tracks
+                },
+                teamStructure: {
+                    title: document.getElementById('bootcampTeamTitle').value,
+                    subtitle: document.getElementById('bootcampTeamSubtitle').value,
+                    teams: teamItems
+                },
+                schedule: {
+                    title: document.getElementById('bootcampScheduleTitle').value,
+                    subtitle: document.getElementById('bootcampScheduleSubtitle').value,
+                    months: months
+                },
+                applicationForm: {
+                    googleFormUrl: document.getElementById('bootcampGoogleFormUrl').value,
+                    deadline: document.getElementById('bootcampApplicationDeadline').value,
+                    title: document.getElementById('bootcampApplicationTitle').value,
+                    subtitle: document.getElementById('bootcampApplicationSubtitle').value
+                }
+            };
+
+            try {
+                await db.ref('bootcampContent').set(bootcampData);
+                showMessage('Bootcamp content saved successfully!', 'success');
+            } catch (error) {
+                showMessage('Error saving bootcamp content: ' + error.message, 'error');
+            }
         }
 
         // ==================== TRAINING PROGRAMS ====================
@@ -3064,6 +3538,7 @@
                     document.getElementById('trainingActive').checked = program.active !== false;
                     
                     currentEditingId = programId;
+                    currentEditingType = 'training';
                     showMessage('Editing program: ' + program.name, 'info');
                 }
             } catch (error) {
@@ -3095,6 +3570,7 @@
             document.getElementById('trainingOrder').value = '1';
             document.getElementById('trainingActive').checked = true;
             currentEditingId = null;
+            currentEditingType = null;
         }
 
         // ==================== TRAINING SCHEDULES ====================
@@ -3177,7 +3653,6 @@
             
             const programDiv = document.createElement('div');
             programDiv.className = 'array-item';
-            programDiv.id = programId;
             programDiv.innerHTML = `
                 <div class="array-item-content">
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); margin-bottom: var(--space-sm);">
@@ -3301,8 +3776,7 @@
                 imageUrl: document.getElementById('teamImageUrl').value.trim(),
                 order: parseInt(document.getElementById('teamOrder').value) || 1,
                 social: {
-                    linkedin: document.getElementById('teamLinkedin').value.trim(),
-                    twitter: document.getElementById('teamTwitter').value.trim()
+                    linkedin: document.getElementById('teamLinkedin').value.trim()
                 },
                 active: document.getElementById('teamActive').checked,
                 lastUpdated: new Date().toISOString()
@@ -3345,10 +3819,10 @@
                     document.getElementById('teamImageUrl').value = member.imageUrl || '';
                     document.getElementById('teamOrder').value = member.order || 1;
                     document.getElementById('teamLinkedin').value = member.social?.linkedin || '';
-                    document.getElementById('teamTwitter').value = member.social?.twitter || '';
                     document.getElementById('teamActive').checked = member.active !== false;
                     
                     currentEditingId = memberId;
+                    currentEditingType = 'team';
                     showMessage('Editing team member: ' + member.name, 'info');
                 }
             } catch (error) {
@@ -3376,9 +3850,9 @@
             document.getElementById('teamImageUrl').value = '';
             document.getElementById('teamOrder').value = '1';
             document.getElementById('teamLinkedin').value = '';
-            document.getElementById('teamTwitter').value = '';
             document.getElementById('teamActive').checked = true;
             currentEditingId = null;
+            currentEditingType = null;
         }
 
         // ==================== TESTIMONIALS ====================
@@ -3481,6 +3955,7 @@
                     document.getElementById('testimonialActive').checked = testimonial.active !== false;
                     
                     currentEditingId = testimonialId;
+                    currentEditingType = 'testimonial';
                     showMessage('Editing testimonial: ' + testimonial.name, 'info');
                 }
             } catch (error) {
@@ -3513,6 +3988,7 @@
             document.getElementById('testimonialOrder').value = '1';
             document.getElementById('testimonialActive').checked = true;
             currentEditingId = null;
+            currentEditingType = null;
         }
 
         // ==================== HOME PAGE CONTENT ====================
@@ -3520,17 +3996,20 @@
             document.querySelectorAll('.home-tab').forEach(tab => {
                 tab.style.display = 'none';
             });
-            document.querySelectorAll('.tab-btn').forEach(tab => {
-                tab.classList.remove('active');
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
             });
             
-            const tabElements = {
-                'hero': 'homeHeroTab',
-                'approach': 'homeApproachTab'
-            };
+            // Show selected tab
+            document.getElementById('home' + tabName.charAt(0).toUpperCase() + tabName.slice(1) + 'Tab').style.display = 'block';
             
-            document.getElementById(tabElements[tabName]).style.display = 'block';
-            event.target.classList.add('active');
+            // Activate selected tab button
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            tabButtons.forEach(btn => {
+                if (btn.textContent.toLowerCase().includes(tabName.toLowerCase())) {
+                    btn.classList.add('active');
+                }
+            });
         }
 
         function initTagInput() {
@@ -3725,17 +4204,20 @@
             document.querySelectorAll('.training-tab').forEach(tab => {
                 tab.style.display = 'none';
             });
-            document.querySelectorAll('.tab-btn').forEach(tab => {
-                tab.classList.remove('active');
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
             });
             
-            const tabElements = {
-                'hero': 'trainingHeroTab',
-                'outcomes': 'trainingOutcomesTab'
-            };
+            // Show selected tab
+            document.getElementById('training' + tabName.charAt(0).toUpperCase() + tabName.slice(1) + 'Tab').style.display = 'block';
             
-            document.getElementById(tabElements[tabName]).style.display = 'block';
-            event.target.classList.add('active');
+            // Activate selected tab button
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            tabButtons.forEach(btn => {
+                if (btn.textContent.toLowerCase().includes(tabName.toLowerCase())) {
+                    btn.classList.add('active');
+                }
+            });
         }
 
         function addOutcomeMetric() {
@@ -3998,6 +4480,7 @@
                     document.getElementById('faqActive').checked = faq.active !== false;
                     
                     currentEditingId = faqId;
+                    currentEditingType = 'faq';
                     showMessage('Editing FAQ', 'info');
                 }
             } catch (error) {
@@ -4024,6 +4507,7 @@
             document.getElementById('faqOrder').value = '1';
             document.getElementById('faqActive').checked = true;
             currentEditingId = null;
+            currentEditingType = null;
         }
 
         // ==================== DATA TOOLS ====================
@@ -4031,18 +4515,20 @@
             document.querySelectorAll('.data-tab').forEach(tab => {
                 tab.style.display = 'none';
             });
-            document.querySelectorAll('.tab-btn').forEach(tab => {
-                tab.classList.remove('active');
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
             });
             
-            const tabElements = {
-                'export': 'dataExportTab',
-                'import': 'dataImportTab',
-                'backup': 'dataBackupTab'
-            };
+            // Show selected tab
+            document.getElementById('data' + tabName.charAt(0).toUpperCase() + tabName.slice(1) + 'Tab').style.display = 'block';
             
-            document.getElementById(tabElements[tabName]).style.display = 'block';
-            event.target.classList.add('active');
+            // Activate selected tab button
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            tabButtons.forEach(btn => {
+                if (btn.textContent.toLowerCase().includes(tabName.toLowerCase())) {
+                    btn.classList.add('active');
+                }
+            });
         }
 
         async function exportData() {
@@ -4210,23 +4696,24 @@
         }
 
         // ==================== UTILITY FUNCTIONS ====================
-        function initImagePreview() {
+        function updateImagePreview(previewId, imageUrl) {
+            const preview = document.getElementById(previewId);
+            if (imageUrl && imageUrl.trim() !== '') {
+                preview.innerHTML = `<img src="${imageUrl}" alt="Preview" onerror="this.parentElement.innerHTML='<span>Invalid image URL</span>'">`;
+            } else {
+                preview.innerHTML = '<span>No image preview</span>';
+            }
+        }
+
+        // Initialize image preview
+        document.addEventListener('DOMContentLoaded', function() {
             const imageUrlInput = document.getElementById('eventImageUrl');
             if (imageUrlInput) {
                 imageUrlInput.addEventListener('input', function() {
                     updateImagePreview('eventImagePreview', this.value);
                 });
             }
-        }
-
-        function updateImagePreview(previewId, imageUrl) {
-            const preview = document.getElementById(previewId);
-            if (imageUrl) {
-                preview.innerHTML = `<img src="${imageUrl}" alt="Preview" onerror="this.parentElement.innerHTML='<span>Invalid image URL</span>'">`;
-            } else {
-                preview.innerHTML = '<span>No image preview</span>';
-            }
-        }
+        });
 
         // Make functions global
         window.switchSection = switchSection;
@@ -4238,7 +4725,6 @@
         window.editEventCategory = editEventCategory;
         window.deleteEventCategory = deleteEventCategory;
         window.showEventTab = showEventTab;
-        window.addTicketType = addTicketType;
         window.saveEvent = saveEvent;
         window.clearEventForm = clearEventForm;
         window.editEvent = editEvent;
@@ -4286,6 +4772,13 @@
         window.restoreBackup = restoreBackup;
         window.deleteBackup = deleteBackup;
         window.loadBackups = loadBackups;
+        window.showBootcampTab = showBootcampTab;
+        window.addBootcampHighlight = addBootcampHighlight;
+        window.addFranchiseTrack = addFranchiseTrack;
+        window.addTeamStructure = addTeamStructure;
+        window.addMonthlySchedule = addMonthlySchedule;
+        window.loadBootcampContent = loadBootcampContent;
+        window.saveBootcampContent = saveBootcampContent;
     </script>
 </body>
 </html>
