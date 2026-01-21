@@ -1992,7 +1992,7 @@
                     <div class="mpesa-till-display">
                         <div style="font-size: 0.9rem; opacity: 0.9;">TILL NUMBER</div>
                         <div class="mpesa-till-number">9442155</div>
-                        <div style="font-size: 0.9rem; opacity: 0.9;">DSOG EVENTS</div>
+                        <div style="font-size: 0.9rem; opacity: 0.9;">Moses Mugera - DSOG</div>
                     </div>
 
                     <div class="payment-steps">
@@ -2027,19 +2027,19 @@
                     </div>
 
                     <p style="font-size: 0.85rem; color: var(--text-tertiary); text-align: center; margin-top: var(--space-md);">
-                        <i class="fas fa-info-circle"></i> You will receive an M-Pesa confirmation SMS
+                        <i class="fas fa-info-circle"></i> You will receive an M-Pesa confirmation SMS with a transaction code
                     </p>
                 </div>
 
                 <!-- WhatsApp Confirmation Section -->
                 <div id="whatsappConfirmationSection" class="whatsapp-confirmation-section" style="display: none;">
                     <h4><i class="fab fa-whatsapp"></i> Confirm Your Payment</h4>
-                    <p>After payment, paste your M-Pesa transaction code below to auto-generate a WhatsApp confirmation message:</p>
+                    <p>After payment, paste your M-Pesa transaction code below to confirm your registration:</p>
                     
                     <input type="text" 
                            id="transactionCodeInput" 
                            class="transaction-code-input" 
-                           placeholder="Paste your M-Pesa transaction code here (e.g., ODH8HGF3RQ)">
+                           placeholder="Paste your M-Pesa transaction code here">
                     
                     <div id="whatsappMessagePreview" class="whatsapp-message-preview" style="display: none;">
                         <!-- WhatsApp message preview will appear here -->
@@ -2050,7 +2050,7 @@
                     </a>
 
                     <p style="font-size: 0.85rem; color: var(--text-tertiary); margin-top: var(--space-md);">
-                        <i class="fas fa-info-circle"></i> Just paste your code above - no button needed. The WhatsApp message will auto-generate.
+                        <i class="fas fa-info-circle"></i> Just paste your code above - the WhatsApp message will auto-generate
                     </p>
                 </div>
             </div>
@@ -2296,7 +2296,7 @@
                 </div>
                 
                 <div style="margin-top: var(--space-xl); font-size: 0.9rem; opacity: 0.9; color: rgba(255,255,255,0.9);">
-                    <p><i class="fas fa-mobile-alt"></i> Pay via M-Pesa Till: 9442155 • <i class="fas fa-shield-alt"></i> Secure payment • <i class="fab fa-whatsapp"></i> Instant WhatsApp confirmation</p>
+                    <p><i class="fas fa-mobile-alt"></i> Pay via M-Pesa Till: 9442155 (Moses Mugera) • <i class="fas fa-shield-alt"></i> Secure payment • <i class="fab fa-whatsapp"></i> Instant WhatsApp confirmation</p>
                 </div>
             </div>
         </div>
@@ -2344,8 +2344,8 @@
                     <h3>Payment Information</h3>
                     <ul>
                         <li><i class="fas fa-mobile-alt"></i> M-Pesa Till: 9442155</li>
-                        <li><i class="fas fa-shopping-cart"></i> Lipa na M-Pesa</li>
-                        <li><i class="fab fa-whatsapp"></i> WhatsApp Confirmation</li>
+                        <li><i class="fas fa-user"></i> Account: Moses Mugera</li>
+                        <li><i class="fab fa-whatsapp"></i> WhatsApp: +254733737983</li>
                         <li><i class="fas fa-headset"></i> 24/7 Payment Support</li>
                         <li><i class="fas fa-envelope"></i> receipts@dsog.org</li>
                         <li><i class="fas fa-phone"></i> Payment Inquiries</li>
@@ -2354,8 +2354,8 @@
             </div>
             
             <div class="copyright">
-                <p>&copy; <span id="currentYear"></span> DSOG Events - M-Pesa Ticketing System. All payments processed through M-Pesa Till Number 9442155. All rights reserved.</p>
-                <p style="margin-top: var(--space-sm); font-size: 0.85rem;">Secure Payment • Instant Confirmation • Digital Tickets • WhatsApp Verification • Customer Support</p>
+                <p>&copy; <span id="currentYear"></span> DSOG Events - M-Pesa Ticketing System. All payments processed through M-Pesa Till Number 9442155 (Moses Mugera). All rights reserved.</p>
+                <p style="margin-top: var(--space-sm); font-size: 0.85rem;">Secure Payment • Instant Confirmation • WhatsApp: +254733737983 • Customer Support</p>
             </div>
         </div>
     </footer>
@@ -3121,7 +3121,7 @@
         preview.style.display = 'block';
         
         // Create WhatsApp URL
-        const phoneNumber = "+254741488881"; // Your WhatsApp number
+        const phoneNumber = "254733737983"; // Your WhatsApp number
         const encodedMessage = encodeURIComponent(whatsappMessage);
         const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
         
@@ -3139,36 +3139,19 @@
         const dateStr = now.toLocaleDateString('en-GB');
         const timeStr = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
         
-        return `🚀 DSOG EVENT REGISTRATION CONFIRMATION
+        return `✅ DSOG Event Registration Payment Confirmation
 
 📅 Event: ${paymentDetails.event || 'DSOG Event'}
 🎫 Ticket: ${paymentDetails.ticket || 'Standard Ticket'}
-💰 Amount Paid: ${paymentDetails.currency || 'KES'} ${paymentDetails.amount || '0'}
+💰 Amount: ${paymentDetails.currency || 'KES'} ${paymentDetails.amount || '0'}
 
-📱 M-Pesa Transaction Details:
-   • Transaction Code: ${transactionCode}
-   • Till Number: 9442155
-   • Payment Date: ${dateStr}
-   • Payment Time: ${timeStr}
+📱 M-Pesa Transaction:
+• Code: ${transactionCode}
+• Till: 9442155 (Moses Mugera)
+• Date: ${dateStr}
+• Time: ${timeStr}
 
-👤 My Details:
-   • Full Name: [Please provide your full name]
-   • Phone Number: [Please provide your phone number]
-   • Email: [Please provide your email address]
-
-📋 Additional Information:
-   • Dietary Requirements (if any): 
-   • Special Accommodations (if any):
-
-✅ I confirm that:
-   1. I have made the full payment as indicated above
-   2. The transaction code is correct
-   3. I will attend the event on the specified date
-   4. I have read and agree to the event terms
-
-Please confirm my registration and send me the event details.
-
-Thank you!`;
+🚀 Payment confirmed and registration completed.`;
     }
 
     function getDemoTickets() {
@@ -3589,8 +3572,8 @@ Thank you!`;
     
     // Debug helper
     console.log('DSOG Events JavaScript loaded successfully with M-Pesa integration');
-    console.log('WhatsApp Number: +254741488881');
-    console.log('M-Pesa Till: 9442155');
+    console.log('WhatsApp Number: +254733737983');
+    console.log('M-Pesa Till: 9442155 (Moses Mugera)');
 </script>
 </body>
 </html>
