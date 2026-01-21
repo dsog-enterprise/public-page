@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=0.95, maximum-scale=5.0, user-scalable=yes">
     
     <!-- SEO Meta Tags -->
-    <meta name="description" content="DSOG Events - Transformative business and spiritual events for entrepreneurs. Buy tickets via M-Pesa Till 9442155.">
-    <meta name="keywords" content="DSOG events, M-Pesa payment, business events, spiritual workshops, event tickets">
+    <meta name="description" content="DSOG Events - Transformative business and spiritual events for entrepreneurs. Buy tickets for bootcamps, inspiration summits, and spiritual workshops.">
+    <meta name="keywords" content="DSOG events, entrepreneurship bootcamp tickets, business inspiration tickets, spiritual purpose workshops, event tickets, business event tickets, M-Pesa payment, Lipa na M-Pesa">
     
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#C21807">
@@ -18,13 +18,13 @@
     <meta name="msapplication-TileColor" content="#C21807">
     
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="DSOG Events | Buy Tickets via M-Pesa">
-    <meta property="og:description" content="Purchase tickets via M-Pesa Till 9442155 for transformative events: Bootcamp, Become What You Believe, and The Making of an Icon.">
+    <meta property="og:title" content="DSOG Events | Buy Tickets for Transformative Events">
+    <meta property="og:description" content="Purchase tickets for our transformative events: Bootcamp, Become What You Believe, and The Making of an Icon. Secure payment with M-Pesa.">
     <meta property="og:image" content="https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp">
     <meta property="og:url" content="https://dsog.org/events">
     <meta property="og:type" content="website">
     
-    <title>DSOG Events | Buy Tickets via M-Pesa</title>
+    <title>DSOG Events | Buy Tickets for Transformative Events</title>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -32,7 +32,11 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
     
     <!-- Events Page Styles -->
     <style>
@@ -47,11 +51,8 @@
             --accent-blue: #2C5282;
             --accent-green: #2D7D46;
             --accent-purple: #6B46C1;
-            
-            /* M-Pesa Colors */
-            --mpesa-green: #00A651;
-            --mpesa-light-green: rgba(0, 166, 81, 0.1);
-            --mpesa-dark-green: #007A3B;
+            --mpesa-green: #00A900;
+            --mpesa-dark-green: #007E00;
             
             /* Neutral Colors */
             --white: #FFFFFF;
@@ -88,7 +89,7 @@
             --gradient-card: linear-gradient(145deg, var(--white) 0%, #F8F9FA 100%);
             --gradient-spiritual: linear-gradient(135deg, #6B46C1 0%, #9F7AEA 100%);
             --gradient-inspiration: linear-gradient(135deg, #D4AF37 0%, #F6E05E 100%);
-            --gradient-mpesa: linear-gradient(135deg, var(--mpesa-green) 0%, var(--mpesa-dark-green) 100%);
+            --gradient-mpesa: linear-gradient(135deg, #00A900 0%, #007E00 100%);
             
             /* Animation Properties */
             --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -161,9 +162,11 @@
             --white: #1E1E1E;
             --light-gray: #2D2D2D;
             --medium-gray: #404040;
+            --mpesa-green: #00CC00;
+            --mpesa-dark-green: #009900;
         }
 
-        /* ===== M-PESA PAYMENT MODAL STYLES ===== */
+        /* ===== PAYMENT MODAL STYLES ===== */
         .payment-modal-overlay {
             position: fixed;
             top: 0;
@@ -195,14 +198,14 @@
             max-width: 550px;
             max-height: 90vh;
             overflow-y: auto;
-            transform: translateY(20px);
-            transition: transform 0.3s ease;
+            transform: translateY(20px) scale(0.95);
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             border: 1px solid var(--border-color);
             box-shadow: var(--shadow-2xl);
         }
 
         .payment-modal-overlay.active .payment-modal {
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
         }
 
         .payment-modal-header {
@@ -246,177 +249,282 @@
             padding: var(--space-xl);
         }
 
-        .mpesa-till-display {
-            background: var(--mpesa-light-green);
-            border: 2px solid var(--mpesa-green);
-            border-radius: var(--radius-lg);
-            padding: var(--space-xl);
-            text-align: center;
-            margin-bottom: var(--space-xl);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .mpesa-till-display::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--gradient-mpesa);
-        }
-
-        .till-label {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-bottom: var(--space-xs);
-            display: block;
-        }
-
-        .till-number {
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: var(--mpesa-green);
-            letter-spacing: 2px;
-            margin: var(--space-md) 0;
-            font-family: monospace;
-            text-shadow: 0 2px 4px rgba(0, 166, 81, 0.2);
-        }
-
-        .till-instructions {
+        .ticket-option {
             background: var(--bg-secondary);
-            border-radius: var(--radius-md);
-            padding: var(--space-lg);
-            margin-bottom: var(--space-xl);
             border: 1px solid var(--border-color);
-        }
-
-        .till-instructions ol {
-            margin-left: var(--space-lg);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
             margin-bottom: var(--space-md);
+            transition: var(--transition-smooth);
+            cursor: pointer;
+            position: relative;
         }
 
-        .till-instructions li {
+        .ticket-option:hover {
+            border-color: var(--primary-red);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .ticket-option.selected {
+            border-color: var(--primary-red);
+            background: rgba(194, 24, 7, 0.05);
+            border-width: 2px;
+        }
+
+        .ticket-option-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
             margin-bottom: var(--space-sm);
+        }
+
+        .ticket-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        .ticket-price {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-red);
+            display: flex;
+            align-items: baseline;
+            gap: var(--space-2xs);
+        }
+
+        .ticket-currency {
+            font-size: 1rem;
+            color: var(--text-tertiary);
+        }
+
+        .ticket-description {
             color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: var(--space-sm);
+            line-height: 1.5;
         }
 
-        .till-instructions strong {
-            color: var(--mpesa-green);
+        .ticket-details {
+            display: flex;
+            gap: var(--space-md);
+            font-size: 0.85rem;
+            color: var(--text-tertiary);
+            margin-bottom: var(--space-sm);
         }
 
-        .payment-reference {
+        .ticket-detail {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .ticket-detail i {
+            color: var(--primary-red);
+        }
+
+        .ticket-availability {
+            font-size: 0.8rem;
+            padding: var(--space-2xs) var(--space-md);
+            border-radius: var(--radius-full);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .available {
+            background: rgba(45, 125, 70, 0.1);
+            color: var(--accent-green);
+            border: 1px solid rgba(45, 125, 70, 0.2);
+        }
+
+        .limited {
+            background: rgba(212, 175, 55, 0.1);
+            color: #B8860B;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .sold-out {
+            background: rgba(194, 24, 7, 0.1);
+            color: var(--primary-red);
+            border: 1px solid rgba(194, 24, 7, 0.2);
+        }
+
+        .payment-modal-footer {
+            padding: var(--space-xl);
+            border-top: 1px solid var(--border-color);
             background: var(--bg-secondary);
+            border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+        }
+
+        .ticket-summary {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
             padding: var(--space-md);
-            margin: var(--space-lg) 0;
-            border: 1px solid var(--border-color);
-            text-align: center;
+            margin-bottom: var(--space-lg);
         }
 
-        .reference-code {
-            font-family: monospace;
-            background: var(--bg-primary);
-            padding: var(--space-sm) var(--space-md);
-            border-radius: var(--radius-md);
-            border: 2px dashed var(--border-color);
-            margin: var(--space-sm) 0;
-            font-size: 1.2rem;
-            color: var(--primary-red);
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: var(--space-xs) 0;
+        }
+
+        .summary-label {
+            color: var(--text-secondary);
+        }
+
+        .summary-value {
             font-weight: 600;
-            letter-spacing: 1px;
+            color: var(--text-primary);
         }
 
-        .verification-section {
-            margin-top: var(--space-xl);
-            padding-top: var(--space-xl);
+        .summary-total {
             border-top: 1px solid var(--border-color);
+            padding-top: var(--space-sm);
+            margin-top: var(--space-sm);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-red);
         }
 
-        .verification-section h4 {
+        /* M-Pesa Payment Section */
+        .mpesa-payment-section {
+            background: rgba(0, 169, 0, 0.05);
+            border: 1px solid rgba(0, 169, 0, 0.2);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            margin: var(--space-lg) 0;
+        }
+
+        .mpesa-payment-section h4 {
+            color: var(--mpesa-dark-green);
+            margin-bottom: var(--space-md);
             display: flex;
             align-items: center;
             gap: var(--space-sm);
-            margin-bottom: var(--space-lg);
+        }
+
+        .mpesa-till-display {
+            background: var(--gradient-mpesa);
+            color: white;
+            padding: var(--space-lg);
+            border-radius: var(--radius-md);
+            text-align: center;
+            margin: var(--space-md) 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .mpesa-till-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin: var(--space-sm) 0;
+            font-family: monospace;
+            background: rgba(255, 255, 255, 0.2);
+            padding: var(--space-sm);
+            border-radius: var(--radius-sm);
+            display: inline-block;
+        }
+
+        .payment-steps {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+            margin: var(--space-lg) 0;
+        }
+
+        .payment-step {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-md);
+            padding: var(--space-md);
+            background: var(--bg-primary);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            background: var(--gradient-mpesa);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        /* WhatsApp Confirmation Section */
+        .whatsapp-confirmation-section {
+            background: rgba(37, 211, 102, 0.05);
+            border: 1px solid rgba(37, 211, 102, 0.2);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            margin: var(--space-lg) 0;
+        }
+
+        .whatsapp-confirmation-section h4 {
+            color: #25D366;
+            margin-bottom: var(--space-md);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
         }
 
         .transaction-code-input {
-            margin-bottom: var(--space-lg);
-        }
-
-        .input-group {
-            display: flex;
-            gap: var(--space-sm);
-            margin-bottom: var(--space-sm);
-        }
-
-        .transaction-input {
-            flex: 1;
+            width: 100%;
             padding: var(--space-lg);
             border: 2px solid var(--border-color);
             border-radius: var(--radius-md);
             font-size: 1.1rem;
             font-family: monospace;
+            letter-spacing: 1px;
             text-align: center;
-            background: var(--bg-secondary);
+            background: var(--bg-primary);
             color: var(--text-primary);
             transition: var(--transition-smooth);
+            margin-bottom: var(--space-md);
         }
 
-        .transaction-input:focus {
+        .transaction-code-input:focus {
             outline: none;
             border-color: var(--mpesa-green);
-            box-shadow: 0 0 0 3px rgba(0, 166, 81, 0.1);
+            box-shadow: 0 0 0 3px rgba(0, 169, 0, 0.1);
         }
 
-        .paste-button {
-            padding: 0 var(--space-xl);
-            background: var(--gradient-mpesa);
-            color: var(--white);
-            border: none;
-            border-radius: var(--radius-md);
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--space-sm);
-            min-width: 120px;
-        }
-
-        .paste-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 166, 81, 0.3);
-        }
-
-        .auto-paste-info {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
+        .transaction-code-input::placeholder {
             color: var(--text-tertiary);
-            font-size: 0.9rem;
-            margin-top: var(--space-sm);
+            letter-spacing: normal;
         }
 
-        .auto-paste-info i {
-            color: var(--mpesa-green);
-        }
-
-        .whatsapp-confirmation {
-            background: rgba(37, 211, 102, 0.1);
-            border: 1px solid rgba(37, 211, 102, 0.2);
+        .whatsapp-message-preview {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
-            padding: var(--space-lg);
-            margin-top: var(--space-lg);
+            padding: var(--space-md);
+            margin: var(--space-md) 0;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            white-space: pre-line;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: 'Inter', sans-serif;
         }
 
         .whatsapp-button {
             width: 100%;
             padding: var(--space-lg);
             background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
-            color: var(--white);
+            color: white;
             border: none;
             border-radius: var(--radius-md);
             font-weight: 600;
@@ -427,7 +535,7 @@
             justify-content: center;
             gap: var(--space-sm);
             transition: var(--transition-smooth);
-            margin-top: var(--space-md);
+            text-decoration: none;
         }
 
         .whatsapp-button:hover {
@@ -439,17 +547,47 @@
             font-size: 1.2rem;
         }
 
-        .mpesa-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-sm);
+        .mpesa-button {
+            width: 100%;
+            padding: var(--space-lg);
             background: var(--gradient-mpesa);
-            color: var(--white);
-            padding: var(--space-xs) var(--space-md);
-            border-radius: var(--radius-full);
-            font-size: 0.8rem;
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
             font-weight: 600;
-            letter-spacing: 0.05em;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            transition: var(--transition-smooth);
+        }
+
+        .mpesa-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .mpesa-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .payment-security {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin-top: var(--space-md);
+            color: var(--text-tertiary);
+            font-size: 0.8rem;
+        }
+
+        .payment-security i {
+            color: var(--mpesa-green);
         }
 
         /* Payment Processing States */
@@ -462,7 +600,7 @@
             width: 60px;
             height: 60px;
             border: 3px solid var(--border-color);
-            border-top-color: var(--mpesa-green);
+            border-top-color: var(--primary-red);
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 0 auto var(--space-lg);
@@ -503,11 +641,15 @@
             padding: 0;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         html {
             font-size: 16px;
             scroll-behavior: smooth;
+            scroll-padding-top: calc(var(--header-height) + 20px);
+            text-rendering: optimizeLegibility;
         }
 
         body {
@@ -516,10 +658,43 @@
             color: var(--text-primary);
             background-color: var(--bg-primary);
             overflow-x: hidden;
+            transition: var(--transition-smooth);
+            position: relative;
+            min-height: 100vh;
+            font-size: 0.9375rem;
+            font-weight: 400;
+            letter-spacing: 0.01em;
         }
 
         body.payment-modal-open {
             overflow: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-full);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gradient-primary);
+            border-radius: var(--radius-full);
+            border: 2px solid var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-red);
+        }
+
+        /* Selection Color */
+        ::selection {
+            background: rgba(194, 24, 7, 0.2);
+            color: var(--text-primary);
         }
 
         /* ===== HEADER ===== */
@@ -530,10 +705,16 @@
             width: 100%;
             height: var(--header-height);
             background: var(--glass-bg);
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
             border-bottom: 1px solid var(--border-color);
             z-index: var(--z-fixed);
             transition: var(--transition-smooth);
+            box-shadow: var(--shadow-sm);
+        }
+
+        [data-theme="dark"] .header {
+            border-bottom: 1px solid rgba(64, 64, 64, 0.8);
         }
 
         .header.scrolled {
@@ -550,6 +731,7 @@
             max-width: var(--container-width);
             margin: 0 auto;
             padding: 0 var(--space-xl);
+            gap: var(--space-xl);
         }
 
         /* Logo */
@@ -558,12 +740,21 @@
             align-items: center;
             gap: var(--space-md);
             text-decoration: none;
+            flex-shrink: 0;
+            padding: var(--space-xs) 0;
+            height: 100%;
         }
 
         .logo-image {
             height: var(--logo-size);
             width: auto;
             object-fit: contain;
+            display: block;
+            transition: var(--transition-smooth);
+        }
+
+        [data-theme="dark"] .logo-image {
+            filter: brightness(0) invert(1);
         }
 
         .logo-text {
@@ -571,6 +762,14 @@
             font-size: 1.5rem;
             font-weight: 800;
             color: var(--text-primary);
+            letter-spacing: -0.02em;
+            line-height: 1;
+            white-space: nowrap;
+        }
+
+        .logo-text span {
+            color: var(--primary-red);
+            font-weight: 700;
         }
 
         /* Main Navigation */
@@ -578,19 +777,45 @@
             display: flex;
             align-items: center;
             gap: var(--nav-item-spacing);
+            margin: 0;
+            padding: 0;
             list-style: none;
+            height: 100%;
         }
 
         .nav-link {
+            position: relative;
             color: var(--text-secondary);
             text-decoration: none;
             font-weight: 500;
             font-size: 0.875rem;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            align-items: center;
             transition: var(--transition-fast);
+            letter-spacing: 0.01em;
+            white-space: nowrap;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: var(--transition-smooth);
+            border-radius: 1px;
         }
 
         .nav-link:hover {
             color: var(--primary-red);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
         }
 
         .nav-link.active {
@@ -598,15 +823,40 @@
             font-weight: 600;
         }
 
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* Contact Button */
+        .nav-links .btn-primary {
+            font-size: 0.875rem;
+            padding: var(--space-sm) var(--space-lg);
+            height: auto;
+            margin-left: var(--space-sm);
+            flex-shrink: 0;
+        }
+
         /* Mobile Menu Button */
         .mobile-menu-btn {
             display: none;
+            align-items: center;
+            justify-content: center;
             background: none;
             border: none;
             color: var(--primary-red);
             font-size: 1.25rem;
             cursor: pointer;
             padding: var(--space-sm);
+            border-radius: var(--radius-md);
+            transition: var(--transition-smooth);
+            z-index: var(--z-dropdown);
+            width: 44px;
+            height: 44px;
+            flex-shrink: 0;
+        }
+
+        .mobile-menu-btn:hover {
+            background: var(--bg-tertiary);
         }
 
         /* ===== TYPOGRAPHY ===== */
@@ -614,27 +864,87 @@
             font-family: var(--font-heading);
             font-weight: 700;
             line-height: 1.2;
+            letter-spacing: -0.02em;
             margin-bottom: var(--space-md);
+            color: var(--text-primary);
         }
 
-        h1 { font-size: clamp(2.5rem, 5vw, 3.5rem); }
-        h2 { font-size: clamp(1.875rem, 4vw, 2.75rem); }
-        h3 { font-size: clamp(1.5rem, 3vw, 2rem); }
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+        }
+
+        h2 {
+            font-size: clamp(1.875rem, 4vw, 2.75rem);
+            font-weight: 700;
+        }
+
+        h3 {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 600;
+        }
 
         .text-gradient {
             background: var(--gradient-primary);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            display: inline-block;
+        }
+
+        .text-gradient-gold {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        .text-gradient-spiritual {
+            background: var(--gradient-spiritual);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
         }
 
         .lead {
             font-size: clamp(1.125rem, 2vw, 1.25rem);
             color: var(--text-secondary);
             line-height: 1.6;
+            font-weight: 400;
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
+        }
+
+        p {
+            margin-bottom: var(--space-md);
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-weight: 400;
+        }
+
+        .slogan {
+            font-family: var(--font-spiritual);
+            font-style: italic;
+            color: var(--text-tertiary);
+            font-size: 1.1rem;
+            margin-top: calc(var(--space-sm) * -1);
+            margin-bottom: var(--space-md);
+            position: relative;
+            padding-left: var(--space-lg);
+        }
+
+        .slogan::before {
+            content: '"';
+            position: absolute;
+            left: 0;
+            top: -5px;
+            font-size: 2rem;
+            color: var(--primary-red);
+            font-family: serif;
         }
 
         /* ===== LAYOUT & CONTAINERS ===== */
@@ -647,6 +957,7 @@
 
         section {
             padding: var(--space-4xl) 0;
+            position: relative;
         }
 
         .section-header {
@@ -655,6 +966,34 @@
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
+        }
+
+        .section-header h2 {
+            position: relative;
+            display: inline-block;
+            margin-bottom: var(--space-lg);
+        }
+
+        .section-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            color: var(--text-tertiary);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: var(--space-sm);
+            display: block;
+            font-weight: 600;
         }
 
         /* ===== BUTTONS ===== */
@@ -668,14 +1007,19 @@
             font-weight: 600;
             font-size: 0.875rem;
             text-decoration: none;
-            border: none;
+            border: 1px solid transparent;
             cursor: pointer;
             transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+            letter-spacing: 0.02em;
         }
 
         .btn-primary {
             background: var(--gradient-primary);
-            color: var(--white);
+            color: var(--white) !important;
+            border: none;
         }
 
         .btn-primary:hover {
@@ -683,19 +1027,75 @@
             box-shadow: var(--shadow-xl);
         }
 
-        .btn-mpesa {
-            background: var(--gradient-mpesa);
-            color: var(--white);
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-red);
+            border: 1px solid var(--primary-red);
         }
 
-        .btn-mpesa:hover {
+        .btn-secondary:hover {
+            background: var(--primary-red);
+            color: var(--white) !important;
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 166, 81, 0.3);
+            box-shadow: 0 8px 25px rgba(194, 24, 7, 0.2);
+        }
+
+        .btn-gold {
+            background: var(--gradient-gold);
+            color: var(--primary-dark) !important;
+            border: none;
+            font-weight: 700;
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-spiritual {
+            background: var(--gradient-spiritual);
+            color: var(--white) !important;
+            border: none;
+        }
+
+        .btn-spiritual:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(107, 70, 193, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary-red);
+            color: var(--primary-red);
+            transform: translateY(-2px);
+        }
+
+        .btn-small {
+            padding: var(--space-sm) var(--space-lg);
+            font-size: 0.85rem;
         }
 
         .btn-large {
             padding: var(--space-lg) var(--space-2xl);
             font-size: 1rem;
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        .buy-ticket-btn {
+            margin-top: auto;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
         }
 
         /* ===== EVENTS HERO ===== */
@@ -705,25 +1105,46 @@
             align-items: center;
             padding-top: var(--header-height);
             background: var(--gradient-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .events-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(194, 24, 7, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.02) 0%, transparent 50%);
+            z-index: var(--z-negative);
         }
 
         .events-hero-content {
+            position: relative;
+            z-index: var(--z-normal);
             max-width: 1200px;
             margin: 0 auto;
             text-align: center;
+            padding: 0 var(--space-xl);
         }
 
-        .mpesa-badge-hero {
+        .events-badge {
             display: inline-flex;
             align-items: center;
             gap: var(--space-sm);
-            background: var(--gradient-mpesa);
+            background: var(--gradient-primary);
             color: var(--white);
             padding: var(--space-sm) var(--space-lg);
             border-radius: var(--radius-full);
             font-size: 0.8rem;
             font-weight: 600;
+            letter-spacing: 0.05em;
             margin-bottom: var(--space-xl);
+            box-shadow: var(--shadow-lg);
+            text-transform: uppercase;
         }
 
         .hero-buttons {
@@ -732,6 +1153,24 @@
             justify-content: center;
             flex-wrap: wrap;
             margin-top: var(--space-2xl);
+        }
+
+        /* ===== TRANSFORMATIVE EVENTS ===== */
+        .transformative-events {
+            background: var(--bg-primary);
+            padding: var(--space-4xl) 0;
+        }
+
+        .events-intro {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto var(--space-3xl);
+        }
+
+        .events-intro p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
         }
 
         /* ===== EVENT CATEGORIES ===== */
@@ -749,11 +1188,29 @@
             text-align: center;
             border: 1px solid var(--border-color);
             transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .category-card.bootcamp {
+            border-top: 4px solid var(--primary-red);
+        }
+
+        .category-card.inspiration {
+            border-top: 4px solid #D4AF37;
+        }
+
+        .category-card.spiritual {
+            border-top: 4px solid var(--accent-purple);
         }
 
         .category-card:hover {
             transform: translateY(-8px);
             box-shadow: var(--shadow-xl);
+            border-color: var(--primary-red);
         }
 
         .category-icon {
@@ -780,9 +1237,37 @@
             background: var(--gradient-spiritual);
         }
 
+        .category-tag {
+            display: inline-block;
+            padding: var(--space-xs) var(--space-md);
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: var(--space-md);
+        }
+
+        .bootcamp .category-tag {
+            background: rgba(194, 24, 7, 0.1);
+            color: var(--primary-red);
+            border: 1px solid rgba(194, 24, 7, 0.2);
+        }
+
+        .inspiration .category-tag {
+            background: rgba(212, 175, 55, 0.1);
+            color: #B8860B;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .spiritual .category-tag {
+            background: rgba(107, 70, 193, 0.1);
+            color: var(--accent-purple);
+            border: 1px solid rgba(107, 70, 193, 0.2);
+        }
+
         /* ===== UPCOMING EVENTS DETAILS ===== */
         .upcoming-events {
             background: var(--bg-secondary);
+            padding: var(--space-4xl) 0;
         }
 
         .events-grid {
@@ -798,11 +1283,16 @@
             overflow: hidden;
             border: 1px solid var(--border-color);
             transition: var(--transition-smooth);
+            position: relative;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
         .event-card:hover {
             transform: translateY(-8px);
             box-shadow: var(--shadow-xl);
+            border-color: var(--primary-red);
         }
 
         .event-image-container {
@@ -831,17 +1321,82 @@
             border-radius: var(--radius-md);
             font-size: 0.85rem;
             font-weight: 600;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            z-index: var(--z-normal);
             color: var(--white);
         }
 
-        .bootcamp-event .event-date-badge {
+        .event-card.bootcamp-event .event-date-badge {
             background: var(--gradient-primary);
+        }
+
+        .event-card.inspiration-event .event-date-badge {
+            background: var(--gradient-gold);
+            color: var(--primary-dark);
+        }
+
+        .event-card.spiritual-event .event-date-badge {
+            background: var(--gradient-spiritual);
         }
 
         .event-content {
             padding: var(--space-xl);
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
 
+        .event-category {
+            display: inline-block;
+            padding: var(--space-2xs) var(--space-md);
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: var(--space-md);
+            letter-spacing: 0.05em;
+            align-self: flex-start;
+        }
+
+        .event-category.bootcamp {
+            background: rgba(194, 24, 7, 0.1);
+            color: var(--primary-red);
+        }
+
+        .event-category.inspiration {
+            background: rgba(212, 175, 55, 0.1);
+            color: #B8860B;
+        }
+
+        .event-category.spiritual {
+            background: rgba(107, 70, 193, 0.1);
+            color: var(--accent-purple);
+        }
+
+        .event-details {
+            flex-grow: 1;
+        }
+
+        .event-details h3 {
+            margin-bottom: var(--space-sm);
+            line-height: 1.3;
+        }
+
+        .spiritual-event .event-details h3 {
+            font-family: var(--font-spiritual);
+            font-weight: 700;
+        }
+
+        .event-details p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: var(--space-lg);
+        }
+
+        /* Ticket Pricing */
         .ticket-price-display {
             background: var(--bg-secondary);
             border-radius: var(--radius-md);
@@ -853,14 +1408,236 @@
             border: 1px solid var(--border-color);
         }
 
+        .price-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
         .price-amount {
             font-weight: 700;
             font-size: 1.2rem;
             color: var(--primary-red);
         }
 
-        .buy-ticket-btn {
-            margin-top: var(--space-lg);
+        .price-note {
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+            margin-top: var(--space-xs);
+        }
+
+        .event-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+            padding-top: var(--space-md);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            color: var(--text-tertiary);
+            font-size: 0.85rem;
+        }
+
+        .meta-item i {
+            width: 16px;
+        }
+
+        .event-card .meta-item i {
+            color: var(--primary-red);
+        }
+
+        .spiritual-event .meta-item i {
+            color: var(--accent-purple);
+        }
+
+        .inspiration-event .meta-item i {
+            color: #B8860B;
+        }
+
+        .duration-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            background: rgba(194, 24, 7, 0.08);
+            color: var(--primary-red);
+            padding: var(--space-2xs) var(--space-md);
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: var(--space-sm);
+        }
+
+        .duration-badge i {
+            font-size: 0.8rem;
+        }
+
+        /* ===== REGISTRATION INFO ===== */
+        .registration-info {
+            background: var(--bg-primary);
+            padding: var(--space-4xl) 0;
+        }
+
+        .registration-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-2xl);
+            align-items: center;
+        }
+
+        .registration-visual {
+            text-align: center;
+        }
+
+        .registration-icon {
+            width: 150px;
+            height: 150px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            font-size: 3rem;
+            color: var(--white);
+            margin-bottom: var(--space-lg);
+        }
+
+        .registration-steps {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-lg);
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-md);
+            padding: var(--space-lg);
+            background: var(--gradient-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            transition: var(--transition-smooth);
+        }
+
+        .step-item:hover {
+            transform: translateX(5px);
+            border-color: var(--primary-red);
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        /* ===== EVENT BENEFITS ===== */
+        .benefits-section {
+            background: var(--bg-secondary);
+            padding: var(--space-4xl) 0;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-xl);
+            margin-top: var(--space-2xl);
+        }
+
+        .benefit-card {
+            text-align: center;
+            padding: var(--space-xl);
+            background: var(--gradient-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            transition: var(--transition-smooth);
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary-red);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .benefit-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--space-lg);
+            font-size: 1.5rem;
+            color: var(--white);
+        }
+
+        .benefit-1 .benefit-icon {
+            background: var(--gradient-primary);
+        }
+
+        .benefit-2 .benefit-icon {
+            background: var(--gradient-gold);
+        }
+
+        .benefit-3 .benefit-icon {
+            background: var(--gradient-spiritual);
+        }
+
+        .benefit-4 .benefit-icon {
+            background: linear-gradient(135deg, #2D7D46 0%, #4CAF50 100%);
+        }
+
+        /* ===== REGISTRATION CTA ===== */
+        .registration-cta {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: var(--space-4xl) 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--radius-xl);
+            margin: var(--space-4xl) auto;
+            max-width: 1200px;
+        }
+
+        .registration-cta::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%);
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: var(--z-normal);
+        }
+
+        .urgency-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            padding: var(--space-sm) var(--space-lg);
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--space-xl);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         /* ===== FOOTER ===== */
@@ -868,6 +1645,17 @@
             background: var(--footer-bg);
             color: var(--white);
             padding: var(--space-4xl) 0 var(--space-xl);
+            position: relative;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-primary);
         }
 
         .footer-content {
@@ -877,6 +1665,42 @@
             margin-bottom: var(--space-xl);
         }
 
+        .footer-logo {
+            height: 40px;
+            margin-bottom: var(--space-md);
+            filter: brightness(0) invert(1);
+        }
+
+        .footer-section h3 {
+            color: var(--primary-gold);
+            margin-bottom: var(--space-md);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: var(--space-sm);
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            transition: var(--transition-smooth);
+        }
+
+        .footer-section ul li:hover {
+            color: var(--white);
+            transform: translateX(4px);
+        }
+
+        .footer-section ul li a {
+            color: inherit;
+            text-decoration: none;
+        }
+
         .copyright {
             text-align: center;
             padding-top: var(--space-xl);
@@ -884,9 +1708,45 @@
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             color: rgba(255, 255, 255, 0.5);
             font-size: 0.85rem;
+            max-width: var(--container-width);
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        /* ===== RESPONSIVE DESIGN ===== */
+        /* ===== ANIMATIONS ===== */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s var(--transition-smooth), 
+                        transform 0.6s var(--transition-smooth);
+        }
+
+        .animate-on-scroll.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== LOADING STATES ===== */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-2xl);
+            color: var(--text-secondary);
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--primary-red);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: var(--space-md);
+        }
+
+        /* ===== MOBILE NAVIGATION ===== */
         @media (max-width: 1024px) {
             .nav-links {
                 position: fixed;
@@ -895,11 +1755,20 @@
                 right: 0;
                 background: var(--bg-primary);
                 flex-direction: column;
+                align-items: stretch;
+                gap: 0;
+                height: auto;
+                max-height: calc(100vh - var(--header-height));
+                overflow-y: auto;
                 padding: var(--space-md);
                 transform: translateY(-100%);
                 opacity: 0;
                 visibility: hidden;
-                transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+                transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                            opacity 0.3s ease,
+                            visibility 0.3s ease;
+                box-shadow: var(--shadow-xl);
+                border-top: 1px solid var(--border-color);
             }
 
             .nav-links.active {
@@ -908,32 +1777,169 @@
                 visibility: visible;
             }
 
+            .nav-link {
+                height: auto;
+                padding: var(--space-md) var(--space-lg);
+                border-radius: var(--radius-md);
+                margin-bottom: var(--space-xs);
+                display: flex;
+                align-items: center;
+            }
+
+            .nav-link:hover {
+                background: var(--bg-tertiary);
+            }
+
+            .nav-link::after {
+                display: none;
+            }
+
+            .nav-links .btn-primary {
+                margin: var(--space-md) 0 0 0;
+                width: 100%;
+                justify-content: center;
+            }
+
             .mobile-menu-btn {
-                display: block;
+                display: flex;
+                margin-left: auto;
+            }
+
+            .navbar {
+                gap: var(--space-md);
+                padding: 0 var(--space-lg);
             }
         }
 
+        /* ===== RESPONSIVE DESIGN ===== */
         @media (max-width: 768px) {
+            :root {
+                --header-height: 64px;
+                --nav-item-spacing: 1.5rem;
+                --logo-size: 36px;
+            }
+
+            .navbar {
+                padding: 0 var(--space-lg);
+            }
+
+            .logo-text {
+                font-size: 1.25rem;
+            }
+
+            .events-hero {
+                padding-top: var(--header-height);
+            }
+
+            h1 { font-size: 2.25rem; }
+            h2 { font-size: 1.75rem; }
+            h3 { font-size: 1.5rem; }
+
+            .event-categories,
+            .events-grid,
+            .benefits-grid {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
             .hero-buttons {
                 flex-direction: column;
+                align-items: center;
+                gap: var(--space-md);
             }
-            
-            .event-categories,
-            .events-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .input-group {
-                flex-direction: column;
-            }
-            
-            .paste-button {
+
+            .hero-buttons .btn {
                 width: 100%;
+                max-width: 300px;
+            }
+
+            .payment-modal {
+                margin: var(--space-md);
+            }
+
+            .mpesa-till-number {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            :root {
+                --header-height: 60px;
+                --logo-size: 32px;
+            }
+
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.5rem; }
+            h3 { font-size: 1.25rem; }
+
+            .container {
+                padding: 0 var(--space-md);
+            }
+
+            .events-hero {
+                padding-top: var(--header-height);
+            }
+
+            .events-badge {
+                font-size: 0.75rem;
+                padding: var(--space-xs) var(--space-md);
+            }
+
+            .btn {
+                padding: var(--space-md) var(--space-lg);
+                font-size: 0.9rem;
+            }
+
+            .event-image-container {
+                height: 200px;
+            }
+
+            .event-content {
+                padding: var(--space-lg);
+            }
+
+            .event-date-badge {
+                top: var(--space-sm);
+                left: var(--space-sm);
+                font-size: 0.75rem;
+            }
+
+            .ticket-option-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--space-xs);
+            }
+            
+            .ticket-price {
+                font-size: 1.25rem;
+            }
+
+            .mpesa-till-number {
+                font-size: 1.75rem;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Firebase Status Indicator -->
+    <div class="firebase-status" id="firebaseStatus" role="status" aria-live="polite">
+        <i class="fas fa-circle"></i>
+        <span>Live</span>
+    </div>
+
+    <!-- Data Update Indicator -->
+    <div class="data-update-indicator" id="dataUpdateIndicator" role="alert" aria-live="polite">
+        <i class="fas fa-sync-alt"></i>
+        <span>Updating content...</span>
+    </div>
+
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <i class="fas fa-moon"></i>
+    </button>
+
     <!-- Header -->
     <header class="header" id="header">
         <nav class="navbar">
@@ -954,77 +1960,145 @@
                 <li><a href="contact.html" class="btn btn-primary">Contact Us</a></li>
             </ul>
 
-            <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
                 <i class="fas fa-bars"></i>
             </button>
         </nav>
     </header>
 
-    <!-- M-Pesa Payment Modal -->
+    <!-- Payment Modal -->
     <div class="payment-modal-overlay" id="paymentModal">
         <div class="payment-modal">
             <div class="payment-modal-header">
-                <h3><i class="fas fa-mobile-alt"></i> Pay via M-Pesa</h3>
+                <h3><i class="fas fa-ticket-alt"></i> Purchase Ticket</h3>
                 <button class="payment-modal-close" id="paymentModalClose">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             <div class="payment-modal-content">
-                <!-- M-Pesa Till Display -->
-                <div class="mpesa-till-display">
-                    <span class="till-label">PAY TO TILL NUMBER:</span>
-                    <div class="till-number">9442155</div>
-                    <div class="mpesa-badge">
-                        <i class="fas fa-check-circle"></i> DSOG Stores - Safaricom Verified
+                <div id="ticketOptions">
+                    <!-- Ticket options will be loaded here -->
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <p>Loading ticket options...</p>
                     </div>
                 </div>
 
-                <!-- Payment Instructions -->
-                <div class="till-instructions">
-                    <h4><i class="fas fa-list-ol"></i> Payment Steps:</h4>
-                    <ol>
-                        <li>Go to <strong>M-Pesa</strong> on your phone</li>
-                        <li>Select <strong>Lipa na M-Pesa</strong></li>
-                        <li>Select <strong>Till Number</strong></li>
-                        <li>Enter Till: <strong>9442155</strong></li>
-                        <li>Enter Amount: <strong id="mpesaAmount">1000</strong> KES</li>
-                        <li>Enter your <strong>M-Pesa PIN</strong></li>
-                        <li>Press <strong>OK</strong> to complete</li>
-                    </ol>
-                </div>
-
-                <!-- Payment Reference -->
-                <div class="payment-reference">
-                    <div class="till-label">REFERENCE CODE:</div>
-                    <div class="reference-code" id="paymentReference">DSOG-000000</div>
-                    <button class="btn btn-mpesa btn-small" onclick="copyReferenceCode()" style="margin-top: var(--space-sm);">
-                        <i class="fas fa-copy"></i> Copy Code
-                    </button>
-                </div>
-
-                <!-- Verification Section -->
-                <div class="verification-section">
-                    <h4><i class="fas fa-check-circle"></i> Verify Payment</h4>
-                    <p>After payment, paste your M-Pesa transaction code:</p>
+                <!-- M-Pesa Payment Instructions -->
+                <div id="mpesaPaymentSection" class="mpesa-payment-section" style="display: none;">
+                    <h4><i class="fas fa-mobile-alt"></i> Pay with M-Pesa</h4>
+                    <p>Make payment using Lipa na M-Pesa to our Till number:</p>
                     
-                    <div class="transaction-code-input">
-                        <div class="input-group">
-                            <input type="text" 
-                                   id="transactionCode" 
-                                   class="transaction-input" 
-                                   placeholder="Transaction Code (e.g., QW12ER34T5)">
-                            <button class="paste-button" onclick="autoPasteTransactionCode()">
-                                <i class="fas fa-paste"></i> Paste Code
-                            </button>
+                    <div class="mpesa-till-display">
+                        <div style="font-size: 0.9rem; opacity: 0.9;">TILL NUMBER</div>
+                        <div class="mpesa-till-number">9442155</div>
+                        <div style="font-size: 0.9rem; opacity: 0.9;">DSOG EVENTS</div>
+                    </div>
+
+                    <div class="payment-steps">
+                        <div class="payment-step">
+                            <div class="step-number">1</div>
+                            <div>
+                                <strong>Go to M-Pesa on your phone</strong>
+                                <p style="font-size: 0.9rem; margin-top: 4px;">Select "Lipa na M-Pesa"</p>
+                            </div>
+                        </div>
+                        <div class="payment-step">
+                            <div class="step-number">2</div>
+                            <div>
+                                <strong>Select "Buy Goods and Services"</strong>
+                                <p style="font-size: 0.9rem; margin-top: 4px;">Enter Till Number: <strong>9442155</strong></p>
+                            </div>
+                        </div>
+                        <div class="payment-step">
+                            <div class="step-number">3</div>
+                            <div>
+                                <strong>Enter the exact amount</strong>
+                                <p style="font-size: 0.9rem; margin-top: 4px;" id="exactAmountDisplay">Amount: KES 0</p>
+                            </div>
+                        </div>
+                        <div class="payment-step">
+                            <div class="step-number">4</div>
+                            <div>
+                                <strong>Enter your M-Pesa PIN</strong>
+                                <p style="font-size: 0.9rem; margin-top: 4px;">Complete the transaction</p>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- WhatsApp Confirmation -->
-                    <div class="whatsapp-confirmation">
-                        <p><strong><i class="fas fa-whatsapp"></i> Confirmation via WhatsApp</strong></p>
-                        
-                        <button class="whatsapp-button" onclick="sendWhatsAppConfirmation()">
-                            <i class="fab fa-whatsapp"></i> Send Confirmation
+                    <p style="font-size: 0.85rem; color: var(--text-tertiary); text-align: center; margin-top: var(--space-md);">
+                        <i class="fas fa-info-circle"></i> You will receive an M-Pesa confirmation SMS
+                    </p>
+                </div>
+
+                <!-- WhatsApp Confirmation Section -->
+                <div id="whatsappConfirmationSection" class="whatsapp-confirmation-section" style="display: none;">
+                    <h4><i class="fab fa-whatsapp"></i> Confirm Your Payment</h4>
+                    <p>After payment, paste your M-Pesa transaction code below to auto-generate a WhatsApp confirmation message:</p>
+                    
+                    <input type="text" 
+                           id="transactionCodeInput" 
+                           class="transaction-code-input" 
+                           placeholder="Paste your M-Pesa transaction code here (e.g., ODH8HGF3RQ)">
+                    
+                    <div id="whatsappMessagePreview" class="whatsapp-message-preview" style="display: none;">
+                        <!-- WhatsApp message preview will appear here -->
+                    </div>
+
+                    <a id="whatsappButton" class="whatsapp-button" target="_blank" style="display: none;">
+                        <i class="fab fa-whatsapp"></i> Send WhatsApp Confirmation
+                    </a>
+
+                    <p style="font-size: 0.85rem; color: var(--text-tertiary); margin-top: var(--space-md);">
+                        <i class="fas fa-info-circle"></i> Just paste your code above - no button needed. The WhatsApp message will auto-generate.
+                    </p>
+                </div>
+            </div>
+            <div class="payment-modal-footer">
+                <div id="ticketSummary" style="display: none;">
+                    <div class="ticket-summary">
+                        <div class="summary-item">
+                            <span class="summary-label">Ticket:</span>
+                            <span class="summary-value" id="summaryTicketName">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Event:</span>
+                            <span class="summary-value" id="summaryEventName">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Price:</span>
+                            <span class="summary-value" id="summaryTicketPrice">-</span>
+                        </div>
+                        <div class="summary-item summary-total">
+                            <span class="summary-label">Total to Pay:</span>
+                            <span class="summary-value" id="summaryTotal">-</span>
+                        </div>
+                    </div>
+                    <button id="proceedToMpesaButton" class="mpesa-button" onclick="proceedToMpesaPayment()">
+                        <i class="fas fa-mobile-alt"></i>
+                        Proceed to M-Pesa Payment
+                    </button>
+                    <div class="payment-security">
+                        <i class="fas fa-shield-alt"></i>
+                        Secure payment via M-Pesa • Instant confirmation
+                    </div>
+                </div>
+                <div id="paymentProcessing" style="display: none;">
+                    <div class="payment-processing">
+                        <div class="processing-spinner"></div>
+                        <h4>Processing...</h4>
+                        <p>Please complete the M-Pesa payment on your phone.</p>
+                    </div>
+                </div>
+                <div id="paymentSuccess" style="display: none;">
+                    <div class="payment-success">
+                        <div class="success-icon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <h4>Payment Instructions Sent!</h4>
+                        <p>Please check the M-Pesa payment instructions above and complete your payment.</p>
+                        <button class="btn btn-primary" id="closeSuccessBtn" style="margin-top: var(--space-lg);">
+                            Close
                         </button>
                     </div>
                 </div>
@@ -1036,20 +2110,42 @@
     <section class="events-hero">
         <div class="container">
             <div class="events-hero-content">
-                <div class="mpesa-badge-hero">
-                    <i class="fas fa-mobile-alt"></i> PAY VIA M-PESA
+                <div class="events-badge">
+                    <i class="fas fa-ticket-alt"></i> BUY TICKETS NOW
                 </div>
                 
                 <h1>Secure Your <span class="text-gradient">Transformative Experience</span></h1>
-                <p class="lead">Purchase tickets for our exclusive events via M-Pesa Till <strong>9442155</strong>. Simple, secure, and instant confirmation.</p>
+                <p class="lead">Purchase tickets for our exclusive events designed to empower entrepreneurs, ignite passion, and discover divine purpose. Secure payment with M-Pesa.</p>
                 
                 <div class="hero-buttons">
                     <a href="#upcoming" class="btn btn-primary btn-large">
                         <i class="fas fa-calendar-alt"></i> View Events & Tickets
                     </a>
-                    <button class="btn btn-mpesa btn-large" onclick="openPaymentModal()">
-                        <i class="fas fa-mobile-alt"></i> Pay via M-Pesa
-                    </button>
+                    <a href="#registration" class="btn btn-secondary btn-large">
+                        <i class="fas fa-info-circle"></i> How to Purchase
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Transformative Events Section -->
+    <section class="transformative-events">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Ticket Categories</span>
+                <h2>Three Levels of <span class="text-gradient">Transformation</span></h2>
+            </div>
+            
+            <div class="events-intro">
+                <p>Choose from our three transformative event categories. Each offers unique benefits and experiences tailored to different stages of your entrepreneurial journey.</p>
+            </div>
+            
+            <!-- Event Categories (Loaded from Firebase) -->
+            <div id="eventCategories" class="event-categories">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading event categories...</p>
                 </div>
             </div>
         </div>
@@ -1059,19 +2155,148 @@
     <section id="upcoming" class="upcoming-events">
         <div class="container">
             <div class="section-header">
-                <span style="color: var(--text-tertiary); font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: var(--space-sm);">Available Tickets</span>
+                <span class="section-subtitle">Available Tickets</span>
                 <h2>Purchase Tickets for <span class="text-gradient">Upcoming Events</span></h2>
-                <p class="lead">Each event offers different ticket options. Pay securely via M-Pesa Till 9442155.</p>
+                <p class="lead">Each event offers different ticket options with secure payment processing through M-Pesa. Limited seats available.</p>
             </div>
             
-            <!-- Upcoming Events -->
-            <div class="events-grid" id="eventsGrid">
-                <!-- Events will be loaded here from Firebase -->
-                <div style="text-align: center; grid-column: 1 / -1; padding: 3rem;">
-                    <div style="margin-bottom: 1rem;">
-                        <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary-red);"></i>
+            <!-- Upcoming Events (Loaded from Firebase) -->
+            <div id="eventsGrid" class="events-grid">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading available events...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registration Info Section -->
+    <section id="registration" class="registration-info">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Simple Purchase Process</span>
+                <h2>How to <span class="text-gradient">Buy Tickets</span></h2>
+                <p class="lead">Purchasing tickets for our transformative events is quick, easy, and secure. Follow these simple steps to secure your spot.</p>
+            </div>
+            
+            <div class="registration-container">
+                <div class="registration-visual">
+                    <div class="registration-icon">
+                        <i class="fas fa-mobile-alt"></i>
                     </div>
-                    <p>Loading events from Firebase...</p>
+                    <h3>M-Pesa Payment</h3>
+                    <p>All payments are processed securely through M-Pesa. Pay via Lipa na M-Pesa to Till Number 9442155.</p>
+                    <div style="margin-top: var(--space-lg);">
+                        <button class="btn btn-primary btn-large" onclick="openPaymentModal()">
+                            <i class="fas fa-shopping-cart"></i> View Payment Process
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="registration-steps">
+                    <div class="step-item animate-on-scroll">
+                        <div class="step-number">1</div>
+                        <div>
+                            <h4>Select Your Event</h4>
+                            <p>Choose from our upcoming events and click "Buy Ticket" to see available options.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step-item animate-on-scroll">
+                        <div class="step-number">2</div>
+                        <div>
+                            <h4>Choose Ticket Type</h4>
+                            <p>Select your preferred ticket option (Standard, VIP, Early Bird, etc.) in the payment modal.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step-item animate-on-scroll">
+                        <div class="step-number">3</div>
+                        <div>
+                            <h4>M-Pesa Payment</h4>
+                            <p>Pay via Lipa na M-Pesa to Till Number 9442155 with the exact amount shown.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step-item animate-on-scroll">
+                        <div class="step-number">4</div>
+                        <div>
+                            <h4>WhatsApp Confirmation</h4>
+                            <p>Paste your M-Pesa transaction code to auto-generate and send WhatsApp confirmation.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Ticket Benefits</span>
+                <h2>What Your <span class="text-gradient">Ticket Includes</span></h2>
+                <p class="lead">Every ticket purchase comes with these exclusive benefits and features for maximum value.</p>
+            </div>
+            
+            <div class="benefits-grid">
+                <div class="benefit-card benefit-1 animate-on-scroll">
+                    <div class="benefit-icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <h4>Guaranteed Entry</h4>
+                    <p>Secure your spot with a guaranteed seat at the event of your choice.</p>
+                </div>
+                
+                <div class="benefit-card benefit-2 animate-on-scroll">
+                    <div class="benefit-icon">
+                        <i class="fas fa-file-certificate"></i>
+                    </div>
+                    <h4>Digital Certificate</h4>
+                    <p>Receive a certificate of participation or completion (where applicable).</p>
+                </div>
+                
+                <div class="benefit-card benefit-3 animate-on-scroll">
+                    <div class="benefit-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <h4>Event Materials</h4>
+                    <p>Access to all event materials, handouts, and digital resources.</p>
+                </div>
+                
+                <div class="benefit-card benefit-4 animate-on-scroll">
+                    <div class="benefit-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h4>Network Access</h4>
+                    <p>Join our exclusive community of like-minded entrepreneurs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registration CTA Section -->
+    <section class="registration-cta">
+        <div class="container">
+            <div class="cta-content">
+                <div class="urgency-badge">
+                    <i class="fas fa-clock"></i> LIMITED TICKETS AVAILABLE
+                </div>
+                
+                <h2 style="color: var(--white);">Secure Your <span style="color: var(--primary-gold);">Transformation Today</span></h2>
+                <p class="lead">Don't miss this opportunity to transform your business and life. Tickets are selling fast - secure yours now with our secure M-Pesa payment system.</p>
+                
+                <div class="hero-buttons">
+                    <a href="#upcoming" class="btn btn-gold btn-large">
+                        <i class="fas fa-ticket-alt"></i> View Available Tickets
+                    </a>
+                    <button class="btn btn-secondary btn-large" onclick="openPaymentModal()" style="background: rgba(255,255,255,0.1); color: var(--white); border-color: rgba(255,255,255,0.3);">
+                        <i class="fas fa-mobile-alt"></i> View Payment Process
+                    </button>
+                </div>
+                
+                <div style="margin-top: var(--space-xl); font-size: 0.9rem; opacity: 0.9; color: rgba(255,255,255,0.9);">
+                    <p><i class="fas fa-mobile-alt"></i> Pay via M-Pesa Till: 9442155 • <i class="fas fa-shield-alt"></i> Secure payment • <i class="fab fa-whatsapp"></i> Instant WhatsApp confirmation</p>
                 </div>
             </div>
         </div>
@@ -1084,27 +2309,53 @@
                 <div class="footer-section">
                     <img src="https://i.postimg.cc/kMZ1jTww/Untitled-design-4-removebg-preview.png" 
                          alt="DSOG" 
-                         style="height: 40px; margin-bottom: 1rem; filter: brightness(0) invert(1);">
-                    <p>Empowering entrepreneurs through transformative events with secure M-Pesa payment via Till 9442155.</p>
-                    <div class="mpesa-badge" style="margin-top: 1rem; background: rgba(255,255,255,0.1);">
-                        <i class="fas fa-mobile-alt"></i> M-PESA TILL: 9442155
+                         class="footer-logo">
+                    <p>Empowering entrepreneurs through transformative events with secure ticket purchasing through M-Pesa payment system.</p>
+                    <div class="events-badge" style="margin-top: var(--space-md); background: rgba(255,255,255,0.1); color: white;">
+                        <i class="fas fa-mobile-alt"></i> M-PESA TICKETING
                     </div>
                 </div>
                 
                 <div class="footer-section">
-                    <h3 style="color: var(--primary-gold); margin-bottom: 1rem; font-size: 0.95rem; text-transform: uppercase;">Quick Links</h3>
-                    <ul style="list-style: none;">
-                        <li style="margin-bottom: 0.5rem;"><a href="index.html" style="color: rgba(255,255,255,0.7); text-decoration: none;">Home</a></li>
-                        <li style="margin-bottom: 0.5rem;"><a href="about.html" style="color: rgba(255,255,255,0.7); text-decoration: none;">About DSOG</a></li>
-                        <li style="margin-bottom: 0.5rem;"><a href="enterprise.html" style="color: rgba(255,255,255,0.7); text-decoration: none;">Enterprise</a></li>
-                        <li style="margin-bottom: 0.5rem;"><a href="events.html" style="color: rgba(255,255,255,0.7); text-decoration: none;">Event Tickets</a></li>
-                        <li style="margin-bottom: 0.5rem;"><a href="contact.html" style="color: rgba(255,255,255,0.7); text-decoration: none;">Contact Support</a></li>
+                    <h3>Event Tickets</h3>
+                    <ul>
+                        <li><a href="#upcoming">Available Tickets</a></li>
+                        <li><a href="#bootcamp-details">Bootcamp Tickets</a></li>
+                        <li><a href="#inspiration-details">Inspiration Summit</a></li>
+                        <li><a href="#spiritual-details">Spiritual Workshop</a></li>
+                        <li><a href="#registration">How to Purchase</a></li>
+                        <li><a href="#ticket-faq">Ticket FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About DSOG</a></li>
+                        <li><a href="enterprise.html">Enterprise Solutions</a></li>
+                        <li><a href="events.html">Event Tickets</a></li>
+                        <li><a href="training.html">Training Programs</a></li>
+                        <li><a href="contact.html">Contact Support</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Payment Information</h3>
+                    <ul>
+                        <li><i class="fas fa-mobile-alt"></i> M-Pesa Till: 9442155</li>
+                        <li><i class="fas fa-shopping-cart"></i> Lipa na M-Pesa</li>
+                        <li><i class="fab fa-whatsapp"></i> WhatsApp Confirmation</li>
+                        <li><i class="fas fa-headset"></i> 24/7 Payment Support</li>
+                        <li><i class="fas fa-envelope"></i> receipts@dsog.org</li>
+                        <li><i class="fas fa-phone"></i> Payment Inquiries</li>
                     </ul>
                 </div>
             </div>
             
             <div class="copyright">
-                <p>&copy; <span id="currentYear"></span> DSOG Events - M-Pesa Ticketing System. All payments via Till 9442155.</p>
+                <p>&copy; <span id="currentYear"></span> DSOG Events - M-Pesa Ticketing System. All payments processed through M-Pesa Till Number 9442155. All rights reserved.</p>
+                <p style="margin-top: var(--space-sm); font-size: 0.85rem;">Secure Payment • Instant Confirmation • Digital Tickets • WhatsApp Verification • Customer Support</p>
             </div>
         </div>
     </footer>
@@ -1112,476 +2363,882 @@
     <!-- JavaScript -->
     <script>
     // ============================================
-    // SIMPLE M-PESA PAYMENT SYSTEM
+    // FIREBASE CONFIGURATION
     // ============================================
-    
-    // Configuration
-    const MPESA_TILL = "9442155";
-    const WHATSAPP_NUMBER = "254733737983";
-    let currentEvent = null;
+    const firebaseConfig = {
+        apiKey: "AIzaSyDb5ZFHbo7lGM8ph0oBxFVTHRF5C5C_DWU",
+        authDomain: "dsog-events.firebaseapp.com",
+        databaseURL: "https://dsog-events-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "dsog-events",
+        storageBucket: "dsog-events.firebasestorage.app",
+        messagingSenderId: "1075977932287",
+        appId: "1:1075977932287:web:b2bf4d1c0083d2dac8ebca"
+    };
 
-    // Initialize
+    // Initialize Firebase
+    let db;
+    let firebaseListeners = [];
+    let isFirebaseInitialized = false;
+    let selectedEvent = null;
+    let selectedTicket = null;
+
+    try {
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.database();
+        isFirebaseInitialized = true;
+        console.log('Firebase initialized successfully for Events Ticketing');
+    } catch (error) {
+        console.error('Firebase initialization error:', error);
+        isFirebaseInitialized = false;
+    }
+
+    // Cache management
+    const CACHE_KEY = 'dsog_tickets_cache';
+    const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
+    // Update management
+    let lastUpdateTime = 0;
+    const UPDATE_DEBOUNCE_TIME = 2000; // 2 seconds between updates
+    let updateTimeout = null;
+
+    // ============================================
+    // INITIALIZATION
+    // ============================================
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('DSOG Events Page Loaded');
+        console.log('🚀 DSOG Events Ticketing System Loaded');
+        
+        // Initialize all components
+        initializeTheme();
+        initializeNavigation();
+        initializeAnimations();
+        initializeScrollEffects();
         
         // Set current year
         document.getElementById('currentYear').textContent = new Date().getFullYear();
         
-        // Initialize navigation
-        initializeNavigation();
+        // Load from cache first for instant display
+        const cachedData = getCachedData();
+        if (cachedData && !isCacheExpired(cachedData.timestamp)) {
+            console.log('Loading from cache for instant display');
+            displayCachedData(cachedData);
+        }
         
-        // Setup modal events
-        setupModalEvents();
+        // Initialize Firebase connection
+        if (isFirebaseInitialized) {
+            initializeFirebaseConnection();
+            setupRealtimeListeners();
+        } else {
+            showFirebaseStatus('offline');
+            console.warn('Firebase not available, using cached data only');
+        }
         
-        // Generate initial reference code
-        updateReferenceCode();
+        console.log('Ticketing system initialized with real-time updates');
         
-        // Load events from Firebase
-        loadEventsFromFirebase();
+        // Setup modal events after DOM is fully loaded
+        setTimeout(setupPaymentModalEvents, 100);
     });
 
     // ============================================
-    // FIREBASE INTEGRATION - SIMPLE & RELIABLE
+    // FIREBASE CONNECTION MANAGEMENT
     // ============================================
-    async function loadEventsFromFirebase() {
-        try {
-            console.log('Loading events from Firebase...');
-            
-            // Direct fetch from Firebase REST API (no SDK needed)
-            const response = await fetch('https://dsog-events-default-rtdb.europe-west1.firebasedatabase.app/upcomingEvents.json');
-            
-            if (!response.ok) {
-                throw new Error('Failed to fetch events');
-            }
-            
-            const eventsData = await response.json();
-            console.log('Events data received:', eventsData);
-            
-            if (eventsData) {
-                displayEvents(eventsData);
+    function initializeFirebaseConnection() {
+        if (!isFirebaseInitialized) return;
+        
+        // Monitor connection status
+        const connectedRef = db.ref('.info/connected');
+        connectedRef.on('value', (snap) => {
+            if (snap.val() === true) {
+                showFirebaseStatus('online');
+                console.log('Connected to Firebase - Real-time updates active');
             } else {
-                showDefaultEvents();
+                showFirebaseStatus('offline');
+                console.log('Disconnected from Firebase - Using cached data');
             }
-            
-        } catch (error) {
-            console.error('Error loading events:', error);
-            showDefaultEvents();
-        }
-    }
-
-    function displayEvents(eventsData) {
-        const eventsGrid = document.getElementById('eventsGrid');
-        
-        if (!eventsData || Object.keys(eventsData).length === 0) {
-            showDefaultEvents();
-            return;
-        }
-        
-        let eventsHTML = '';
-        
-        // Convert events object to array
-        const eventsArray = Object.values(eventsData);
-        
-        // Sort by date
-        eventsArray.sort((a, b) => {
-            const dateA = a.date ? new Date(a.date) : new Date('9999-12-31');
-            const dateB = b.date ? new Date(b.date) : new Date('9999-12-31');
-            return dateA - dateB;
-        });
-        
-        eventsArray.forEach((event, index) => {
-            if (event.active === false) return;
-            
-            const eventId = `event-${index}`;
-            const category = event.category || 'bootcamp';
-            const title = event.title || 'Upcoming Event';
-            const description = event.description || 'Join us for this transformative event.';
-            const date = event.date ? formatDate(event.date) : 'Date TBD';
-            const venue = event.venue || 'Nairobi, Kenya';
-            const price = event.price || '1000';
-            const imageUrl = event.imageUrl || getDefaultImage(category);
-            
-            let badgeColor = 'var(--gradient-primary)';
-            let btnClass = 'btn-primary';
-            
-            if (category === 'inspiration') {
-                badgeColor = 'var(--gradient-gold)';
-                btnClass = 'btn-gold';
-            } else if (category === 'spiritual') {
-                badgeColor = 'var(--gradient-spiritual)';
-                btnClass = 'btn-spiritual';
-            }
-            
-            eventsHTML += `
-                <div class="event-card ${category}-event">
-                    <div class="event-image-container">
-                        <img src="${imageUrl}" 
-                             alt="${title}" 
-                             class="event-image"
-                             onerror="this.src='${getDefaultImage(category)}'">
-                        <div class="event-date-badge" style="background: ${badgeColor}">
-                            <i class="fas fa-calendar"></i> ${date}
-                        </div>
-                    </div>
-                    <div class="event-content">
-                        <h3>${title}</h3>
-                        <p>${description}</p>
-                        
-                        <div class="ticket-price-display">
-                            <div style="font-size: 0.85rem; color: var(--text-secondary);">
-                                <i class="fas fa-ticket-alt"></i> Ticket Price
-                            </div>
-                            <div class="price-amount">
-                                KES ${price}
-                            </div>
-                        </div>
-                        
-                        <div style="display: flex; gap: var(--space-md); margin-top: var(--space-md); font-size: 0.85rem; color: var(--text-tertiary);">
-                            <div style="display: flex; align-items: center; gap: 4px;">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>${venue}</span>
-                            </div>
-                        </div>
-                        
-                        <div class="buy-ticket-btn">
-                            <button class="btn ${btnClass} btn-block" onclick="openPaymentModal('${eventId}', ${price}, '${title}')">
-                                <i class="fas fa-mobile-alt"></i> Pay via M-Pesa
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-        
-        eventsGrid.innerHTML = eventsHTML;
-    }
-
-    function showDefaultEvents() {
-        const eventsGrid = document.getElementById('eventsGrid');
-        eventsGrid.innerHTML = `
-            <div class="event-card bootcamp-event">
-                <div class="event-image-container">
-                    <img src="https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp" 
-                         alt="Startup Bootcamp" 
-                         class="event-image">
-                    <div class="event-date-badge">
-                        <i class="fas fa-calendar"></i> Feb 15-17, 2024
-                    </div>
-                </div>
-                <div class="event-content">
-                    <h3>Startup Bootcamp 2024</h3>
-                    <p>Intensive 3-day bootcamp covering business fundamentals, funding, marketing, and scaling strategies.</p>
-                    
-                    <div class="ticket-price-display">
-                        <div style="font-size: 0.85rem; color: var(--text-secondary);">
-                            <i class="fas fa-ticket-alt"></i> Ticket Price
-                        </div>
-                        <div class="price-amount">
-                            KES 5,000
-                        </div>
-                    </div>
-                    
-                    <div class="buy-ticket-btn">
-                        <button class="btn btn-primary btn-block" onclick="openPaymentModal('bootcamp', 5000, 'Startup Bootcamp 2024')">
-                            <i class="fas fa-mobile-alt"></i> Pay via M-Pesa
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="event-card inspiration-event">
-                <div class="event-image-container">
-                    <img src="https://i.postimg.cc/sgNRzKbd/20260114_1543_Image_Generation_simple_compose_01key8g91re75trpnnjn6j42z5_1.webp" 
-                         alt="Become What You Believe" 
-                         class="event-image">
-                    <div class="event-date-badge" style="background: var(--gradient-gold); color: var(--primary-dark);">
-                        <i class="fas fa-calendar"></i> Mar 8, 2024
-                    </div>
-                </div>
-                <div class="event-content">
-                    <h3>Become What You Believe</h3>
-                    <p>Transformational leadership summit to unlock your potential and align business with core beliefs.</p>
-                    
-                    <div class="ticket-price-display">
-                        <div style="font-size: 0.85rem; color: var(--text-secondary);">
-                            <i class="fas fa-ticket-alt"></i> Ticket Price
-                        </div>
-                        <div class="price-amount">
-                            KES 2,500
-                        </div>
-                    </div>
-                    
-                    <div class="buy-ticket-btn">
-                        <button class="btn btn-primary btn-block" onclick="openPaymentModal('inspiration', 2500, 'Become What You Believe')">
-                            <i class="fas fa-mobile-alt"></i> Pay via M-Pesa
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="event-card spiritual-event">
-                <div class="event-image-container">
-                    <img src="https://i.postimg.cc/kXw6d695/20260114-1617-Image-Generation-simple-compose-01keyad7jyf15rcfk3tz16wdbq-1.webp" 
-                         alt="The Making of an Icon" 
-                         class="event-image">
-                    <div class="event-date-badge" style="background: var(--gradient-spiritual);">
-                        <i class="fas fa-calendar"></i> Apr 5, 2024
-                    </div>
-                </div>
-                <div class="event-content">
-                    <h3>The Making of an Icon</h3>
-                    <p>Deep spiritual workshop exploring divine purpose in business and entrepreneurship.</p>
-                    
-                    <div class="ticket-price-display">
-                        <div style="font-size: 0.85rem; color: var(--text-secondary);">
-                            <i class="fas fa-ticket-alt"></i> Ticket Price
-                        </div>
-                        <div class="price-amount">
-                            KES 1,500
-                        </div>
-                    </div>
-                    
-                    <div class="buy-ticket-btn">
-                        <button class="btn btn-primary btn-block" onclick="openPaymentModal('spiritual', 1500, 'The Making of an Icon')">
-                            <i class="fas fa-mobile-alt"></i> Pay via M-Pesa
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-
-    function formatDate(dateString) {
-        try {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            });
-        } catch (e) {
-            return 'Date TBD';
-        }
-    }
-
-    function getDefaultImage(category) {
-        const images = {
-            'bootcamp': 'https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp',
-            'inspiration': 'https://i.postimg.cc/sgNRzKbd/20260114_1543_Image_Generation_simple_compose_01key8g91re75trpnnjn6j42z5_1.webp',
-            'spiritual': 'https://i.postimg.cc/kXw6d695/20260114-1617-Image-Generation-simple-compose-01keyad7jyf15rcfk3tz16wdbq-1.webp'
-        };
-        return images[category] || images.bootcamp;
-    }
-
-    // ============================================
-    // PAYMENT MODAL FUNCTIONS
-    // ============================================
-    function openPaymentModal(eventId = 'demo', amount = 1000, eventName = 'DSOG Event') {
-        console.log('Opening modal for:', eventId, amount, eventName);
-        
-        currentEvent = {
-            id: eventId,
-            name: eventName,
-            amount: amount
-        };
-        
-        // Set amount in modal
-        document.getElementById('mpesaAmount').textContent = amount.toLocaleString();
-        
-        // Generate new reference code
-        updateReferenceCode();
-        
-        // Clear transaction code
-        document.getElementById('transactionCode').value = '';
-        
-        // Show modal
-        const modal = document.getElementById('paymentModal');
-        modal.classList.add('active');
-        document.body.classList.add('payment-modal-open');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closePaymentModal() {
-        const modal = document.getElementById('paymentModal');
-        modal.classList.remove('active');
-        document.body.classList.remove('payment-modal-open');
-        document.body.style.overflow = '';
-    }
-
-    function updateReferenceCode() {
-        const timestamp = Date.now().toString().slice(-6);
-        const random = Math.random().toString(36).substring(2, 6).toUpperCase();
-        document.getElementById('paymentReference').textContent = `DSOG-${timestamp}${random}`;
-    }
-
-    function copyReferenceCode() {
-        const refElement = document.getElementById('paymentReference');
-        const text = refElement.textContent;
-        
-        navigator.clipboard.writeText(text).then(() => {
-            refElement.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                refElement.style.transform = 'scale(1)';
-            }, 200);
-            
-            showNotification('Reference code copied!');
-        }).catch(err => {
-            console.error('Copy failed:', err);
-            showNotification('Failed to copy. Please copy manually.');
         });
     }
 
-    // ============================================
-    // AUTO-PASTE & WHATSAPP FUNCTIONS
-    // ============================================
-    async function autoPasteTransactionCode() {
-        const input = document.getElementById('transactionCode');
+    function showFirebaseStatus(status) {
+        const statusEl = document.getElementById('firebaseStatus');
+        if (!statusEl) return;
         
-        try {
-            const text = await navigator.clipboard.readText();
-            if (text && text.trim()) {
-                input.value = text.trim().toUpperCase().replace(/\s+/g, '');
-                showNotification('Transaction code pasted!');
-            } else {
-                showNotification('Clipboard is empty');
-                input.focus();
-            }
-        } catch (error) {
-            console.log('Clipboard error:', error);
-            showNotification('Please paste manually (Ctrl+V)');
-            input.focus();
+        if (status === 'online') {
+            statusEl.classList.remove('offline');
+            statusEl.innerHTML = '<i class="fas fa-circle"></i><span>Live</span>';
+            statusEl.setAttribute('aria-label', 'Connected to live updates');
+        } else {
+            statusEl.classList.add('offline');
+            statusEl.innerHTML = '<i class="fas fa-circle"></i><span>Offline</span>';
+            statusEl.setAttribute('aria-label', 'Using cached data - offline mode');
         }
     }
 
-    function sendWhatsAppConfirmation() {
-        const transactionCode = document.getElementById('transactionCode').value.trim();
+    function showUpdateIndicator(type) {
+        const now = Date.now();
+        if (now - lastUpdateTime < UPDATE_DEBOUNCE_TIME) return;
         
-        if (!transactionCode) {
-            showNotification('Please enter or paste your transaction code');
-            document.getElementById('transactionCode').focus();
-            return;
-        }
+        lastUpdateTime = now;
         
-        // Validate transaction code
-        if (!/^[A-Z0-9]{8,12}$/.test(transactionCode)) {
-            showNotification('Please enter a valid M-Pesa transaction code');
-            return;
-        }
+        const indicator = document.getElementById('dataUpdateIndicator');
+        if (!indicator) return;
         
-        const eventName = currentEvent?.name || 'DSOG Event';
-        const amount = currentEvent?.amount || 1000;
-        const reference = document.getElementById('paymentReference').textContent;
+        indicator.querySelector('span').textContent = `${type} updated`;
+        indicator.classList.add('show');
         
-        // Create WhatsApp message
-        const message = `🎟️ *DSOG EVENT REGISTRATION* 🎟️
-
-📅 Event: ${eventName}
-💰 Amount: KES ${amount}
-🔢 Reference: ${reference}
-📱 M-Pesa Code: ${transactionCode}
-
-✅ Payment confirmed via M-Pesa Till 9442155`;
-
-        const encodedMessage = encodeURIComponent(message);
-        const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
-        
-        // Save registration
-        saveRegistration(transactionCode, reference, eventName, amount);
-        
-        // Open WhatsApp
-        window.open(whatsappUrl, '_blank');
-        
-        // Close modal after delay
+        // Auto-hide after 3 seconds
         setTimeout(() => {
-            closePaymentModal();
-            showNotification('WhatsApp opened! Please send the message.');
-        }, 500);
-    }
-
-    function saveRegistration(transactionCode, reference, eventName, amount) {
-        try {
-            const registration = {
-                event: eventName,
-                amount: amount,
-                transactionCode: transactionCode,
-                reference: reference,
-                timestamp: new Date().toISOString()
-            };
-            
-            // Save to localStorage
-            const registrations = JSON.parse(localStorage.getItem('dsog_registrations') || '[]');
-            registrations.push(registration);
-            localStorage.setItem('dsog_registrations', JSON.stringify(registrations));
-            
-            console.log('Registration saved:', registration);
-        } catch (error) {
-            console.error('Error saving registration:', error);
-        }
-    }
-
-    function showNotification(message) {
-        // Create notification element
-        const notification = document.createElement('div');
-        notification.textContent = message;
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 12px 20px;
-            background: var(--mpesa-green);
-            color: white;
-            border-radius: 6px;
-            z-index: 10000;
-            animation: slideIn 0.3s ease, slideOut 0.3s ease 2.7s;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        `;
-        
-        document.body.appendChild(notification);
-        
-        // Auto remove
-        setTimeout(() => {
-            notification.remove();
+            indicator.classList.remove('show');
         }, 3000);
     }
 
     // ============================================
-    // NAVIGATION & MODAL SETUP
+    // SILENT REAL-TIME UPDATES
     // ============================================
-    function initializeNavigation() {
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const navLinks = document.getElementById('navLinks');
+    function setupRealtimeListeners() {
+        if (!isFirebaseInitialized) return;
         
-        if (mobileMenuBtn && navLinks) {
-            mobileMenuBtn.addEventListener('click', function() {
-                navLinks.classList.toggle('active');
-            });
+        console.log('Setting up silent real-time listeners for ticketing...');
+        
+        // Remove any existing listeners
+        removeAllListeners();
+        
+        // Debounced update function
+        const debouncedUpdate = (type) => {
+            if (updateTimeout) clearTimeout(updateTimeout);
             
-            // Close menu when clicking links
-            navLinks.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => {
-                    if (window.innerWidth <= 1024) {
-                        navLinks.classList.remove('active');
-                    }
-                });
-            });
-        }
+            updateTimeout = setTimeout(() => {
+                showUpdateIndicator(type);
+            }, UPDATE_DEBOUNCE_TIME);
+        };
         
-        // Header scroll effect
-        const header = document.getElementById('header');
-        if (header) {
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 50) {
-                    header.classList.add('scrolled');
-                } else {
-                    header.classList.remove('scrolled');
-                }
-            });
+        // 1. Event Categories Listener
+        const categoriesRef = db.ref('eventCategories');
+        const categoriesListener = categoriesRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                displayEventCategories(data);
+                saveToCachePartial('eventCategories', data);
+                debouncedUpdate('Categories');
+            }
+        });
+        firebaseListeners.push({ ref: categoriesRef, listener: categoriesListener });
+        
+        // 2. Upcoming Events Listener
+        const eventsRef = db.ref('upcomingEvents');
+        const eventsListener = eventsRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            console.log('Events data from Firebase:', data);
+            displayEventsWithTickets(data);
+            saveToCachePartial('upcomingEvents', data);
+            debouncedUpdate('Events');
+        });
+        firebaseListeners.push({ ref: eventsRef, listener: eventsListener });
+        
+        console.log(`Setup ${firebaseListeners.length} silent real-time listeners for ticketing`);
+    }
+
+    function removeAllListeners() {
+        firebaseListeners.forEach(({ ref, listener }) => {
+            if (ref && listener) {
+                ref.off('value', listener);
+            }
+        });
+        firebaseListeners = [];
+    }
+
+    // ============================================
+    // CACHE MANAGEMENT
+    // ============================================
+    function getCachedData() {
+        try {
+            const cached = localStorage.getItem(CACHE_KEY);
+            return cached ? JSON.parse(cached) : null;
+        } catch (error) {
+            console.error('Error reading cache:', error);
+            return null;
         }
     }
 
-    function setupModalEvents() {
+    function saveToCachePartial(key, data) {
+        try {
+            const cached = getCachedData() || { timestamp: Date.now(), data: {} };
+            cached.data[key] = data;
+            cached.timestamp = Date.now();
+            localStorage.setItem(CACHE_KEY, JSON.stringify(cached));
+        } catch (error) {
+            console.error('Error saving to cache:', error);
+        }
+    }
+
+    function isCacheExpired(timestamp) {
+        return Date.now() - timestamp > CACHE_DURATION;
+    }
+
+    function displayCachedData(cachedData) {
+        const data = cachedData.data;
+        
+        if (data.eventCategories) {
+            displayEventCategories(data.eventCategories);
+        }
+        
+        if (data.upcomingEvents) {
+            displayEventsWithTickets(data.upcomingEvents);
+        }
+    }
+
+    // ============================================
+    // UI UPDATES - USING ACTUAL FIREBASE DATA
+    // ============================================
+    function displayEventCategories(categories) {
+        const categoriesContainer = document.getElementById('eventCategories');
+        if (!categoriesContainer) return;
+        
+        // Convert to array and filter active categories
+        const categoriesArray = categories ? Object.values(categories)
+            .filter(cat => cat.active !== false)
+            .sort((a, b) => (a.order || 999) - (b.order || 999)) : [];
+        
+        if (categoriesArray.length > 0) {
+            categoriesContainer.innerHTML = '';
+            categoriesArray.forEach((category, index) => {
+                const categoryCard = createCategoryCard(category, index);
+                categoriesContainer.appendChild(categoryCard);
+            });
+            
+            // Initialize animations for new cards
+            setTimeout(() => {
+                initializeAnimations();
+            }, 100);
+        } else {
+            categoriesContainer.innerHTML = `
+                <div class="category-card" style="grid-column: 1 / -1; text-align: center; padding: var(--space-2xl);">
+                    <div class="category-icon" style="background: var(--gradient-primary);">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h3>Event Categories</h3>
+                    <p>Our event categories will be available soon. Check back for updates!</p>
+                </div>
+            `;
+        }
+    }
+
+    function displayEventsWithTickets(events) {
+        const eventsGrid = document.getElementById('eventsGrid');
+        if (!eventsGrid) return;
+        
+        // Convert events object to array and filter active ones
+        const eventsArray = events ? Object.values(events)
+            .filter(event => event.active !== false)
+            .sort((a, b) => new Date(a.date || '9999-12-31') - new Date(b.date || '9999-12-31')) : [];
+        
+        console.log('Processed events array:', eventsArray);
+        
+        if (eventsArray.length > 0) {
+            eventsGrid.innerHTML = '';
+            eventsArray.forEach((event, index) => {
+                console.log(`Event ${index}:`, event.title, 'Tickets:', event.tickets);
+                const eventCard = createEventCard(event, index);
+                eventsGrid.appendChild(eventCard);
+            });
+            
+            // Initialize animations for new cards
+            setTimeout(() => {
+                initializeAnimations();
+            }, 100);
+        } else {
+            eventsGrid.innerHTML = `
+                <div class="event-card" style="grid-column: 1 / -1; text-align: center; padding: var(--space-2xl);">
+                    <div class="event-content">
+                        <h3>No Events with Tickets Available</h3>
+                        <p>Check back soon for events with available tickets.</p>
+                        <button class="btn btn-primary" style="margin-top: var(--space-lg);" onclick="openPaymentModal()">
+                            <i class="fas fa-shopping-cart"></i> View Payment Process
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+    }
+
+    // ============================================
+    // CARD CREATION FUNCTIONS - USING REAL DATA
+    // ============================================
+    function createCategoryCard(category, index) {
+        const card = document.createElement('div');
+        card.className = `category-card ${category.id || 'bootcamp'} animate-on-scroll`;
+        card.id = `${category.id}-category`;
+        card.dataset.delay = index * 100;
+        
+        // Determine button style and icon based on category
+        let btnClass = 'btn-primary';
+        let icon = category.icon || 'fas fa-graduation-cap';
+        
+        if (category.id === 'inspiration') {
+            btnClass = 'btn-gold';
+        } else if (category.id === 'spiritual') {
+            btnClass = 'btn-spiritual';
+        }
+        
+        card.innerHTML = `
+            <div class="category-icon">
+                <i class="${icon}"></i>
+            </div>
+            <span class="category-tag">${category.frequency || 'TRANSFORMATIVE'}</span>
+            <h3 class="${category.id === 'inspiration' ? 'text-gradient-gold' : category.id === 'spiritual' ? 'text-gradient-spiritual' : 'text-gradient'}">${category.name || 'Event Category'}</h3>
+            <p>${category.description || 'Join us for this transformative event category.'}</p>
+            <div style="margin-top: auto; padding-top: var(--space-md);">
+                <a href="#${category.id}-details" class="btn ${btnClass}" style="width: 100%;">
+                    <i class="fas fa-ticket-alt"></i> View Tickets
+                </a>
+            </div>
+        `;
+        
+        return card;
+    }
+
+    function createEventCard(event, index) {
+        const card = document.createElement('div');
+        // Use the actual event ID from Firebase
+        const eventId = event.id || `event-${Date.now()}-${index}`;
+        card.id = `${event.category}-details`;
+        card.className = `event-card animate-on-scroll ${event.category}-event`;
+        card.dataset.delay = index * 100;
+        
+        // Format date
+        let dateText = 'Date TBD';
+        if (event.date) {
+            try {
+                const eventDate = new Date(event.date);
+                if (!isNaN(eventDate.getTime())) {
+                    dateText = eventDate.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                }
+            } catch (error) {
+                console.error('Error formatting date:', error);
+            }
+        }
+        
+        // Get category name
+        const categoryNames = {
+            'bootcamp': 'Startup Bootcamp',
+            'inspiration': 'Become What You Believe',
+            'spiritual': 'The Making of an Icon'
+        };
+        
+        const categoryName = categoryNames[event.category] || event.category || 'Event';
+        
+        // Determine button style
+        let btnClass = 'btn-primary';
+        if (event.category === 'inspiration') btnClass = 'btn-gold';
+        if (event.category === 'spiritual') btnClass = 'btn-spiritual';
+        
+        // Get actual ticket pricing from Firebase data
+        const tickets = event.tickets ? Object.values(event.tickets) : [];
+        console.log(`Event "${event.title}" tickets:`, tickets);
+        
+        // Calculate lowest price from actual tickets
+        let lowestPrice = 0;
+        let currency = 'KES';
+        let ticketCount = 0;
+        
+        if (tickets.length > 0) {
+            // Convert prices to numbers and find the lowest
+            const prices = tickets.map(t => parseFloat(t.price) || 0).filter(price => price > 0);
+            lowestPrice = prices.length > 0 ? Math.min(...prices) : 0;
+            currency = tickets[0].currency || 'KES';
+            ticketCount = tickets.length;
+        }
+        
+        // Create a safe JSON string for the onclick handler
+        const safeEventData = JSON.stringify(event).replace(/"/g, '&quot;').replace(/'/g, "\\'");
+
+        card.innerHTML = `
+            <div class="event-image-container">
+                <img src="${event.imageUrl || getDefaultImage(event.category)}" 
+                     alt="${event.title || 'DSOG Event'}" 
+                     class="event-image"
+                     onerror="this.src='${getDefaultImage(event.category)}'">
+                <div class="event-date-badge">
+                    <i class="fas fa-calendar"></i> ${dateText}
+                </div>
+            </div>
+            <div class="event-content">
+                <span class="event-category ${event.category}">${categoryName.toUpperCase()}</span>
+                ${event.duration ? `<div class="duration-badge"><i class="fas fa-clock"></i> ${event.duration}</div>` : ''}
+                <div class="event-details">
+                    <h3>${event.title || 'Upcoming Event'}</h3>
+                    ${event.category === 'spiritual' ? '<div class="slogan">"Search within me O Lord"</div>' : ''}
+                    ${event.subtitle ? `<p><strong>${event.subtitle}</strong></p>` : ''}
+                    <p>${event.description || 'Join us for this transformative event.'}</p>
+                    
+                    ${tickets.length > 0 ? `
+                        <div class="ticket-price-display">
+                            <div class="price-label">
+                                <i class="fas fa-ticket-alt"></i> Tickets from
+                            </div>
+                            <div class="price-amount">
+                                ${currency} ${lowestPrice}
+                            </div>
+                        </div>
+                        <div class="price-note">
+                            <i class="fas fa-info-circle"></i> ${ticketCount} ticket option${ticketCount !== 1 ? 's' : ''} available
+                        </div>
+                    ` : ''}
+                    
+                    <div class="event-meta">
+                        ${event.venue ? `<div class="meta-item"><i class="fas fa-map-marker-alt"></i><span>${event.venue}</span></div>` : ''}
+                        ${event.maxParticipants ? `<div class="meta-item"><i class="fas fa-users"></i><span>Max: ${event.maxParticipants} Participants</span></div>` : ''}
+                    </div>
+                </div>
+                <div class="buy-ticket-btn">
+                    <button class="btn ${btnClass} btn-block" onclick="handleBuyTicketClick(event, '${eventId}', '${safeEventData}')">
+                        <i class="fas fa-shopping-cart"></i> Buy Tickets Now
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        return card;
+    }
+
+    function getDefaultImage(category) {
+        const defaultImages = {
+            'bootcamp': 'https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp',
+            'inspiration': 'https://i.postimg.cc/sgNRzKbd/20260114_1543_Image_Generation_simple_compose_01key8g91re75trpnnjn6j42z5_1.webp',
+            'spiritual': 'https://i.postimg.cc/kXw6d695/20260114-1617-Image-Generation-simple-compose-01keyad7jyf15rcfk3tz16wdbq-1.webp'
+        };
+        return defaultImages[category] || defaultImages.bootcamp;
+    }
+
+    // ============================================
+    // PAYMENT MODAL MANAGEMENT - USING REAL DATA
+    // ============================================
+    function openPaymentModal(eventId = null, eventData = null) {
+        console.log('Opening payment modal with event:', eventId, eventData);
+        
+        const modal = document.getElementById('paymentModal');
+        const body = document.body;
+        
+        if (eventId && eventData) {
+            selectedEvent = { 
+                id: eventId,
+                ...eventData 
+            };
+            
+            // Use actual tickets from Firebase
+            if (eventData.tickets && Object.keys(eventData.tickets).length > 0) {
+                console.log('Using actual tickets from database:', eventData.tickets);
+                loadTicketOptions(eventData.tickets);
+            } else {
+                console.warn('No tickets found in event data');
+                alert('No tickets available for this event. Please check back later.');
+                return;
+            }
+        } else {
+            // Demo mode - only for testing
+            selectedEvent = {
+                id: 'demo',
+                title: 'Demo Event',
+                tickets: getDemoTickets()
+            };
+            loadTicketOptions(selectedEvent.tickets);
+        }
+        
+        resetPaymentModal();
+        modal.classList.add('active');
+        body.classList.add('payment-modal-open');
+        body.style.overflow = 'hidden';
+    }
+
+    function closePaymentModal() {
+        const modal = document.getElementById('paymentModal');
+        const body = document.body;
+        
+        modal.classList.remove('active');
+        body.classList.remove('payment-modal-open');
+        body.style.overflow = '';
+        
+        // Reset after animation completes
+        setTimeout(() => {
+            selectedEvent = null;
+            selectedTicket = null;
+            resetPaymentModal();
+        }, 300);
+    }
+
+    function resetPaymentModal() {
+        document.getElementById('ticketSummary').style.display = 'none';
+        document.getElementById('mpesaPaymentSection').style.display = 'none';
+        document.getElementById('whatsappConfirmationSection').style.display = 'none';
+        document.getElementById('paymentProcessing').style.display = 'none';
+        document.getElementById('paymentSuccess').style.display = 'none';
+        document.getElementById('ticketOptions').style.display = 'block';
+        selectedTicket = null;
+    }
+
+    function loadTicketOptions(tickets) {
+        const container = document.getElementById('ticketOptions');
+        
+        if (!tickets || Object.keys(tickets).length === 0) {
+            container.innerHTML = `
+                <div style="text-align: center; padding: var(--space-xl);">
+                    <i class="fas fa-ticket-alt" style="font-size: 3rem; color: var(--text-tertiary); margin-bottom: var(--space-md);"></i>
+                    <h4>No Tickets Available</h4>
+                    <p>Ticket sales for this event have not started yet or are sold out.</p>
+                    <p style="margin-top: var(--space-md); font-size: 0.9rem; color: var(--text-tertiary);">
+                        Contact us for more information.
+                    </p>
+                </div>
+            `;
+            return;
+        }
+
+        // Convert tickets object to array
+        const ticketsArray = Object.entries(tickets).map(([id, ticket]) => ({ 
+            id, 
+            ...ticket,
+            // Ensure price is a number
+            price: parseFloat(ticket.price) || 0
+        }));
+        
+        // Sort tickets by price
+        ticketsArray.sort((a, b) => (a.price || 0) - (b.price || 0));
+        
+        const ticketsHTML = ticketsArray.map(ticket => {
+            const isSoldOut = (ticket.quantityAvailable && ticket.quantitySold && 
+                              ticket.quantitySold >= ticket.quantityAvailable);
+            const availabilityClass = isSoldOut ? 'sold-out' : 
+                                     (ticket.quantityAvailable && ticket.quantityAvailable < 20) ? 'limited' : 'available';
+            const availabilityText = isSoldOut ? 'Sold Out' : 
+                                   (ticket.quantityAvailable && ticket.quantityAvailable < 20) ? 
+                                   `Only ${ticket.quantityAvailable - (ticket.quantitySold || 0)} left` : 'Available';
+            
+            // Create a safe JSON string for the ticket data
+            const safeTicketData = JSON.stringify(ticket).replace(/"/g, '&quot;');
+            
+            return `
+                <div class="ticket-option ${isSoldOut ? 'sold-out-option' : ''}" 
+                     data-ticket-id="${ticket.id}"
+                     data-ticket-data='${safeTicketData}'>
+                    <div class="ticket-option-header">
+                        <div>
+                            <div class="ticket-name">${ticket.name || 'Standard Ticket'}</div>
+                            <div class="ticket-description">${ticket.description || 'Full access to event'}</div>
+                        </div>
+                        <div class="ticket-price">
+                            <span class="ticket-currency">${ticket.currency || 'KES'}</span>
+                            ${ticket.price || '0'}
+                        </div>
+                    </div>
+                    <div class="ticket-details">
+                        ${ticket.includes ? `
+                            <div class="ticket-detail">
+                                <i class="fas fa-check-circle"></i>
+                                <span>${ticket.includes}</span>
+                            </div>
+                        ` : ''}
+                        <div class="ticket-detail">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>${ticket.type || 'Standard'}</span>
+                        </div>
+                    </div>
+                    <div class="ticket-availability ${availabilityClass}">
+                        <i class="fas ${isSoldOut ? 'fa-times-circle' : 'fa-check-circle'}"></i>
+                        ${availabilityText}
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        container.innerHTML = ticketsHTML;
+        
+        // Add click handlers to ticket options
+        setTimeout(() => {
+            const ticketOptions = container.querySelectorAll('.ticket-option:not(.sold-out-option)');
+            ticketOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const ticketId = this.getAttribute('data-ticket-id');
+                    const ticketDataStr = this.getAttribute('data-ticket-data');
+                    try {
+                        const ticketData = JSON.parse(ticketDataStr.replace(/&quot;/g, '"'));
+                        selectTicket(ticketId, ticketData);
+                    } catch (error) {
+                        console.error('Error parsing ticket data:', error);
+                    }
+                });
+            });
+        }, 100);
+    }
+
+    function selectTicket(ticketId, ticketData) {
+        console.log('Selecting ticket:', ticketId, ticketData);
+        selectedTicket = { id: ticketId, ...ticketData };
+        
+        // Update UI to show selected ticket
+        document.querySelectorAll('.ticket-option').forEach(option => {
+            option.classList.remove('selected');
+        });
+        
+        // Find and select the clicked ticket
+        const selectedOption = document.querySelector(`.ticket-option[data-ticket-id="${ticketId}"]`);
+        if (selectedOption) {
+            selectedOption.classList.add('selected');
+        }
+        
+        // Update summary
+        updateTicketSummary();
+        
+        // Show summary and enable payment button
+        document.getElementById('ticketSummary').style.display = 'block';
+    }
+
+    function updateTicketSummary() {
+        if (!selectedEvent || !selectedTicket) return;
+        
+        const ticketName = selectedTicket.name || 'Standard Ticket';
+        const eventName = selectedEvent.title || 'DSOG Event';
+        const ticketPrice = selectedTicket.price || 0;
+        const currency = selectedTicket.currency || 'KES';
+        
+        document.getElementById('summaryTicketName').textContent = ticketName;
+        document.getElementById('summaryEventName').textContent = eventName;
+        document.getElementById('summaryTicketPrice').textContent = `${currency} ${ticketPrice}`;
+        document.getElementById('summaryTotal').textContent = `${currency} ${ticketPrice}`;
+    }
+
+    // ============================================
+    // M-PESA PAYMENT FUNCTIONS
+    // ============================================
+    
+    function proceedToMpesaPayment() {
+        console.log('Proceeding to M-Pesa payment...');
+        
+        if (!selectedEvent || !selectedTicket) {
+            alert('Please select a ticket first');
+            return;
+        }
+        
+        const amount = selectedTicket.price || 0;
+        const currency = selectedTicket.currency || 'KES';
+        const eventTitle = selectedEvent.title || 'DSOG Event';
+        const ticketName = selectedTicket.name || 'Event Ticket';
+        
+        // Store payment details in localStorage
+        const paymentDetails = {
+            event: eventTitle,
+            ticket: ticketName,
+            amount: amount,
+            currency: currency,
+            date: new Date().toISOString(),
+            timestamp: Date.now()
+        };
+        
+        localStorage.setItem('dsog_mpesa_payment', JSON.stringify(paymentDetails));
+        
+        // Show M-Pesa payment section
+        document.getElementById('ticketOptions').style.display = 'none';
+        document.getElementById('ticketSummary').style.display = 'none';
+        document.getElementById('mpesaPaymentSection').style.display = 'block';
+        document.getElementById('whatsappConfirmationSection').style.display = 'block';
+        
+        // Update exact amount display
+        document.getElementById('exactAmountDisplay').textContent = `Amount: ${currency} ${amount}`;
+        
+        // Setup transaction code input listener
+        setupTransactionCodeInput();
+        
+        // Scroll to WhatsApp confirmation section
+        setTimeout(() => {
+            document.querySelector('#whatsappConfirmationSection').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'center'
+            });
+        }, 500);
+    }
+
+    // ============================================
+    // WHATSAPP CONFIRMATION SYSTEM
+    // ============================================
+    function setupTransactionCodeInput() {
+        const input = document.getElementById('transactionCodeInput');
+        const preview = document.getElementById('whatsappMessagePreview');
+        const button = document.getElementById('whatsappButton');
+        
+        if (!input) return;
+        
+        // Clear any existing value
+        input.value = '';
+        
+        // Focus on input
+        setTimeout(() => {
+            input.focus();
+        }, 300);
+        
+        // Listen for paste events
+        input.addEventListener('paste', function(e) {
+            // Allow the paste to happen first
+            setTimeout(() => {
+                processTransactionCode(this.value);
+            }, 10);
+        });
+        
+        // Listen for input changes (for manual typing)
+        input.addEventListener('input', function() {
+            if (this.value.length >= 8) { // M-Pesa codes are usually 10+ characters
+                processTransactionCode(this.value);
+            } else {
+                preview.style.display = 'none';
+                button.style.display = 'none';
+            }
+        });
+        
+        // Listen for Enter key
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && this.value.length >= 8) {
+                processTransactionCode(this.value);
+            }
+        });
+    }
+
+    function processTransactionCode(transactionCode) {
+        if (!transactionCode || transactionCode.trim().length < 8) {
+            return;
+        }
+        
+        const code = transactionCode.trim().toUpperCase();
+        const paymentDetails = JSON.parse(localStorage.getItem('dsog_mpesa_payment') || '{}');
+        
+        // Generate WhatsApp message
+        const whatsappMessage = generateWhatsAppMessage(code, paymentDetails);
+        
+        // Update preview
+        const preview = document.getElementById('whatsappMessagePreview');
+        const button = document.getElementById('whatsappButton');
+        
+        preview.innerHTML = whatsappMessage;
+        preview.style.display = 'block';
+        
+        // Create WhatsApp URL
+        const phoneNumber = "+254741488881"; // Your WhatsApp number
+        const encodedMessage = encodeURIComponent(whatsappMessage);
+        const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+        
+        button.href = whatsappUrl;
+        button.style.display = 'flex';
+        
+        // Auto-scroll to button
+        setTimeout(() => {
+            button.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 300);
+    }
+
+    function generateWhatsAppMessage(transactionCode, paymentDetails) {
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('en-GB');
+        const timeStr = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+        
+        return `🚀 DSOG EVENT REGISTRATION CONFIRMATION
+
+📅 Event: ${paymentDetails.event || 'DSOG Event'}
+🎫 Ticket: ${paymentDetails.ticket || 'Standard Ticket'}
+💰 Amount Paid: ${paymentDetails.currency || 'KES'} ${paymentDetails.amount || '0'}
+
+📱 M-Pesa Transaction Details:
+   • Transaction Code: ${transactionCode}
+   • Till Number: 9442155
+   • Payment Date: ${dateStr}
+   • Payment Time: ${timeStr}
+
+👤 My Details:
+   • Full Name: [Please provide your full name]
+   • Phone Number: [Please provide your phone number]
+   • Email: [Please provide your email address]
+
+📋 Additional Information:
+   • Dietary Requirements (if any): 
+   • Special Accommodations (if any):
+
+✅ I confirm that:
+   1. I have made the full payment as indicated above
+   2. The transaction code is correct
+   3. I will attend the event on the specified date
+   4. I have read and agree to the event terms
+
+Please confirm my registration and send me the event details.
+
+Thank you!`;
+    }
+
+    function getDemoTickets() {
+        return {
+            standard: {
+                id: 'standard',
+                name: "Standard Ticket",
+                price: 5000,
+                currency: "KES",
+                description: "Full access to event sessions and materials",
+                includes: "All sessions + Materials",
+                type: "Standard",
+                quantityAvailable: 50,
+                quantitySold: 25
+            },
+            vip: {
+                id: 'vip',
+                name: "VIP Ticket",
+                price: 15000,
+                currency: "KES",
+                description: "VIP access with front row seating and networking dinner",
+                includes: "VIP + Dinner + Networking",
+                type: "VIP",
+                quantityAvailable: 20,
+                quantitySold: 15
+            },
+            earlybird: {
+                id: 'earlybird',
+                name: "Early Bird Ticket",
+                price: 3500,
+                currency: "KES",
+                description: "Limited time discounted ticket",
+                includes: "All sessions + Materials",
+                type: "Early Bird",
+                quantityAvailable: 30,
+                quantitySold: 10
+            }
+        };
+    }
+
+    function handleBuyTicketClick(e, eventId, eventDataStr) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        console.log('Buy ticket clicked for event:', eventId);
+        
+        try {
+            // Parse the event data from the string
+            const eventData = JSON.parse(eventDataStr.replace(/&quot;/g, '"'));
+            console.log('Parsed event data:', eventData);
+            
+            openPaymentModal(eventId, eventData);
+        } catch (error) {
+            console.error('Error parsing event data:', error);
+            // Fallback to demo data if parsing fails
+            openPaymentModal();
+        }
+    }
+
+    function setupPaymentModalEvents() {
+        console.log('Setting up payment modal events...');
+        
         const modal = document.getElementById('paymentModal');
         const closeBtn = document.getElementById('paymentModalClose');
+        const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+        
+        if (!modal || !closeBtn) {
+            console.error('Payment modal elements not found');
+            return;
+        }
         
         // Close modal when clicking overlay
         modal.addEventListener('click', (e) => {
@@ -1593,6 +3250,11 @@
         // Close modal with button
         closeBtn.addEventListener('click', closePaymentModal);
         
+        // Close success message
+        if (closeSuccessBtn) {
+            closeSuccessBtn.addEventListener('click', closePaymentModal);
+        }
+        
         // Close with Escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && modal.classList.contains('active')) {
@@ -1600,27 +3262,335 @@
             }
         });
         
-        // Enter key in transaction code field
-        const transactionInput = document.getElementById('transactionCode');
-        if (transactionInput) {
-            transactionInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    sendWhatsAppConfirmation();
+        console.log('Payment modal events setup complete');
+    }
+
+    // ============================================
+    // CORE FUNCTIONS
+    // ============================================
+    function initializeTheme() {
+        const themeToggle = document.getElementById('themeToggle');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+        
+        const savedTheme = localStorage.getItem('theme');
+        const systemTheme = prefersDark.matches ? 'dark' : 'light';
+        const initialTheme = savedTheme || systemTheme;
+        
+        document.documentElement.setAttribute('data-theme', initialTheme);
+        updateThemeIcon(initialTheme);
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+            
+            setTimeout(() => {
+                document.body.style.transition = '';
+            }, 300);
+        });
+        
+        prefersDark.addEventListener('change', (e) => {
+            if (!localStorage.getItem('theme')) {
+                const newTheme = e.matches ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                updateThemeIcon(newTheme);
+            }
+        });
+        
+        function updateThemeIcon(theme) {
+            const icon = themeToggle.querySelector('i');
+            if (theme === 'dark') {
+                icon.className = 'fas fa-sun';
+                themeToggle.setAttribute('aria-label', 'Switch to light theme');
+            } else {
+                icon.className = 'fas fa-moon';
+                themeToggle.setAttribute('aria-label', 'Switch to dark theme');
+            }
+        }
+    }
+
+    function initializeNavigation() {
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+        
+        if (mobileMenuBtn && navLinks) {
+            mobileMenuBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                navLinks.classList.toggle('active');
+                const icon = this.querySelector('i');
+                icon.className = navLinks.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
+                this.setAttribute('aria-expanded', navLinks.classList.contains('active'));
+                
+                if (navLinks.classList.contains('active')) {
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    document.body.style.overflow = '';
+                }
+            });
+
+            document.addEventListener('click', function(event) {
+                if (!navLinks.contains(event.target) && !mobileMenuBtn.contains(event.target) && navLinks.classList.contains('active')) {
+                    navLinks.classList.remove('active');
+                    mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                    document.body.style.overflow = '';
+                }
+            });
+
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth <= 1024) {
+                        navLinks.classList.remove('active');
+                        mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
+                        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                        document.body.style.overflow = '';
+                    }
+                });
+            });
+            
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 1024) {
+                    navLinks.classList.remove('active');
+                    mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                    document.body.style.overflow = '';
                 }
             });
         }
+
+        // Header scroll effect
+        const header = document.getElementById('header');
+        if (header) {
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                
+                if (href.startsWith('#') && href !== '#') {
+                    e.preventDefault();
+                    
+                    const targetId = href.substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        const headerHeight = document.getElementById('header') ? document.getElementById('header').offsetHeight : 72;
+                        const targetPosition = targetElement.offsetTop - headerHeight - 20;
+                        
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                        
+                        history.pushState(null, '', href);
+                    }
+                }
+            });
+        });
+    }
+
+    function initializeAnimations() {
+        const animatedElements = document.querySelectorAll('.animate-on-scroll');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const delay = entry.target.dataset.delay || 0;
+                    setTimeout(() => {
+                        entry.target.classList.add('animated');
+                    }, delay);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+        
+        animatedElements.forEach((element, index) => {
+            if (!element.dataset.delay) {
+                element.dataset.delay = index * 100;
+            }
+            observer.observe(element);
+        });
+    }
+
+    function initializeScrollEffects() {
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            // Add parallax effect to hero
+            const hero = document.querySelector('.events-hero');
+            if (hero) {
+                const scrolled = window.pageYOffset;
+                const rate = scrolled * -0.5;
+                hero.style.transform = `translate3d(0, ${rate}px, 0)`;
+            }
+            
+            lastScroll = currentScroll;
+        });
     }
 
     // ============================================
     // GLOBAL FUNCTIONS
     // ============================================
+    // Make functions globally available for onclick handlers
     window.openPaymentModal = openPaymentModal;
+    window.selectTicket = selectTicket;
     window.closePaymentModal = closePaymentModal;
-    window.autoPasteTransactionCode = autoPasteTransactionCode;
-    window.copyReferenceCode = copyReferenceCode;
-    window.sendWhatsAppConfirmation = sendWhatsAppConfirmation;
+    window.handleBuyTicketClick = handleBuyTicketClick;
+    window.proceedToMpesaPayment = proceedToMpesaPayment;
 
-    console.log('DSOG Events System Ready!');
-    </script>
+    // Touch device optimizations
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function(event) {
+        const now = Date.now();
+        if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
+        }
+        lastTouchEnd = now;
+    }, false);
+
+    // Add CSS for firebase-status and data-update-indicator
+    const style = document.createElement('style');
+    style.textContent = `
+        .firebase-status {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            padding: 8px 12px;
+            border-radius: var(--radius-md);
+            font-size: 12px;
+            z-index: 9999;
+            background: #28a745;
+            color: white;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition-smooth);
+        }
+        
+        .firebase-status.offline {
+            background: #dc3545;
+        }
+        
+        .firebase-status i {
+            font-size: 10px;
+        }
+        
+        .data-update-indicator {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            padding: 12px 16px;
+            background: var(--primary-red);
+            color: white;
+            border-radius: var(--radius-lg);
+            font-size: 14px;
+            z-index: 10000;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transform: translateX(120%);
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .data-update-indicator.show {
+                transform: translateX(0);
+        }
+        
+        .data-update-indicator i {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .sold-out-option {
+            opacity: 0.6;
+            cursor: not-allowed !important;
+        }
+        
+        .sold-out-option:hover {
+            transform: none !important;
+            border-color: var(--border-color) !important;
+        }
+        
+        /* Payment Modal Styles */
+        .payment-modal {
+            max-width: 550px;
+        }
+        
+        .transaction-code-input {
+            font-size: 1.1rem;
+            padding: 16px;
+        }
+        
+        .whatsapp-button {
+            font-size: 1.1rem;
+            padding: 16px;
+        }
+        
+        .mpesa-button {
+            font-size: 1.1rem;
+            padding: 16px;
+        }
+        
+        @media (max-width: 768px) {
+            .payment-modal {
+                margin: 20px;
+            }
+        }
+        
+        /* Additional styles for better UX */
+        .ticket-option {
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .ticket-option.selected {
+            border-color: var(--primary-red) !important;
+            background: rgba(194, 24, 7, 0.05) !important;
+        }
+        
+        .buy-ticket-btn button {
+            cursor: pointer;
+        }
+        
+        /* M-Pesa animation */
+        .mpesa-till-number {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    `;
+    document.head.appendChild(style);
+    
+    // Debug helper
+    console.log('DSOG Events JavaScript loaded successfully with M-Pesa integration');
+    console.log('WhatsApp Number: +254741488881');
+    console.log('M-Pesa Till: 9442155');
+</script>
 </body>
 </html>
