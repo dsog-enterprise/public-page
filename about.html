@@ -34,6 +34,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+    
     <!-- About Page Styles -->
     <style>
         /* Import CSS Variables */
@@ -46,6 +50,7 @@
             --secondary-dark: #2D2D2D;
             --accent-blue: #2C5282;
             --accent-green: #2D7D46;
+            --accent-purple: #6B46C1;
             
             /* Neutral Colors */
             --white: #FFFFFF;
@@ -521,13 +526,13 @@
             font-size: 1.5rem;
         }
 
-        /* ===== IMPACT SECTION ===== */
-        .impact-section {
+        /* ===== STATISTICS SECTION ===== */
+        .stats-section {
             background: var(--bg-secondary);
             padding: var(--space-4xl) 0;
         }
 
-        .impact-stats {
+        .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: var(--space-xl);
@@ -557,6 +562,145 @@
             background-clip: text;
             color: transparent;
             line-height: 1;
+        }
+
+        /* ===== TEAM SECTION ===== */
+        .team-section {
+            background: var(--bg-primary);
+            padding: var(--space-4xl) 0;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-xl);
+            margin-top: var(--space-2xl);
+        }
+
+        .team-card {
+            background: var(--gradient-card);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            transition: var(--transition-smooth);
+        }
+
+        .team-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .team-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: var(--space-xl) auto var(--space-lg);
+            border: 4px solid var(--primary-red);
+        }
+
+        .team-content {
+            padding: var(--space-lg);
+        }
+
+        .team-social {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-md);
+            margin-top: var(--space-md);
+        }
+
+        .team-social a {
+            color: var(--text-secondary);
+            transition: var(--transition-smooth);
+        }
+
+        .team-social a:hover {
+            color: var(--primary-red);
+            transform: translateY(-2px);
+        }
+
+        /* ===== FAQ SECTION ===== */
+        .faq-section {
+            background: var(--bg-secondary);
+            padding: var(--space-4xl) 0;
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--gradient-card);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--space-md);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            transition: var(--transition-smooth);
+        }
+
+        .faq-item:hover {
+            border-color: var(--primary-red);
+            box-shadow: var(--shadow-md);
+        }
+
+        .faq-question {
+            padding: var(--space-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .faq-question i {
+            transition: transform 0.3s ease;
+            color: var(--primary-red);
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 var(--space-lg);
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border-top: 1px solid transparent;
+        }
+
+        .faq-item.active .faq-answer {
+            padding: var(--space-lg);
+            max-height: 500px;
+            border-top-color: var(--border-color);
+        }
+
+        .faq-category-badge {
+            display: inline-block;
+            padding: var(--space-2xs) var(--space-md);
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: var(--space-sm);
+            letter-spacing: 0.05em;
+        }
+
+        .faq-category-badge.bootcamp {
+            background: rgba(194, 24, 7, 0.1);
+            color: var(--primary-red);
+        }
+
+        .faq-category-badge.training {
+            background: rgba(45, 125, 70, 0.1);
+            color: var(--accent-green);
+        }
+
+        .faq-category-badge.registration {
+            background: rgba(44, 82, 130, 0.1);
+            color: var(--accent-blue);
         }
 
         /* ===== APPROACH SECTION ===== */
@@ -615,63 +759,6 @@
             margin-bottom: var(--space-lg);
             font-size: 1.5rem;
             color: var(--white);
-        }
-
-        /* ===== TEAM SECTION ===== */
-        .team-section {
-            background: var(--bg-secondary);
-            padding: var(--space-4xl) 0;
-        }
-
-        .team-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: var(--space-xl);
-            margin-top: var(--space-2xl);
-        }
-
-        .team-card {
-            background: var(--gradient-card);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            text-align: center;
-            border: 1px solid var(--border-color);
-            transition: var(--transition-smooth);
-        }
-
-        .team-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-xl);
-        }
-
-        .team-avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin: var(--space-xl) auto var(--space-lg);
-            border: 4px solid var(--primary-red);
-        }
-
-        .team-content {
-            padding: var(--space-lg);
-        }
-
-        .team-social {
-            display: flex;
-            justify-content: center;
-            gap: var(--space-md);
-            margin-top: var(--space-md);
-        }
-
-        .team-social a {
-            color: var(--text-secondary);
-            transition: var(--transition-smooth);
-        }
-
-        .team-social a:hover {
-            color: var(--primary-red);
-            transform: translateY(-2px);
         }
 
         /* ===== PARTNERS SECTION ===== */
@@ -928,6 +1015,32 @@
             font-weight: 600;
         }
 
+        /* ===== LOADING STATES ===== */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-2xl);
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--primary-red);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: var(--space-md);
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
         /* ===== RESPONSIVE DESIGN ===== */
         @media (max-width: 1024px) {
             .nav-links {
@@ -998,7 +1111,7 @@
                 padding-left: var(--space-md);
             }
 
-            .impact-stats,
+            .stats-grid,
             .mission-grid,
             .values-grid,
             .approach-grid,
@@ -1260,47 +1373,56 @@
         </div>
     </section>
 
-    <!-- Impact Section -->
-    <section class="impact-section">
+    <!-- Statistics Section (Loaded from Firebase) -->
+    <section class="stats-section">
         <div class="container">
             <div class="section-header">
                 <span class="section-subtitle">Our Impact</span>
-                <h2>Transforming <span class="text-gradient">Entrepreneurial Dreams</span></h2>
-                <p class="lead">The numbers tell a story of transformation, growth, and success across our entrepreneurial community.</p>
+                <h2>By The <span class="text-gradient">Numbers</span></h2>
+                <p class="lead">The measurable impact we've created in empowering entrepreneurs and transforming businesses.</p>
             </div>
             
-            <div class="impact-stats">
-                <div class="stat-item">
-                    <div class="stat-number">500+</div>
-                    <div>Entrepreneurs Trained</div>
-                    <div class="text-small" style="margin-top: var(--space-xs);">Comprehensive business skills development</div>
-                </div>
-                
-                <div class="stat-item">
-                    <div class="stat-number">50+</div>
-                    <div>Events Hosted</div>
-                    <div class="text-small" style="margin-top: var(--space-xs);">Transformative workshops & networking</div>
-                </div>
-                
-                <div class="stat-item">
-                    <div class="stat-number">30+</div>
-                    <div>Startups Supported</div>
-                    <div class="text-small" style="margin-top: var(--space-xs);">From idea to successful enterprise</div>
-                </div>
-                
-                <div class="stat-item">
-                    <div class="stat-number">15+</div>
-                    <div>Franchise Partners</div>
-                    <div class="text-small" style="margin-top: var(--space-xs);">Established business opportunities</div>
+            <div class="stats-grid" id="statsGrid">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading statistics...</p>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- Team Section (Loaded from Firebase) -->
+    <section class="team-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Our Leadership</span>
+                <h2>Meet Our <span class="text-gradient">Team</span></h2>
+                <p class="lead">Passionate professionals dedicated to empowering entrepreneurs and driving business success.</p>
+            </div>
             
-            <div style="text-align: center; margin-top: var(--space-2xl);">
-                <h3>Success Stories</h3>
-                <p>From small startups to growing enterprises, our entrepreneurs have created businesses that are making a real difference in their communities and industries.</p>
-                <a href="success-stories.html" class="btn btn-primary" style="margin-top: var(--space-lg);">
-                    Read Success Stories <i class="fas fa-arrow-right"></i>
-                </a>
+            <div class="team-grid" id="teamGrid">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading team members...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section (Loaded from Firebase) -->
+    <section class="faq-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Got Questions?</span>
+                <h2>Frequently Asked <span class="text-gradient">Questions</span></h2>
+                <p class="lead">Find answers to common questions about DSOG, our programs, and how we can help your business succeed.</p>
+            </div>
+            
+            <div class="faq-container" id="faqContainer">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading FAQs...</p>
+                </div>
             </div>
         </div>
     </section>
@@ -1384,83 +1506,6 @@
         </div>
     </section>
 
-    <!-- Team Section -->
-    <section class="team-section">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-subtitle">Our Leadership</span>
-                <h2>Meet Our <span class="text-gradient">Team</span></h2>
-                <p class="lead">Passionate professionals dedicated to empowering entrepreneurs and driving business success.</p>
-            </div>
-            
-            <div class="team-grid">
-                <div class="team-card">
-                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-                         alt="Founder & CEO" 
-                         class="team-avatar">
-                    <div class="team-content">
-                        <h4>Alex Johnson</h4>
-                        <p style="color: var(--primary-red); font-weight: 600;">Founder & CEO</p>
-                        <p>Visionary leader with 15+ years of entrepreneurship experience and passion for business development.</p>
-                        <div class="team-social">
-                            <a href="#"><i class="fab fa-linkedin"></i></a>
-                            <a href="#"><i class="fab fa-twitter"></i></a>
-                            <a href="#"><i class="fab fa-instagram"></i></a>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="team-card">
-                    <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-                         alt="Head of Training" 
-                         class="team-avatar">
-                    <div class="team-content">
-                        <h4>Sarah Williams</h4>
-                        <p style="color: var(--primary-red); font-weight: 600;">Head of Training</p>
-                        <p>Expert in business education with a track record of developing successful entrepreneurial training programs.</p>
-                        <div class="team-social">
-                            <a href="#"><i class="fab fa-linkedin"></i></a>
-                            <a href="#"><i class="fab fa-twitter"></i></a>
-                            <a href="#"><i class="fab fa-instagram"></i></a>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="team-card">
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-                         alt="Events Director" 
-                         class="team-avatar">
-                    <div class="team-content">
-                        <h4>Michael Chen</h4>
-                        <p style="color: var(--primary-red); font-weight: 600;">Events Director</p>
-                        <p>Creative force behind our transformative events that engage and inspire entrepreneurs across industries.</p>
-                        <div class="team-social">
-                            <a href="#"><i class="fab fa-linkedin"></i></a>
-                            <a href="#"><i class="fab fa-twitter"></i></a>
-                            <a href="#"><i class="fab fa-instagram"></i></a>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="team-card">
-                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-                         alt="Startup Incubation Lead" 
-                         class="team-avatar">
-                    <div class="team-content">
-                        <h4>Emma Rodriguez</h4>
-                        <p style="color: var(--primary-red); font-weight: 600;">Startup Incubation Lead</p>
-                        <p>Seasoned startup advisor who has helped launch 50+ successful businesses across various industries.</p>
-                        <div class="team-social">
-                            <a href="#"><i class="fab fa-linkedin"></i></a>
-                            <a href="#"><i class="fab fa-twitter"></i></a>
-                            <a href="#"><i class="fab fa-instagram"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Partners Section -->
     <section class="partners-section">
         <div class="container">
@@ -1500,7 +1545,7 @@
             </div>
             
             <div class="hero-buttons">
-                <a href="events.html" class="btn btn-primary btn-large">
+                <a href="bootcamp.html" class="btn btn-primary btn-large">
                     <i class="fas fa-calendar-alt"></i> Join Our Next Event
                 </a>
                 <a href="contact.html" class="btn btn-secondary btn-large">
@@ -1530,7 +1575,7 @@
                         <li><a href="index.html">Home</a></li>
                         <li><a href="about.html">About DSOG</a></li>
                         <li><a href="enterprise.html">Enterprise Solutions</a></li>
-                        <li><a href="events.html">Events</a></li>
+                        <li><a href="bootcamp.html">Events & Bootcamp</a></li>
                         <li><a href="training.html">Training Programs</a></li>
                         <li><a href="contact.html">Contact Us</a></li>
                     </ul>
@@ -1568,19 +1613,412 @@
 
     <!-- JavaScript -->
     <script>
+        // Firebase Configuration (same as homepage)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDb5ZFHbo7lGM8ph0oBxFVTHRF5C5C_DWU",
+            authDomain: "dsog-events.firebaseapp.com",
+            databaseURL: "https://dsog-events-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "dsog-events",
+            storageBucket: "dsog-events.firebasestorage.app",
+            messagingSenderId: "1075977932287",
+            appId: "1:1075977932287:web:b2bf4d1c0083d2dac8ebca"
+        };
+
+        // Initialize Firebase
+        let db;
+        let firebaseListeners = [];
+        let isFirebaseInitialized = false;
+
+        try {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.database();
+            isFirebaseInitialized = true;
+            console.log('Firebase initialized successfully for About page');
+        } catch (error) {
+            console.error('Firebase initialization error:', error);
+            isFirebaseInitialized = false;
+        }
+
+        // Cache management
+        const CACHE_KEY = 'dsog_about_cache';
+        const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 DSOG About Us Page Loaded');
             
-            // Theme Toggle
+            // Initialize all components
+            initializeTheme();
+            initializeNavigation();
+            initializeAnimations();
+            
+            // Set current year
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            // Load from cache first for instant display
+            const cachedData = getCachedData();
+            if (cachedData && !isCacheExpired(cachedData.timestamp)) {
+                console.log('Loading from cache for instant display');
+                displayCachedData(cachedData);
+            }
+            
+            // Initialize Firebase connection
+            if (isFirebaseInitialized) {
+                initializeFirebaseConnection();
+                setupRealtimeListeners();
+            } else {
+                console.warn('Firebase not available, using cached data only');
+            }
+        });
+
+        // ==================== FIREBASE FUNCTIONS ====================
+        function initializeFirebaseConnection() {
+            if (!isFirebaseInitialized) return;
+            
+            console.log('Firebase connected for About page');
+        }
+
+        function setupRealtimeListeners() {
+            if (!isFirebaseInitialized) return;
+            
+            console.log('Setting up real-time listeners for About page...');
+            
+            // 1. Statistics Listener
+            const statsRef = db.ref('stats');
+            const statsListener = statsRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                displayStatistics(data);
+                saveToCachePartial('stats', data);
+            });
+            firebaseListeners.push({ ref: statsRef, listener: statsListener });
+            
+            // 2. Team Members Listener
+            const teamRef = db.ref('teamMembers');
+            const teamListener = teamRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                displayTeamMembers(data);
+                saveToCachePartial('teamMembers', data);
+            });
+            firebaseListeners.push({ ref: teamRef, listener: teamListener });
+            
+            // 3. FAQs Listener
+            const faqsRef = db.ref('faqs');
+            const faqsListener = faqsRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                displayFAQs(data);
+                saveToCachePartial('faqs', data);
+            });
+            firebaseListeners.push({ ref: faqsRef, listener: faqsListener });
+            
+            console.log(`Setup ${firebaseListeners.length} real-time listeners for About page`);
+        }
+
+        // ==================== CACHE MANAGEMENT ====================
+        function getCachedData() {
+            try {
+                const cached = localStorage.getItem(CACHE_KEY);
+                return cached ? JSON.parse(cached) : null;
+            } catch (error) {
+                console.error('Error reading cache:', error);
+                return null;
+            }
+        }
+
+        function saveToCachePartial(key, data) {
+            try {
+                const cached = getCachedData() || { timestamp: Date.now(), data: {} };
+                cached.data[key] = data;
+                cached.timestamp = Date.now();
+                localStorage.setItem(CACHE_KEY, JSON.stringify(cached));
+            } catch (error) {
+                console.error('Error saving to cache:', error);
+            }
+        }
+
+        function isCacheExpired(timestamp) {
+            return Date.now() - timestamp > CACHE_DURATION;
+        }
+
+        function displayCachedData(cachedData) {
+            const data = cachedData.data;
+            
+            if (data.stats) {
+                displayStatistics(data.stats);
+            }
+            
+            if (data.teamMembers) {
+                displayTeamMembers(data.teamMembers);
+            }
+            
+            if (data.faqs) {
+                displayFAQs(data.faqs);
+            }
+        }
+
+        // ==================== DISPLAY FUNCTIONS ====================
+        function displayStatistics(stats) {
+            try {
+                const statsGrid = document.getElementById('statsGrid');
+                if (!statsGrid) return;
+                
+                statsGrid.innerHTML = '';
+                
+                // Define which stats to show and their labels
+                const statItems = [
+                    { key: 'entrepreneursTrained', label: 'Entrepreneurs Trained', value: stats?.entrepreneursTrained || 0 },
+                    { key: 'eventsHosted', label: 'Events Hosted', value: stats?.eventsHosted || 0 },
+                    { key: 'startupsSupported', label: 'Startups Supported', value: stats?.startupsSupported || 0 },
+                    { key: 'completionRate', label: 'Completion Rate', value: stats?.completionRate ? `${stats.completionRate}%` : '95%' },
+                    { key: 'businessGrowthRate', label: 'Business Growth', value: stats?.businessGrowthRate ? `${stats.businessGrowthRate}%` : '85%' },
+                    { key: 'satisfactionRate', label: 'Satisfaction Rate', value: stats?.satisfactionRate ? `${stats.satisfactionRate}%` : '90%' }
+                ];
+                
+                statItems.forEach((stat, index) => {
+                    if (stat.value && stat.value !== '0') {
+                        const statItem = document.createElement('div');
+                        statItem.className = 'stat-item';
+                        statItem.style.opacity = '0';
+                        statItem.style.transform = 'translateY(20px)';
+                        statItem.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                        statItem.style.transitionDelay = `${index * 0.1}s`;
+                        
+                        statItem.innerHTML = `
+                            <div class="stat-number">${stat.value}</div>
+                            <div>${stat.label}</div>
+                        `;
+                        
+                        statsGrid.appendChild(statItem);
+                        
+                        // Animate in
+                        setTimeout(() => {
+                            statItem.style.opacity = '1';
+                            statItem.style.transform = 'translateY(0)';
+                        }, 100);
+                    }
+                });
+            } catch (error) {
+                console.error('Error displaying statistics:', error);
+            }
+        }
+
+        function displayTeamMembers(team) {
+            try {
+                const teamGrid = document.getElementById('teamGrid');
+                if (!teamGrid) return;
+                
+                // Convert to array and filter active members
+                const teamArray = team ? Object.values(team)
+                    .filter(member => member.active !== false)
+                    .sort((a, b) => (a.order || 999) - (b.order || 999)) : [];
+                
+                if (teamArray.length > 0) {
+                    teamGrid.innerHTML = '';
+                    
+                    teamArray.forEach((member, index) => {
+                        const memberCard = createTeamMemberCard(member, index);
+                        teamGrid.appendChild(memberCard);
+                    });
+                } else {
+                    // Fallback to default team cards if no data
+                    teamGrid.innerHTML = `
+                        <div class="team-card">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" 
+                                 alt="Team Member" 
+                                 class="team-avatar">
+                            <div class="team-content">
+                                <h4>Moses Mugera</h4>
+                                <p style="color: var(--primary-red); font-weight: 600;">Founder & CEO</p>
+                                <p>Entrepreneurship expert with 15+ years experience in business development and training.</p>
+                                <div class="team-social">
+                                    <a href="https://linkedin.com/in/mosesmugera" target="_blank">
+                                        <i class="fab fa-linkedin"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="team-card">
+                            <img src="https://randomuser.me/api/portraits/men/86.jpg" 
+                                 alt="Team Member" 
+                                 class="team-avatar">
+                            <div class="team-content">
+                                <h4>Robert Johnson</h4>
+                                <p style="color: var(--primary-red); font-weight: 600;">Head of Training</p>
+                                <p>Specializes in business strategy and market expansion with 10+ years of corporate experience.</p>
+                                <div class="team-social">
+                                    <a href="https://linkedin.com/in/robertjohnson" target="_blank">
+                                        <i class="fab fa-linkedin"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error displaying team members:', error);
+            }
+        }
+
+        function displayFAQs(faqs) {
+            try {
+                const faqContainer = document.getElementById('faqContainer');
+                if (!faqContainer) return;
+                
+                // Convert to array and filter active FAQs
+                const faqsArray = faqs ? Object.values(faqs)
+                    .filter(faq => faq.active !== false)
+                    .sort((a, b) => (a.order || 999) - (b.order || 999)) : [];
+                
+                if (faqsArray.length > 0) {
+                    faqContainer.innerHTML = '';
+                    
+                    faqsArray.forEach((faq, index) => {
+                        const faqItem = createFAQItem(faq, index);
+                        faqContainer.appendChild(faqItem);
+                    });
+                    
+                    // Initialize FAQ toggle functionality
+                    initializeFAQToggles();
+                } else {
+                    // Fallback to default FAQs if no data
+                    faqContainer.innerHTML = `
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                How do I register for an event?
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>You can register by clicking the 'Register Now' button on any event, contacting us via WhatsApp at 0733 737 983, or emailing events.dsog@gmail.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                What is the duration of the bootcamp?
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>The DSOG Franchise Bootcamp is a comprehensive 3-month intensive program with flexible scheduling options.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                Are the training programs certified?
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Yes, all our training programs include a certificate of completion and achievement.</p>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Initialize FAQ toggle functionality
+                    initializeFAQToggles();
+                }
+            } catch (error) {
+                console.error('Error displaying FAQs:', error);
+            }
+        }
+
+        function createTeamMemberCard(member, index) {
+            const card = document.createElement('div');
+            card.className = 'team-card';
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            card.style.transitionDelay = `${index * 0.1}s`;
+            
+            card.innerHTML = `
+                <img src="${member.imageUrl || `https://randomuser.me/api/portraits/${member.gender === 'female' ? 'women' : 'men'}/${Math.floor(Math.random() * 100)}.jpg`}" 
+                     alt="${member.name}" 
+                     class="team-avatar"
+                     onerror="this.src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'">
+                <div class="team-content">
+                    <h4>${member.name || 'Team Member'}</h4>
+                    <p style="color: var(--primary-red); font-weight: 600;">${member.role || 'Team Member'}</p>
+                    <p>${member.bio || 'Passionate about empowering entrepreneurs and driving business success.'}</p>
+                    ${member.social?.linkedin ? `
+                        <div class="team-social">
+                            <a href="${member.social.linkedin}" target="_blank">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            
+            // Animate in
+            setTimeout(() => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100);
+            
+            return card;
+        }
+
+        function createFAQItem(faq, index) {
+            const item = document.createElement('div');
+            item.className = 'faq-item';
+            item.style.opacity = '0';
+            item.style.transform = 'translateY(20px)';
+            item.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            item.style.transitionDelay = `${index * 0.1}s`;
+            
+            // Get category class
+            let categoryClass = '';
+            if (faq.category) {
+                categoryClass = `faq-category-badge ${faq.category}`;
+            }
+            
+            item.innerHTML = `
+                <div class="faq-question">
+                    ${faq.question || 'FAQ Question'}
+                    ${faq.category ? `<span class="${categoryClass}">${faq.category.toUpperCase()}</span>` : ''}
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>${faq.answer || 'FAQ answer will be displayed here.'}</p>
+                </div>
+            `;
+            
+            // Animate in
+            setTimeout(() => {
+                item.style.opacity = '1';
+                item.style.transform = 'translateY(0)';
+            }, 100);
+            
+            return item;
+        }
+
+        function initializeFAQToggles() {
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                
+                question.addEventListener('click', () => {
+                    // Close other open items
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item && otherItem.classList.contains('active')) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+                    
+                    // Toggle current item
+                    item.classList.toggle('active');
+                });
+            });
+        }
+
+        // ==================== CORE FUNCTIONS ====================
+        function initializeTheme() {
             const themeToggle = document.getElementById('themeToggle');
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
             
-            // Get saved theme or system preference
             const savedTheme = localStorage.getItem('theme');
             const systemTheme = prefersDark.matches ? 'dark' : 'light';
             const initialTheme = savedTheme || systemTheme;
             
-            // Set initial theme
             document.documentElement.setAttribute('data-theme', initialTheme);
             updateThemeIcon(initialTheme);
             
@@ -1598,13 +2036,27 @@
                 }, 300);
             });
             
+            prefersDark.addEventListener('change', (e) => {
+                if (!localStorage.getItem('theme')) {
+                    const newTheme = e.matches ? 'dark' : 'light';
+                    document.documentElement.setAttribute('data-theme', newTheme);
+                    updateThemeIcon(newTheme);
+                }
+            });
+            
             function updateThemeIcon(theme) {
                 const icon = themeToggle.querySelector('i');
-                icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-                themeToggle.setAttribute('aria-label', `Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`);
+                if (theme === 'dark') {
+                    icon.className = 'fas fa-sun';
+                    themeToggle.setAttribute('aria-label', 'Switch to light theme');
+                } else {
+                    icon.className = 'fas fa-moon';
+                    themeToggle.setAttribute('aria-label', 'Switch to dark theme');
+                }
             }
+        }
 
-            // Mobile Menu
+        function initializeNavigation() {
             const mobileMenuBtn = document.getElementById('mobileMenuBtn');
             const navLinks = document.getElementById('navLinks');
             
@@ -1616,11 +2068,13 @@
                     icon.className = navLinks.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
                     this.setAttribute('aria-expanded', navLinks.classList.contains('active'));
                     
-                    // Prevent body scroll when menu is open
-                    document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+                    if (navLinks.classList.contains('active')) {
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        document.body.style.overflow = '';
+                    }
                 });
 
-                // Close menu when clicking outside
                 document.addEventListener('click', function(event) {
                     if (!navLinks.contains(event.target) && !mobileMenuBtn.contains(event.target) && navLinks.classList.contains('active')) {
                         navLinks.classList.remove('active');
@@ -1630,7 +2084,6 @@
                     }
                 });
 
-                // Close menu when clicking a link
                 navLinks.querySelectorAll('a').forEach(link => {
                     link.addEventListener('click', () => {
                         if (window.innerWidth <= 1024) {
@@ -1642,7 +2095,6 @@
                     });
                 });
                 
-                // Handle window resize
                 window.addEventListener('resize', () => {
                     if (window.innerWidth > 1024) {
                         navLinks.classList.remove('active');
@@ -1663,9 +2115,34 @@
                 }
             });
 
-            // Set current year in footer
-            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    
+                    if (href.startsWith('#') && href !== '#') {
+                        e.preventDefault();
+                        
+                        const targetId = href.substring(1);
+                        const targetElement = document.getElementById(targetId);
+                        
+                        if (targetElement) {
+                            const headerHeight = document.getElementById('header').offsetHeight;
+                            const targetPosition = targetElement.offsetTop - headerHeight - 20;
+                            
+                            window.scrollTo({
+                                top: targetPosition,
+                                behavior: 'smooth'
+                            });
+                            
+                            history.pushState(null, '', href);
+                        }
+                    }
+                });
+            });
+        }
 
+        function initializeAnimations() {
             // Add animation to timeline items
             const timelineItems = document.querySelectorAll('.timeline-item');
             const observer = new IntersectionObserver((entries) => {
@@ -1686,8 +2163,8 @@
                 observer.observe(item);
             });
 
-            // Add animation to mission cards
-            const missionCards = document.querySelectorAll('.mission-card, .value-item, .approach-card, .team-card');
+            // Add animation to mission cards, value items, approach cards
+            const animatedCards = document.querySelectorAll('.mission-card, .value-item, .approach-card');
             const cardObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -1700,7 +2177,7 @@
                 rootMargin: '0px 0px -50px 0px'
             });
 
-            missionCards.forEach((card, index) => {
+            animatedCards.forEach((card, index) => {
                 card.style.opacity = '0';
                 card.style.transform = 'translateY(30px)';
                 card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
@@ -1708,9 +2185,9 @@
                 cardObserver.observe(card);
             });
 
-            // Add animation to stats
-            const statItems = document.querySelectorAll('.stat-item');
-            const statObserver = new IntersectionObserver((entries) => {
+            // Add animation to partner logos
+            const partnerLogos = document.querySelectorAll('.partner-logo');
+            const logoObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.style.opacity = '1';
@@ -1721,12 +2198,23 @@
                 threshold: 0.1
             });
 
-            statItems.forEach(item => {
-                item.style.opacity = '0';
-                item.style.transform = 'scale(0.8)';
-                item.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                statObserver.observe(item);
+            partnerLogos.forEach(logo => {
+                logo.style.opacity = '0';
+                logo.style.transform = 'scale(0.8)';
+                logo.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                logoObserver.observe(logo);
             });
+        }
+
+        // ==================== CLEANUP ====================
+        window.addEventListener('beforeunload', () => {
+            // Remove Firebase listeners
+            firebaseListeners.forEach(({ ref, listener }) => {
+                if (ref && listener) {
+                    ref.off('value', listener);
+                }
+            });
+            firebaseListeners = [];
         });
     </script>
 </body>
