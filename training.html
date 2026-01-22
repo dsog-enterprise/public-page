@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=0.95, maximum-scale=5.0, user-scalable=yes">
     
     <!-- SEO Meta Tags -->
-    <meta name="description" content="DSOG Training Programs - Structured business training with clear schedules, objectives, and measurable outcomes for entrepreneurs and professionals.">
-    <meta name="keywords" content="DSOG training, business training programs, entrepreneur education, professional development, training schedules, skill development">
+    <meta name="description" content="DSOG Training - Comprehensive training programs with clear objectives, structured schedules, and measurable outcomes designed for sustainable business growth.">
+    <meta name="keywords" content="DSOG training, business training programs, professional development, market expansion, client engagement, business fundamentals, online training">
     
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#C21807">
@@ -18,13 +18,13 @@
     <meta name="msapplication-TileColor" content="#C21807">
     
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="DSOG Training Programs | Structured Business Education">
-    <meta property="og:description" content="Comprehensive training programs with clear schedules, objectives, and measurable outcomes for business professionals and entrepreneurs.">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80">
+    <meta property="og:title" content="DSOG Training | Master Your Business Skills">
+    <meta property="og:description" content="Comprehensive training programs with clear objectives, structured schedules, and measurable outcomes designed for sustainable business growth.">
+    <meta property="og:image" content="https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp">
     <meta property="og:url" content="https://dsog.org/training">
     <meta property="og:type" content="website">
     
-    <title>DSOG Training Programs | Structured Business Education</title>
+    <title>DSOG Training | Master Your Business Skills with Structured Education</title>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -32,7 +32,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
@@ -50,6 +50,9 @@
             --secondary-dark: #2D2D2D;
             --accent-blue: #2C5282;
             --accent-green: #2D7D46;
+            --accent-purple: #6B46C1;
+            --mpesa-green: #00A900;
+            --mpesa-dark-green: #007E00;
             
             /* Neutral Colors */
             --white: #FFFFFF;
@@ -84,6 +87,8 @@
             --gradient-dark: linear-gradient(135deg, #1A1A1A 0%, #2D2D2D 100%);
             --gradient-light: linear-gradient(135deg, var(--white) 0%, #F8F9FA 100%);
             --gradient-card: linear-gradient(145deg, var(--white) 0%, #F8F9FA 100%);
+            --gradient-training: linear-gradient(135deg, #2C5282 0%, #4299E1 100%);
+            --gradient-success: linear-gradient(135deg, #2D7D46 0%, #48BB78 100%);
             
             /* Animation Properties */
             --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -99,7 +104,7 @@
             --radius-2xl: 22px;
             --radius-full: 9999px;
             
-            /* Spacing System - Consistent Units */
+            /* Spacing System */
             --space-3xs: 0.125rem;
             --space-2xs: 0.25rem;
             --space-xs: 0.5rem;
@@ -115,8 +120,9 @@
             /* Professional Typography */
             --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
             --font-heading: 'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-spiritual: 'Playfair Display', serif;
             
-            /* Layout Variables - Fixed Values */
+            /* Layout Variables */
             --header-height: 72px;
             --container-width: 1320px;
             --nav-item-spacing: 2.5rem;
@@ -155,6 +161,8 @@
             --white: #1E1E1E;
             --light-gray: #2D2D2D;
             --medium-gray: #404040;
+            --mpesa-green: #00CC00;
+            --mpesa-dark-green: #009900;
         }
 
         /* ===== CSS RESET & BASE STYLES ===== */
@@ -209,7 +217,13 @@
             background: var(--primary-red);
         }
 
-        /* ===== PERFECTLY ALIGNED HEADER ===== */
+        /* Selection Color */
+        ::selection {
+            background: rgba(194, 24, 7, 0.2);
+            color: var(--text-primary);
+        }
+
+        /* ===== HEADER ===== */
         .header {
             position: fixed;
             top: 0;
@@ -233,6 +247,7 @@
             box-shadow: var(--shadow-lg);
         }
 
+        /* Navbar Container */
         .navbar {
             display: flex;
             align-items: center;
@@ -245,6 +260,7 @@
             gap: var(--space-xl);
         }
 
+        /* Logo */
         .logo {
             display: flex;
             align-items: center;
@@ -282,6 +298,7 @@
             font-weight: 700;
         }
 
+        /* Main Navigation */
         .nav-links {
             display: flex;
             align-items: center;
@@ -304,7 +321,6 @@
             align-items: center;
             transition: var(--transition-fast);
             letter-spacing: 0.01em;
-            text-transform: none;
             white-space: nowrap;
         }
 
@@ -337,6 +353,7 @@
             width: 100%;
         }
 
+        /* Contact Button */
         .nav-links .btn-primary {
             font-size: 0.875rem;
             padding: var(--space-sm) var(--space-lg);
@@ -345,6 +362,7 @@
             flex-shrink: 0;
         }
 
+        /* Mobile Menu Button */
         .mobile-menu-btn {
             display: none;
             align-items: center;
@@ -367,7 +385,7 @@
             background: var(--bg-tertiary);
         }
 
-        /* ===== TYPOGRAPHY SYSTEM ===== */
+        /* ===== TYPOGRAPHY ===== */
         h1, h2, h3, h4, h5, h6 {
             font-family: var(--font-heading);
             font-weight: 700;
@@ -393,13 +411,24 @@
             font-weight: 600;
         }
 
-        h4 {
-            font-size: clamp(1.25rem, 2.5vw, 1.75rem);
-            font-weight: 600;
-        }
-
         .text-gradient {
             background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        .text-gradient-training {
+            background: var(--gradient-training);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        .text-gradient-success {
+            background: var(--gradient-success);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -423,33 +452,12 @@
             font-weight: 400;
         }
 
-        .text-small {
-            font-size: 0.875rem;
-            color: var(--text-tertiary);
-            letter-spacing: 0.01em;
-        }
-
-        .text-center { text-align: center; }
-        .text-left { text-align: left; }
-        .text-right { text-align: right; }
-
-        .text-primary { color: var(--primary-red); }
-        .text-gold { color: var(--primary-gold); }
-        .text-accent { color: var(--accent-blue); }
-
         /* ===== LAYOUT & CONTAINERS ===== */
         .container {
             width: 100%;
             max-width: var(--container-width);
             margin: 0 auto;
             padding: 0 var(--space-xl);
-        }
-
-        .container-wide {
-            width: 100%;
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 0 var(--space-2xl);
         }
 
         section {
@@ -493,7 +501,7 @@
             font-weight: 600;
         }
 
-        /* ===== BUTTON SYSTEM ===== */
+        /* ===== BUTTONS ===== */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -511,15 +519,6 @@
             overflow: hidden;
             white-space: nowrap;
             letter-spacing: 0.02em;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: inherit;
-            z-index: -1;
-            opacity: 0.9;
         }
 
         .btn-primary {
@@ -546,6 +545,28 @@
             box-shadow: 0 8px 25px rgba(194, 24, 7, 0.2);
         }
 
+        .btn-training {
+            background: var(--gradient-training);
+            color: var(--white) !important;
+            border: none;
+        }
+
+        .btn-training:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(44, 82, 130, 0.3);
+        }
+
+        .btn-success {
+            background: var(--gradient-success);
+            color: var(--white) !important;
+            border: none;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(45, 125, 70, 0.3);
+        }
+
         .btn-outline {
             background: transparent;
             color: var(--text-primary);
@@ -570,7 +591,6 @@
 
         .btn-block {
             width: 100%;
-            display: flex;
         }
 
         /* ===== TRAINING HERO ===== */
@@ -592,8 +612,8 @@
             right: 0;
             bottom: 0;
             background: 
-                radial-gradient(circle at 20% 80%, rgba(194, 24, 7, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.03) 0%, transparent 50%);
+                radial-gradient(circle at 20% 80%, rgba(44, 82, 130, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(194, 24, 7, 0.03) 0%, transparent 50%);
             z-index: var(--z-negative);
         }
 
@@ -610,7 +630,7 @@
             display: inline-flex;
             align-items: center;
             gap: var(--space-sm);
-            background: var(--gradient-primary);
+            background: var(--gradient-training);
             color: var(--white);
             padding: var(--space-sm) var(--space-lg);
             border-radius: var(--radius-full);
@@ -622,235 +642,312 @@
             text-transform: uppercase;
         }
 
-        .training-highlights {
+        .hero-highlights {
             display: flex;
+            justify-content: center;
             flex-wrap: wrap;
             gap: var(--space-lg);
-            justify-content: center;
-            margin: var(--space-2xl) 0;
-            max-width: 1000px;
-            margin-left: auto;
-            margin-right: auto;
+            margin: var(--space-xl) 0;
         }
 
         .highlight-item {
             display: flex;
             align-items: center;
             gap: var(--space-sm);
-            background: rgba(194, 24, 7, 0.08);
+            background: var(--gradient-card);
             padding: var(--space-md) var(--space-lg);
             border-radius: var(--radius-lg);
-            border: 1px solid rgba(194, 24, 7, 0.15);
-            min-width: 250px;
-            justify-content: center;
+            border: 1px solid var(--border-color);
+            min-width: 200px;
             transition: var(--transition-smooth);
         }
 
         .highlight-item:hover {
-            transform: translateY(-2px);
-            border-color: var(--primary-red);
+            transform: translateY(-4px);
+            border-color: var(--accent-blue);
             box-shadow: var(--shadow-md);
         }
 
-        .highlight-item i {
-            color: var(--primary-red);
-            font-size: 1.25rem;
+        .highlight-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-training);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: var(--space-md);
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: var(--space-2xl);
         }
 
         /* ===== TRAINING PROGRAMS ===== */
-        .programs-section {
+        .training-programs {
             background: var(--bg-primary);
             padding: var(--space-4xl) 0;
+        }
+
+        .programs-intro {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto var(--space-3xl);
+        }
+
+        .programs-intro p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* ===== PROGRAM CATEGORIES ===== */
+        .program-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-xl);
+            margin-top: var(--space-2xl);
+        }
+
+        .category-card {
+            background: var(--gradient-card);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            text-align: center;
+            border: 1px solid var(--border-color);
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .category-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--accent-blue);
+        }
+
+        .category-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--space-lg);
+            font-size: 1.75rem;
+            color: var(--white);
+            background: var(--gradient-training);
+        }
+
+        .category-tag {
+            display: inline-block;
+            padding: var(--space-xs) var(--space-md);
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: var(--space-md);
+            background: rgba(44, 82, 130, 0.1);
+            color: var(--accent-blue);
+            border: 1px solid rgba(44, 82, 130, 0.2);
+        }
+
+        /* ===== TRAINING SCHEDULES ===== */
+        .training-schedules {
+            background: var(--bg-secondary);
+            padding: var(--space-4xl) 0;
+        }
+
+        .schedules-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .quarter-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-2xl);
+            justify-content: center;
+        }
+
+        .quarter-tab {
+            padding: var(--space-md) var(--space-xl);
+            background: var(--gradient-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .quarter-tab:hover {
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+
+        .quarter-tab.active {
+            background: var(--gradient-training);
+            color: white;
+            border-color: var(--accent-blue);
+            box-shadow: var(--shadow-md);
         }
 
         .programs-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: var(--space-xl);
-            margin-top: var(--space-2xl);
         }
 
         .program-card {
             background: var(--gradient-card);
             border-radius: var(--radius-lg);
-            padding: var(--space-xl);
-            position: relative;
             overflow: hidden;
             border: 1px solid var(--border-color);
             transition: var(--transition-smooth);
+            position: relative;
             height: 100%;
             display: flex;
             flex-direction: column;
         }
 
-        .program-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--gradient-primary);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.4s var(--transition-smooth);
-        }
-
         .program-card:hover {
             transform: translateY(-8px);
             box-shadow: var(--shadow-xl);
-            border-color: var(--primary-red);
+            border-color: var(--accent-blue);
         }
 
-        .program-card:hover::before {
-            transform: scaleX(1);
+        .program-image-container {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
         }
 
-        .program-icon {
-            width: 70px;
-            height: 70px;
-            background: var(--gradient-primary);
-            color: var(--white);
+        .program-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition-smooth);
+        }
+
+        .program-card:hover .program-image {
+            transform: scale(1.05);
+        }
+
+        .program-duration-badge {
+            position: absolute;
+            top: var(--space-md);
+            left: var(--space-md);
+            padding: var(--space-xs) var(--space-md);
             border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: var(--shadow-md);
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 1.75rem;
-            margin-bottom: var(--space-lg);
-            flex-shrink: 0;
+            gap: var(--space-xs);
+            z-index: var(--z-normal);
+            color: var(--white);
+            background: var(--gradient-training);
         }
 
-        .program-duration {
+        .program-content {
+            padding: var(--space-xl);
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .program-category {
             display: inline-block;
-            background: rgba(194, 24, 7, 0.1);
-            color: var(--primary-red);
             padding: var(--space-2xs) var(--space-md);
             border-radius: var(--radius-full);
             font-size: 0.75rem;
             font-weight: 600;
             margin-bottom: var(--space-md);
             letter-spacing: 0.05em;
+            align-self: flex-start;
+            background: rgba(44, 82, 130, 0.1);
+            color: var(--accent-blue);
         }
 
-        .program-outcomes {
-            margin-top: var(--space-md);
-            list-style: none;
+        .program-details {
             flex-grow: 1;
         }
 
-        .program-outcomes li {
-            display: flex;
-            align-items: flex-start;
-            gap: var(--space-sm);
+        .program-details h3 {
             margin-bottom: var(--space-sm);
+            line-height: 1.3;
+        }
+
+        .program-details p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: var(--space-lg);
+        }
+
+        .program-objectives {
+            margin: var(--space-md) 0;
+            padding-left: var(--space-lg);
+        }
+
+        .program-objectives li {
+            margin-bottom: var(--space-xs);
             color: var(--text-secondary);
             font-size: 0.9rem;
         }
 
-        .program-outcomes i {
-            color: var(--primary-red);
-            margin-top: 0.2rem;
-            flex-shrink: 0;
-        }
-
-        .long-term-results {
-            margin-top: var(--space-lg);
+        .program-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
             padding-top: var(--space-md);
             border-top: 1px solid var(--border-color);
         }
 
-        /* ===== TRAINING SCHEDULE ===== */
-        .schedule-section {
-            background: var(--bg-secondary);
-            padding: var(--space-4xl) 0;
-        }
-
-        .schedule-tabs {
-            display: flex;
-            justify-content: center;
-            gap: var(--space-md);
-            flex-wrap: wrap;
-            margin-bottom: var(--space-2xl);
-        }
-
-        .schedule-tab {
-            padding: var(--space-sm) var(--space-xl);
-            background: var(--gradient-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-full);
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: var(--text-secondary);
+        .meta-item {
             display: flex;
             align-items: center;
+            gap: var(--space-xs);
+            color: var(--text-tertiary);
+            font-size: 0.85rem;
+        }
+
+        .meta-item i {
+            width: 16px;
+            color: var(--accent-blue);
+        }
+
+        .enroll-button {
+            margin-top: auto;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             gap: var(--space-sm);
         }
 
-        .schedule-tab:hover,
-        .schedule-tab.active {
-            background: var(--gradient-primary);
-            color: var(--white);
-            border-color: var(--primary-red);
-            transform: translateY(-2px);
-        }
-
-        .schedule-content {
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .schedule-content.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .schedule-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: var(--gradient-card);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            box-shadow: var(--shadow-md);
-        }
-
-        .schedule-table th {
-            background: var(--gradient-primary);
-            color: var(--white);
-            padding: var(--space-lg);
-            text-align: left;
-            font-weight: 600;
-            font-size: 0.875rem;
-        }
-
-        .schedule-table td {
-            padding: var(--space-lg);
-            border-bottom: 1px solid var(--border-color);
-            color: var(--text-secondary);
-        }
-
-        .schedule-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .schedule-table tr:hover td {
-            background: rgba(194, 24, 7, 0.02);
-        }
-
-        /* ===== OUTCOMES & RESULTS ===== */
-        .outcomes-section {
-            padding: var(--space-4xl) 0;
+        /* ===== TRAINING OUTCOMES ===== */
+        .training-outcomes {
             background: var(--bg-primary);
+            padding: var(--space-4xl) 0;
         }
 
         .outcomes-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: var(--space-xl);
             margin-top: var(--space-2xl);
         }
@@ -862,28 +959,144 @@
             border-radius: var(--radius-lg);
             border: 1px solid var(--border-color);
             transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
         }
 
         .outcome-card:hover {
             transform: translateY(-4px);
-            border-color: var(--primary-red);
+            border-color: var(--accent-green);
             box-shadow: var(--shadow-lg);
         }
 
         .outcome-number {
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: 800;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            color: var(--accent-green);
+            margin-bottom: var(--space-sm);
             line-height: 1;
-            margin-bottom: var(--space-md);
         }
 
-        /* ===== REGISTRATION CTA ===== */
-        .registration-section {
-            background: var(--gradient-primary);
+        .outcome-card h4 {
+            margin-bottom: var(--space-sm);
+        }
+
+        .outcome-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* ===== REGISTRATION INFO ===== */
+        .registration-info {
+            background: var(--bg-secondary);
+            padding: var(--space-4xl) 0;
+        }
+
+        .registration-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-2xl);
+            align-items: center;
+        }
+
+        .registration-visual {
+            text-align: center;
+        }
+
+        .registration-icon {
+            width: 150px;
+            height: 150px;
+            background: var(--gradient-training);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            font-size: 3rem;
+            color: var(--white);
+            margin-bottom: var(--space-lg);
+        }
+
+        .registration-steps {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-lg);
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-md);
+            padding: var(--space-lg);
+            background: var(--gradient-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            transition: var(--transition-smooth);
+        }
+
+        .step-item:hover {
+            transform: translateX(5px);
+            border-color: var(--accent-blue);
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-training);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        /* ===== BENEFITS SECTION ===== */
+        .benefits-section {
+            background: var(--bg-primary);
+            padding: var(--space-4xl) 0;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-xl);
+            margin-top: var(--space-2xl);
+        }
+
+        .benefit-card {
+            text-align: center;
+            padding: var(--space-xl);
+            background: var(--gradient-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            transition: var(--transition-smooth);
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-blue);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .benefit-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--space-lg);
+            font-size: 1.5rem;
+            color: var(--white);
+            background: var(--gradient-training);
+        }
+
+        /* ===== ENROLLMENT CTA ===== */
+        .enrollment-cta {
+            background: var(--gradient-training);
             color: var(--white);
             padding: var(--space-4xl) 0;
             text-align: center;
@@ -894,36 +1107,32 @@
             max-width: 1200px;
         }
 
-        .registration-section::before {
+        .enrollment-cta::before {
             content: '';
             position: absolute;
             inset: 0;
             background: 
-                radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%);
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 50%);
         }
 
-        .registration-section > * {
+        .cta-content {
             position: relative;
             z-index: var(--z-normal);
         }
 
-        .registration-section h2 {
+        .urgency-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            background: rgba(255, 255, 255, 0.2);
             color: var(--white);
-        }
-
-        .registration-section .lead {
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        .benefits-details {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-lg);
-            padding: var(--space-xl);
-            margin-top: var(--space-2xl);
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+            padding: var(--space-sm) var(--space-lg);
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--space-xl);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.15);
         }
@@ -1001,33 +1210,6 @@
             margin-right: auto;
         }
 
-        /* ===== THEME TOGGLE ===== */
-        .theme-toggle {
-            position: fixed;
-            bottom: var(--space-xl);
-            right: var(--space-xl);
-            width: 52px;
-            height: 52px;
-            background: var(--gradient-primary);
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            font-size: 1.1rem;
-            cursor: pointer;
-            z-index: var(--z-fixed);
-            box-shadow: var(--shadow-xl);
-            transition: var(--transition-smooth);
-            border: none;
-            outline: none;
-        }
-
-        .theme-toggle:hover {
-            transform: rotate(30deg) scale(1.05);
-            box-shadow: var(--shadow-2xl);
-        }
-
         /* ===== ANIMATIONS ===== */
         .animate-on-scroll {
             opacity: 0;
@@ -1039,6 +1221,30 @@
         .animate-on-scroll.animated {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        /* ===== LOADING STATES ===== */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-2xl);
+            color: var(--text-secondary);
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--primary-red);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: var(--space-md);
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         /* ===== MOBILE NAVIGATION ===== */
@@ -1130,47 +1336,44 @@
             h2 { font-size: 1.75rem; }
             h3 { font-size: 1.5rem; }
 
+            .program-categories,
             .programs-grid,
-            .outcomes-grid {
+            .outcomes-grid,
+            .benefits-grid {
                 grid-template-columns: 1fr;
                 max-width: 500px;
                 margin-left: auto;
                 margin-right: auto;
             }
 
-            .training-highlights {
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: var(--space-md);
+            }
+
+            .hero-buttons .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .hero-highlights {
                 flex-direction: column;
                 align-items: center;
             }
 
             .highlight-item {
                 width: 100%;
-                max-width: 400px;
+                max-width: 300px;
             }
 
-            .schedule-tabs {
-                overflow-x: auto;
-                flex-wrap: nowrap;
-                justify-content: flex-start;
-                padding-bottom: var(--space-sm);
-                margin: var(--space-lg) calc(var(--space-lg) * -1);
-                padding-left: var(--space-lg);
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none;
+            .quarter-tabs {
+                flex-direction: column;
+                align-items: stretch;
             }
 
-            .schedule-tabs::-webkit-scrollbar {
-                display: none;
-            }
-
-            .schedule-tab {
-                flex-shrink: 0;
-                white-space: nowrap;
-            }
-
-            .schedule-table {
-                display: block;
-                overflow-x: auto;
+            .quarter-tab {
+                text-align: center;
             }
         }
 
@@ -1179,6 +1382,10 @@
                 --header-height: 60px;
                 --logo-size: 32px;
             }
+
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.5rem; }
+            h3 { font-size: 1.25rem; }
 
             .container {
                 padding: 0 var(--space-md);
@@ -1198,41 +1405,35 @@
                 font-size: 0.9rem;
             }
 
-            .program-card {
+            .program-image-container {
+                height: 200px;
+            }
+
+            .program-content {
                 padding: var(--space-lg);
             }
 
-            .schedule-table th,
-            .schedule-table td {
-                padding: var(--space-md);
-            }
-        }
-
-        @media (max-width: 360px) {
-            .logo-image {
-                height: 32px;
-            }
-            
-            .logo-text {
-                font-size: 1.1rem;
-            }
-            
-            h1 { font-size: 1.75rem; }
-            h2 { font-size: 1.25rem; }
-            h3 { font-size: 1.1rem; }
-            
-            .program-card {
-                padding: var(--space-md);
-            }
-            
-            .btn {
-                padding: var(--space-sm) var(--space-md);
-                font-size: 0.85rem;
+            .program-duration-badge {
+                top: var(--space-sm);
+                left: var(--space-sm);
+                font-size: 0.75rem;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Firebase Status Indicator -->
+    <div class="firebase-status" id="firebaseStatus" role="status" aria-live="polite">
+        <i class="fas fa-circle"></i>
+        <span>Live</span>
+    </div>
+
+    <!-- Data Update Indicator -->
+    <div class="data-update-indicator" id="dataUpdateIndicator" role="alert" aria-live="polite">
+        <i class="fas fa-sync-alt"></i>
+        <span>Updating content...</span>
+    </div>
+
     <!-- Theme Toggle -->
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
         <i class="fas fa-moon"></i>
@@ -1250,12 +1451,11 @@
 
             <ul class="nav-links" id="navLinks">
                 <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
                 <li><a href="enterprise.html" class="nav-link">Enterprise</a></li>
-                <!--<li><a href="events.html" class="nav-link">Events</a></li>-->
+                <li><a href="events.html" class="nav-link">Events</a></li>
                 <li><a href="training.html" class="nav-link active">Training</a></li>
-                <!--<li><a href="startups.html" class="nav-link">Startup Opportunities</a></li>-->
                 <li><a href="bootcamp.html" class="nav-link">Bootcamp</a></li>
-                <li><a href="about.html" class="nav-link">About Us</a></li>
                 <li><a href="contact.html" class="btn btn-primary">Contact Us</a></li>
             </ul>
 
@@ -1269,38 +1469,23 @@
     <section class="training-hero">
         <div class="container">
             <div class="training-hero-content">
-                <div class="training-badge" id="heroBadge">
+                <div class="training-badge">
                     <i class="fas fa-graduation-cap"></i> STRUCTURED BUSINESS EDUCATION
                 </div>
                 
-                <h1 id="heroTitle">Master Your <span class="text-gradient">Business Skills</span> with DSOG Training</h1>
+                <h1 id="heroTitle">Master Your Business Skills with <span class="text-gradient-training">DSOG Training</span></h1>
                 <p class="lead" id="heroSubtitle">Comprehensive training programs with clear objectives, structured schedules, and measurable outcomes designed for sustainable business growth and professional development.</p>
                 
-                <div class="training-highlights" id="trainingHighlights">
-                    <div class="highlight-item">
-                        <i class="fas fa-calendar-alt"></i>
-                        <span>Structured Schedules</span>
-                    </div>
-                    <div class="highlight-item">
-                        <i class="fas fa-bullseye"></i>
-                        <span>Clear Objectives</span>
-                    </div>
-                    <div class="highlight-item">
-                        <i class="fas fa-chart-line"></i>
-                        <span>Measurable Outcomes</span>
-                    </div>
-                    <div class="highlight-item">
-                        <i class="fas fa-certificate"></i>
-                        <span>Certification</span>
-                    </div>
+                <div class="hero-highlights" id="heroHighlights">
+                    <!-- Highlights loaded from Firebase -->
                 </div>
                 
                 <div class="hero-buttons">
-                    <a href="#programs" class="btn btn-primary btn-large">
-                        <i class="fas fa-book-open"></i> Explore Programs
+                    <a href="#programs" class="btn btn-training btn-large">
+                        <i class="fas fa-graduation-cap"></i> View Training Programs
                     </a>
-                    <a href="#schedule" class="btn btn-secondary btn-large">
-                        <i class="fas fa-calendar-alt"></i> View Schedules
+                    <a href="#schedules" class="btn btn-secondary btn-large">
+                        <i class="fas fa-calendar-alt"></i> View Schedule
                     </a>
                 </div>
             </div>
@@ -1308,102 +1493,200 @@
     </section>
 
     <!-- Training Programs Section -->
-    <section id="programs" class="programs-section">
+    <section id="programs" class="training-programs">
         <div class="container">
             <div class="section-header">
-                <span class="section-subtitle">Our Curriculum</span>
-                <h2>Structured <span class="text-gradient">Training Programs</span></h2>
-                <p class="lead">Each program is designed with specific objectives, durations, and measurable outcomes to ensure tangible results.</p>
+                <span class="section-subtitle">Our Programs</span>
+                <h2>Comprehensive <span class="text-gradient-training">Training Programs</span></h2>
             </div>
             
-            <div class="programs-grid" id="programsGrid">
-                <!-- Programs will be loaded dynamically -->
+            <div class="programs-intro">
+                <p>Our training programs are designed to equip professionals and entrepreneurs with the skills needed to thrive in today's competitive business landscape. Each program offers clear objectives, structured schedules, and measurable outcomes.</p>
+            </div>
+            
+            <!-- Training Programs (Loaded from Firebase) -->
+            <div id="trainingPrograms" class="program-categories">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading training programs...</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Training Schedule Section -->
-    <section id="schedule" class="schedule-section">
+    <!-- Training Schedules Section -->
+    <section id="schedules" class="training-schedules">
         <div class="container">
             <div class="section-header">
-                <span class="section-subtitle">Plan Your Learning</span>
-                <h2>Training <span class="text-gradient">Schedules</span></h2>
-                <p class="lead">Choose from our structured training schedules designed for different learning preferences and availability.</p>
+                <span class="section-subtitle">Upcoming Sessions</span>
+                <h2>Training <span class="text-gradient-training">Schedules</span></h2>
+                <p class="lead">Choose from our quarterly training schedules or flexible online programs. Enroll now to secure your spot in upcoming sessions.</p>
             </div>
             
-            <div class="schedule-tabs" id="scheduleTabs">
-                <!-- Tabs will be loaded dynamically -->
+            <!-- Quarter Tabs -->
+            <div class="quarter-tabs" id="quarterTabs">
+                <!-- Tabs loaded from Firebase -->
             </div>
             
-            <div class="schedule-content" id="scheduleContent">
-                <!-- Schedule content will be loaded dynamically -->
+            <!-- Programs Grid -->
+            <div id="programsGrid" class="programs-grid">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading training schedules...</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Outcomes Section -->
-    <section class="outcomes-section">
+    <!-- Training Outcomes Section -->
+    <section class="training-outcomes">
         <div class="container">
             <div class="section-header">
-                <span class="section-subtitle">Measurable Success</span>
-                <h2>Training <span class="text-gradient">Outcomes</span></h2>
-                <p class="lead">Our training programs deliver tangible results with clear metrics for success and long-term impact.</p>
+                <span class="section-subtitle">Measurable Results</span>
+                <h2>Training <span class="text-gradient-success">Outcomes</span></h2>
+                <p class="lead">Our training programs deliver measurable results and tangible benefits for participants and their businesses.</p>
             </div>
             
-            <div class="outcomes-grid" id="outcomesGrid">
-                <!-- Outcomes will be loaded dynamically -->
+            <!-- Outcomes (Loaded from Firebase) -->
+            <div id="trainingOutcomes" class="outcomes-grid">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading outcomes...</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Registration CTA -->
-    <section id="register" class="registration-section">
+    <!-- Registration Info Section -->
+    <section id="registration" class="registration-info">
         <div class="container">
             <div class="section-header">
-                <span class="section-subtitle">Start Your Journey</span>
-                <h2 id="registrationTitle">Enroll in <span class="text-gradient">DSOG Training</span></h2>
-                <p class="lead" id="registrationSubtitle">Take the next step in your professional development with our structured, results-driven training programs.</p>
+                <span class="section-subtitle">Simple Enrollment</span>
+                <h2>How to <span class="text-gradient-training">Enroll</span></h2>
+                <p class="lead">Enrolling in our training programs is quick and easy. Follow these simple steps to start your learning journey.</p>
             </div>
             
-            <div class="benefits-details">
-                <h4>Training Benefits</h4>
-                <ul style="list-style: none; margin-top: var(--space-md);">
-                    <li style="margin-bottom: var(--space-sm); display: flex; align-items: center; gap: var(--space-sm);">
-                        <i class="fas fa-check" style="color: var(--white);"></i>
-                        <span>Structured learning with clear objectives and outcomes</span>
-                    </li>
-                    <li style="margin-bottom: var(--space-sm); display: flex; align-items: center; gap: var(--space-sm);">
-                        <i class="fas fa-check" style="color: var(--white);"></i>
-                        <span>Flexible schedules for working professionals</span>
-                    </li>
-                    <li style="margin-bottom: var(--space-sm); display: flex; align-items: center; gap: var(--space-sm);">
-                        <i class="fas fa-check" style="color: var(--white);"></i>
-                        <span>Certificate of completion and achievement</span>
-                    </li>
-                    <li style="margin-bottom: var(--space-sm); display: flex; align-items: center; gap: var(--space-sm);">
-                        <i class="fas fa-check" style="color: var(--white);"></i>
-                        <span>Post-training support and mentorship</span>
-                    </li>
-                    <li style="display: flex; align-items: center; gap: var(--space-sm);">
-                        <i class="fas fa-check" style="color: var(--white);"></i>
-                        <span>Networking opportunities with fellow professionals</span>
-                    </li>
-                </ul>
+            <div class="registration-container">
+                <div class="registration-visual">
+                    <div class="registration-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3>Professional Development</h3>
+                    <p>Invest in your professional growth with our certified training programs designed for real-world application.</p>
+                    <div style="margin-top: var(--space-lg);">
+                        <a href="https://wa.me/254733737983?text=I'm%20interested%20in%20DSOG%20Training%20Programs" 
+                           class="btn btn-success btn-large" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Inquire via WhatsApp
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="registration-steps">
+                    <div class="step-item animate-on-scroll">
+                        <div class="step-number">1</div>
+                        <div>
+                            <h4>Choose Your Program</h4>
+                            <p>Select from our available training programs based on your learning goals and schedule.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step-item animate-on-scroll">
+                        <div class="step-number">2</div>
+                        <div>
+                            <h4>Select Schedule</h4>
+                            <p>Pick a convenient schedule from our quarterly or online programs.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step-item animate-on-scroll">
+                        <div class="step-number">3</div>
+                        <div>
+                            <h4>Enroll via WhatsApp</h4>
+                            <p>Contact us via WhatsApp to complete your enrollment and payment.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step-item animate-on-scroll">
+                        <div class="step-number">4</div>
+                        <div>
+                            <h4>Start Learning</h4>
+                            <p>Access your training materials and join your first session.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Program Benefits</span>
+                <h2>Why Choose <span class="text-gradient-training">DSOG Training</span></h2>
+                <p class="lead">Our training programs offer unique benefits designed for maximum impact and practical application.</p>
             </div>
             
-            <div class="hero-buttons" style="margin-top: var(--space-2xl);">
-                <a href="https://wa.me/254733737983?text=I'm%20interested%20in%20DSOG%20training%20programs" 
-                   target="_blank" 
-                   class="btn btn-primary btn-large">
-                    <i class="fab fa-whatsapp"></i> WhatsApp Enrollment
-                </a>
-                <a href="contact.html" class="btn btn-secondary btn-large">
-                    <i class="fas fa-calendar-alt"></i> Schedule Consultation
-                </a>
+            <div class="benefits-grid">
+                <div class="benefit-card animate-on-scroll">
+                    <div class="benefit-icon">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <h4>Certification</h4>
+                    <p>Receive recognized certification upon completion to validate your skills.</p>
+                </div>
+                
+                <div class="benefit-card animate-on-scroll">
+                    <div class="benefit-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h4>Practical Skills</h4>
+                    <p>Learn skills that you can immediately apply in your business or career.</p>
+                </div>
+                
+                <div class="benefit-card animate-on-scroll">
+                    <div class="benefit-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h4>Expert Instructors</h4>
+                    <p>Learn from experienced professionals with real-world business expertise.</p>
+                </div>
+                
+                <div class="benefit-card animate-on-scroll">
+                    <div class="benefit-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h4>Network Building</h4>
+                    <p>Connect with like-minded professionals and expand your business network.</p>
+                </div>
             </div>
-            
-            <div style="margin-top: var(--space-xl); font-size: 0.9rem; opacity: 0.9;">
-                <p><i class="fas fa-info-circle"></i> All training programs include course materials, certification, and 3 months of post-training support</p>
+        </div>
+    </section>
+
+    <!-- Enrollment CTA Section -->
+    <section class="enrollment-cta">
+        <div class="container">
+            <div class="cta-content">
+                <div class="urgency-badge">
+                    <i class="fas fa-clock"></i> LIMITED SEATS AVAILABLE
+                </div>
+                
+                <h2 style="color: var(--white);">Start Your <span style="color: var(--primary-gold);">Professional Journey Today</span></h2>
+                <p class="lead">Transform your career and business with our comprehensive training programs. Limited seats available in each cohort - secure your spot now.</p>
+                
+                <div class="hero-buttons">
+                    <a href="#schedules" class="btn btn-gold btn-large">
+                        <i class="fas fa-calendar-alt"></i> View Available Schedules
+                    </a>
+                    <a href="https://wa.me/254733737983?text=I'm%20interested%20in%20DSOG%20Training%20Programs" 
+                       class="btn btn-success btn-large" target="_blank">
+                        <i class="fab fa-whatsapp"></i> Enroll via WhatsApp
+                    </a>
+                </div>
+                
+                <div style="margin-top: var(--space-xl); font-size: 0.9rem; opacity: 0.9; color: rgba(255,255,255,0.9);">
+                    <p><i class="fas fa-phone-alt"></i> Call: +254 733 737 983 • <i class="fab fa-whatsapp"></i> WhatsApp: +254733737983 • <i class="fas fa-envelope"></i> Email: office.dsog@gmail.com</p>
+                </div>
             </div>
         </div>
     </section>
@@ -1416,21 +1699,19 @@
                     <img src="https://i.postimg.cc/kMZ1jTww/Untitled-design-4-removebg-preview.png" 
                          alt="DSOG" 
                          class="footer-logo">
-                    <p>Structured business training programs with clear objectives, schedules, and measurable outcomes for sustainable professional growth.</p>
+                    <p>Empowering professionals and entrepreneurs through comprehensive training programs with structured schedules and measurable outcomes.</p>
                     <div class="training-badge" style="margin-top: var(--space-md); background: rgba(255,255,255,0.1); color: white;">
-                        <i class="fas fa-graduation-cap"></i> STRUCTURED TRAINING
+                        <i class="fas fa-graduation-cap"></i> PROFESSIONAL TRAINING
                     </div>
                 </div>
                 
                 <div class="footer-section">
                     <h3>Training Programs</h3>
-                    <ul>
-                        <li><a href="#programs">Business Fundamentals</a></li>
-                        <li><a href="#programs">Market Expansion</a></li>
-                        <li><a href="#programs">Client Engagement</a></li>
-                        <li><a href="#schedule">Training Schedules</a></li>
-                        <li><a href="#register">Enrollment</a></li>
-                        <li><a href="contact.html">Training Consultation</a></li>
+                    <ul id="footerPrograms">
+                        <li><a href="#programs">All Programs</a></li>
+                        <li><a href="#schedules">Training Schedules</a></li>
+                        <li><a href="#outcomes">Program Outcomes</a></li>
+                        <li><a href="#registration">How to Enroll</a></li>
                     </ul>
                 </div>
                 
@@ -1440,677 +1721,752 @@
                         <li><a href="index.html">Home</a></li>
                         <li><a href="about.html">About DSOG</a></li>
                         <li><a href="enterprise.html">Enterprise Solutions</a></li>
-                        <li><a href="events.html">Business Events</a></li>
-                        <li><a href="startups.html">Startup Support</a></li>
-                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="events.html">Events</a></li>
+                        <li><a href="training.html">Training Programs</a></li>
+                        <li><a href="contact.html">Contact Support</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-section">
-                    <h3>Training Information</h3>
+                    <h3>Contact Training</h3>
                     <ul>
-                        <li><i class="fas fa-phone"></i> 0733 737 983</li>
-                        <li><i class="fas fa-envelope"></i> training@dsog.org</li>
-                        <li><i class="fab fa-whatsapp"></i> Training Enrollment</li>
-                        <li><i class="fas fa-map-marker-alt"></i> Nairobi, Kenya</li>
-                        <li><i class="fas fa-clock"></i> Mon-Fri, 8 AM-5 PM</li>
-                        <li><i class="fas fa-certificate"></i> Certification Provided</li>
+                        <li><i class="fas fa-phone-alt"></i> +254 733 737 983</li>
+                        <li><i class="fab fa-whatsapp"></i> +254733737983</li>
+                        <li><i class="fas fa-headset"></i> Training Inquiries</li>
+                        <li><i class="fas fa-envelope"></i> office.dsog@gmail.com</li>
+                        <li><i class="fas fa-clock"></i> Mon-Fri: 8 AM - 5 PM</li>
                     </ul>
                 </div>
             </div>
             
             <div class="copyright">
-                <p>&copy; <span id="currentYear"></span> DSOG Training Programs. All rights reserved.</p>
-                <p style="margin-top: var(--space-sm); font-size: 0.85rem;">Structured Learning • Clear Objectives • Measurable Outcomes • Professional Development • Business Growth</p>
+                <p>&copy; <span id="currentYear"></span> DSOG Training - Professional Development Programs. All rights reserved.</p>
+                <p style="margin-top: var(--space-sm); font-size: 0.85rem;">Structured Education • Measurable Outcomes • Professional Certification • WhatsApp: +254733737983</p>
             </div>
         </div>
     </footer>
 
     <!-- JavaScript -->
     <script>
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyDb5ZFHbo7lGM8ph0oBxFVTHRF5C5C_DWU",
-            authDomain: "dsog-events.firebaseapp.com",
-            databaseURL: "https://dsog-events-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "dsog-events",
-            storageBucket: "dsog-events.firebasestorage.app",
-            messagingSenderId: "1075977932287",
-            appId: "1:1075977932287:web:b2bf4d1c0083d2dac8ebca"
-        };
+    // ============================================
+    // FIREBASE CONFIGURATION
+    // ============================================
+    const firebaseConfig = {
+        apiKey: "AIzaSyDb5ZFHbo7lGM8ph0oBxFVTHRF5C5C_DWU",
+        authDomain: "dsog-events.firebaseapp.com",
+        databaseURL: "https://dsog-events-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "dsog-events",
+        storageBucket: "dsog-events.firebasestorage.app",
+        messagingSenderId: "1075977932287",
+        appId: "1:1075977932287:web:b2bf4d1c0083d2dac8ebca"
+    };
 
-        // Initialize Firebase
-        let db;
-        try {
-            firebase.initializeApp(firebaseConfig);
-            db = firebase.database();
-            console.log('Firebase initialized successfully');
-        } catch (error) {
-            console.error('Firebase initialization error:', error);
-            db = null;
+    // Initialize Firebase
+    let db;
+    let firebaseListeners = [];
+    let isFirebaseInitialized = false;
+    let currentQuarter = 'q1'; // Default quarter
+
+    try {
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.database();
+        isFirebaseInitialized = true;
+        console.log('Firebase initialized successfully for Training Page');
+    } catch (error) {
+        console.error('Firebase initialization error:', error);
+        isFirebaseInitialized = false;
+    }
+
+    // Cache management
+    const CACHE_KEY = 'dsog_training_cache';
+    const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
+    // Update management
+    let lastUpdateTime = 0;
+    const UPDATE_DEBOUNCE_TIME = 2000; // 2 seconds between updates
+    let updateTimeout = null;
+
+    // ============================================
+    // INITIALIZATION
+    // ============================================
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('🚀 DSOG Training System Loaded');
+        
+        // Initialize all components
+        initializeTheme();
+        initializeNavigation();
+        initializeAnimations();
+        initializeScrollEffects();
+        
+        // Set current year
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        // Load from cache first for instant display
+        const cachedData = getCachedData();
+        if (cachedData && !isCacheExpired(cachedData.timestamp)) {
+            console.log('Loading from cache for instant display');
+            displayCachedData(cachedData);
         }
+        
+        // Initialize Firebase connection
+        if (isFirebaseInitialized) {
+            initializeFirebaseConnection();
+            setupRealtimeListeners();
+        } else {
+            showFirebaseStatus('offline');
+            console.warn('Firebase not available, using cached data only');
+        }
+        
+        console.log('Training system initialized with real-time updates');
+    });
 
-        // Cache management
-        const CACHE_KEY = 'dsog_training_cache';
-        const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes
-
-        // Initialize the website
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 DSOG Training Page Loaded');
-            
-            // Initialize all components
-            initializeTheme();
-            initializeNavigation();
-            initializeScheduleTabs();
-            initializeAnimations();
-            
-            // Set current year
-            document.getElementById('currentYear').textContent = new Date().getFullYear();
-            
-            // Load static content first
-            loadStaticContent();
-            
-            // Then load from cache for faster display
-            setTimeout(() => {
-                loadFromCache();
-            }, 100);
-            
-            // Then fetch from Firebase in the background (delayed)
-            setTimeout(() => {
-                fetchFromFirebase();
-            }, 2000); // 2 second delay to let user start browsing
-            
-            console.log('Training page initialized');
+    // ============================================
+    // FIREBASE CONNECTION MANAGEMENT
+    // ============================================
+    function initializeFirebaseConnection() {
+        if (!isFirebaseInitialized) return;
+        
+        // Monitor connection status
+        const connectedRef = db.ref('.info/connected');
+        connectedRef.on('value', (snap) => {
+            if (snap.val() === true) {
+                showFirebaseStatus('online');
+                console.log('Connected to Firebase - Real-time updates active');
+            } else {
+                showFirebaseStatus('offline');
+                console.log('Disconnected from Firebase - Using cached data');
+            }
         });
+    }
 
-        // ==================== STATIC CONTENT ====================
-        function loadStaticContent() {
-            // Static content as fallback
-            const staticContent = {
-                hero: {
-                    badge: "STRUCTURED BUSINESS EDUCATION",
-                    title: "Master Your Business Skills with DSOG Training",
-                    subtitle: "Comprehensive training programs with clear objectives, structured schedules, and measurable outcomes designed for sustainable business growth and professional development.",
-                    highlights: ["Structured Schedules", "Clear Objectives", "Measurable Outcomes", "Certification"]
-                },
-                programs: [
-                    {
-                        id: "program_001",
-                        name: "Business Fundamentals",
-                        description: "Core business principles and practical skills for establishing and managing successful enterprises from the ground up.",
-                        duration: "8 WEEKS",
-                        objectives: [
-                            "Master business planning and strategy development",
-                            "Understand financial management and budgeting",
-                            "Learn market analysis and competitive positioning",
-                            "Develop operational management skills"
-                        ],
-                        longTermResults: "Participants establish sustainable businesses with proper operational frameworks, financial controls, and growth strategies.",
-                        icon: "fas fa-briefcase"
-                    },
-                    {
-                        id: "program_002",
-                        name: "Market Expansion Strategies",
-                        description: "Advanced techniques for growing your business reach, scaling operations, and capturing new market opportunities.",
-                        duration: "6 WEEKS",
-                        objectives: [
-                            "Master market research methodologies",
-                            "Develop effective expansion strategies",
-                            "Learn customer acquisition techniques",
-                            "Understand scaling challenges and solutions"
-                        ],
-                        longTermResults: "Businesses achieve sustainable growth, increased market share, and develop systematic expansion capabilities.",
-                        icon: "fas fa-expand-arrows-alt"
-                    },
-                    {
-                        id: "program_003",
-                        name: "Client Engagement Excellence",
-                        description: "Master the art of building strong client relationships, delivering exceptional service, and maximizing customer lifetime value.",
-                        duration: "4 WEEKS",
-                        objectives: [
-                            "Develop effective communication skills",
-                            "Learn customer retention strategies",
-                            "Master conflict resolution techniques",
-                            "Understand customer psychology"
-                        ],
-                        longTermResults: "Improved customer loyalty, increased repeat business, and enhanced brand reputation through superior client relationships.",
-                        icon: "fas fa-users"
-                    }
-                ],
-                schedules: {
-                    q1: {
-                        quarter: "q1",
-                        name: "Quarter 1 (Jan-Mar)",
-                        programs: [
-                            {
-                                programName: "Business Fundamentals",
-                                startDate: "2024-01-15",
-                                duration: "8 Weeks",
-                                schedule: "Mon & Wed, 6-8 PM"
-                            },
-                            {
-                                programName: "Market Expansion",
-                                startDate: "2024-02-05",
-                                duration: "6 Weeks",
-                                schedule: "Tue & Thu, 6-8 PM"
-                            },
-                            {
-                                programName: "Client Engagement",
-                                startDate: "2024-03-10",
-                                duration: "4 Weeks",
-                                schedule: "Saturday, 9 AM-1 PM"
-                            }
-                        ]
-                    },
-                    q2: {
-                        quarter: "q2",
-                        name: "Quarter 2 (Apr-Jun)",
-                        programs: [
-                            {
-                                programName: "Business Fundamentals",
-                                startDate: "2024-04-08",
-                                duration: "8 Weeks",
-                                schedule: "Mon & Wed, 6-8 PM"
-                            },
-                            {
-                                programName: "Market Expansion",
-                                startDate: "2024-05-06",
-                                duration: "6 Weeks",
-                                schedule: "Tue & Thu, 6-8 PM"
-                            }
-                        ]
-                    }
-                },
-                outcomes: [
-                    { percentage: 95, title: "Completion Rate", description: "High program completion rates indicating engaging, valuable, and well-structured content." },
-                    { percentage: 85, title: "Business Growth", description: "Participants report measurable business growth and improvement within 6 months of program completion." },
-                    { percentage: 90, title: "Satisfaction Rate", description: "Consistently high satisfaction scores from program participants across all training modules." },
-                    { percentage: 70, title: "Career Advancement", description: "Participants experience career advancement or business expansion within one year of training." }
-                ]
-            };
-
-            // Display static content
-            displayHeroContent(staticContent.hero);
-            displayPrograms(staticContent.programs);
-            displaySchedules(staticContent.schedules);
-            displayOutcomes(staticContent.outcomes);
+    function showFirebaseStatus(status) {
+        const statusEl = document.getElementById('firebaseStatus');
+        if (!statusEl) return;
+        
+        if (status === 'online') {
+            statusEl.classList.remove('offline');
+            statusEl.innerHTML = '<i class="fas fa-circle"></i><span>Live</span>';
+            statusEl.setAttribute('aria-label', 'Connected to live updates');
+        } else {
+            statusEl.classList.add('offline');
+            statusEl.innerHTML = '<i class="fas fa-circle"></i><span>Offline</span>';
+            statusEl.setAttribute('aria-label', 'Using cached data - offline mode');
         }
+    }
 
-        // ==================== CACHE MANAGEMENT ====================
-        function getCachedData() {
-            try {
-                const cached = localStorage.getItem(CACHE_KEY);
-                return cached ? JSON.parse(cached) : null;
-            } catch (error) {
-                console.error('Error reading cache:', error);
-                return null;
+    function showUpdateIndicator(type) {
+        const now = Date.now();
+        if (now - lastUpdateTime < UPDATE_DEBOUNCE_TIME) return;
+        
+        lastUpdateTime = now;
+        
+        const indicator = document.getElementById('dataUpdateIndicator');
+        if (!indicator) return;
+        
+        indicator.querySelector('span').textContent = `${type} updated`;
+        indicator.classList.add('show');
+        
+        // Auto-hide after 3 seconds
+        setTimeout(() => {
+            indicator.classList.remove('show');
+        }, 3000);
+    }
+
+    // ============================================
+    // SILENT REAL-TIME UPDATES
+    // ============================================
+    function setupRealtimeListeners() {
+        if (!isFirebaseInitialized) return;
+        
+        console.log('Setting up silent real-time listeners for training...');
+        
+        // Remove any existing listeners
+        removeAllListeners();
+        
+        // Debounced update function
+        const debouncedUpdate = (type) => {
+            if (updateTimeout) clearTimeout(updateTimeout);
+            
+            updateTimeout = setTimeout(() => {
+                showUpdateIndicator(type);
+            }, UPDATE_DEBOUNCE_TIME);
+        };
+        
+        // 1. Training Page Content (Hero)
+        const trainingContentRef = db.ref('trainingPageContent');
+        const trainingContentListener = trainingContentRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                displayTrainingHero(data);
+                saveToCachePartial('trainingPageContent', data);
+                debouncedUpdate('Training Content');
             }
+        });
+        firebaseListeners.push({ ref: trainingContentRef, listener: trainingContentListener });
+        
+        // 2. Training Programs
+        const programsRef = db.ref('trainingPrograms');
+        const programsListener = programsRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                displayTrainingPrograms(data);
+                saveToCachePartial('trainingPrograms', data);
+                debouncedUpdate('Programs');
+            }
+        });
+        firebaseListeners.push({ ref: programsRef, listener: programsListener });
+        
+        // 3. Training Schedules
+        const schedulesRef = db.ref('trainingSchedules');
+        const schedulesListener = schedulesRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                displayTrainingSchedules(data);
+                saveToCachePartial('trainingSchedules', data);
+                debouncedUpdate('Schedules');
+            }
+        });
+        firebaseListeners.push({ ref: schedulesRef, listener: schedulesListener });
+        
+        // 4. Training Outcomes
+        const outcomesRef = db.ref('trainingPageContent/outcomes');
+        const outcomesListener = outcomesRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                displayTrainingOutcomes(data);
+                saveToCachePartial('trainingOutcomes', data);
+                debouncedUpdate('Outcomes');
+            }
+        });
+        firebaseListeners.push({ ref: outcomesRef, listener: outcomesListener });
+        
+        console.log(`Setup ${firebaseListeners.length} silent real-time listeners for training`);
+    }
+
+    function removeAllListeners() {
+        firebaseListeners.forEach(({ ref, listener }) => {
+            if (ref && listener) {
+                ref.off('value', listener);
+            }
+        });
+        firebaseListeners = [];
+    }
+
+    // ============================================
+    // CACHE MANAGEMENT
+    // ============================================
+    function getCachedData() {
+        try {
+            const cached = localStorage.getItem(CACHE_KEY);
+            return cached ? JSON.parse(cached) : null;
+        } catch (error) {
+            console.error('Error reading cache:', error);
+            return null;
         }
+    }
 
-        function saveToCache(data) {
-            try {
-                const cacheData = {
-                    data: data,
-                    timestamp: Date.now()
-                };
-                localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
-                console.log('Data saved to cache');
-            } catch (error) {
-                console.error('Error saving to cache:', error);
-            }
+    function saveToCachePartial(key, data) {
+        try {
+            const cached = getCachedData() || { timestamp: Date.now(), data: {} };
+            cached.data[key] = data;
+            cached.timestamp = Date.now();
+            localStorage.setItem(CACHE_KEY, JSON.stringify(cached));
+        } catch (error) {
+            console.error('Error saving to cache:', error);
         }
+    }
 
-        function isCacheExpired(timestamp) {
-            return Date.now() - timestamp > CACHE_DURATION;
+    function isCacheExpired(timestamp) {
+        return Date.now() - timestamp > CACHE_DURATION;
+    }
+
+    function displayCachedData(cachedData) {
+        const data = cachedData.data;
+        
+        if (data.trainingPageContent) {
+            displayTrainingHero(data.trainingPageContent);
         }
-
-        function loadFromCache() {
-            const cached = getCachedData();
-            if (cached && !isCacheExpired(cached.timestamp)) {
-                console.log('Loading training data from cache');
-                updateContentFromCache(cached.data);
-            }
+        
+        if (data.trainingPrograms) {
+            displayTrainingPrograms(data.trainingPrograms);
         }
-
-        function updateContentFromCache(data) {
-            // Update training page content from cache
-            if (data.trainingPageContent) {
-                displayHeroContent(data.trainingPageContent.hero);
-                displayOutcomes(data.trainingPageContent.outcomes);
-            }
-            
-            if (data.trainingPrograms) {
-                displayPrograms(Object.values(data.trainingPrograms));
-            }
-            
-            if (data.trainingSchedules) {
-                displaySchedules(data.trainingSchedules);
-            }
-            
-            if (data.stats) {
-                displayStatsInFooter(data.stats);
-            }
+        
+        if (data.trainingSchedules) {
+            displayTrainingSchedules(data.trainingSchedules);
         }
-
-        // ==================== FIREBASE DATA FETCHING ====================
-        function fetchFromFirebase() {
-            if (!db) {
-                console.log('Firebase not available, using cached data only');
-                return;
-            }
-
-            console.log('Fetching training data from Firebase in background...');
-            
-            // Fetch training page content
-            db.ref('trainingPageContent').once('value').then(snapshot => {
-                const data = snapshot.val();
-                if (data) {
-                    console.log('Training page content loaded from Firebase');
-                    displayHeroContent(data.hero);
-                    displayOutcomes(data.outcomes);
-                    savePartialToCache('trainingPageContent', data);
-                }
-            }).catch(error => {
-                console.error('Error loading training page content:', error);
-            });
-            
-            // Fetch training programs
-            db.ref('trainingPrograms').once('value').then(snapshot => {
-                const data = snapshot.val();
-                if (data) {
-                    console.log('Training programs loaded from Firebase');
-                    displayPrograms(Object.values(data).filter(p => p.active !== false));
-                    savePartialToCache('trainingPrograms', data);
-                }
-            }).catch(error => {
-                console.error('Error loading training programs:', error);
-            });
-            
-            // Fetch training schedules
-            db.ref('trainingSchedules').once('value').then(snapshot => {
-                const data = snapshot.val();
-                if (data) {
-                    console.log('Training schedules loaded from Firebase');
-                    displaySchedules(data);
-                    savePartialToCache('trainingSchedules', data);
-                }
-            }).catch(error => {
-                console.error('Error loading training schedules:', error);
-            });
-            
-            // Fetch stats for footer
-            db.ref('stats').once('value').then(snapshot => {
-                const data = snapshot.val();
-                if (data) {
-                    console.log('Stats loaded from Firebase');
-                    displayStatsInFooter(data);
-                    savePartialToCache('stats', data);
-                }
-            }).catch(error => {
-                console.error('Error loading stats:', error);
-            });
-            
-            // Fetch app settings for contact info
-            db.ref('appSettings').once('value').then(snapshot => {
-                const data = snapshot.val();
-                if (data) {
-                    console.log('App settings loaded from Firebase');
-                    updateContactInfo(data);
-                    savePartialToCache('appSettings', data);
-                }
-            }).catch(error => {
-                console.error('Error loading app settings:', error);
-            });
+        
+        if (data.trainingOutcomes) {
+            displayTrainingOutcomes(data.trainingOutcomes);
         }
+    }
 
-        function savePartialToCache(key, data) {
-            try {
-                const cached = getCachedData() || { timestamp: Date.now(), data: {} };
-                cached.data[key] = data;
-                cached.timestamp = Date.now();
-                localStorage.setItem(CACHE_KEY, JSON.stringify(cached));
-            } catch (error) {
-                console.error('Error saving partial cache:', error);
-            }
+    // ============================================
+    // UI UPDATES - USING ACTUAL FIREBASE DATA
+    // ============================================
+    function displayTrainingHero(data) {
+        const hero = data.hero || {};
+        
+        // Update hero title
+        const heroTitle = document.getElementById('heroTitle');
+        if (heroTitle && hero.title) {
+            heroTitle.innerHTML = hero.title.replace('DSOG Training', '<span class="text-gradient-training">DSOG Training</span>');
         }
-
-        // ==================== CONTENT DISPLAY FUNCTIONS ====================
-        function displayHeroContent(content) {
-            if (content.badge) {
-                document.getElementById('heroBadge').innerHTML = `
-                    <i class="fas fa-graduation-cap"></i> ${content.badge}
-                `;
-            }
-            
-            if (content.title) {
-                document.getElementById('heroTitle').innerHTML = content.title;
-            }
-            
-            if (content.subtitle) {
-                document.getElementById('heroSubtitle').textContent = content.subtitle;
-            }
-            
-            if (content.highlights && Array.isArray(content.highlights)) {
-                const highlightsContainer = document.getElementById('trainingHighlights');
-                if (highlightsContainer) {
-                    highlightsContainer.innerHTML = '';
-                    content.highlights.forEach(highlight => {
-                        const iconMap = {
-                            'Structured Schedules': 'fa-calendar-alt',
-                            'Clear Objectives': 'fa-bullseye',
-                            'Measurable Outcomes': 'fa-chart-line',
-                            'Certification': 'fa-certificate'
-                        };
-                        
-                        const iconClass = iconMap[highlight] || 'fa-check-circle';
-                        
-                        const highlightItem = document.createElement('div');
-                        highlightItem.className = 'highlight-item';
-                        highlightItem.innerHTML = `
-                            <i class="fas ${iconClass}"></i>
-                            <span>${highlight}</span>
-                        `;
-                        highlightsContainer.appendChild(highlightItem);
-                    });
-                }
-            }
+        
+        // Update hero subtitle
+        const heroSubtitle = document.getElementById('heroSubtitle');
+        if (heroSubtitle && hero.subtitle) {
+            heroSubtitle.textContent = hero.subtitle;
         }
-
-        function displayPrograms(programs) {
-            const programsGrid = document.getElementById('programsGrid');
-            if (!programsGrid) return;
-            
-            programsGrid.innerHTML = '';
-            
-            programs.forEach((program, index) => {
-                const programCard = document.createElement('div');
-                programCard.className = 'program-card animate-on-scroll';
-                programCard.dataset.delay = index * 100;
-                
-                programCard.innerHTML = `
-                    <div class="program-icon">
-                        <i class="${program.icon || 'fas fa-briefcase'}"></i>
+        
+        // Update hero badge
+        const trainingBadge = document.querySelector('.training-badge');
+        if (trainingBadge && hero.badge) {
+            trainingBadge.innerHTML = `<i class="fas fa-graduation-cap"></i> ${hero.badge}`;
+        }
+        
+        // Update highlights
+        const heroHighlights = document.getElementById('heroHighlights');
+        if (heroHighlights && hero.highlights && Array.isArray(hero.highlights)) {
+            heroHighlights.innerHTML = '';
+            hero.highlights.forEach(highlight => {
+                const highlightItem = document.createElement('div');
+                highlightItem.className = 'highlight-item animate-on-scroll';
+                highlightItem.innerHTML = `
+                    <div class="highlight-icon">
+                        <i class="fas fa-check"></i>
                     </div>
-                    <span class="program-duration">${program.duration || 'DURATION TBD'}</span>
-                    <h3>${program.name || 'Training Program'}</h3>
-                    <p>${program.description || 'Comprehensive training program designed for professional development.'}</p>
-                    
-                    <h4>Program Objectives</h4>
-                    <ul class="program-outcomes">
-                        ${(program.objectives || []).map(obj => `
-                            <li><i class="fas fa-check"></i> ${obj}</li>
-                        `).join('')}
-                    </ul>
-                    
-                    <div class="long-term-results">
-                        <h4>Long-term Results</h4>
-                        <p>${program.longTermResults || 'Participants achieve measurable results and sustainable growth.'}</p>
+                    <div>
+                        <strong>${highlight}</strong>
+                        <div style="font-size: 0.85rem; color: var(--text-tertiary); margin-top: 2px;">Included</div>
                     </div>
                 `;
-                
-                programsGrid.appendChild(programCard);
+                heroHighlights.appendChild(highlightItem);
             });
             
-            // Re-initialize animations
+            // Initialize animations for new highlights
             setTimeout(() => {
                 initializeAnimations();
             }, 100);
         }
+    }
 
-        function displaySchedules(schedules) {
-            const tabsContainer = document.getElementById('scheduleTabs');
-            const contentContainer = document.getElementById('scheduleContent');
+    function displayTrainingPrograms(programs) {
+        const programsContainer = document.getElementById('trainingPrograms');
+        const footerPrograms = document.getElementById('footerPrograms');
+        
+        if (!programsContainer) return;
+        
+        // Convert to array and filter active programs
+        const programsArray = programs ? Object.values(programs)
+            .filter(program => program.active !== false)
+            .sort((a, b) => (a.order || 999) - (b.order || 999)) : [];
+        
+        if (programsArray.length > 0) {
+            // Update main programs display
+            programsContainer.innerHTML = '';
+            programsArray.forEach((program, index) => {
+                const programCard = createProgramCard(program, index);
+                programsContainer.appendChild(programCard);
+            });
             
-            if (!tabsContainer || !contentContainer) return;
+            // Update footer programs list (limit to 4)
+            if (footerPrograms) {
+                const footerList = programsArray.slice(0, 4).map(program => 
+                    `<li><a href="#program-${program.id}">${program.name}</a></li>`
+                ).join('');
+                footerPrograms.innerHTML = footerList;
+            }
             
-            // Clear existing content
+            // Initialize animations for new cards
+            setTimeout(() => {
+                initializeAnimations();
+            }, 100);
+        } else {
+            programsContainer.innerHTML = `
+                <div class="category-card" style="grid-column: 1 / -1; text-align: center; padding: var(--space-2xl);">
+                    <div class="category-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>Training Programs</h3>
+                    <p>Our training programs are currently being updated. Check back soon for exciting new courses!</p>
+                </div>
+            `;
+        }
+    }
+
+    function displayTrainingSchedules(schedules) {
+        const tabsContainer = document.getElementById('quarterTabs');
+        const gridContainer = document.getElementById('programsGrid');
+        
+        if (!tabsContainer || !gridContainer) return;
+        
+        // Convert to array and filter active schedules
+        const schedulesArray = schedules ? Object.values(schedules)
+            .filter(schedule => schedule.active !== false)
+            .sort((a, b) => {
+                const order = { 'online': 0, 'q1': 1, 'q2': 2, 'q3': 3, 'q4': 4 };
+                return (order[a.quarter] || 99) - (order[b.quarter] || 99);
+            }) : [];
+        
+        if (schedulesArray.length > 0) {
+            // Create quarter tabs
             tabsContainer.innerHTML = '';
-            contentContainer.innerHTML = '';
+            schedulesArray.forEach((schedule, index) => {
+                const tab = document.createElement('div');
+                tab.className = `quarter-tab ${schedule.quarter === currentQuarter ? 'active' : ''}`;
+                tab.textContent = schedule.name || schedule.quarter.toUpperCase();
+                tab.dataset.quarter = schedule.quarter;
+                tab.addEventListener('click', () => {
+                    switchQuarter(schedule.quarter);
+                });
+                tabsContainer.appendChild(tab);
+            });
             
-            // Convert schedules object to array and filter active ones
-            const scheduleArray = Object.values(schedules).filter(schedule => schedule.active !== false);
+            // Display programs for current quarter
+            displayQuarterPrograms(currentQuarter, schedules);
+        } else {
+            gridContainer.innerHTML = `
+                <div class="program-card" style="grid-column: 1 / -1; text-align: center; padding: var(--space-2xl);">
+                    <div class="program-content">
+                        <h3>Training Schedules</h3>
+                        <p>Training schedules are currently being planned. Check back soon for upcoming sessions!</p>
+                        <a href="https://wa.me/254733737983?text=I'm%20interested%20in%20DSOG%20Training%20Schedules" 
+                           class="btn btn-training" style="margin-top: var(--space-lg);" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Inquire about Schedules
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+    }
+
+    function displayQuarterPrograms(quarter, schedules) {
+        const gridContainer = document.getElementById('programsGrid');
+        if (!gridContainer) return;
+        
+        const quarterData = schedules[quarter];
+        
+        if (quarterData && quarterData.programs) {
+            const programsArray = Object.values(quarterData.programs)
+                .filter(program => program.active !== false)
+                .sort((a, b) => (a.order || 999) - (b.order || 999));
             
-            if (scheduleArray.length === 0) {
-                contentContainer.innerHTML = `
-                    <div class="schedule-content active">
-                        <table class="schedule-table">
-                            <thead>
-                                <tr>
-                                    <th>Program</th>
-                                    <th>Start Date</th>
-                                    <th>Duration</th>
-                                    <th>Schedule</th>
-                                    <th>Enrollment</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td colspan="5" style="text-align: center; padding: var(--space-2xl); color: var(--text-tertiary);">
-                                        No training schedules available at the moment. Please check back soon!
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+            if (programsArray.length > 0) {
+                gridContainer.innerHTML = '';
+                programsArray.forEach((program, index) => {
+                    const programCard = createScheduleCard(program, index, quarter);
+                    gridContainer.appendChild(programCard);
+                });
+            } else {
+                gridContainer.innerHTML = `
+                    <div class="program-card" style="grid-column: 1 / -1; text-align: center; padding: var(--space-2xl);">
+                        <div class="program-content">
+                            <h3>No Programs Scheduled</h3>
+                            <p>There are no programs scheduled for this quarter yet. Please check other quarters or contact us for information.</p>
+                            <button class="btn btn-outline" style="margin-top: var(--space-lg);" onclick="switchQuarter('online')">
+                                Check Online Programs
+                            </button>
+                        </div>
                     </div>
                 `;
-                return;
             }
-            
-            // Create tabs and content
-            scheduleArray.forEach((schedule, index) => {
-                // Create tab
-                const tab = document.createElement('button');
-                tab.className = `schedule-tab ${index === 0 ? 'active' : ''}`;
-                tab.dataset.schedule = schedule.quarter || schedule.name.toLowerCase().replace(/[^a-z0-9]/g, '_');
-                tab.innerHTML = `
-                    <i class="fas ${schedule.quarter === 'online' ? 'fa-laptop' : 'fa-calendar'}"></i> ${schedule.name}
-                `;
-                tabsContainer.appendChild(tab);
-                
-                // Create content
-                const content = document.createElement('div');
-                content.className = `schedule-content ${index === 0 ? 'active' : ''}`;
-                content.id = `schedule-${schedule.quarter || schedule.name.toLowerCase().replace(/[^a-z0-9]/g, '_')}`;
-                
-                // Build table rows for programs
-                const programRows = Object.values(schedule.programs || {})
-                    .filter(program => program.active !== false)
-                    .map(program => {
-                        const enrollmentUrl = program.enrollmentUrl || `https://wa.me/254733737983?text=I'm%20interested%20in%20${encodeURIComponent(program.programName || 'Training')}`;
-                        
-                        return `
-                            <tr>
-                                <td>
-                                    <strong>${program.programName || 'Training Program'}</strong>
-                                    <div class="text-small">${program.description || 'Professional development training'}</div>
-                                </td>
-                                <td>${program.startDate || 'Start Date TBD'}</td>
-                                <td>${program.duration || 'Duration TBD'}</td>
-                                <td>${program.schedule || 'Schedule TBD'}</td>
-                                <td><a href="${enrollmentUrl}" target="_blank" class="btn btn-primary btn-small">Enroll Now</a></td>
-                            </tr>
-                        `;
-                    }).join('');
-                
-                content.innerHTML = `
-                    <table class="schedule-table">
-                        <thead>
-                            <tr>
-                                <th>Program</th>
-                                <th>Start Date</th>
-                                <th>Duration</th>
-                                <th>${schedule.quarter === 'online' ? 'Format' : 'Schedule'}</th>
-                                <th>Enrollment</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${programRows || '<tr><td colspan="5" style="text-align: center; padding: var(--space-xl); color: var(--text-tertiary);">No programs scheduled for this period.</td></tr>'}
-                        </tbody>
-                    </table>
-                `;
-                
-                contentContainer.appendChild(content);
-            });
-            
-            // Add tab click handlers
-            document.querySelectorAll('.schedule-tab').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const scheduleId = tab.getAttribute('data-schedule');
-                    
-                    // Update active tab
-                    document.querySelectorAll('.schedule-tab').forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    
-                    // Show corresponding content
-                    document.querySelectorAll('.schedule-content').forEach(content => {
-                        content.classList.remove('active');
-                        if (content.id === `schedule-${scheduleId}`) {
-                            content.classList.add('active');
-                        }
-                    });
-                });
-            });
+        } else {
+            gridContainer.innerHTML = `
+                <div class="program-card" style="grid-column: 1 / -1; text-align: center; padding: var(--space-2xl);">
+                    <div class="program-content">
+                        <h3>Schedule Not Available</h3>
+                        <p>The schedule for this quarter is not available yet. Please check back soon or contact us for information.</p>
+                    </div>
+                </div>
+            `;
         }
+        
+        // Initialize animations for new cards
+        setTimeout(() => {
+            initializeAnimations();
+        }, 100);
+    }
 
-        function displayOutcomes(outcomes) {
-            const outcomesGrid = document.getElementById('outcomesGrid');
-            if (!outcomesGrid) return;
-            
-            outcomesGrid.innerHTML = '';
-            
+    function displayTrainingOutcomes(outcomes) {
+        const outcomesContainer = document.getElementById('trainingOutcomes');
+        if (!outcomesContainer) return;
+        
+        if (outcomes && Array.isArray(outcomes)) {
+            outcomesContainer.innerHTML = '';
             outcomes.forEach((outcome, index) => {
-                const outcomeCard = document.createElement('div');
-                outcomeCard.className = 'outcome-card animate-on-scroll';
-                outcomeCard.dataset.delay = index * 100;
-                
-                outcomeCard.innerHTML = `
-                    <div class="outcome-number">${outcome.percentage || 0}%</div>
-                    <h3>${outcome.title || 'Outcome'}</h3>
-                    <p>${outcome.description || 'Measurable training outcome.'}</p>
-                `;
-                
-                outcomesGrid.appendChild(outcomeCard);
+                const outcomeCard = createOutcomeCard(outcome, index);
+                outcomesContainer.appendChild(outcomeCard);
             });
-            
-            // Re-initialize animations
-            setTimeout(() => {
-                initializeAnimations();
-            }, 100);
+        } else {
+            outcomesContainer.innerHTML = `
+                <div class="outcome-card" style="grid-column: 1 / -1; text-align: center; padding: var(--space-2xl);">
+                    <div class="outcome-number">95%</div>
+                    <h4>Completion Rate</h4>
+                    <p>High program completion rates indicating engaging, valuable, and well-structured content.</p>
+                </div>
+            `;
         }
+        
+        // Initialize animations for new cards
+        setTimeout(() => {
+            initializeAnimations();
+        }, 100);
+    }
 
-        function displayStatsInFooter(stats) {
-            // Update any stats in the footer if needed
-            if (stats.entrepreneursTrained) {
-                // You could add stats to footer if desired
-            }
-        }
+    // ============================================
+    // CARD CREATION FUNCTIONS - USING REAL DATA
+    // ============================================
+    function createProgramCard(program, index) {
+        const card = document.createElement('div');
+        card.className = 'category-card animate-on-scroll';
+        card.id = `program-${program.id}`;
+        card.dataset.delay = index * 100;
+        
+        card.innerHTML = `
+            <div class="category-icon">
+                <i class="${program.icon || 'fas fa-briefcase'}"></i>
+            </div>
+            <span class="category-tag">${program.duration || 'FLEXIBLE DURATION'}</span>
+            <h3 class="text-gradient-training">${program.name || 'Training Program'}</h3>
+            <p>${program.description || 'Comprehensive training program designed for business growth.'}</p>
+            <div style="margin-top: auto; padding-top: var(--space-md);">
+                <a href="#schedules" class="btn btn-training" style="width: 100%;" onclick="switchQuarter('online')">
+                    <i class="fas fa-calendar-check"></i> View Schedules
+                </a>
+            </div>
+        `;
+        
+        return card;
+    }
 
-        function updateContactInfo(settings) {
-            // Update WhatsApp link with phone number from settings
-            const whatsappLink = document.querySelector('a[href*="wa.me"]');
-            if (whatsappLink && settings.whatsappNumber) {
-                const phoneNumber = settings.whatsappNumber.replace(/\D/g, '');
-                whatsappLink.href = `https://wa.me/${phoneNumber}?text=I'm%20interested%20in%20DSOG%20training%20programs`;
-            }
-        }
-
-        // ==================== CORE FUNCTIONS ====================
-        function initializeTheme() {
-            const themeToggle = document.getElementById('themeToggle');
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-            
-            const savedTheme = localStorage.getItem('theme');
-            const systemTheme = prefersDark.matches ? 'dark' : 'light';
-            const initialTheme = savedTheme || systemTheme;
-            
-            document.documentElement.setAttribute('data-theme', initialTheme);
-            updateThemeIcon(initialTheme);
-            
-            themeToggle.addEventListener('click', () => {
-                const currentTheme = document.documentElement.getAttribute('data-theme');
-                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-                
-                document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
-                document.documentElement.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-                updateThemeIcon(newTheme);
-                
-                setTimeout(() => {
-                    document.body.style.transition = '';
-                }, 300);
-            });
-            
-            prefersDark.addEventListener('change', (e) => {
-                if (!localStorage.getItem('theme')) {
-                    const newTheme = e.matches ? 'dark' : 'light';
-                    document.documentElement.setAttribute('data-theme', newTheme);
-                    updateThemeIcon(newTheme);
-                }
-            });
-            
-            function updateThemeIcon(theme) {
-                const icon = themeToggle.querySelector('i');
-                if (theme === 'dark') {
-                    icon.className = 'fas fa-sun';
-                    themeToggle.setAttribute('aria-label', 'Switch to light theme');
-                } else {
-                    icon.className = 'fas fa-moon';
-                    themeToggle.setAttribute('aria-label', 'Switch to dark theme');
-                }
-            }
-        }
-
-        function initializeNavigation() {
-            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-            const navLinks = document.getElementById('navLinks');
-            
-            if (mobileMenuBtn && navLinks) {
-                mobileMenuBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    navLinks.classList.toggle('active');
-                    const icon = this.querySelector('i');
-                    icon.className = navLinks.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
-                    this.setAttribute('aria-expanded', navLinks.classList.contains('active'));
-                    
-                    if (navLinks.classList.contains('active')) {
-                        document.body.style.overflow = 'hidden';
-                    } else {
-                        document.body.style.overflow = '';
-                    }
-                });
-
-                document.addEventListener('click', function(event) {
-                    if (!navLinks.contains(event.target) && !mobileMenuBtn.contains(event.target) && navLinks.classList.contains('active')) {
-                        navLinks.classList.remove('active');
-                        mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
-                        mobileMenuBtn.setAttribute('aria-expanded', 'false');
-                        document.body.style.overflow = '';
-                    }
-                });
-
-                navLinks.querySelectorAll('a').forEach(link => {
-                    link.addEventListener('click', () => {
-                        if (window.innerWidth <= 1024) {
-                            navLinks.classList.remove('active');
-                            mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
-                            mobileMenuBtn.setAttribute('aria-expanded', 'false');
-                            document.body.style.overflow = '';
-                        }
+    function createScheduleCard(program, index, quarter) {
+        const card = document.createElement('div');
+        card.className = 'program-card animate-on-scroll';
+        card.dataset.delay = index * 100;
+        
+        // Format date if available
+        let dateText = 'Date TBD';
+        if (program.startDate && program.startDate !== 'Rolling Admission') {
+            try {
+                const startDate = new Date(program.startDate);
+                if (!isNaN(startDate.getTime())) {
+                    dateText = startDate.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
                     });
-                });
+                }
+            } catch (error) {
+                console.error('Error formatting date:', error);
+            }
+        } else if (program.startDate === 'Rolling Admission') {
+            dateText = 'Rolling Admission';
+        }
+        
+        // Create WhatsApp enrollment URL
+        const whatsappUrl = program.enrollmentUrl || 
+                          `https://wa.me/254733737983?text=I'm%20interested%20in%20${encodeURIComponent(program.programName || 'Training Program')}`;
+
+        card.innerHTML = `
+            <div class="program-image-container">
+                <img src="${getTrainingImage(program.programId || quarter)}" 
+                     alt="${program.programName || 'Training Program'}" 
+                     class="program-image"
+                     onerror="this.src='${getDefaultTrainingImage()}'">
+                <div class="program-duration-badge">
+                    <i class="fas fa-clock"></i> ${program.duration || 'Flexible'}
+                </div>
+            </div>
+            <div class="program-content">
+                <span class="program-category">${quarter === 'online' ? 'ONLINE' : 'IN-PERSON'}</span>
+                <div class="program-details">
+                    <h3>${program.programName || 'Training Program'}</h3>
+                    <p>${program.schedule || 'Flexible schedule to suit your needs'}</p>
+                    
+                    <div class="program-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>${dateText}</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-clock"></i>
+                            <span>${program.duration || 'Flexible'}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="enroll-button">
+                    <a href="${whatsappUrl}" 
+                       class="btn btn-success btn-block" 
+                       target="_blank">
+                        <i class="fab fa-whatsapp"></i> Enroll Now
+                    </a>
+                </div>
+            </div>
+        `;
+        
+        return card;
+    }
+
+    function createOutcomeCard(outcome, index) {
+        const card = document.createElement('div');
+        card.className = 'outcome-card animate-on-scroll';
+        card.dataset.delay = index * 100;
+        
+        card.innerHTML = `
+            <div class="outcome-number">${outcome.percentage || '95'}%</div>
+            <h4>${outcome.title || 'Completion Rate'}</h4>
+            <p>${outcome.description || 'High program completion rates indicating engaging content.'}</p>
+        `;
+        
+        return card;
+    }
+
+    // ============================================
+    // HELPER FUNCTIONS
+    // ============================================
+    function getTrainingImage(programId) {
+        const imageMap = {
+            'program_001': 'https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            'program_002': 'https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            'program_003': 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            'program_1768478371143': 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            'online': 'https://images.unsplash.com/photo-1498049794561-7780e7231661?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            'q1': 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            'q2': 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            'q3': 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            'q4': 'https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+        };
+        
+        return imageMap[programId] || getDefaultTrainingImage();
+    }
+
+    function getDefaultTrainingImage() {
+        return 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+    }
+
+    function switchQuarter(quarter) {
+        currentQuarter = quarter;
+        
+        // Update active tab
+        document.querySelectorAll('.quarter-tab').forEach(tab => {
+            tab.classList.toggle('active', tab.dataset.quarter === quarter);
+        });
+        
+        // Load data for selected quarter
+        if (isFirebaseInitialized) {
+            db.ref('trainingSchedules').once('value').then(snapshot => {
+                const schedules = snapshot.val();
+                displayQuarterPrograms(quarter, schedules);
+            });
+        } else {
+            // Use cached data
+            const cachedData = getCachedData();
+            if (cachedData && cachedData.data.trainingSchedules) {
+                displayQuarterPrograms(quarter, cachedData.data.trainingSchedules);
+            }
+        }
+    }
+
+    // ============================================
+    // CORE FUNCTIONS
+    // ============================================
+    function initializeTheme() {
+        const themeToggle = document.getElementById('themeToggle');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+        
+        const savedTheme = localStorage.getItem('theme');
+        const systemTheme = prefersDark.matches ? 'dark' : 'light';
+        const initialTheme = savedTheme || systemTheme;
+        
+        document.documentElement.setAttribute('data-theme', initialTheme);
+        updateThemeIcon(initialTheme);
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+            
+            setTimeout(() => {
+                document.body.style.transition = '';
+            }, 300);
+        });
+        
+        prefersDark.addEventListener('change', (e) => {
+            if (!localStorage.getItem('theme')) {
+                const newTheme = e.matches ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                updateThemeIcon(newTheme);
+            }
+        });
+        
+        function updateThemeIcon(theme) {
+            const icon = themeToggle.querySelector('i');
+            if (theme === 'dark') {
+                icon.className = 'fas fa-sun';
+                themeToggle.setAttribute('aria-label', 'Switch to light theme');
+            } else {
+                icon.className = 'fas fa-moon';
+                themeToggle.setAttribute('aria-label', 'Switch to dark theme');
+            }
+        }
+    }
+
+    function initializeNavigation() {
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+        
+        if (mobileMenuBtn && navLinks) {
+            mobileMenuBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                navLinks.classList.toggle('active');
+                const icon = this.querySelector('i');
+                icon.className = navLinks.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
+                this.setAttribute('aria-expanded', navLinks.classList.contains('active'));
                 
-                window.addEventListener('resize', () => {
-                    if (window.innerWidth > 1024) {
+                if (navLinks.classList.contains('active')) {
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    document.body.style.overflow = '';
+                }
+            });
+
+            document.addEventListener('click', function(event) {
+                if (!navLinks.contains(event.target) && !mobileMenuBtn.contains(event.target) && navLinks.classList.contains('active')) {
+                    navLinks.classList.remove('active');
+                    mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                    document.body.style.overflow = '';
+                }
+            });
+
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth <= 1024) {
                         navLinks.classList.remove('active');
                         mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
                         mobileMenuBtn.setAttribute('aria-expanded', 'false');
                         document.body.style.overflow = '';
                     }
                 });
-            }
+            });
+            
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 1024) {
+                    navLinks.classList.remove('active');
+                    mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                    document.body.style.overflow = '';
+                }
+            });
+        }
 
-            // Header scroll effect
-            const header = document.getElementById('header');
+        // Header scroll effect
+        const header = document.getElementById('header');
+        if (header) {
             window.addEventListener('scroll', () => {
                 if (window.scrollY > 50) {
                     header.classList.add('scrolled');
@@ -2118,73 +2474,184 @@
                     header.classList.remove('scrolled');
                 }
             });
+        }
 
-            // Smooth scroll for anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    const href = this.getAttribute('href');
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                
+                if (href.startsWith('#') && href !== '#') {
+                    e.preventDefault();
                     
-                    if (href.startsWith('#') && href !== '#') {
-                        e.preventDefault();
+                    const targetId = href.substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        const headerHeight = document.getElementById('header') ? document.getElementById('header').offsetHeight : 72;
+                        const targetPosition = targetElement.offsetTop - headerHeight - 20;
                         
-                        const targetId = href.substring(1);
-                        const targetElement = document.getElementById(targetId);
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
                         
-                        if (targetElement) {
-                            const headerHeight = document.getElementById('header').offsetHeight;
-                            const targetPosition = targetElement.offsetTop - headerHeight - 20;
-                            
-                            window.scrollTo({
-                                top: targetPosition,
-                                behavior: 'smooth'
-                            });
-                            
-                            history.pushState(null, '', href);
-                        }
+                        history.pushState(null, '', href);
                     }
-                });
-            });
-        }
-
-        function initializeScheduleTabs() {
-            // Already handled in displaySchedules function
-        }
-
-        function initializeAnimations() {
-            const animatedElements = document.querySelectorAll('.animate-on-scroll');
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const delay = entry.target.dataset.delay || 0;
-                        setTimeout(() => {
-                            entry.target.classList.add('animated');
-                        }, delay);
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            });
-            
-            animatedElements.forEach((element, index) => {
-                if (!element.dataset.delay) {
-                    element.dataset.delay = index * 100;
                 }
-                observer.observe(element);
             });
-        }
+        });
+    }
 
-        // Touch optimizations
-        let lastTouchEnd = 0;
-        document.addEventListener('touchend', (event) => {
-            const now = Date.now();
-            if (now - lastTouchEnd <= 300) {
-                event.preventDefault();
+    function initializeAnimations() {
+        const animatedElements = document.querySelectorAll('.animate-on-scroll');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const delay = entry.target.dataset.delay || 0;
+                    setTimeout(() => {
+                        entry.target.classList.add('animated');
+                    }, delay);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+        
+        animatedElements.forEach((element, index) => {
+            if (!element.dataset.delay) {
+                element.dataset.delay = index * 100;
             }
-            lastTouchEnd = now;
-        }, false);
+            observer.observe(element);
+        });
+    }
+
+    function initializeScrollEffects() {
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            // Add parallax effect to hero
+            const hero = document.querySelector('.training-hero');
+            if (hero) {
+                const scrolled = window.pageYOffset;
+                const rate = scrolled * -0.5;
+                hero.style.transform = `translate3d(0, ${rate}px, 0)`;
+            }
+            
+            lastScroll = currentScroll;
+        });
+    }
+
+    // ============================================
+    // GLOBAL FUNCTIONS
+    // ============================================
+    // Make functions globally available
+    window.switchQuarter = switchQuarter;
+
+    // Touch device optimizations
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function(event) {
+        const now = Date.now();
+        if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
+        }
+        lastTouchEnd = now;
+    }, false);
+
+    // Add CSS for firebase-status and data-update-indicator
+    const style = document.createElement('style');
+    style.textContent = `
+        .firebase-status {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            padding: 8px 12px;
+            border-radius: var(--radius-md);
+            font-size: 12px;
+            z-index: 9999;
+            background: #28a745;
+            color: white;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition-smooth);
+        }
+        
+        .firebase-status.offline {
+            background: #dc3545;
+        }
+        
+        .firebase-status i {
+            font-size: 10px;
+        }
+        
+        .data-update-indicator {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            padding: 12px 16px;
+            background: var(--primary-red);
+            color: white;
+            border-radius: var(--radius-lg);
+            font-size: 14px;
+            z-index: 10000;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transform: translateX(120%);
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .data-update-indicator.show {
+                transform: translateX(0);
+        }
+        
+        .data-update-indicator i {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition-smooth);
+        }
+        
+        .theme-toggle:hover {
+            transform: translateY(-2px) scale(1.05);
+        }
+    `;
+    document.head.appendChild(style);
+    
+    // Debug helper
+    console.log('DSOG Training JavaScript loaded successfully');
+    console.log('Current Quarter:', currentQuarter);
+    console.log('WhatsApp Number: +254733737983');
+    console.log('Email: office.dsog@gmail.com');
     </script>
 </body>
 </html>
