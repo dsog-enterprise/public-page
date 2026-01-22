@@ -32,30 +32,30 @@
     </script>
     
     <!-- App Version -->
-    <meta name="app-version" content="11.0.0">
+    <meta name="app-version" content="12.0.0">
     
     <!-- SEO Meta Tags -->
-    <meta name="description" content="DSOG Startup Builder Bootcamp - Intensive 1-month training to launch your startup. Learn business fundamentals, team building, and get startup support.">
-    <meta name="keywords" content="startup bootcamp, business training, entrepreneurship, startup Kenya, business skills, startup support, team building">
+    <meta name="description" content="DSOG Startup Bootcamps - Available bootcamp programs with dates, pricing, and application deadlines. Apply for upcoming startup bootcamps.">
+    <meta name="keywords" content="startup bootcamp, business training, entrepreneurship Kenya, startup program, bootcamp dates, bootcamp pricing, business skills training">
     
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#C21807">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="DSOG Startup Bootcamp">
+    <meta name="apple-mobile-web-app-title" content="DSOG Bootcamps">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="DSOG Startup Bootcamp">
+    <meta name="application-name" content="DSOG Bootcamps">
     <meta name="msapplication-TileColor" content="#C21807">
-    <meta name="msapplication-starturl" content="/bootcamp.html?v=11.0.0">
+    <meta name="msapplication-starturl" content="/bootcamp.html?v=12.0.0">
     
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="DSOG Startup Builder Bootcamp | Launch Your Startup in 1 Month">
-    <meta property="og:description" content="Join our intensive 1-month bootcamp. Transform your idea into a real business with our structured training and startup support system.">
+    <meta property="og:title" content="DSOG Startup Bootcamps | Available Programs & Dates">
+    <meta property="og:description" content="View all available startup bootcamp programs, dates, pricing, and application deadlines. Apply for upcoming cohorts.">
     <meta property="og:image" content="https://i.postimg.cc/CxNLzQgt/Untitled-design-3.webp">
     <meta property="og:url" content="https://dsog.org/bootcamp">
     <meta property="og:type" content="website">
     
-    <title>DSOG Startup Builder Bootcamp | Launch Your Startup in 1 Month</title>
+    <title>DSOG Startup Bootcamps | Available Programs & Dates</title>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -64,34 +64,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Firebase Status CSS -->
-    <style>
-        .firebase-status {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            z-index: 10000;
-            background: #28a745;
-            color: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .firebase-status.offline {
-            background: #dc3545;
-        }
-        
-        .firebase-status i {
-            font-size: 10px;
-        }
-    </style>
     
     <style>
         /* ===== CSS CUSTOM PROPERTIES ===== */
@@ -138,7 +110,6 @@
             --gradient-dark: linear-gradient(135deg, #1A1A1A 0%, #2D2D2D 100%);
             --gradient-light: linear-gradient(135deg, var(--white) 0%, #F8F9FA 100%);
             --gradient-card: linear-gradient(145deg, var(--white) 0%, #F8F9FA 100%);
-            --gradient-entrepreneur: linear-gradient(135deg, #2C5282 0%, #6B46C1 100%);
             
             /* Animation Properties */
             --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -258,107 +229,14 @@
             animation: spin 1s linear infinite;
         }
 
-        .skeleton {
-            background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--bg-tertiary) 50%, var(--bg-secondary) 75%);
-            background-size: 200% 100%;
-            animation: skeleton-loading 1.5s infinite;
-            border-radius: var(--radius-md);
-            min-height: 20px;
-            margin-bottom: var(--space-md);
-        }
-
         @keyframes spin {
             to { transform: rotate(360deg); }
-        }
-
-        @keyframes skeleton-loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-
-        /* ===== PROFESSIONAL COUNTDOWN TIMER ===== */
-        .countdown-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(135deg, rgba(194, 24, 7, 0.95) 0%, rgba(229, 57, 53, 0.95) 100%);
-            color: var(--white);
-            padding: var(--space-sm) var(--space-xl);
-            z-index: var(--z-top);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--space-xl);
-            flex-wrap: wrap;
-            transition: transform 0.3s ease;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            height: 60px;
-            overflow: hidden;
-        }
-
-        .countdown-message {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            font-weight: 600;
-            font-size: 0.9rem;
-            letter-spacing: 0.02em;
-            white-space: nowrap;
-        }
-
-        .countdown-message i {
-            font-size: 1rem;
-            flex-shrink: 0;
-        }
-
-        .countdown-timer {
-            display: flex;
-            align-items: center;
-            gap: var(--space-lg);
-            flex-wrap: nowrap;
-        }
-
-        .countdown-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: var(--space-xs);
-            min-width: 40px;
-        }
-
-        .countdown-value {
-            font-family: var(--font-heading);
-            font-weight: 800;
-            font-size: 1.5rem;
-            line-height: 1;
-            width: 100%;
-            text-align: center;
-            color: var(--white);
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .countdown-label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            opacity: 0.9;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-
-        .countdown-separator {
-            color: rgba(255, 255, 255, 0.5);
-            font-weight: 300;
-            margin: 0 var(--space-xs);
         }
 
         /* ===== HEADER & NAVIGATION ===== */
         .header {
             position: fixed;
-            top: 60px;
+            top: 0;
             left: 0;
             width: 100%;
             height: var(--header-height);
@@ -539,29 +417,8 @@
             font-weight: 600;
         }
 
-        h4 {
-            font-size: clamp(1.25rem, 2.5vw, 1.5rem);
-            font-weight: 600;
-        }
-
         .text-gradient {
             background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            display: inline-block;
-        }
-
-        .text-gradient-gold {
-            background: var(--gradient-gold);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            display: inline-block;
-        }
-
-        .text-gradient-entrepreneur {
-            background: var(--gradient-entrepreneur);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -678,29 +535,6 @@
             box-shadow: 0 8px 25px rgba(194, 24, 7, 0.2);
         }
 
-        .btn-entrepreneur {
-            background: var(--gradient-entrepreneur);
-            color: var(--white) !important;
-            border: none;
-        }
-
-        .btn-entrepreneur:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(44, 82, 130, 0.3);
-        }
-
-        .btn-gold {
-            background: var(--gradient-gold);
-            color: var(--primary-dark) !important;
-            border: none;
-            font-weight: 700;
-        }
-
-        .btn-gold:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
-        }
-
         .btn-outline {
             background: transparent;
             color: var(--text-primary);
@@ -729,10 +563,10 @@
 
         /* ===== BOOTCAMP HERO ===== */
         .bootcamp-hero {
-            min-height: 90vh;
+            min-height: 70vh;
             display: flex;
             align-items: center;
-            padding-top: calc(var(--header-height) + 60px);
+            padding-top: var(--header-height);
             position: relative;
             overflow: hidden;
             background: var(--gradient-light);
@@ -747,8 +581,7 @@
             bottom: 0;
             background: 
                 radial-gradient(circle at 20% 80%, rgba(194, 24, 7, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.02) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(44, 82, 130, 0.03) 0%, transparent 60%);
+                radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.02) 0%, transparent 50%);
             z-index: var(--z-negative);
         }
 
@@ -765,7 +598,7 @@
             display: inline-flex;
             align-items: center;
             gap: var(--space-sm);
-            background: var(--gradient-entrepreneur);
+            background: var(--gradient-primary);
             color: var(--white);
             padding: var(--space-sm) var(--space-lg);
             border-radius: var(--radius-full);
@@ -775,56 +608,6 @@
             margin-bottom: var(--space-xl);
             box-shadow: var(--shadow-lg);
             text-transform: uppercase;
-        }
-
-        .pricing-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-md);
-            background: rgba(45, 125, 70, 0.1);
-            color: var(--accent-green);
-            padding: var(--space-md) var(--space-xl);
-            border-radius: var(--radius-lg);
-            font-weight: 700;
-            margin: var(--space-xl) 0;
-            border: 2px solid rgba(45, 125, 70, 0.2);
-            font-size: 1.2rem;
-        }
-
-        .pricing-badge span {
-            color: var(--primary-red);
-            font-size: 1.5rem;
-        }
-
-        .hero-highlights {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: var(--space-lg);
-            margin: var(--space-2xl) 0;
-            max-width: 1000px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .highlight-item {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            background: rgba(44, 82, 130, 0.08);
-            padding: var(--space-lg);
-            border-radius: var(--radius-lg);
-            border: 1px solid rgba(44, 82, 130, 0.15);
-            transition: var(--transition-smooth);
-        }
-
-        .highlight-item:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .highlight-item i {
-            color: var(--accent-blue);
-            font-size: 1.5rem;
         }
 
         .hero-buttons {
@@ -835,319 +618,240 @@
             margin-top: var(--space-2xl);
         }
 
-        /* ===== BOOTCAMP PROGRAM STRUCTURE ===== */
-        .program-structure-section {
+        /* ===== BOOTCAMP GRID ===== */
+        .bootcamps-section {
             background: var(--bg-primary);
         }
 
-        .program-grid {
+        .bootcamps-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: var(--space-xl);
             margin-top: var(--space-2xl);
         }
 
-        .program-card {
+        .bootcamp-card {
             background: var(--gradient-card);
             border-radius: var(--radius-lg);
-            padding: var(--space-xl);
-            position: relative;
             overflow: hidden;
             border: 1px solid var(--border-color);
             transition: var(--transition-smooth);
+            position: relative;
             height: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
-        .program-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--gradient-primary);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.4s var(--transition-smooth);
-        }
-
-        .program-card:hover {
+        .bootcamp-card:hover {
             transform: translateY(-8px);
             box-shadow: var(--shadow-xl);
             border-color: var(--primary-red);
         }
 
-        .program-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .program-phase {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--primary-red);
-            font-weight: 700;
-            margin-bottom: var(--space-sm);
-        }
-
-        /* ===== WEEKLY SCHEDULE ===== */
-        .weekly-schedule-section {
-            background: var(--bg-secondary);
-        }
-
-        .schedule-timeline {
-            max-width: 800px;
-            margin: var(--space-2xl) auto;
-        }
-
-        .timeline-week {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: var(--space-2xl);
+        .bootcamp-image-container {
             position: relative;
-            padding-left: var(--space-xl);
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
         }
 
-        .timeline-week::before {
-            content: '';
+        .bootcamp-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition-smooth);
+        }
+
+        .bootcamp-card:hover .bootcamp-image {
+            transform: scale(1.05);
+        }
+
+        .bootcamp-date-badge {
             position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 2px;
+            top: var(--space-md);
+            left: var(--space-md);
+            padding: var(--space-xs) var(--space-md);
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: var(--shadow-md);
             background: var(--gradient-primary);
-        }
-
-        .timeline-week::after {
-            content: '';
-            position: absolute;
-            left: -4px;
-            top: 20px;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--primary-red);
-        }
-
-        .week-number {
-            position: absolute;
-            left: -30px;
-            top: 15px;
-            width: 60px;
-            text-align: center;
-            font-weight: 700;
-            color: var(--primary-red);
-            font-size: 1.2rem;
-            background: var(--bg-secondary);
-            padding: var(--space-xs);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
             z-index: var(--z-normal);
         }
 
-        .week-content {
-            background: var(--gradient-card);
-            border-radius: var(--radius-lg);
-            padding: var(--space-lg);
-            border: 1px solid var(--border-color);
+        .bootcamp-status {
+            position: absolute;
+            top: var(--space-md);
+            right: var(--space-md);
+            padding: var(--space-xs) var(--space-md);
+            border-radius: var(--radius-md);
+            font-size: 0.75rem;
+            font-weight: 600;
             box-shadow: var(--shadow-md);
-            flex: 1;
-            margin-left: var(--space-xl);
+            z-index: var(--z-normal);
         }
 
-        .week-tag {
+        .status-open {
+            background: rgba(45, 125, 70, 0.9);
+            color: var(--white);
+        }
+
+        .status-closing {
+            background: rgba(212, 175, 55, 0.9);
+            color: var(--primary-dark);
+        }
+
+        .status-closed {
+            background: rgba(108, 117, 125, 0.9);
+            color: var(--white);
+        }
+
+        .bootcamp-content {
+            padding: var(--space-xl);
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bootcamp-category {
             display: inline-block;
-            padding: var(--space-xs) var(--space-md);
+            padding: var(--space-2xs) var(--space-md);
             border-radius: var(--radius-full);
             font-size: 0.75rem;
             font-weight: 600;
-            margin-bottom: var(--space-sm);
+            margin-bottom: var(--space-md);
+            letter-spacing: 0.05em;
+            align-self: flex-start;
             background: rgba(194, 24, 7, 0.1);
             color: var(--primary-red);
-            border: 1px solid rgba(194, 24, 7, 0.2);
         }
 
-        .learning-points {
-            list-style: none;
-            margin-top: var(--space-md);
+        .bootcamp-details {
+            flex-grow: 1;
         }
 
-        .learning-points li {
+        .bootcamp-details h3 {
+            margin-bottom: var(--space-sm);
+            line-height: 1.3;
+        }
+
+        .bootcamp-details p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: var(--space-lg);
+        }
+
+        /* Bootcamp Meta Info */
+        .bootcamp-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+            padding-top: var(--space-md);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            color: var(--text-tertiary);
+            font-size: 0.85rem;
+        }
+
+        .meta-item i {
+            width: 16px;
+            color: var(--primary-red);
+        }
+
+        /* Deadline Countdown */
+        .deadline-countdown {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            padding: var(--space-sm) var(--space-md);
+            margin: var(--space-md) 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .deadline-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .deadline-timer {
             display: flex;
             align-items: center;
             gap: var(--space-sm);
-            margin-bottom: var(--space-xs);
-            color: var(--text-secondary);
-            font-size: 0.9rem;
         }
 
-        .learning-points i {
+        .deadline-value {
+            font-weight: 700;
+            font-size: 1.1rem;
             color: var(--primary-red);
-            font-size: 0.8rem;
         }
 
-        /* ===== TEAM SUPPORT SYSTEM ===== */
-        .team-support-section {
-            background: var(--bg-primary);
+        .deadline-unit {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
         }
 
-        .support-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: var(--space-xl);
-            margin-top: var(--space-2xl);
-        }
-
-        .support-card {
-            background: var(--gradient-card);
-            border-radius: var(--radius-lg);
-            padding: var(--space-xl);
-            text-align: center;
-            border: 1px solid var(--border-color);
-            transition: var(--transition-smooth);
-        }
-
-        .support-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-xl);
-            border-color: var(--primary-red);
-        }
-
-        .support-icon {
-            width: 70px;
-            height: 70px;
-            background: var(--gradient-primary);
-            color: var(--white);
+        /* Ticket Pricing */
+        .ticket-pricing {
+            background: var(--bg-secondary);
             border-radius: var(--radius-md);
+            padding: var(--space-sm) var(--space-md);
+            margin: var(--space-md) 0;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 1.75rem;
-            margin: 0 auto var(--space-lg);
+            justify-content: space-between;
+            border: 1px solid var(--border-color);
         }
 
-        /* ===== APPLICATION PROCESS ===== */
-        .application-process-section {
-            background: var(--bg-secondary);
+        .price-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
         }
 
-        .process-steps {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-xl);
-            max-width: 800px;
-            margin: var(--space-2xl) auto;
+        .price-amount {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary-red);
         }
 
-        .process-step {
-            display: flex;
-            align-items: flex-start;
-            gap: var(--space-xl);
-            padding: var(--space-xl);
+        .price-from {
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+            margin-top: var(--space-xs);
+        }
+
+        /* ===== NO BOOTCAMPS MESSAGE ===== */
+        .no-bootcamps {
+            text-align: center;
+            padding: var(--space-2xl);
             background: var(--gradient-card);
             border-radius: var(--radius-lg);
             border: 1px solid var(--border-color);
-            transition: var(--transition-smooth);
+            max-width: 600px;
+            margin: 0 auto;
         }
 
-        .process-step:hover {
-            transform: translateX(5px);
-            border-color: var(--primary-red);
-        }
-
-        .step-number {
-            width: 50px;
-            height: 50px;
+        .no-bootcamps-icon {
+            width: 80px;
+            height: 80px;
             background: var(--gradient-primary);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--white);
-            font-weight: 700;
-            font-size: 1.2rem;
-            flex-shrink: 0;
-        }
-
-        /* ===== BOOTCAMP BENEFITS ===== */
-        .benefits-section {
-            background: var(--bg-primary);
-        }
-
-        .benefits-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: var(--space-xl);
-            margin-top: var(--space-2xl);
-        }
-
-        .benefit-card {
-            text-align: center;
-            padding: var(--space-xl);
-            background: var(--gradient-card);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-color);
-            transition: var(--transition-smooth);
-        }
-
-        .benefit-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--primary-red);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .benefit-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
             margin: 0 auto var(--space-lg);
-            font-size: 1.5rem;
+            font-size: 2rem;
             color: var(--white);
-            background: var(--gradient-primary);
-        }
-
-        /* ===== REGISTRATION CTA ===== */
-        .registration-cta {
-            background: var(--gradient-primary);
-            color: var(--white);
-            padding: var(--space-4xl) 0;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            border-radius: var(--radius-xl);
-            margin: var(--space-4xl) auto;
-            max-width: 1200px;
-        }
-
-        .registration-cta::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%);
-        }
-
-        .cta-content {
-            position: relative;
-            z-index: var(--z-normal);
-        }
-
-        .urgency-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-sm);
-            background: rgba(255, 255, 255, 0.2);
-            color: var(--white);
-            padding: var(--space-sm) var(--space-lg);
-            border-radius: var(--radius-full);
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-            margin-bottom: var(--space-xl);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         /* ===== FOOTER ===== */
@@ -1283,63 +987,11 @@
             margin-bottom: var(--space-md);
         }
 
-        /* ===== BOOTCAMP DATA STYLES ===== */
-        .bootcamp-meta {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--space-xl);
-            flex-wrap: wrap;
-            margin: var(--space-lg) 0;
-        }
-
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-        }
-
-        .meta-item i {
-            color: var(--primary-red);
-        }
-
-        .bootcamp-image {
-            width: 100%;
-            max-height: 500px;
-            object-fit: cover;
-            border-radius: var(--radius-lg);
-            margin: var(--space-xl) 0;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .phase-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: var(--space-md);
-            margin-top: var(--space-md);
-        }
-
-        .phase-item {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            padding: var(--space-md);
-            background: rgba(44, 82, 130, 0.05);
-            border-radius: var(--radius-md);
-            border: 1px solid rgba(44, 82, 130, 0.1);
-        }
-
-        .phase-item i {
-            color: var(--accent-blue);
-        }
-
         /* ===== MOBILE NAVIGATION ===== */
         @media (max-width: 1024px) {
             .nav-links {
                 position: fixed;
-                top: calc(var(--header-height) + 60px);
+                top: var(--header-height);
                 left: 0;
                 right: 0;
                 background: var(--bg-primary);
@@ -1347,7 +999,7 @@
                 align-items: stretch;
                 gap: 0;
                 height: auto;
-                max-height: calc(100vh - var(--header-height) - 60px);
+                max-height: calc(100vh - var(--header-height));
                 overflow-y: auto;
                 padding: var(--space-md);
                 transform: translateY(-100%);
@@ -1399,54 +1051,6 @@
                 gap: var(--space-md);
                 padding: 0 var(--space-lg);
             }
-
-            .timeline-week {
-                flex-direction: column;
-                padding-left: var(--space-lg);
-            }
-
-            .week-content {
-                margin-left: 0;
-                margin-top: var(--space-lg);
-            }
-
-            .week-number {
-                position: relative;
-                left: 0;
-                top: 0;
-                margin-bottom: var(--space-sm);
-            }
-
-            .timeline-week::before {
-                left: 15px;
-            }
-
-            .timeline-week::after {
-                left: 11px;
-            }
-
-            .countdown-container {
-                padding: var(--space-xs) var(--space-lg);
-                gap: var(--space-lg);
-                height: 50px;
-            }
-
-            .countdown-value {
-                font-size: 1.25rem;
-                min-width: 35px;
-            }
-
-            .header {
-                top: 50px;
-            }
-
-            .bootcamp-hero {
-                padding-top: calc(var(--header-height) + 50px);
-            }
-
-            html {
-                scroll-padding-top: calc(var(--header-height) + 50px);
-            }
         }
 
         /* ===== RESPONSIVE DESIGN ===== */
@@ -1473,9 +1077,7 @@
             h2 { font-size: 1.75rem; }
             h3 { font-size: 1.5rem; }
 
-            .program-grid,
-            .support-grid,
-            .benefits-grid {
+            .bootcamps-grid {
                 grid-template-columns: 1fr;
                 max-width: 500px;
                 margin-left: auto;
@@ -1491,59 +1093,6 @@
             .hero-buttons .btn {
                 width: 100%;
                 max-width: 300px;
-            }
-
-            .hero-highlights {
-                overflow-x: auto;
-                flex-wrap: nowrap;
-                justify-content: flex-start;
-                padding-bottom: var(--space-sm);
-                margin: var(--space-lg) calc(var(--space-lg) * -1);
-                padding-left: var(--space-lg);
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none;
-            }
-
-            .hero-highlights::-webkit-scrollbar {
-                display: none;
-            }
-
-            .highlight-item {
-                flex-shrink: 0;
-                white-space: nowrap;
-            }
-
-            .registration-cta {
-                border-radius: var(--radius-lg);
-                margin: var(--space-2xl) var(--space-md);
-            }
-
-            .process-step {
-                flex-direction: column;
-                gap: var(--space-lg);
-            }
-
-            .step-number {
-                align-self: center;
-            }
-
-            .countdown-container {
-                flex-direction: column;
-                gap: var(--space-sm);
-                padding: var(--space-sm);
-            }
-
-            .countdown-timer {
-                gap: var(--space-md);
-            }
-
-            .countdown-value {
-                font-size: 1.1rem;
-                min-width: 30px;
-            }
-
-            .countdown-label {
-                font-size: 0.65rem;
             }
         }
 
@@ -1575,14 +1124,23 @@
                 font-size: 0.9rem;
             }
 
-            .program-card,
-            .support-card,
-            .benefit-card {
+            .bootcamp-content {
                 padding: var(--space-lg);
             }
 
-            .process-step {
-                padding: var(--space-lg);
+            .bootcamp-image-container {
+                height: 200px;
+            }
+
+            .bootcamp-date-badge,
+            .bootcamp-status {
+                top: var(--space-sm);
+                left: var(--space-sm);
+                font-size: 0.75rem;
+            }
+
+            .bootcamp-status {
+                right: var(--space-sm);
             }
 
             .theme-toggle {
@@ -1591,73 +1149,6 @@
                 width: 44px;
                 height: 44px;
                 font-size: 0.95rem;
-            }
-
-            .countdown-message {
-                font-size: 0.8rem;
-            }
-
-            .countdown-timer {
-                gap: var(--space-sm);
-            }
-
-            .countdown-value {
-                font-size: 1rem;
-                min-width: 25px;
-            }
-
-            .countdown-label {
-                font-size: 0.6rem;
-            }
-        }
-
-        @media (max-width: 360px) {
-            .logo-image {
-                height: 32px;
-            }
-            
-            .logo-text {
-                font-size: 1.1rem;
-            }
-            
-            h1 { font-size: 1.75rem; }
-            h2 { font-size: 1.25rem; }
-            h3 { font-size: 1.1rem; }
-            
-            .lead {
-                font-size: 1rem;
-            }
-            
-            .program-card,
-            .support-card,
-            .benefit-card {
-                padding: var(--space-md);
-            }
-            
-            .btn {
-                padding: var(--space-sm) var(--space-md);
-                font-size: 0.85rem;
-            }
-
-            .theme-toggle {
-                bottom: var(--space-sm);
-                right: var(--space-sm);
-                width: 40px;
-                height: 40px;
-                font-size: 0.9rem;
-            }
-
-            .countdown-container {
-                padding: var(--space-xs);
-            }
-
-            .countdown-value {
-                font-size: 0.9rem;
-                min-width: 22px;
-            }
-
-            .countdown-label {
-                font-size: 0.55rem;
             }
         }
     </style>
@@ -1668,43 +1159,8 @@
         <div class="loading-spinner"></div>
     </div>
 
-    <!-- Firebase Status Indicator -->
-    <div class="firebase-status" id="firebaseStatus" role="status" aria-live="polite">
-        <i class="fas fa-circle"></i>
-        <span>Live</span>
-    </div>
-
     <!-- Main Content (Hidden until data loads) -->
     <div id="mainContent" style="display: none;">
-        <!-- Professional Countdown Timer -->
-        <div class="countdown-container" id="countdownContainer">
-            <div class="countdown-message">
-                <i class="fas fa-clock"></i>
-                <span id="countdownMessage">Bootcamp registration closes soon:</span>
-            </div>
-            <div class="countdown-timer">
-                <div class="countdown-item">
-                    <div class="countdown-value" id="days">00</div>
-                    <div class="countdown-label">Days</div>
-                </div>
-                <span class="countdown-separator">:</span>
-                <div class="countdown-item">
-                    <div class="countdown-value" id="hours">00</div>
-                    <div class="countdown-label">Hours</div>
-                </div>
-                <span class="countdown-separator">:</span>
-                <div class="countdown-item">
-                    <div class="countdown-value" id="minutes">00</div>
-                    <div class="countdown-label">Minutes</div>
-                </div>
-                <span class="countdown-separator">:</span>
-                <div class="countdown-item">
-                    <div class="countdown-value" id="seconds">00</div>
-                    <div class="countdown-label">Seconds</div>
-                </div>
-            </div>
-        </div>
-
         <!-- Theme Toggle -->
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
             <i class="fas fa-moon"></i>
@@ -1736,158 +1192,109 @@
         </header>
 
         <!-- Bootcamp Hero Section -->
-        <section class="bootcamp-hero" id="bootcampHero">
+        <section class="bootcamp-hero">
             <div class="container">
                 <div class="bootcamp-hero-content">
-                    <div class="bootcamp-badge" id="missionBadge">
-                        <i class="fas fa-crown"></i> <span id="cohortBadge">Loading...</span>
+                    <div class="bootcamp-badge">
+                        <i class="fas fa-graduation-cap"></i> STARTUP BOOTCAMP PROGRAMS
                     </div>
                     
-                    <h1 id="heroTitle">Loading...</h1>
-                    <p class="lead" id="heroSubtitle">Loading bootcamp information...</p>
-                    
-                    <div class="bootcamp-meta" id="bootcampMeta">
-                        <!-- Meta info will be loaded dynamically -->
-                    </div>
-                    
-                    <img id="bootcampImage" class="bootcamp-image" 
-                         src="https://i.postimg.cc/CxNLzQgt/Untitled-design-3.webp" 
-                         alt="DSOG Startup Bootcamp">
-                    
-                    <div class="pricing-badge" id="pricingBadge">
-                        <i class="fas fa-gem"></i>
-                        <div id="pricingText">Loading pricing...</div>
-                    </div>
-                    
-                    <div class="hero-highlights" id="heroHighlights">
-                        <!-- Highlights will be loaded dynamically -->
-                    </div>
+                    <h1>Available <span class="text-gradient">Startup Bootcamps</span></h1>
+                    <p class="lead" id="heroSubtitle">Browse all available startup bootcamp programs, dates, pricing, and application deadlines. Secure your spot in our upcoming cohorts.</p>
                     
                     <div class="hero-buttons">
-                        <a href="#application" class="btn btn-primary btn-large" id="applyButton">
-                            <i class="fas fa-user-plus"></i> Apply for Bootcamp
+                        <a href="#bootcamps" class="btn btn-primary btn-large">
+                            <i class="fas fa-calendar-alt"></i> View Available Bootcamps
                         </a>
-                        <a href="#program" class="btn btn-secondary btn-large">
-                            <i class="fas fa-book-open"></i> View Program Details
+                        <a href="#how-to-apply" class="btn btn-secondary btn-large">
+                            <i class="fas fa-info-circle"></i> How to Apply
                         </a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Program Structure Section -->
-        <section id="program" class="program-structure-section">
+        <!-- Available Bootcamps Section -->
+        <section id="bootcamps" class="bootcamps-section">
             <div class="container">
                 <div class="section-header">
-                    <span class="section-subtitle">Structured Learning</span>
-                    <h2>Bootcamp <span class="text-gradient">Program Structure</span></h2>
-                    <p class="lead" id="programSubtitle">Loading program details...</p>
+                    <span class="section-subtitle">Current Programs</span>
+                    <h2>Available <span class="text-gradient">Startup Bootcamps</span></h2>
+                    <p class="lead" id="bootcampsSubtitle">All our startup bootcamp programs with dates, pricing, and application deadlines.</p>
                 </div>
                 
-                <div class="program-grid" id="programStructure">
-                    <!-- Program structure will be loaded dynamically -->
+                <div class="bootcamps-grid" id="bootcampsGrid">
+                    <!-- Bootcamps will be loaded dynamically from Firebase -->
                     <div class="data-loading">
                         <div class="data-loading-spinner"></div>
-                        <p>Loading program structure...</p>
+                        <p>Loading available bootcamps...</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Weekly Schedule Section -->
-        <section class="weekly-schedule-section">
+        <!-- How to Apply Section -->
+        <section id="how-to-apply" class="bootcamps-section" style="background: var(--bg-secondary);">
             <div class="container">
                 <div class="section-header">
-                    <span class="section-subtitle">1-Month Intensive</span>
-                    <h2>Weekly <span class="text-gradient">Learning Journey</span></h2>
-                    <p class="lead" id="scheduleSubtitle">Loading weekly schedule...</p>
+                    <span class="section-subtitle">Application Process</span>
+                    <h2>How to <span class="text-gradient">Apply & Enroll</span></h2>
+                    <p class="lead">Follow these simple steps to secure your spot in our startup bootcamp programs.</p>
                 </div>
                 
-                <div class="schedule-timeline" id="weeklySchedule">
-                    <!-- Weekly schedule will be loaded dynamically -->
-                    <div class="data-loading">
-                        <div class="data-loading-spinner"></div>
-                        <p>Loading weekly schedule...</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Team Support System -->
-        <section class="team-support-section">
-            <div class="container">
-                <div class="section-header">
-                    <span class="section-subtitle">Collaborative Approach</span>
-                    <h2>Team-Based <span class="text-gradient">Support System</span></h2>
-                    <p class="lead" id="teamSubtitle">Loading team support information...</p>
-                </div>
-                
-                <div class="support-grid" id="teamSupport">
-                    <!-- Team support info will be loaded dynamically -->
-                    <div class="data-loading">
-                        <div class="data-loading-spinner"></div>
-                        <p>Loading team support information...</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Application Process -->
-        <section id="application" class="application-process-section">
-            <div class="container">
-                <div class="section-header">
-                    <span class="section-subtitle">Join Our Bootcamp</span>
-                    <h2>Application <span class="text-gradient">Process</span></h2>
-                    <p class="lead" id="applicationSubtitle">Loading application process...</p>
-                </div>
-                
-                <div class="process-steps" id="applicationProcess">
-                    <!-- Application process steps will be loaded dynamically -->
-                    <div class="data-loading">
-                        <div class="data-loading-spinner"></div>
-                        <p>Loading application process...</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Bootcamp Benefits -->
-        <section class="benefits-section">
-            <div class="container">
-                <div class="section-header">
-                    <span class="section-subtitle">What You Gain</span>
-                    <h2>Bootcamp <span class="text-gradient">Benefits</span></h2>
-                    <p class="lead" id="benefitsSubtitle">Loading bootcamp benefits...</p>
-                </div>
-                
-                <div class="benefits-grid" id="bootcampBenefits">
-                    <!-- Benefits will be loaded dynamically -->
-                    <div class="data-loading">
-                        <div class="data-loading-spinner"></div>
-                        <p>Loading benefits...</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Registration CTA -->
-        <section class="registration-cta">
-            <div class="container">
-                <div class="cta-content">
-                    <div class="urgency-badge">
-                        <i class="fas fa-clock"></i> LIMITED SEATS AVAILABLE
+                <div class="bootcamps-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+                    <div class="bootcamp-card">
+                        <div class="bootcamp-content">
+                            <div class="bootcamp-category">STEP 1</div>
+                            <h3>Browse Bootcamps</h3>
+                            <p>View all available bootcamp programs, dates, and pricing information. Check application deadlines.</p>
+                            <div class="bootcamp-meta">
+                                <div class="meta-item">
+                                    <i class="fas fa-calendar-check"></i>
+                                    <span>Check Dates</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-tag"></i>
+                                    <span>View Pricing</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
-                    <h2 style="color: var(--white);">Ready to <span style="color: var(--primary-gold);">Launch Your Startup?</span></h2>
-                    <p class="lead" style="color: rgba(255, 255, 255, 0.9);" id="ctaSubtitle">Loading call to action...</p>
+                    <div class="bootcamp-card">
+                        <div class="bootcamp-content">
+                            <div class="bootcamp-category">STEP 2</div>
+                            <h3>Purchase Ticket</h3>
+                            <p>Click "Get Tickets" on your chosen bootcamp to proceed to ticket purchase with secure payment options.</p>
+                            <div class="bootcamp-meta">
+                                <div class="meta-item">
+                                    <i class="fas fa-ticket-alt"></i>
+                                    <span>Select Tickets</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-credit-card"></i>
+                                    <span>Secure Payment</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     
-                    <div class="hero-buttons">
-                        <a href="#application" class="btn btn-gold btn-large">
-                            <i class="fas fa-user-plus"></i> Apply Now
-                        </a>
-                        <a href="contact.html" class="btn btn-secondary btn-large" style="background: rgba(255,255,255,0.1); color: var(--white); border-color: rgba(255,255,255,0.3);">
-                            <i class="fas fa-question-circle"></i> Have Questions?
-                        </a>
+                    <div class="bootcamp-card">
+                        <div class="bootcamp-content">
+                            <div class="bootcamp-category">STEP 3</div>
+                            <h3>Complete Enrollment</h3>
+                            <p>After payment, complete your enrollment details and prepare for the bootcamp orientation.</p>
+                            <div class="bootcamp-meta">
+                                <div class="meta-item">
+                                    <i class="fas fa-user-check"></i>
+                                    <span>Enrollment Details</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-users"></i>
+                                    <span>Team Formation</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1901,20 +1308,19 @@
                         <img src="https://i.postimg.cc/kMZ1jTww/Untitled-design-4-removebg-preview.png" 
                              alt="DSOG" 
                              class="footer-logo">
-                        <p>DSOG Startup Builder Bootcamp: Intensive 1-month training to transform ideas into successful businesses with our structured support system.</p>
+                        <p>DSOG Startup Bootcamps: Intensive training programs designed to launch your business ideas into successful ventures.</p>
                         <div class="bootcamp-badge" style="margin-top: var(--space-md); background: rgba(255,255,255,0.1); color: white;">
-                            <i class="fas fa-crown"></i> <span id="footerCohort">Loading...</span>
+                            <i class="fas fa-graduation-cap"></i> STARTUP BOOTCAMP
                         </div>
                     </div>
                     
                     <div class="footer-section">
-                        <h3>Bootcamp Program</h3>
-                        <ul id="footerProgramLinks">
-                            <!-- Program links will be loaded dynamically -->
-                            <li><a href="#program">Program Structure</a></li>
-                            <li><a href="#weekly-schedule">Weekly Schedule</a></li>
-                            <li><a href="#application">Application Process</a></li>
-                            <li><a href="#benefits">Bootcamp Benefits</a></li>
+                        <h3>Bootcamp Links</h3>
+                        <ul>
+                            <li><a href="#bootcamps">Available Bootcamps</a></li>
+                            <li><a href="#how-to-apply">How to Apply</a></li>
+                            <li><a href="events.html">All Events</a></li>
+                            <li><a href="tickets.html">Ticket Purchase</a></li>
                         </ul>
                     </div>
                     
@@ -1925,26 +1331,27 @@
                             <li><a href="about.html">About DSOG</a></li>
                             <li><a href="enterprise.html">Enterprise Solutions</a></li>
                             <li><a href="training.html">Training Programs</a></li>
-                            <li><a href="bootcamp.html">Startup Bootcamp</a></li>
+                            <li><a href="bootcamp.html">Startup Bootcamps</a></li>
                             <li><a href="contact.html">Contact Us</a></li>
                         </ul>
                     </div>
                     
                     <div class="footer-section">
                         <h3>Bootcamp Information</h3>
-                        <ul id="footerContact">
-                            <!-- Contact info will be loaded dynamically -->
+                        <ul>
                             <li><i class="fas fa-phone"></i> +254 733 737 983</li>
                             <li><i class="fas fa-envelope"></i> bootcamp@dsog.org</li>
                             <li><i class="fab fa-whatsapp"></i> Bootcamp Application</li>
                             <li><i class="fas fa-map-marker-alt"></i> Nairobi, Kenya</li>
+                            <li><i class="fas fa-calendar-alt"></i> Check Dates Above</li>
+                            <li><i class="fas fa-tag"></i> See Pricing Above</li>
                         </ul>
                     </div>
                 </div>
                 
                 <div class="copyright">
-                    <p>&copy; <span id="currentYear"></span> DSOG Startup Builder Bootcamp. All rights reserved.</p>
-                    <p style="margin-top: var(--space-sm); font-size: 0.85rem;">1-Month Intensive Training • Team-Based Learning • Startup Support • Entrepreneur Development</p>
+                    <p>&copy; <span id="currentYear"></span> DSOG Startup Bootcamps. All rights reserved.</p>
+                    <p style="margin-top: var(--space-sm); font-size: 0.85rem;">Startup Training • Business Launch • Entrepreneur Development • Team Building • Market Ready</p>
                 </div>
             </div>
         </footer>
@@ -1953,7 +1360,7 @@
     <!-- JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 DSOG Startup Bootcamp Version 11.0.0 - Firebase Enhanced');
+            console.log('🚀 DSOG Bootcamps Page - Loading from Firebase');
             
             // Initialize app
             initializeApp();
@@ -1964,9 +1371,6 @@
                     while (!window.firebase) {
                         await new Promise(resolve => setTimeout(resolve, 100));
                     }
-                    
-                    // Set up Firebase connection status
-                    setupFirebaseStatus();
                     
                     // Fetch bootcamp data from Firebase
                     await fetchBootcampData();
@@ -1980,599 +1384,345 @@
                     // Set current year
                     document.getElementById('currentYear').textContent = new Date().getFullYear();
                     
-                    // Initialize countdown timer
-                    initializeCountdown();
-                    
                 } catch (error) {
                     console.error('Error initializing app:', error);
                     showError('Failed to load bootcamp data. Please refresh the page.');
                 }
             }
             
-            function setupFirebaseStatus() {
-                try {
-                    const statusEl = document.getElementById('firebaseStatus');
-                    if (statusEl) {
-                        statusEl.innerHTML = '<i class="fas fa-circle"></i><span>Connected to Firebase</span>';
-                    }
-                } catch (error) {
-                    console.log('Firebase status indicator not available');
-                }
-            }
-            
             async function fetchBootcampData() {
-                console.log('Fetching bootcamp data from Firebase...');
+                console.log('Fetching bootcamp events from Firebase...');
                 
-                // Reference to bootcamp content in Firebase
-                const bootcampRef = window.firebase.ref(window.firebase.database, 'bootcampContent');
+                // Reference to events in Firebase (same as events page uses)
+                const eventsRef = window.firebase.ref(window.firebase.database, 'upcomingEvents');
                 
                 return new Promise((resolve, reject) => {
-                    window.firebase.onValue(bootcampRef, (snapshot) => {
+                    window.firebase.onValue(eventsRef, (snapshot) => {
                         const data = snapshot.val();
                         if (data) {
-                            console.log('Bootcamp data loaded successfully:', data);
+                            console.log('Events data loaded successfully from Firebase');
                             
-                            // Update page with data from Firebase
-                            updatePageWithData(data);
+                            // Filter for bootcamp events only
+                            const bootcampEvents = filterBootcampEvents(data);
+                            
+                            // Update page with bootcamp events
+                            updateBootcampGrid(bootcampEvents);
                             
                             // Hide loading screen and show content
                             document.getElementById('loadingScreen').style.display = 'none';
                             document.getElementById('mainContent').style.display = 'block';
                             
-                            resolve(data);
+                            resolve(bootcampEvents);
                         } else {
-                            console.warn('No bootcamp data found in Firebase, using default data');
-                            loadDefaultData();
-                            resolve(null);
+                            console.error('No events data found in Firebase');
+                            showNoBootcampsMessage();
+                            document.getElementById('loadingScreen').style.display = 'none';
+                            document.getElementById('mainContent').style.display = 'block';
+                            reject(new Error('No events data found in Firebase'));
                         }
                     }, (error) => {
                         console.error('Firebase error:', error);
-                        loadDefaultData();
+                        showNoBootcampsMessage();
+                        document.getElementById('loadingScreen').style.display = 'none';
+                        document.getElementById('mainContent').style.display = 'block';
                         reject(error);
                     });
                 });
             }
             
-            function loadDefaultData() {
-                const defaultData = {
-                    hero: {
-                        cohort: "Cohort 1",
-                        mainTitle: "Startup Builder Bootcamp",
-                        subtitle: "Transform your idea into a real business in just 1 month. Learn business fundamentals, build your team, and launch with our support.",
-                        imageUrl: "https://i.postimg.cc/CxNLzQgt/Untitled-design-3.webp",
-                        meta: [
-                            { icon: "fas fa-calendar", text: "1 Month Intensive" },
-                            { icon: "fas fa-users", text: "Team-Based Learning" },
-                            { icon: "fas fa-graduation-cap", text: "Practical Training" }
-                        ],
-                        pricing: {
-                            amount: "3,500",
-                            currency: "KES",
-                            description: "Special Pioneer Price"
-                        },
-                        highlights: [
-                            { icon: "fas fa-rocket", text: "Launch Your Startup" },
-                            { icon: "fas fa-user-friends", text: "Team Formation Support" },
-                            { icon: "fas fa-hands-helping", text: "Post-Bootcamp Support" }
-                        ]
-                    },
-                    program: {
-                        subtitle: "Our 1-month intensive program follows the Golden Circle methodology",
-                        phases: [
-                            {
-                                phase: "PHASE 1",
-                                title: "Personal Identity & Purpose",
-                                description: "Start with self-discovery to understand your entrepreneurial identity and purpose.",
-                                items: ["Self-assessment exercises", "Purpose discovery", "Entrepreneurial mindset"]
-                            },
-                            {
-                                phase: "PHASE 2",
-                                title: "The Golden Circle: WHY",
-                                description: "Discover your core purpose - why your business exists beyond making money.",
-                                items: ["Core purpose discovery", "Mission statement", "Value proposition"]
-                            },
-                            {
-                                phase: "PHASE 3",
-                                title: "The Golden Circle: WHAT",
-                                description: "Define what your business does - products, services, and value delivery.",
-                                items: ["Business model canvas", "Product development", "Service design"]
-                            },
-                            {
-                                phase: "PHASE 4",
-                                title: "The Golden Circle: HOW",
-                                description: "Learn how to execute - operations, marketing, and business systems.",
-                                items: ["Execution strategy", "Marketing plan", "Operational systems"]
-                            }
-                        ]
-                    },
-                    schedule: {
-                        subtitle: "Weekly breakdown of our intensive 1-month bootcamp",
-                        weeks: [
-                            {
-                                week: "Week 1",
-                                tag: "Identity & Foundation",
-                                title: "Personal Discovery & Team Formation",
-                                focus: "Building entrepreneurial identity and forming teams",
-                                points: [
-                                    "Self-discovery exercises and purpose identification",
-                                    "Understanding entrepreneurial mindset",
-                                    "Team formation and role assignment",
-                                    "Introduction to Golden Circle methodology"
-                                ]
-                            },
-                            {
-                                week: "Week 2",
-                                tag: "WHY & Vision",
-                                title: "Business Purpose & Core Values",
-                                focus: "Defining business purpose and core values",
-                                points: [
-                                    "Discovering your business WHY",
-                                    "Developing mission and vision statements",
-                                    "Identifying core values and principles",
-                                    "Creating value proposition canvas"
-                                ]
-                            },
-                            {
-                                week: "Week 3",
-                                tag: "WHAT & Strategy",
-                                title: "Business Model & Product Development",
-                                focus: "Developing business model and product strategy",
-                                points: [
-                                    "Business Model Canvas development",
-                                    "Product/service design and development",
-                                    "Market research and validation",
-                                    "Financial planning basics"
-                                ]
-                            },
-                            {
-                                week: "Week 4",
-                                tag: "HOW & Execution",
-                                title: "Launch & Operations",
-                                focus: "Launch preparation and operational setup",
-                                points: [
-                                    "Marketing and sales strategy execution",
-                                    "Operational systems setup",
-                                    "Launch planning and execution",
-                                    "Post-launch support planning"
-                                ]
-                            }
-                        ]
-                    },
-                    teamSupport: {
-                        subtitle: "Comprehensive support system for team success",
-                        supportTypes: [
-                            {
-                                icon: "fas fa-users",
-                                title: "Team Formation Support",
-                                description: "We help match you with compatible teammates or guide you in forming your own team of 4 members."
-                            },
-                            {
-                                icon: "fas fa-chalkboard-teacher",
-                                title: "Weekly Mentorship",
-                                description: "Regular mentorship sessions with experienced entrepreneurs and business coaches."
-                            },
-                            {
-                                icon: "fas fa-tools",
-                                title: "Practical Tools",
-                                description: "Access to business tools, templates, and resources for immediate implementation."
-                            },
-                            {
-                                icon: "fas fa-network-wired",
-                                title: "Post-Bootcamp Network",
-                                description: "Continued access to our entrepreneur network and alumni community."
-                            }
-                        ]
-                    },
-                    application: {
-                        subtitle: "Simple 3-step application process",
-                        steps: [
-                            {
-                                step: "1",
-                                title: "Online Application",
-                                description: "Complete our online application form with basic information and your entrepreneurial background."
-                            },
-                            {
-                                step: "2",
-                                title: "Team Formation",
-                                description: "Form your team of 4 members or get matched with compatible teammates through our system."
-                            },
-                            {
-                                step: "3",
-                                title: "Onboarding & Payment",
-                                description: "Complete the registration process with payment and attend the orientation session."
-                            }
-                        ]
-                    },
-                    benefits: {
-                        subtitle: "What you gain from our bootcamp experience",
-                        benefitsList: [
-                            {
-                                icon: "fas fa-rocket",
-                                title: "Launch-Ready Startup",
-                                description: "Graduate with a functional business ready to operate in the market."
-                            },
-                            {
-                                icon: "fas fa-handshake",
-                                title: "Team Partnership",
-                                description: "Build strong partnerships with like-minded entrepreneurs."
-                            },
-                            {
-                                icon: "fas fa-tools",
-                                title: "Practical Skills",
-                                description: "Acquire hands-on business skills immediately applicable to your venture."
-                            },
-                            {
-                                icon: "fas fa-network-wired",
-                                title: "Entrepreneur Network",
-                                description: "Join our growing network of entrepreneurs and business mentors."
-                            }
-                        ]
-                    },
-                    cta: {
-                        subtitle: "Don't miss this opportunity to transform your entrepreneurial journey. Limited seats available for our upcoming cohort.",
-                        buttons: [
-                            { text: "Apply Now", url: "#application", type: "primary" },
-                            { text: "Contact Us", url: "contact.html", type: "secondary" }
-                        ]
+            function filterBootcampEvents(eventsData) {
+                console.log('Filtering bootcamp events from all events...');
+                
+                const bootcamps = [];
+                
+                // Convert object to array if needed
+                const eventsArray = Array.isArray(eventsData) ? eventsData : Object.values(eventsData);
+                
+                // Filter events where category is 'bootcamp'
+                eventsArray.forEach(event => {
+                    if (event && event.active !== false && event.category === 'bootcamp') {
+                        bootcamps.push(event);
                     }
-                };
+                });
                 
-                updatePageWithData(defaultData);
-                document.getElementById('loadingScreen').style.display = 'none';
-                document.getElementById('mainContent').style.display = 'block';
+                console.log(`Found ${bootcamps.length} bootcamp events`);
+                return bootcamps;
             }
             
-            function updatePageWithData(data) {
-                // Update Hero Section
-                updateHeroSection(data.hero);
+            function updateBootcampGrid(bootcamps) {
+                const grid = document.getElementById('bootcampsGrid');
+                const subtitle = document.getElementById('bootcampsSubtitle');
                 
-                // Update Program Structure
-                updateProgramStructure(data.program);
+                if (!grid) return;
                 
-                // Update Weekly Schedule
-                updateWeeklySchedule(data.schedule);
+                if (bootcamps.length === 0) {
+                    showNoBootcampsMessage();
+                    if (subtitle) {
+                        subtitle.textContent = 'No bootcamps are currently available. Check back soon for upcoming programs.';
+                    }
+                    return;
+                }
                 
-                // Update Team Support
-                updateTeamSupport(data.teamSupport);
+                // Update subtitle with count
+                if (subtitle) {
+                    subtitle.textContent = `Showing ${bootcamps.length} available bootcamp program${bootcamps.length !== 1 ? 's' : ''} with dates, pricing, and application deadlines.`;
+                }
                 
-                // Update Application Process
-                updateApplicationProcess(data.application);
+                // Sort bootcamps by date (soonest first)
+                bootcamps.sort((a, b) => {
+                    const dateA = a.date ? new Date(a.date) : new Date('9999-12-31');
+                    const dateB = b.date ? new Date(b.date) : new Date('9999-12-31');
+                    return dateA - dateB;
+                });
                 
-                // Update Benefits
-                updateBenefits(data.benefits);
+                // Clear loading message
+                grid.innerHTML = '';
                 
-                // Update CTA
-                updateCTA(data.cta);
+                // Create bootcamp cards
+                bootcamps.forEach((bootcamp, index) => {
+                    const card = createBootcampCard(bootcamp, index);
+                    grid.appendChild(card);
+                });
                 
-                // Update Footer
-                updateFooter(data);
+                // Initialize animations
+                setTimeout(() => {
+                    initializeAnimations();
+                }, 100);
             }
             
-            function updateHeroSection(heroData) {
-                if (!heroData) return;
+            function createBootcampCard(bootcamp, index) {
+                const card = document.createElement('div');
+                card.className = 'bootcamp-card animate-on-scroll';
+                card.dataset.delay = index * 100;
+                card.id = `bootcamp-${bootcamp.id || index}`;
                 
-                // Update cohort badge
-                const cohortBadge = document.getElementById('cohortBadge');
-                if (cohortBadge && heroData.cohort) {
-                    cohortBadge.textContent = heroData.cohort;
+                // Format date
+                let dateText = 'Date TBD';
+                if (bootcamp.date) {
+                    try {
+                        const bootcampDate = new Date(bootcamp.date);
+                        if (!isNaN(bootcampDate.getTime())) {
+                            dateText = bootcampDate.toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'short',
+                                day: 'numeric'
+                            });
+                        }
+                    } catch (error) {
+                        console.error('Error formatting date:', error);
+                    }
                 }
                 
-                // Update footer cohort
-                const footerCohort = document.getElementById('footerCohort');
-                if (footerCohort && heroData.cohort) {
-                    footerCohort.textContent = heroData.cohort;
-                }
+                // Calculate deadline status
+                const deadlineStatus = calculateDeadlineStatus(bootcamp);
+                const deadlineCountdown = calculateDeadlineCountdown(bootcamp);
                 
-                // Update title and subtitle
-                const heroTitle = document.getElementById('heroTitle');
-                if (heroTitle && heroData.mainTitle) {
-                    heroTitle.innerHTML = heroData.mainTitle;
-                }
+                // Get lowest ticket price
+                const lowestPrice = getLowestTicketPrice(bootcamp);
+                const currency = bootcamp.currency || 'KES';
                 
-                const heroSubtitle = document.getElementById('heroSubtitle');
-                if (heroSubtitle && heroData.subtitle) {
-                    heroSubtitle.textContent = heroData.subtitle;
-                }
+                // Default image for bootcamps
+                const defaultImage = 'https://i.postimg.cc/CxNLzQgt/Untitled-design-3.webp';
                 
-                // Update bootcamp image
-                const bootcampImage = document.getElementById('bootcampImage');
-                if (bootcampImage && heroData.imageUrl) {
-                    bootcampImage.src = heroData.imageUrl;
-                    bootcampImage.alt = heroData.mainTitle || 'DSOG Startup Bootcamp';
-                }
-                
-                // Update meta information
-                const bootcampMeta = document.getElementById('bootcampMeta');
-                if (bootcampMeta && heroData.meta) {
-                    bootcampMeta.innerHTML = '';
-                    heroData.meta.forEach(item => {
-                        const metaItem = document.createElement('div');
-                        metaItem.className = 'meta-item';
-                        metaItem.innerHTML = `
-                            <i class="${item.icon}"></i>
-                            <span>${item.text}</span>
-                        `;
-                        bootcampMeta.appendChild(metaItem);
-                    });
-                }
-                
-                // Update pricing badge
-                const pricingText = document.getElementById('pricingText');
-                if (pricingText && heroData.pricing) {
-                    pricingText.innerHTML = `
-                        ${heroData.pricing.description || 'Special Price'}: 
-                        <span>${heroData.pricing.currency || 'KES'} ${heroData.pricing.amount || '3,500'}</span>
-                    `;
-                }
-                
-                // Update highlights
-                const highlightsContainer = document.getElementById('heroHighlights');
-                if (highlightsContainer && heroData.highlights) {
-                    highlightsContainer.innerHTML = '';
-                    heroData.highlights.forEach(highlight => {
-                        const highlightElement = document.createElement('div');
-                        highlightElement.className = 'highlight-item animate-on-scroll';
-                        highlightElement.innerHTML = `
-                            <i class="${highlight.icon}"></i>
-                            <span>${highlight.text}</span>
-                        `;
-                        highlightsContainer.appendChild(highlightElement);
-                    });
-                }
-            }
-            
-            function updateProgramStructure(programData) {
-                if (!programData) return;
-                
-                // Update subtitle
-                const programSubtitle = document.getElementById('programSubtitle');
-                if (programSubtitle && programData.subtitle) {
-                    programSubtitle.textContent = programData.subtitle;
-                }
-                
-                // Update program structure
-                const programStructure = document.getElementById('programStructure');
-                if (programStructure && programData.phases) {
-                    programStructure.innerHTML = '';
-                    programData.phases.forEach((phase, index) => {
-                        const phaseCard = document.createElement('div');
-                        phaseCard.className = 'program-card animate-on-scroll';
-                        phaseCard.dataset.delay = index * 100;
-                        
-                        let itemsHTML = '';
-                        if (phase.items && phase.items.length > 0) {
-                            itemsHTML = `
-                                <div class="phase-grid">
-                                    ${phase.items.map(item => `
-                                        <div class="phase-item">
-                                            <i class="fas fa-check-circle"></i>
-                                            <span>${item}</span>
-                                        </div>
-                                    `).join('')}
+                card.innerHTML = `
+                    <div class="bootcamp-image-container">
+                        <img src="${bootcamp.imageUrl || defaultImage}" 
+                             alt="${bootcamp.title || 'Startup Bootcamp'}" 
+                             class="bootcamp-image"
+                             onerror="this.src='${defaultImage}'">
+                        <div class="bootcamp-date-badge">
+                            <i class="fas fa-calendar"></i> ${dateText}
+                        </div>
+                        <div class="bootcamp-status ${deadlineStatus.class}">
+                            <i class="${deadlineStatus.icon}"></i> ${deadlineStatus.text}
+                        </div>
+                    </div>
+                    <div class="bootcamp-content">
+                        <span class="bootcamp-category">STARTUP BOOTCAMP</span>
+                        <div class="bootcamp-details">
+                            <h3>${bootcamp.title || 'Startup Bootcamp Program'}</h3>
+                            ${bootcamp.subtitle ? `<p><strong>${bootcamp.subtitle}</strong></p>` : ''}
+                            <p>${bootcamp.description || 'Join our intensive startup bootcamp program to launch your business idea.'}</p>
+                            
+                            ${deadlineCountdown ? `
+                                <div class="deadline-countdown">
+                                    <div class="deadline-label">Application Deadline:</div>
+                                    <div class="deadline-timer">
+                                        <span class="deadline-value">${deadlineCountdown.value}</span>
+                                        <span class="deadline-unit">${deadlineCountdown.unit}</span>
+                                        ${deadlineCountdown.remaining ? `<span style="margin-left: auto; font-size: 0.8rem; color: var(--text-tertiary);">${deadlineCountdown.remaining} left</span>` : ''}
+                                    </div>
                                 </div>
-                            `;
-                        }
-                        
-                        phaseCard.innerHTML = `
-                            <div class="program-phase">${phase.phase || `PHASE ${index + 1}`}</div>
-                            <h3>${phase.title || 'Program Phase'}</h3>
-                            <p>${phase.description || 'Program phase description'}</p>
-                            ${itemsHTML}
-                        `;
-                        programStructure.appendChild(phaseCard);
-                    });
-                }
-            }
-            
-            function updateWeeklySchedule(scheduleData) {
-                if (!scheduleData) return;
-                
-                // Update subtitle
-                const scheduleSubtitle = document.getElementById('scheduleSubtitle');
-                if (scheduleSubtitle && scheduleData.subtitle) {
-                    scheduleSubtitle.textContent = scheduleData.subtitle;
-                }
-                
-                // Update weekly schedule
-                const weeklySchedule = document.getElementById('weeklySchedule');
-                if (weeklySchedule && scheduleData.weeks) {
-                    weeklySchedule.innerHTML = '';
-                    scheduleData.weeks.forEach((week, index) => {
-                        const weekElement = document.createElement('div');
-                        weekElement.className = 'timeline-week animate-on-scroll';
-                        weekElement.dataset.delay = index * 100;
-                        weekElement.id = `week${index + 1}`;
-                        
-                        let pointsHTML = '';
-                        if (week.points && week.points.length > 0) {
-                            pointsHTML = `
-                                <ul class="learning-points">
-                                    ${week.points.map(point => `
-                                        <li><i class="fas fa-check"></i> ${point}</li>
-                                    `).join('')}
-                                </ul>
-                            `;
-                        }
-                        
-                        weekElement.innerHTML = `
-                            <div class="week-number">${week.week || `Week ${index + 1}`}</div>
-                            <div class="week-content">
-                                <span class="week-tag">${week.tag || 'Learning Week'}</span>
-                                <h4>${week.title || 'Weekly Focus'}</h4>
-                                <p><strong>Focus:</strong> ${week.focus || 'Weekly learning focus'}</p>
-                                ${pointsHTML}
+                            ` : ''}
+                            
+                            ${lowestPrice > 0 ? `
+                                <div class="ticket-pricing">
+                                    <div class="price-label">Ticket Price:</div>
+                                    <div class="price-amount">${currency} ${lowestPrice}</div>
+                                </div>
+                                <div class="price-from">
+                                    <i class="fas fa-info-circle"></i> ${getTicketCount(bootcamp)} ticket option${getTicketCount(bootcamp) !== 1 ? 's' : ''} available
+                                </div>
+                            ` : ''}
+                            
+                            <div class="bootcamp-meta">
+                                ${bootcamp.duration ? `
+                                    <div class="meta-item">
+                                        <i class="fas fa-clock"></i>
+                                        <span>${bootcamp.duration}</span>
+                                    </div>
+                                ` : ''}
+                                ${bootcamp.venue ? `
+                                    <div class="meta-item">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span>${bootcamp.venue}</span>
+                                    </div>
+                                ` : ''}
+                                ${bootcamp.maxParticipants ? `
+                                    <div class="meta-item">
+                                        <i class="fas fa-users"></i>
+                                        <span>Max: ${bootcamp.maxParticipants}</span>
+                                    </div>
+                                ` : ''}
                             </div>
-                        `;
-                        weeklySchedule.appendChild(weekElement);
-                    });
+                        </div>
+                        <div style="margin-top: auto;">
+                            <a href="tickets.html?event=${bootcamp.id || index}" class="btn btn-primary btn-block">
+                                <i class="fas fa-ticket-alt"></i> Get Tickets
+                            </a>
+                        </div>
+                    </div>
+                `;
+                
+                return card;
+            }
+            
+            function calculateDeadlineStatus(bootcamp) {
+                const now = new Date();
+                let deadline = null;
+                
+                // Try to get deadline from various possible fields
+                if (bootcamp.deadline) {
+                    deadline = new Date(bootcamp.deadline);
+                } else if (bootcamp.applicationDeadline) {
+                    deadline = new Date(bootcamp.applicationDeadline);
+                } else if (bootcamp.registrationDeadline) {
+                    deadline = new Date(bootcamp.registrationDeadline);
+                } else if (bootcamp.date) {
+                    // If no deadline, use event date minus 7 days
+                    const eventDate = new Date(bootcamp.date);
+                    deadline = new Date(eventDate);
+                    deadline.setDate(eventDate.getDate() - 7);
+                }
+                
+                if (!deadline || isNaN(deadline.getTime())) {
+                    return { class: 'status-open', icon: 'fas fa-calendar-plus', text: 'Open' };
+                }
+                
+                const timeDiff = deadline - now;
+                const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+                
+                if (daysDiff <= 0) {
+                    return { class: 'status-closed', icon: 'fas fa-calendar-times', text: 'Closed' };
+                } else if (daysDiff <= 7) {
+                    return { class: 'status-closing', icon: 'fas fa-clock', text: 'Closing Soon' };
+                } else {
+                    return { class: 'status-open', icon: 'fas fa-calendar-check', text: 'Open' };
                 }
             }
             
-            function updateTeamSupport(supportData) {
-                if (!supportData) return;
+            function calculateDeadlineCountdown(bootcamp) {
+                const now = new Date();
+                let deadline = null;
                 
-                // Update subtitle
-                const teamSubtitle = document.getElementById('teamSubtitle');
-                if (teamSubtitle && supportData.subtitle) {
-                    teamSubtitle.textContent = supportData.subtitle;
+                // Try to get deadline from various possible fields
+                if (bootcamp.deadline) {
+                    deadline = new Date(bootcamp.deadline);
+                } else if (bootcamp.applicationDeadline) {
+                    deadline = new Date(bootcamp.applicationDeadline);
+                } else if (bootcamp.registrationDeadline) {
+                    deadline = new Date(bootcamp.registrationDeadline);
+                } else if (bootcamp.date) {
+                    // If no deadline, use event date minus 7 days
+                    const eventDate = new Date(bootcamp.date);
+                    deadline = new Date(eventDate);
+                    deadline.setDate(eventDate.getDate() - 7);
                 }
                 
-                // Update team support
-                const teamSupport = document.getElementById('teamSupport');
-                if (teamSupport && supportData.supportTypes) {
-                    teamSupport.innerHTML = '';
-                    supportData.supportTypes.forEach((support, index) => {
-                        const supportCard = document.createElement('div');
-                        supportCard.className = 'support-card animate-on-scroll';
-                        supportCard.dataset.delay = index * 100;
-                        
-                        supportCard.innerHTML = `
-                            <div class="support-icon">
-                                <i class="${support.icon}"></i>
-                            </div>
-                            <h3>${support.title || 'Support Type'}</h3>
-                            <p>${support.description || 'Support description'}</p>
-                        `;
-                        teamSupport.appendChild(supportCard);
-                    });
-                }
-            }
-            
-            function updateApplicationProcess(applicationData) {
-                if (!applicationData) return;
-                
-                // Update subtitle
-                const applicationSubtitle = document.getElementById('applicationSubtitle');
-                if (applicationSubtitle && applicationData.subtitle) {
-                    applicationSubtitle.textContent = applicationData.subtitle;
+                if (!deadline || isNaN(deadline.getTime())) {
+                    return null;
                 }
                 
-                // Update application process
-                const applicationProcess = document.getElementById('applicationProcess');
-                if (applicationProcess && applicationData.steps) {
-                    applicationProcess.innerHTML = '';
-                    applicationData.steps.forEach((step, index) => {
-                        const stepElement = document.createElement('div');
-                        stepElement.className = 'process-step animate-on-scroll';
-                        stepElement.dataset.delay = index * 100;
-                        
-                        stepElement.innerHTML = `
-                            <div class="step-number">${step.step || index + 1}</div>
-                            <div>
-                                <h3>${step.title || 'Application Step'}</h3>
-                                <p>${step.description || 'Step description'}</p>
-                            </div>
-                        `;
-                        applicationProcess.appendChild(stepElement);
-                    });
+                const timeDiff = deadline - now;
+                
+                if (timeDiff <= 0) {
+                    return { value: 'Closed', unit: 'Applications', remaining: null };
+                }
+                
+                const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+                const hoursDiff = Math.ceil(timeDiff / (1000 * 60 * 60));
+                
+                if (daysDiff > 30) {
+                    const monthsDiff = Math.floor(daysDiff / 30);
+                    return { 
+                        value: monthsDiff, 
+                        unit: monthsDiff === 1 ? 'Month' : 'Months',
+                        remaining: `${daysDiff} days`
+                    };
+                } else if (daysDiff > 0) {
+                    return { 
+                        value: daysDiff, 
+                        unit: daysDiff === 1 ? 'Day' : 'Days',
+                        remaining: daysDiff <= 7 ? 'Final days' : null
+                    };
+                } else {
+                    return { 
+                        value: hoursDiff, 
+                        unit: hoursDiff === 1 ? 'Hour' : 'Hours',
+                        remaining: 'Final hours'
+                    };
                 }
             }
             
-            function updateBenefits(benefitsData) {
-                if (!benefitsData) return;
+            function getLowestTicketPrice(bootcamp) {
+                if (!bootcamp.tickets) return 0;
                 
-                // Update subtitle
-                const benefitsSubtitle = document.getElementById('benefitsSubtitle');
-                if (benefitsSubtitle && benefitsData.subtitle) {
-                    benefitsSubtitle.textContent = benefitsData.subtitle;
-                }
+                const tickets = Object.values(bootcamp.tickets);
+                if (tickets.length === 0) return 0;
                 
-                // Update benefits
-                const bootcampBenefits = document.getElementById('bootcampBenefits');
-                if (bootcampBenefits && benefitsData.benefitsList) {
-                    bootcampBenefits.innerHTML = '';
-                    benefitsData.benefitsList.forEach((benefit, index) => {
-                        const benefitCard = document.createElement('div');
-                        benefitCard.className = 'benefit-card animate-on-scroll';
-                        benefitCard.dataset.delay = index * 100;
-                        
-                        benefitCard.innerHTML = `
-                            <div class="benefit-icon">
-                                <i class="${benefit.icon}"></i>
-                            </div>
-                            <h4>${benefit.title || 'Benefit'}</h4>
-                            <p>${benefit.description || 'Benefit description'}</p>
-                        `;
-                        bootcampBenefits.appendChild(benefitCard);
-                    });
-                }
+                const prices = tickets
+                    .map(t => parseFloat(t.price) || 0)
+                    .filter(price => price > 0);
+                
+                return prices.length > 0 ? Math.min(...prices) : 0;
             }
             
-            function updateCTA(ctaData) {
-                if (!ctaData) return;
-                
-                // Update CTA subtitle
-                const ctaSubtitle = document.getElementById('ctaSubtitle');
-                if (ctaSubtitle && ctaData.subtitle) {
-                    ctaSubtitle.textContent = ctaData.subtitle;
-                }
+            function getTicketCount(bootcamp) {
+                if (!bootcamp.tickets) return 0;
+                return Object.keys(bootcamp.tickets).length;
             }
             
-            function updateFooter(data) {
-                // Update footer program links
-                const footerProgramLinks = document.getElementById('footerProgramLinks');
-                if (footerProgramLinks) {
-                    const links = [
-                        { text: "Program Structure", href: "#program" },
-                        { text: "Weekly Schedule", href: "#weekly-schedule" },
-                        { text: "Team Support", href: "#team-support" },
-                        { text: "Application Process", href: "#application" },
-                        { text: "Bootcamp Benefits", href: "#benefits" }
-                    ];
-                    
-                    footerProgramLinks.innerHTML = '';
-                    links.forEach(link => {
-                        const li = document.createElement('li');
-                        li.innerHTML = `<a href="${link.href}">${link.text}</a>`;
-                        footerProgramLinks.appendChild(li);
-                    });
-                }
-            }
-            
-            function initializeCountdown() {
-                // Get deadline from data or use default
-                const deadline = new Date();
-                deadline.setDate(deadline.getDate() + 30); // 30 days from now
+            function showNoBootcampsMessage() {
+                const grid = document.getElementById('bootcampsGrid');
+                if (!grid) return;
                 
-                function updateCountdown() {
-                    const now = new Date();
-                    const difference = deadline - now;
-                    
-                    if (difference > 0) {
-                        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-                        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-                        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-                        
-                        const daysEl = document.getElementById('days');
-                        const hoursEl = document.getElementById('hours');
-                        const minutesEl = document.getElementById('minutes');
-                        const secondsEl = document.getElementById('seconds');
-                        
-                        if (daysEl) daysEl.textContent = days.toString().padStart(2, '0');
-                        if (hoursEl) hoursEl.textContent = hours.toString().padStart(2, '0');
-                        if (minutesEl) minutesEl.textContent = minutes.toString().padStart(2, '0');
-                        if (secondsEl) secondsEl.textContent = seconds.toString().padStart(2, '0');
-                        
-                        const countdownContainer = document.getElementById('countdownContainer');
-                        if (countdownContainer) {
-                            countdownContainer.style.display = 'flex';
-                        }
-                    } else {
-                        const countdownContainer = document.getElementById('countdownContainer');
-                        if (countdownContainer) {
-                            countdownContainer.style.display = 'none';
-                        }
-                        
-                        const countdownMessage = document.getElementById('countdownMessage');
-                        if (countdownMessage) {
-                            countdownMessage.textContent = 'Bootcamp registration is now closed';
-                        }
-                    }
-                }
-                
-                updateCountdown();
-                setInterval(updateCountdown, 1000);
+                grid.innerHTML = `
+                    <div class="no-bootcamps animate-on-scroll" style="grid-column: 1 / -1;">
+                        <div class="no-bootcamps-icon">
+                            <i class="fas fa-calendar-times"></i>
+                        </div>
+                        <h3>No Bootcamps Available</h3>
+                        <p>There are currently no startup bootcamp programs available for registration. Please check back soon for upcoming bootcamp announcements.</p>
+                        <div style="margin-top: var(--space-lg);">
+                            <a href="events.html" class="btn btn-primary">
+                                <i class="fas fa-calendar-alt"></i> View All Events
+                            </a>
+                            <a href="contact.html" class="btn btn-outline" style="margin-left: var(--space-sm);">
+                                <i class="fas fa-envelope"></i> Get Notified
+                            </a>
+                        </div>
+                    </div>
+                `;
             }
             
             function showError(message) {
@@ -2711,7 +1861,7 @@
                             
                             if (targetElement) {
                                 const headerHeight = document.getElementById('header')?.offsetHeight || 72;
-                                const targetPosition = targetElement.offsetTop - headerHeight - 60 - 20;
+                                const targetPosition = targetElement.offsetTop - headerHeight - 20;
                                 
                                 window.scrollTo({
                                     top: targetPosition,
