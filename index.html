@@ -1170,6 +1170,63 @@
             line-height: 1;
         }
 
+        /* ===== TEAM SECTION (Updated to match About page) ===== */
+        .team-section {
+            background: var(--bg-primary);
+            padding: var(--space-4xl) 0;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-xl);
+            margin-top: var(--space-2xl);
+        }
+
+        .team-card {
+            background: var(--gradient-card);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            transition: var(--transition-smooth);
+        }
+
+        .team-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .team-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: var(--space-xl) auto var(--space-lg);
+            border: 4px solid var(--primary-red);
+        }
+
+        .team-content {
+            padding: var(--space-lg);
+        }
+
+        .team-social {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-md);
+            margin-top: var(--space-md);
+        }
+
+        .team-social a {
+            color: var(--text-secondary);
+            transition: var(--transition-smooth);
+        }
+
+        .team-social a:hover {
+            color: var(--primary-red);
+            transform: translateY(-2px);
+        }
+
         /* ===== VALUE PROPOSITION ===== */
         .value-proposition {
             background: var(--bg-primary);
@@ -1206,6 +1263,94 @@
             transform: scale(1.1) rotate(5deg);
             border-color: var(--primary-red);
             box-shadow: var(--shadow-md);
+        }
+
+        /* ===== TESTIMONIALS SECTION ===== */
+        .testimonials-section {
+            background: var(--bg-secondary);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: var(--space-xl);
+            margin-top: var(--space-2xl);
+        }
+
+        .testimonial-card {
+            background: var(--gradient-card);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: var(--transition-smooth);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary-red);
+        }
+
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+
+        .testimonial-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary-red);
+        }
+
+        .testimonial-info h4 {
+            margin-bottom: var(--space-xs);
+        }
+
+        .testimonial-role {
+            color: var(--primary-red);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: var(--space-2xs);
+        }
+
+        .testimonial-company {
+            color: var(--text-tertiary);
+            font-size: 0.85rem;
+        }
+
+        .testimonial-rating {
+            color: #ffc107;
+            margin-bottom: var(--space-md);
+            font-size: 1.1rem;
+        }
+
+        .testimonial-content {
+            font-style: italic;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            flex-grow: 1;
+        }
+
+        .testimonial-event {
+            margin-top: var(--space-md);
+            padding-top: var(--space-md);
+            border-top: 1px solid var(--border-color);
+            color: var(--text-tertiary);
+            font-size: 0.85rem;
+        }
+
+        .testimonial-event i {
+            color: var(--primary-red);
+            margin-right: var(--space-xs);
         }
 
         /* ===== CTA SECTION ===== */
@@ -1573,6 +1718,8 @@
             .approach-grid,
             .services-grid,
             .events-grid,
+            .team-grid,
+            .testimonials-grid,
             .value-grid {
                 grid-template-columns: 1fr;
                 max-width: 500px;
@@ -1686,7 +1833,9 @@
 
             .approach-card,
             .service-card,
-            .event-card {
+            .event-card,
+            .team-card,
+            .testimonial-card {
                 padding: var(--space-lg);
             }
 
@@ -1737,6 +1886,11 @@
                 font-size: 11px;
                 padding: 6px 10px;
             }
+
+            .team-avatar {
+                width: 100px;
+                height: 100px;
+            }
         }
 
         @media (max-width: 360px) {
@@ -1758,7 +1912,9 @@
             
             .approach-card,
             .service-card,
-            .event-card {
+            .event-card,
+            .team-card,
+            .testimonial-card {
                 padding: var(--space-md);
             }
             
@@ -1767,7 +1923,8 @@
                 font-size: 0.85rem;
             }
 
-            .events-grid {
+            .events-grid,
+            .team-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -1781,6 +1938,11 @@
                 width: 40px;
                 height: 40px;
                 font-size: 0.9rem;
+            }
+
+            .team-avatar {
+                width: 90px;
+                height: 90px;
             }
         }
 
@@ -1878,7 +2040,7 @@
                 
                 <div class="hero-buttons">
                     <a href="bootcamp.html" class="btn btn-primary btn-large">
-                        <i class="fas fa-calendar-alt"></i> Upcoming Bootcamp
+                        <i class="fas fa-calendar-alt"></i> Ongoing Bootcamp
                     </a>
                     <a href="#events" class="btn btn-outline btn-large">
                         <i class="fas fa-briefcase"></i> View Events
@@ -2064,26 +2226,32 @@
         </div>
     </section>
 
-    <!-- Team Section-->
-    <section id="team" class="value-proposition">
+    <!-- Team Section (Updated to match About page) -->
+    <section class="team-section">
         <div class="container">
             <div class="section-header">
                 <span class="section-subtitle">Our Team</span>
                 <h2>Meet Our <span class="text-gradient">Expert Team</span></h2>
-                <p class="lead">Learn from successful entrepreneurs and industry experts who have walked the path before you.</p>
+                <p class="lead">Passionate professionals dedicated to empowering entrepreneurs and driving business success.</p>
             </div>
             
-            <div class="value-grid" id="teamGrid">
+            <div class="team-grid" id="teamGrid">
                 <div class="loading">
                     <div class="loading-spinner"></div>
                     <p>Loading team members...</p>
                 </div>
             </div>
+            
+            <div class="text-center" style="margin-top: var(--space-2xl);">
+                <a href="about.html#team" class="btn btn-outline">
+                    <i class="fas fa-users"></i> View Full Team
+                </a>
+            </div>
         </div>
     </section>
 
-    <!-- Testimonials Section -->
-    <section class="services-overview">
+    <!-- Testimonials Section (Updated with new styling) -->
+    <section class="testimonials-section">
         <div class="container">
             <div class="section-header">
                 <span class="section-subtitle">Success Stories</span>
@@ -2091,10 +2259,55 @@
                 <p class="lead">Hear from entrepreneurs and businesses who have transformed their journeys with DSOG.</p>
             </div>
             
-            <div class="services-grid" id="testimonialsGrid">
+            <div class="testimonials-grid" id="testimonialsGrid">
                 <div class="loading">
                     <div class="loading-spinner"></div>
                     <p>Loading testimonials...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Value Proposition Section -->
+    <section class="value-proposition">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Why Choose DSOG</span>
+                <h2>Our Unique <span class="text-gradient">Value Proposition</span></h2>
+                <p class="lead">What sets us apart in empowering entrepreneurs and driving business success.</p>
+            </div>
+            
+            <div class="value-grid">
+                <div class="value-card animate-on-scroll">
+                    <div class="value-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h4>Holistic Approach</h4>
+                    <p>We provide end-to-end support from idea validation to enterprise scaling, ensuring comprehensive entrepreneurial development.</p>
+                </div>
+                
+                <div class="value-card animate-on-scroll">
+                    <div class="value-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h4>Community-Driven</h4>
+                    <p>Join a thriving network of entrepreneurs, mentors, and industry experts committed to mutual growth and success.</p>
+                </div>
+                
+                <div class="value-card animate-on-scroll">
+                    <div class="value-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h4>Practical Focus</h4>
+                    <p>Our programs emphasize hands-on experience and real-world application over theoretical learning.</p>
+                </div>
+                
+                <div class="value-card animate-on-scroll">
+                    <div class="value-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h4>Proven Results</h4>
+                    <p>Track record of transforming entrepreneurial dreams into successful, sustainable businesses with measurable impact.</p>
                 </div>
             </div>
         </div>
@@ -2360,7 +2573,7 @@
             });
             firebaseListeners.push({ ref: statsRef, listener: statsListener });
             
-            // 4. Team Members Listener
+            // 4. Team Members Listener (Updated)
             const teamRef = db.ref('teamMembers');
             const teamListener = teamRef.on('value', (snapshot) => {
                 const data = snapshot.val();
@@ -2370,7 +2583,7 @@
             });
             firebaseListeners.push({ ref: teamRef, listener: teamListener });
             
-            // 5. Testimonials Listener
+            // 5. Testimonials Listener (Updated)
             const testimonialsRef = db.ref('testimonials');
             const testimonialsListener = testimonialsRef.on('value', (snapshot) => {
                 const data = snapshot.val();
@@ -2597,7 +2810,8 @@
                     { key: 'satisfactionRate', label: 'Satisfaction Rate', value: stats?.satisfactionRate ? `${stats.satisfactionRate}%` : '90%' }
                 ];
                 
-                statItems.forEach((stat, index) => {
+                // Show only first 3 stats for homepage
+                statItems.slice(0, 3).forEach((stat, index) => {
                     if (stat.value && stat.value !== '0') {
                         const statItem = document.createElement('div');
                         statItem.className = 'stat-item animate-on-scroll';
@@ -2626,11 +2840,13 @@
                 
                 // Convert to array and filter active members
                 const teamArray = team ? Object.values(team)
-                    .filter(member => member.active !== false) : [];
+                    .filter(member => member.active !== false)
+                    .sort((a, b) => (a.order || 999) - (b.order || 999)) : [];
                 
                 if (teamArray.length > 0) {
                     teamGrid.innerHTML = '';
-                    teamArray.forEach((member, index) => {
+                    // Show only first 4 team members on homepage
+                    teamArray.slice(0, 4).forEach((member, index) => {
                         const memberCard = createTeamMemberCard(member, index);
                         teamGrid.appendChild(memberCard);
                     });
@@ -2640,13 +2856,38 @@
                         initializeAnimations();
                     }, 100);
                 } else {
+                    // Fallback to default team cards if no data
                     teamGrid.innerHTML = `
-                        <div class="value-card" style="grid-column: 1 / -1; text-align: center;">
-                            <div class="value-icon">
-                                <i class="fas fa-users"></i>
+                        <div class="team-card">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" 
+                                 alt="Team Member" 
+                                 class="team-avatar">
+                            <div class="team-content">
+                                <h4>Moses Mugera</h4>
+                                <p style="color: var(--primary-red); font-weight: 600;">Founder & CEO</p>
+                                <p>Entrepreneurship expert with 15+ years experience in business development and training.</p>
+                                <div class="team-social">
+                                    <a href="https://linkedin.com/in/mosesmugera" target="_blank">
+                                        <i class="fab fa-linkedin"></i>
+                                    </a>
+                                </div>
                             </div>
-                            <h4>Our Team</h4>
-                            <p>Meet our expert team dedicated to empowering entrepreneurs.</p>
+                        </div>
+                        
+                        <div class="team-card">
+                            <img src="https://randomuser.me/api/portraits/men/86.jpg" 
+                                 alt="Team Member" 
+                                 class="team-avatar">
+                            <div class="team-content">
+                                <h4>Robert Johnson</h4>
+                                <p style="color: var(--primary-red); font-weight: 600;">Head of Training</p>
+                                <p>Specializes in business strategy and market expansion with 10+ years of corporate experience.</p>
+                                <div class="team-social">
+                                    <a href="https://linkedin.com/in/robertjohnson" target="_blank">
+                                        <i class="fab fa-linkedin"></i>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     `;
                 }
@@ -2662,7 +2903,8 @@
                 
                 // Convert to array and filter active testimonials
                 const testimonialsArray = testimonials ? Object.values(testimonials)
-                    .filter(testimonial => testimonial.active !== false) : [];
+                    .filter(testimonial => testimonial.active !== false)
+                    .sort((a, b) => (a.order || 999) - (b.order || 999)) : [];
                 
                 if (testimonialsArray.length > 0) {
                     testimonialsGrid.innerHTML = '';
@@ -2677,13 +2919,66 @@
                         initializeAnimations();
                     }, 100);
                 } else {
+                    // Fallback to default testimonials if no data
                     testimonialsGrid.innerHTML = `
-                        <div class="service-card" style="grid-column: 1 / -1; text-align: center;">
-                            <div class="service-icon">
-                                <i class="fas fa-comment"></i>
+                        <div class="testimonial-card">
+                            <div class="testimonial-header">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" 
+                                     alt="John Doe" 
+                                     class="testimonial-avatar">
+                                <div class="testimonial-info">
+                                    <h4>John Doe</h4>
+                                    <div class="testimonial-role">Startup Founder</div>
+                                    <div class="testimonial-company">Tech Innovations Ltd</div>
+                                </div>
                             </div>
-                            <h3>Success Stories</h3>
-                            <p>Hear from our successful entrepreneurs and clients.</p>
+                            <div class="testimonial-rating">★★★★★</div>
+                            <div class="testimonial-content">
+                                "DSOG transformed my business approach completely! The bootcamp gave me practical skills I use every day."
+                            </div>
+                            <div class="testimonial-event">
+                                <i class="fas fa-calendar"></i> Bootcamp Participant
+                            </div>
+                        </div>
+                        
+                        <div class="testimonial-card">
+                            <div class="testimonial-header">
+                                <img src="https://randomuser.me/api/portraits/women/44.jpg" 
+                                     alt="Sarah Williams" 
+                                     class="testimonial-avatar">
+                                <div class="testimonial-info">
+                                    <h4>Sarah Williams</h4>
+                                    <div class="testimonial-role">Business Owner</div>
+                                    <div class="testimonial-company">Growth Solutions Ltd</div>
+                                </div>
+                            </div>
+                            <div class="testimonial-rating">★★★★★</div>
+                            <div class="testimonial-content">
+                                "The networking events connected me with amazing partners. My business has grown 200% since joining DSOG."
+                            </div>
+                            <div class="testimonial-event">
+                                <i class="fas fa-calendar"></i> Networking Event Attendee
+                            </div>
+                        </div>
+                        
+                        <div class="testimonial-card">
+                            <div class="testimonial-header">
+                                <img src="https://randomuser.me/api/portraits/men/67.jpg" 
+                                     alt="Michael Chen" 
+                                     class="testimonial-avatar">
+                                <div class="testimonial-info">
+                                    <h4>Michael Chen</h4>
+                                    <div class="testimonial-role">Entrepreneur</div>
+                                    <div class="testimonial-company">Digital Ventures</div>
+                                </div>
+                            </div>
+                            <div class="testimonial-rating">★★★★★</div>
+                            <div class="testimonial-content">
+                                "The training programs are exceptional. I gained skills that directly translated to increased revenue."
+                            </div>
+                            <div class="testimonial-event">
+                                <i class="fas fa-calendar"></i> Training Program Graduate
+                            </div>
                         </div>
                     `;
                 }
@@ -2801,27 +3096,26 @@
 
         function createTeamMemberCard(member, index) {
             const card = document.createElement('div');
-            card.className = 'value-card animate-on-scroll';
+            card.className = 'team-card animate-on-scroll';
             card.dataset.delay = index * 100;
             
             card.innerHTML = `
-                <div class="value-icon">
-                    ${member.imageUrl ? 
-                        `<img src="${member.imageUrl}" alt="${member.name}" 
-                              style="width: 70px; height: 70px; border-radius: var(--radius-lg); object-fit: cover;"
-                              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">` : 
-                        ''
-                    }
-                    <i class="fas fa-user-tie" style="${member.imageUrl ? 'display: none;' : ''}"></i>
+                <img src="${member.imageUrl || `https://randomuser.me/api/portraits/${member.gender === 'female' ? 'women' : 'men'}/${Math.floor(Math.random() * 100)}.jpg`}" 
+                     alt="${member.name}" 
+                     class="team-avatar"
+                     onerror="this.src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'">
+                <div class="team-content">
+                    <h4>${member.name || 'Team Member'}</h4>
+                    <p style="color: var(--primary-red); font-weight: 600;">${member.role || 'Team Member'}</p>
+                    <p>${member.bio || 'Passionate about empowering entrepreneurs and driving business success.'}</p>
+                    ${member.social?.linkedin ? `
+                        <div class="team-social">
+                            <a href="${member.social.linkedin}" target="_blank">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                        </div>
+                    ` : ''}
                 </div>
-                <h4>${member.name || 'Team Member'}</h4>
-                <p><strong>${member.role || 'Team Member'}</strong></p>
-                <p style="font-size: 0.9rem; margin-top: var(--space-sm);">${member.bio || 'Expert in entrepreneurship and business development.'}</p>
-                ${member.social?.linkedin ? `
-                    <a href="${member.social.linkedin}" target="_blank" style="margin-top: var(--space-sm); color: var(--primary-red); text-decoration: none;">
-                        <i class="fab fa-linkedin"></i> LinkedIn
-                    </a>
-                ` : ''}
             `;
             
             return card;
@@ -2829,7 +3123,7 @@
 
         function createTestimonialCard(testimonial, index) {
             const card = document.createElement('div');
-            card.className = 'service-card animate-on-scroll';
+            card.className = 'testimonial-card animate-on-scroll';
             card.dataset.delay = index * 100;
             
             // Create star rating
@@ -2837,24 +3131,26 @@
             const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
             
             card.innerHTML = `
-                <div class="service-icon">
-                    ${testimonial.imageUrl ? 
-                        `<img src="${testimonial.imageUrl}" alt="${testimonial.name}" 
-                              style="width: 60px; height: 60px; border-radius: var(--radius-md); object-fit: cover;"
-                              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">` : 
-                        ''
-                    }
-                    <i class="fas fa-user" style="${testimonial.imageUrl ? 'display: none;' : ''}"></i>
+                <div class="testimonial-header">
+                    <img src="${testimonial.imageUrl || `https://randomuser.me/api/portraits/${testimonial.gender === 'female' ? 'women' : 'men'}/${Math.floor(Math.random() * 100)}.jpg`}" 
+                         alt="${testimonial.name}" 
+                         class="testimonial-avatar"
+                         onerror="this.src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'">
+                    <div class="testimonial-info">
+                        <h4>${testimonial.name || 'Client'}</h4>
+                        <div class="testimonial-role">${testimonial.role || 'Entrepreneur'}</div>
+                        ${testimonial.company ? `<div class="testimonial-company">${testimonial.company}</div>` : ''}
+                    </div>
                 </div>
-                <span class="service-tag">TESTIMONIAL</span>
-                <h3>${testimonial.name || 'Client'}</h3>
-                <p><strong>${testimonial.role || 'Entrepreneur'}</strong></p>
-                ${testimonial.company ? `<p style="color: var(--text-tertiary); font-size: 0.9rem;">${testimonial.company}</p>` : ''}
-                <div style="color: #ffc107; margin: var(--space-sm) 0; font-size: 1.1rem;">
-                    ${stars}
+                <div class="testimonial-rating">${stars}</div>
+                <div class="testimonial-content">
+                    "${testimonial.content || 'Great experience with DSOG!'}"
                 </div>
-                <p style="font-style: italic; margin-top: var(--space-md);">"${testimonial.content || 'Great experience with DSOG!'}"</p>
-                ${testimonial.event ? `<p style="margin-top: var(--space-sm); font-size: 0.85rem; color: var(--primary-red);"><i class="fas fa-calendar"></i> ${testimonial.event}</p>` : ''}
+                ${testimonial.event ? `
+                    <div class="testimonial-event">
+                        <i class="fas fa-calendar"></i> ${testimonial.event}
+                    </div>
+                ` : ''}
             `;
             
             return card;
