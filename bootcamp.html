@@ -32,11 +32,11 @@
     </script>
     
     <!-- App Version -->
-    <meta name="app-version" content="10.0.0">
+    <meta name="app-version" content="11.0.0">
     
     <!-- SEO Meta Tags -->
-    <meta name="description" content="DSOG Startup Builder Bootcamp - Learn how to build your own startup business from scratch. 3-month intensive training for young entrepreneurs.">
-    <meta name="keywords" content="startup bootcamp, business training, entrepreneurship, young entrepreneurs, business skills Kenya, startup training, franchise opportunities">
+    <meta name="description" content="DSOG Startup Builder Bootcamp - Intensive 1-month training to launch your startup. Learn business fundamentals, team building, and get startup support.">
+    <meta name="keywords" content="startup bootcamp, business training, entrepreneurship, startup Kenya, business skills, startup support, team building">
     
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#C21807">
@@ -46,16 +46,16 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="DSOG Startup Bootcamp">
     <meta name="msapplication-TileColor" content="#C21807">
-    <meta name="msapplication-starturl" content="/bootcamp.html?v=10.0.0">
+    <meta name="msapplication-starturl" content="/bootcamp.html?v=11.0.0">
     
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="DSOG Startup Builder Bootcamp | Launch Your Own Business">
-    <meta property="og:description" content="Join our 3-month intensive bootcamp and graduate ready to launch and operate your first startup business. Learn entrepreneurship fundamentals with DSOG franchise as one option.">
+    <meta property="og:title" content="DSOG Startup Builder Bootcamp | Launch Your Startup in 1 Month">
+    <meta property="og:description" content="Join our intensive 1-month bootcamp. Transform your idea into a real business with our structured training and startup support system.">
     <meta property="og:image" content="https://i.postimg.cc/CxNLzQgt/Untitled-design-3.webp">
     <meta property="og:url" content="https://dsog.org/bootcamp">
     <meta property="og:type" content="website">
     
-    <title>DSOG Startup Builder Bootcamp | Launch Your Own Business</title>
+    <title>DSOG Startup Builder Bootcamp | Launch Your Startup in 1 Month</title>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -64,6 +64,34 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Firebase Status CSS -->
+    <style>
+        .firebase-status {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            z-index: 10000;
+            background: #28a745;
+            color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .firebase-status.offline {
+            background: #dc3545;
+        }
+        
+        .firebase-status i {
+            font-size: 10px;
+        }
+    </style>
     
     <style>
         /* ===== CSS CUSTOM PROPERTIES ===== */
@@ -701,7 +729,7 @@
 
         /* ===== BOOTCAMP HERO ===== */
         .bootcamp-hero {
-            min-height: 100vh;
+            min-height: 90vh;
             display: flex;
             align-items: center;
             padding-top: calc(var(--header-height) + 60px);
@@ -807,19 +835,19 @@
             margin-top: var(--space-2xl);
         }
 
-        /* ===== FRANCHISE TRACKS ===== */
-        .tracks-section {
+        /* ===== BOOTCAMP PROGRAM STRUCTURE ===== */
+        .program-structure-section {
             background: var(--bg-primary);
         }
 
-        .tracks-grid {
+        .program-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: var(--space-xl);
             margin-top: var(--space-2xl);
         }
 
-        .track-card {
+        .program-card {
             background: var(--gradient-card);
             border-radius: var(--radius-lg);
             padding: var(--space-xl);
@@ -828,11 +856,9 @@
             border: 1px solid var(--border-color);
             transition: var(--transition-smooth);
             height: 100%;
-            display: flex;
-            flex-direction: column;
         }
 
-        .track-card::before {
+        .program-card::before {
             content: '';
             position: absolute;
             top: 0;
@@ -845,17 +871,147 @@
             transition: transform 0.4s var(--transition-smooth);
         }
 
-        .track-card:hover {
+        .program-card:hover {
             transform: translateY(-8px);
             box-shadow: var(--shadow-xl);
             border-color: var(--primary-red);
         }
 
-        .track-card:hover::before {
+        .program-card:hover::before {
             transform: scaleX(1);
         }
 
-        .track-icon {
+        .program-phase {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--primary-red);
+            font-weight: 700;
+            margin-bottom: var(--space-sm);
+        }
+
+        /* ===== WEEKLY SCHEDULE ===== */
+        .weekly-schedule-section {
+            background: var(--bg-secondary);
+        }
+
+        .schedule-timeline {
+            max-width: 800px;
+            margin: var(--space-2xl) auto;
+        }
+
+        .timeline-week {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: var(--space-2xl);
+            position: relative;
+            padding-left: var(--space-xl);
+        }
+
+        .timeline-week::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--gradient-primary);
+        }
+
+        .timeline-week::after {
+            content: '';
+            position: absolute;
+            left: -4px;
+            top: 20px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--primary-red);
+        }
+
+        .week-number {
+            position: absolute;
+            left: -30px;
+            top: 15px;
+            width: 60px;
+            text-align: center;
+            font-weight: 700;
+            color: var(--primary-red);
+            font-size: 1.2rem;
+            background: var(--bg-secondary);
+            padding: var(--space-xs);
+            z-index: var(--z-normal);
+        }
+
+        .week-content {
+            background: var(--gradient-card);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+            flex: 1;
+            margin-left: var(--space-xl);
+        }
+
+        .week-tag {
+            display: inline-block;
+            padding: var(--space-xs) var(--space-md);
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: var(--space-sm);
+            background: rgba(194, 24, 7, 0.1);
+            color: var(--primary-red);
+            border: 1px solid rgba(194, 24, 7, 0.2);
+        }
+
+        .learning-points {
+            list-style: none;
+            margin-top: var(--space-md);
+        }
+
+        .learning-points li {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-xs);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .learning-points i {
+            color: var(--primary-red);
+            font-size: 0.8rem;
+        }
+
+        /* ===== TEAM SUPPORT SYSTEM ===== */
+        .team-support-section {
+            background: var(--bg-primary);
+        }
+
+        .support-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-xl);
+            margin-top: var(--space-2xl);
+        }
+
+        .support-card {
+            background: var(--gradient-card);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            text-align: center;
+            border: 1px solid var(--border-color);
+            transition: var(--transition-smooth);
+        }
+
+        .support-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary-red);
+        }
+
+        .support-icon {
             width: 70px;
             height: 70px;
             background: var(--gradient-primary);
@@ -865,190 +1021,94 @@
             align-items: center;
             justify-content: center;
             font-size: 1.75rem;
-            margin-bottom: var(--space-lg);
-            flex-shrink: 0;
+            margin: 0 auto var(--space-lg);
         }
 
-        .track-badge {
-            display: inline-block;
-            background: rgba(194, 24, 7, 0.1);
-            color: var(--primary-red);
-            padding: var(--space-2xs) var(--space-md);
-            border-radius: var(--radius-full);
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-bottom: var(--space-md);
-            letter-spacing: 0.05em;
-            align-self: flex-start;
-        }
-
-        .team-size {
-            display: inline-block;
-            background: rgba(45, 125, 70, 0.1);
-            color: var(--accent-green);
-            padding: var(--space-2xs) var(--space-md);
-            border-radius: var(--radius-full);
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-top: var(--space-md);
-            border: 1px solid rgba(45, 125, 70, 0.2);
-        }
-
-        /* ===== TEAM STRUCTURE ===== */
-        .team-section {
+        /* ===== APPLICATION PROCESS ===== */
+        .application-process-section {
             background: var(--bg-secondary);
         }
 
-        .team-structure {
+        .process-steps {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xl);
+            max-width: 800px;
+            margin: var(--space-2xl) auto;
+        }
+
+        .process-step {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-xl);
+            padding: var(--space-xl);
+            background: var(--gradient-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            transition: var(--transition-smooth);
+        }
+
+        .process-step:hover {
+            transform: translateX(5px);
+            border-color: var(--primary-red);
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 700;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        /* ===== BOOTCAMP BENEFITS ===== */
+        .benefits-section {
+            background: var(--bg-primary);
+        }
+
+        .benefits-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: var(--space-xl);
             margin-top: var(--space-2xl);
         }
 
-        .team-card {
+        .benefit-card {
+            text-align: center;
+            padding: var(--space-xl);
             background: var(--gradient-card);
             border-radius: var(--radius-lg);
-            padding: var(--space-xl);
             border: 1px solid var(--border-color);
             transition: var(--transition-smooth);
-            position: relative;
-            overflow: hidden;
         }
 
-        .team-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--gradient-primary);
-            transform: scaleX(0);
-            transition: transform 0.4s var(--transition-smooth);
-        }
-
-        .team-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-xl);
+        .benefit-card:hover {
+            transform: translateY(-4px);
             border-color: var(--primary-red);
+            box-shadow: var(--shadow-lg);
         }
 
-        .team-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .team-number {
-            font-size: 2.5rem;
-            font-weight: 800;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            line-height: 1;
-            margin-bottom: var(--space-md);
-        }
-
-        .benefit-list {
-            list-style: none;
-            margin-top: var(--space-md);
-        }
-
-        .benefit-list li {
+        .benefit-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--radius-md);
             display: flex;
             align-items: center;
-            gap: var(--space-sm);
-            margin-bottom: var(--space-xs);
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .benefit-list i {
-            color: var(--primary-red);
-            font-size: 0.8rem;
-        }
-
-        /* ===== BOOTCAMP SCHEDULE ===== */
-        .schedule-section {
-            background: var(--bg-primary);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .schedule-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: var(--gradient-primary);
-            opacity: 0.1;
-        }
-
-        .timeline {
-            max-width: 800px;
-            margin: var(--space-2xl) auto;
-            position: relative;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 2px;
-            height: 100%;
+            justify-content: center;
+            margin: 0 auto var(--space-lg);
+            font-size: 1.5rem;
+            color: var(--white);
             background: var(--gradient-primary);
         }
 
-        .timeline-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: var(--space-2xl);
-            position: relative;
-        }
-
-        .timeline-item:nth-child(odd) {
-            flex-direction: row;
-        }
-
-        .timeline-item:nth-child(even) {
-            flex-direction: row-reverse;
-        }
-
-        .timeline-content {
-            flex: 1;
-            padding: var(--space-lg);
-            background: var(--gradient-card);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow-md);
-        }
-
-        .timeline-month {
-            width: 100px;
-            text-align: center;
-            font-weight: 700;
-            color: var(--primary-red);
-            padding: var(--space-sm);
-            flex-shrink: 0;
-        }
-
-        .project-focus {
-            display: inline-block;
-            background: rgba(44, 82, 130, 0.1);
-            color: var(--accent-blue);
-            padding: var(--space-2xs) var(--space-sm);
-            border-radius: var(--radius-full);
-            font-size: 0.7rem;
-            font-weight: 600;
-            margin-top: var(--space-xs);
-            border: 1px solid rgba(44, 82, 130, 0.2);
-        }
-
-        /* ===== GOOGLE FORM SECTION ===== */
-        .google-form-section {
+        /* ===== REGISTRATION CTA ===== */
+        .registration-cta {
             background: var(--gradient-primary);
             color: var(--white);
             padding: var(--space-4xl) 0;
@@ -1060,7 +1120,7 @@
             max-width: 1200px;
         }
 
-        .google-form-section::before {
+        .registration-cta::before {
             content: '';
             position: absolute;
             inset: 0;
@@ -1069,37 +1129,25 @@
                 radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%);
         }
 
-        .google-form-section > * {
+        .cta-content {
             position: relative;
             z-index: var(--z-normal);
         }
 
-        .google-form-section h2 {
+        .urgency-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            background: rgba(255, 255, 255, 0.2);
             color: var(--white);
-        }
-
-        .google-form-section .lead {
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        .form-container {
-            background: var(--white);
-            border-radius: var(--radius-lg);
-            padding: var(--space-2xl);
-            margin-top: var(--space-xl);
-            box-shadow: var(--shadow-2xl);
-            max-width: 900px;
-            margin-left: auto;
-            margin-right: auto;
-            text-align: left;
-        }
-
-        .form-container iframe {
-            border: none;
-            border-radius: var(--radius-md);
-            width: 100%;
-            min-height: 800px;
-            background: var(--white);
+            padding: var(--space-sm) var(--space-lg);
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--space-xl);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         /* ===== FOOTER ===== */
@@ -1215,6 +1263,78 @@
             transform: translateY(0);
         }
 
+        /* ===== DATA LOADING STATES ===== */
+        .data-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-2xl);
+            color: var(--text-secondary);
+        }
+
+        .data-loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--primary-red);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: var(--space-md);
+        }
+
+        /* ===== BOOTCAMP DATA STYLES ===== */
+        .bootcamp-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-xl);
+            flex-wrap: wrap;
+            margin: var(--space-lg) 0;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .meta-item i {
+            color: var(--primary-red);
+        }
+
+        .bootcamp-image {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: var(--radius-lg);
+            margin: var(--space-xl) 0;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .phase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-md);
+            margin-top: var(--space-md);
+        }
+
+        .phase-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md);
+            background: rgba(44, 82, 130, 0.05);
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(44, 82, 130, 0.1);
+        }
+
+        .phase-item i {
+            color: var(--accent-blue);
+        }
+
         /* ===== MOBILE NAVIGATION ===== */
         @media (max-width: 1024px) {
             .nav-links {
@@ -1280,18 +1400,29 @@
                 padding: 0 var(--space-lg);
             }
 
-            .timeline-item {
-                flex-direction: column !important;
-                text-align: center;
+            .timeline-week {
+                flex-direction: column;
+                padding-left: var(--space-lg);
             }
 
-            .timeline-month {
-                width: auto;
-                margin-bottom: var(--space-md);
+            .week-content {
+                margin-left: 0;
+                margin-top: var(--space-lg);
             }
 
-            .timeline::before {
-                display: none;
+            .week-number {
+                position: relative;
+                left: 0;
+                top: 0;
+                margin-bottom: var(--space-sm);
+            }
+
+            .timeline-week::before {
+                left: 15px;
+            }
+
+            .timeline-week::after {
+                left: 11px;
             }
 
             .countdown-container {
@@ -1342,8 +1473,9 @@
             h2 { font-size: 1.75rem; }
             h3 { font-size: 1.5rem; }
 
-            .tracks-grid,
-            .team-structure {
+            .program-grid,
+            .support-grid,
+            .benefits-grid {
                 grid-template-columns: 1fr;
                 max-width: 500px;
                 margin-left: auto;
@@ -1381,13 +1513,18 @@
                 white-space: nowrap;
             }
 
-            .google-form-section {
+            .registration-cta {
                 border-radius: var(--radius-lg);
                 margin: var(--space-2xl) var(--space-md);
             }
 
-            .form-container iframe {
-                min-height: 700px;
+            .process-step {
+                flex-direction: column;
+                gap: var(--space-lg);
+            }
+
+            .step-number {
+                align-self: center;
             }
 
             .countdown-container {
@@ -1438,25 +1575,14 @@
                 font-size: 0.9rem;
             }
 
-            .track-card,
-            .team-card {
+            .program-card,
+            .support-card,
+            .benefit-card {
                 padding: var(--space-lg);
             }
 
-            .form-title {
-                font-size: 1.5rem;
-            }
-
-            .form-subtitle {
-                font-size: 1rem;
-            }
-
-            .form-container {
-                padding: var(--space-md);
-            }
-
-            .form-container iframe {
-                min-height: 600px;
+            .process-step {
+                padding: var(--space-lg);
             }
 
             .theme-toggle {
@@ -1502,8 +1628,9 @@
                 font-size: 1rem;
             }
             
-            .track-card,
-            .team-card {
+            .program-card,
+            .support-card,
+            .benefit-card {
                 padding: var(--space-md);
             }
             
@@ -1541,13 +1668,19 @@
         <div class="loading-spinner"></div>
     </div>
 
+    <!-- Firebase Status Indicator -->
+    <div class="firebase-status" id="firebaseStatus" role="status" aria-live="polite">
+        <i class="fas fa-circle"></i>
+        <span>Live</span>
+    </div>
+
     <!-- Main Content (Hidden until data loads) -->
     <div id="mainContent" style="display: none;">
         <!-- Professional Countdown Timer -->
         <div class="countdown-container" id="countdownContainer">
             <div class="countdown-message">
                 <i class="fas fa-clock"></i>
-                <span id="countdownMessage">Bootcamp applications close soon:</span>
+                <span id="countdownMessage">Bootcamp registration closes soon:</span>
             </div>
             <div class="countdown-timer">
                 <div class="countdown-item">
@@ -1607,11 +1740,19 @@
             <div class="container">
                 <div class="bootcamp-hero-content">
                     <div class="bootcamp-badge" id="missionBadge">
-                        <i class="fas fa-crown"></i> Loading...
+                        <i class="fas fa-crown"></i> <span id="cohortBadge">Loading...</span>
                     </div>
                     
                     <h1 id="heroTitle">Loading...</h1>
                     <p class="lead" id="heroSubtitle">Loading bootcamp information...</p>
+                    
+                    <div class="bootcamp-meta" id="bootcampMeta">
+                        <!-- Meta info will be loaded dynamically -->
+                    </div>
+                    
+                    <img id="bootcampImage" class="bootcamp-image" 
+                         src="https://i.postimg.cc/CxNLzQgt/Untitled-design-3.webp" 
+                         alt="DSOG Startup Bootcamp">
                     
                     <div class="pricing-badge" id="pricingBadge">
                         <i class="fas fa-gem"></i>
@@ -1623,96 +1764,131 @@
                     </div>
                     
                     <div class="hero-buttons">
-                        <a href="#google-form" class="btn btn-primary btn-large" id="applyButton">
-                            <i class="fas fa-user-plus"></i> Apply for Pioneer Cohort
+                        <a href="#application" class="btn btn-primary btn-large" id="applyButton">
+                            <i class="fas fa-user-plus"></i> Apply for Bootcamp
                         </a>
-                        <a href="#tracks" class="btn btn-secondary btn-large">
-                            <i class="fas fa-store-alt"></i> Choose Your Franchise Track
+                        <a href="#program" class="btn btn-secondary btn-large">
+                            <i class="fas fa-book-open"></i> View Program Details
                         </a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Franchise Tracks Section -->
-        <section id="tracks" class="tracks-section">
-            <div class="container">
-                <div class="section-header">
-                    <span class="section-subtitle">Choose Your Business</span>
-                    <h2>Franchise <span class="text-gradient">Specialization Tracks</span></h2>
-                    <p class="lead" id="tracksSubtitle">Loading track information...</p>
-                </div>
-                
-                <div class="tracks-grid" id="tracksGrid">
-                    <!-- Tracks will be loaded dynamically -->
-                </div>
-                
-                <div class="text-center" style="margin-top: var(--space-2xl);">
-                    <h4>How Teams Work</h4>
-                    <p>Each franchise track requires a complete team of 4 members. During application, you can either form your own team or we'll help match you with compatible teammates.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Team Structure Section -->
-        <section class="team-section">
-            <div class="container">
-                <div class="section-header">
-                    <span class="section-subtitle">Collaborative Learning</span>
-                    <h2>Team-Based <span class="text-gradient">Franchise Structure</span></h2>
-                    <p class="lead" id="teamSubtitle">Loading team structure information...</p>
-                </div>
-                
-                <div class="team-structure" id="teamStructure">
-                    <!-- Team cards will be loaded dynamically -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Bootcamp Schedule Section -->
-        <section class="schedule-section">
+        <!-- Program Structure Section -->
+        <section id="program" class="program-structure-section">
             <div class="container">
                 <div class="section-header">
                     <span class="section-subtitle">Structured Learning</span>
-                    <h2>3-Month <span class="text-gradient">Bootcamp Schedule</span></h2>
-                    <p class="lead" id="scheduleSubtitle">Loading schedule information...</p>
+                    <h2>Bootcamp <span class="text-gradient">Program Structure</span></h2>
+                    <p class="lead" id="programSubtitle">Loading program details...</p>
                 </div>
                 
-                <div class="timeline" id="timeline">
-                    <!-- Timeline items will be loaded dynamically -->
+                <div class="program-grid" id="programStructure">
+                    <!-- Program structure will be loaded dynamically -->
+                    <div class="data-loading">
+                        <div class="data-loading-spinner"></div>
+                        <p>Loading program structure...</p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Google Form Application Section -->
-        <section id="google-form" class="google-form-section">
+        <!-- Weekly Schedule Section -->
+        <section class="weekly-schedule-section">
             <div class="container">
                 <div class="section-header">
-                    <span class="section-subtitle">Limited Opportunity</span>
-                    <h2>Join <span class="text-gradient">Pioneer Cohort 1</span></h2>
-                    <p class="lead" id="formSubtitle">Loading application information...</p>
+                    <span class="section-subtitle">1-Month Intensive</span>
+                    <h2>Weekly <span class="text-gradient">Learning Journey</span></h2>
+                    <p class="lead" id="scheduleSubtitle">Loading weekly schedule...</p>
                 </div>
                 
-                <div class="form-container">
-                    <!-- Embedded Google Form -->
-                    <iframe id="googleFormIframe" 
-                            title="DSOG Franchise Bootcamp Application Form">
-                        Loading…
-                    </iframe>
+                <div class="schedule-timeline" id="weeklySchedule">
+                    <!-- Weekly schedule will be loaded dynamically -->
+                    <div class="data-loading">
+                        <div class="data-loading-spinner"></div>
+                        <p>Loading weekly schedule...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Support System -->
+        <section class="team-support-section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-subtitle">Collaborative Approach</span>
+                    <h2>Team-Based <span class="text-gradient">Support System</span></h2>
+                    <p class="lead" id="teamSubtitle">Loading team support information...</p>
                 </div>
                 
-                <div class="pricing-badge" style="background: rgba(255,255,255,0.2); color: white; border-color: rgba(255,255,255,0.3); margin-top: var(--space-xl);">
-                    <i class="fas fa-gem"></i>
-                    <div id="footerPricing">Loading pricing...</div>
+                <div class="support-grid" id="teamSupport">
+                    <!-- Team support info will be loaded dynamically -->
+                    <div class="data-loading">
+                        <div class="data-loading-spinner"></div>
+                        <p>Loading team support information...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Application Process -->
+        <section id="application" class="application-process-section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-subtitle">Join Our Bootcamp</span>
+                    <h2>Application <span class="text-gradient">Process</span></h2>
+                    <p class="lead" id="applicationSubtitle">Loading application process...</p>
                 </div>
                 
-                <div class="hero-buttons" style="margin-top: var(--space-2xl);">
-                    <a href="#tracks" class="btn btn-secondary btn-large" style="color: white; border-color: white;">
-                        <i class="fas fa-store-alt"></i> Review Franchise Tracks
-                    </a>
-                    <a href="contact.html" class="btn btn-secondary btn-large" style="color: white; border-color: white;">
-                        <i class="fas fa-question-circle"></i> Questions? Contact Us
-                    </a>
+                <div class="process-steps" id="applicationProcess">
+                    <!-- Application process steps will be loaded dynamically -->
+                    <div class="data-loading">
+                        <div class="data-loading-spinner"></div>
+                        <p>Loading application process...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bootcamp Benefits -->
+        <section class="benefits-section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-subtitle">What You Gain</span>
+                    <h2>Bootcamp <span class="text-gradient">Benefits</span></h2>
+                    <p class="lead" id="benefitsSubtitle">Loading bootcamp benefits...</p>
+                </div>
+                
+                <div class="benefits-grid" id="bootcampBenefits">
+                    <!-- Benefits will be loaded dynamically -->
+                    <div class="data-loading">
+                        <div class="data-loading-spinner"></div>
+                        <p>Loading benefits...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Registration CTA -->
+        <section class="registration-cta">
+            <div class="container">
+                <div class="cta-content">
+                    <div class="urgency-badge">
+                        <i class="fas fa-clock"></i> LIMITED SEATS AVAILABLE
+                    </div>
+                    
+                    <h2 style="color: var(--white);">Ready to <span style="color: var(--primary-gold);">Launch Your Startup?</span></h2>
+                    <p class="lead" style="color: rgba(255, 255, 255, 0.9);" id="ctaSubtitle">Loading call to action...</p>
+                    
+                    <div class="hero-buttons">
+                        <a href="#application" class="btn btn-gold btn-large">
+                            <i class="fas fa-user-plus"></i> Apply Now
+                        </a>
+                        <a href="contact.html" class="btn btn-secondary btn-large" style="background: rgba(255,255,255,0.1); color: var(--white); border-color: rgba(255,255,255,0.3);">
+                            <i class="fas fa-question-circle"></i> Have Questions?
+                        </a>
+                    </div>
                 </div>
             </div>
         </section>
@@ -1725,16 +1901,20 @@
                         <img src="https://i.postimg.cc/kMZ1jTww/Untitled-design-4-removebg-preview.png" 
                              alt="DSOG" 
                              class="footer-logo">
-                        <p>DSOG Franchise Builder Bootcamp: Transforming ambitious individuals into franchise-ready store owners through practical, hands-on training.</p>
+                        <p>DSOG Startup Builder Bootcamp: Intensive 1-month training to transform ideas into successful businesses with our structured support system.</p>
                         <div class="bootcamp-badge" style="margin-top: var(--space-md); background: rgba(255,255,255,0.1); color: white;">
-                            <i class="fas fa-crown"></i> PIONEER COHORT 1
+                            <i class="fas fa-crown"></i> <span id="footerCohort">Loading...</span>
                         </div>
                     </div>
                     
                     <div class="footer-section">
-                        <h3>Bootcamp Tracks</h3>
-                        <ul id="footerTracks">
-                            <!-- Footer track links will be loaded dynamically -->
+                        <h3>Bootcamp Program</h3>
+                        <ul id="footerProgramLinks">
+                            <!-- Program links will be loaded dynamically -->
+                            <li><a href="#program">Program Structure</a></li>
+                            <li><a href="#weekly-schedule">Weekly Schedule</a></li>
+                            <li><a href="#application">Application Process</a></li>
+                            <li><a href="#benefits">Bootcamp Benefits</a></li>
                         </ul>
                     </div>
                     
@@ -1745,7 +1925,7 @@
                             <li><a href="about.html">About DSOG</a></li>
                             <li><a href="enterprise.html">Enterprise Solutions</a></li>
                             <li><a href="training.html">Training Programs</a></li>
-                            <li><a href="bootcamp.html">Bootcamp</a></li>
+                            <li><a href="bootcamp.html">Startup Bootcamp</a></li>
                             <li><a href="contact.html">Contact Us</a></li>
                         </ul>
                     </div>
@@ -1754,13 +1934,17 @@
                         <h3>Bootcamp Information</h3>
                         <ul id="footerContact">
                             <!-- Contact info will be loaded dynamically -->
+                            <li><i class="fas fa-phone"></i> +254 733 737 983</li>
+                            <li><i class="fas fa-envelope"></i> bootcamp@dsog.org</li>
+                            <li><i class="fab fa-whatsapp"></i> Bootcamp Application</li>
+                            <li><i class="fas fa-map-marker-alt"></i> Nairobi, Kenya</li>
                         </ul>
                     </div>
                 </div>
                 
                 <div class="copyright">
-                    <p>&copy; <span id="currentYear"></span> DSOG Franchise Builder Bootcamp. All rights reserved.</p>
-                    <p style="margin-top: var(--space-sm); font-size: 0.85rem;">Franchise Training • Team-Based Learning • Practical Projects • Store Ownership • Entrepreneur Development</p>
+                    <p>&copy; <span id="currentYear"></span> DSOG Startup Builder Bootcamp. All rights reserved.</p>
+                    <p style="margin-top: var(--space-sm); font-size: 0.85rem;">1-Month Intensive Training • Team-Based Learning • Startup Support • Entrepreneur Development</p>
                 </div>
             </div>
         </footer>
@@ -1769,7 +1953,7 @@
     <!-- JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 DSOG Franchise Bootcamp Version 10.0.0 - Firebase Edition');
+            console.log('🚀 DSOG Startup Bootcamp Version 11.0.0 - Firebase Enhanced');
             
             // Initialize app
             initializeApp();
@@ -1781,7 +1965,10 @@
                         await new Promise(resolve => setTimeout(resolve, 100));
                     }
                     
-                    // Fetch data from Firebase
+                    // Set up Firebase connection status
+                    setupFirebaseStatus();
+                    
+                    // Fetch bootcamp data from Firebase
                     await fetchBootcampData();
                     
                     // Initialize other components
@@ -1799,6 +1986,17 @@
                 } catch (error) {
                     console.error('Error initializing app:', error);
                     showError('Failed to load bootcamp data. Please refresh the page.');
+                }
+            }
+            
+            function setupFirebaseStatus() {
+                try {
+                    const statusEl = document.getElementById('firebaseStatus');
+                    if (statusEl) {
+                        statusEl.innerHTML = '<i class="fas fa-circle"></i><span>Connected to Firebase</span>';
+                    }
+                } catch (error) {
+                    console.log('Firebase status indicator not available');
                 }
             }
             
@@ -1823,193 +2021,518 @@
                             
                             resolve(data);
                         } else {
-                            reject(new Error('No bootcamp data found in Firebase'));
+                            console.warn('No bootcamp data found in Firebase, using default data');
+                            loadDefaultData();
+                            resolve(null);
                         }
                     }, (error) => {
+                        console.error('Firebase error:', error);
+                        loadDefaultData();
                         reject(error);
                     });
                 });
+            }
+            
+            function loadDefaultData() {
+                const defaultData = {
+                    hero: {
+                        cohort: "Cohort 1",
+                        mainTitle: "Startup Builder Bootcamp",
+                        subtitle: "Transform your idea into a real business in just 1 month. Learn business fundamentals, build your team, and launch with our support.",
+                        imageUrl: "https://i.postimg.cc/CxNLzQgt/Untitled-design-3.webp",
+                        meta: [
+                            { icon: "fas fa-calendar", text: "1 Month Intensive" },
+                            { icon: "fas fa-users", text: "Team-Based Learning" },
+                            { icon: "fas fa-graduation-cap", text: "Practical Training" }
+                        ],
+                        pricing: {
+                            amount: "3,500",
+                            currency: "KES",
+                            description: "Special Pioneer Price"
+                        },
+                        highlights: [
+                            { icon: "fas fa-rocket", text: "Launch Your Startup" },
+                            { icon: "fas fa-user-friends", text: "Team Formation Support" },
+                            { icon: "fas fa-hands-helping", text: "Post-Bootcamp Support" }
+                        ]
+                    },
+                    program: {
+                        subtitle: "Our 1-month intensive program follows the Golden Circle methodology",
+                        phases: [
+                            {
+                                phase: "PHASE 1",
+                                title: "Personal Identity & Purpose",
+                                description: "Start with self-discovery to understand your entrepreneurial identity and purpose.",
+                                items: ["Self-assessment exercises", "Purpose discovery", "Entrepreneurial mindset"]
+                            },
+                            {
+                                phase: "PHASE 2",
+                                title: "The Golden Circle: WHY",
+                                description: "Discover your core purpose - why your business exists beyond making money.",
+                                items: ["Core purpose discovery", "Mission statement", "Value proposition"]
+                            },
+                            {
+                                phase: "PHASE 3",
+                                title: "The Golden Circle: WHAT",
+                                description: "Define what your business does - products, services, and value delivery.",
+                                items: ["Business model canvas", "Product development", "Service design"]
+                            },
+                            {
+                                phase: "PHASE 4",
+                                title: "The Golden Circle: HOW",
+                                description: "Learn how to execute - operations, marketing, and business systems.",
+                                items: ["Execution strategy", "Marketing plan", "Operational systems"]
+                            }
+                        ]
+                    },
+                    schedule: {
+                        subtitle: "Weekly breakdown of our intensive 1-month bootcamp",
+                        weeks: [
+                            {
+                                week: "Week 1",
+                                tag: "Identity & Foundation",
+                                title: "Personal Discovery & Team Formation",
+                                focus: "Building entrepreneurial identity and forming teams",
+                                points: [
+                                    "Self-discovery exercises and purpose identification",
+                                    "Understanding entrepreneurial mindset",
+                                    "Team formation and role assignment",
+                                    "Introduction to Golden Circle methodology"
+                                ]
+                            },
+                            {
+                                week: "Week 2",
+                                tag: "WHY & Vision",
+                                title: "Business Purpose & Core Values",
+                                focus: "Defining business purpose and core values",
+                                points: [
+                                    "Discovering your business WHY",
+                                    "Developing mission and vision statements",
+                                    "Identifying core values and principles",
+                                    "Creating value proposition canvas"
+                                ]
+                            },
+                            {
+                                week: "Week 3",
+                                tag: "WHAT & Strategy",
+                                title: "Business Model & Product Development",
+                                focus: "Developing business model and product strategy",
+                                points: [
+                                    "Business Model Canvas development",
+                                    "Product/service design and development",
+                                    "Market research and validation",
+                                    "Financial planning basics"
+                                ]
+                            },
+                            {
+                                week: "Week 4",
+                                tag: "HOW & Execution",
+                                title: "Launch & Operations",
+                                focus: "Launch preparation and operational setup",
+                                points: [
+                                    "Marketing and sales strategy execution",
+                                    "Operational systems setup",
+                                    "Launch planning and execution",
+                                    "Post-launch support planning"
+                                ]
+                            }
+                        ]
+                    },
+                    teamSupport: {
+                        subtitle: "Comprehensive support system for team success",
+                        supportTypes: [
+                            {
+                                icon: "fas fa-users",
+                                title: "Team Formation Support",
+                                description: "We help match you with compatible teammates or guide you in forming your own team of 4 members."
+                            },
+                            {
+                                icon: "fas fa-chalkboard-teacher",
+                                title: "Weekly Mentorship",
+                                description: "Regular mentorship sessions with experienced entrepreneurs and business coaches."
+                            },
+                            {
+                                icon: "fas fa-tools",
+                                title: "Practical Tools",
+                                description: "Access to business tools, templates, and resources for immediate implementation."
+                            },
+                            {
+                                icon: "fas fa-network-wired",
+                                title: "Post-Bootcamp Network",
+                                description: "Continued access to our entrepreneur network and alumni community."
+                            }
+                        ]
+                    },
+                    application: {
+                        subtitle: "Simple 3-step application process",
+                        steps: [
+                            {
+                                step: "1",
+                                title: "Online Application",
+                                description: "Complete our online application form with basic information and your entrepreneurial background."
+                            },
+                            {
+                                step: "2",
+                                title: "Team Formation",
+                                description: "Form your team of 4 members or get matched with compatible teammates through our system."
+                            },
+                            {
+                                step: "3",
+                                title: "Onboarding & Payment",
+                                description: "Complete the registration process with payment and attend the orientation session."
+                            }
+                        ]
+                    },
+                    benefits: {
+                        subtitle: "What you gain from our bootcamp experience",
+                        benefitsList: [
+                            {
+                                icon: "fas fa-rocket",
+                                title: "Launch-Ready Startup",
+                                description: "Graduate with a functional business ready to operate in the market."
+                            },
+                            {
+                                icon: "fas fa-handshake",
+                                title: "Team Partnership",
+                                description: "Build strong partnerships with like-minded entrepreneurs."
+                            },
+                            {
+                                icon: "fas fa-tools",
+                                title: "Practical Skills",
+                                description: "Acquire hands-on business skills immediately applicable to your venture."
+                            },
+                            {
+                                icon: "fas fa-network-wired",
+                                title: "Entrepreneur Network",
+                                description: "Join our growing network of entrepreneurs and business mentors."
+                            }
+                        ]
+                    },
+                    cta: {
+                        subtitle: "Don't miss this opportunity to transform your entrepreneurial journey. Limited seats available for our upcoming cohort.",
+                        buttons: [
+                            { text: "Apply Now", url: "#application", type: "primary" },
+                            { text: "Contact Us", url: "contact.html", type: "secondary" }
+                        ]
+                    }
+                };
+                
+                updatePageWithData(defaultData);
+                document.getElementById('loadingScreen').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
             }
             
             function updatePageWithData(data) {
                 // Update Hero Section
                 updateHeroSection(data.hero);
                 
-                // Update Franchise Tracks
-                updateFranchiseTracks(data.franchiseTracks);
+                // Update Program Structure
+                updateProgramStructure(data.program);
                 
-                // Update Team Structure
-                updateTeamStructure(data.teamStructure);
+                // Update Weekly Schedule
+                updateWeeklySchedule(data.schedule);
                 
-                // Update Schedule
-                updateSchedule(data.schedule);
+                // Update Team Support
+                updateTeamSupport(data.teamSupport);
                 
-                // Update Application Form
-                updateApplicationForm(data.applicationForm);
+                // Update Application Process
+                updateApplicationProcess(data.application);
+                
+                // Update Benefits
+                updateBenefits(data.benefits);
+                
+                // Update CTA
+                updateCTA(data.cta);
                 
                 // Update Footer
                 updateFooter(data);
             }
             
             function updateHeroSection(heroData) {
-                document.getElementById('missionBadge').innerHTML = `
-                    <i class="fas fa-crown"></i> ${heroData.missionBadge}
-                `;
+                if (!heroData) return;
                 
-                document.getElementById('heroTitle').innerHTML = heroData.mainTitle;
-                document.getElementById('heroSubtitle').textContent = heroData.subtitle;
+                // Update cohort badge
+                const cohortBadge = document.getElementById('cohortBadge');
+                if (cohortBadge && heroData.cohort) {
+                    cohortBadge.textContent = heroData.cohort;
+                }
+                
+                // Update footer cohort
+                const footerCohort = document.getElementById('footerCohort');
+                if (footerCohort && heroData.cohort) {
+                    footerCohort.textContent = heroData.cohort;
+                }
+                
+                // Update title and subtitle
+                const heroTitle = document.getElementById('heroTitle');
+                if (heroTitle && heroData.mainTitle) {
+                    heroTitle.innerHTML = heroData.mainTitle;
+                }
+                
+                const heroSubtitle = document.getElementById('heroSubtitle');
+                if (heroSubtitle && heroData.subtitle) {
+                    heroSubtitle.textContent = heroData.subtitle;
+                }
+                
+                // Update bootcamp image
+                const bootcampImage = document.getElementById('bootcampImage');
+                if (bootcampImage && heroData.imageUrl) {
+                    bootcampImage.src = heroData.imageUrl;
+                    bootcampImage.alt = heroData.mainTitle || 'DSOG Startup Bootcamp';
+                }
+                
+                // Update meta information
+                const bootcampMeta = document.getElementById('bootcampMeta');
+                if (bootcampMeta && heroData.meta) {
+                    bootcampMeta.innerHTML = '';
+                    heroData.meta.forEach(item => {
+                        const metaItem = document.createElement('div');
+                        metaItem.className = 'meta-item';
+                        metaItem.innerHTML = `
+                            <i class="${item.icon}"></i>
+                            <span>${item.text}</span>
+                        `;
+                        bootcampMeta.appendChild(metaItem);
+                    });
+                }
                 
                 // Update pricing badge
-                const pricingText = heroData.pricing.description || 
-                    `Special Pioneer Price: <span>KSh ${heroData.pricing.specialPrice}</span> (Future Cohorts: KSh ${heroData.pricing.futurePrice}+)`;
-                document.getElementById('pricingText').innerHTML = pricingText;
+                const pricingText = document.getElementById('pricingText');
+                if (pricingText && heroData.pricing) {
+                    pricingText.innerHTML = `
+                        ${heroData.pricing.description || 'Special Price'}: 
+                        <span>${heroData.pricing.currency || 'KES'} ${heroData.pricing.amount || '3,500'}</span>
+                    `;
+                }
                 
                 // Update highlights
                 const highlightsContainer = document.getElementById('heroHighlights');
-                highlightsContainer.innerHTML = '';
-                
-                heroData.highlights.forEach(highlight => {
-                    const highlightElement = document.createElement('div');
-                    highlightElement.className = 'highlight-item animate-on-scroll';
-                    highlightElement.innerHTML = `
-                        <i class="${highlight.icon}"></i>
-                        <span>${highlight.text}</span>
-                    `;
-                    highlightsContainer.appendChild(highlightElement);
-                });
-            }
-            
-            function updateFranchiseTracks(tracksData) {
-                document.getElementById('tracksSubtitle').textContent = tracksData.subtitle;
-                
-                const tracksGrid = document.getElementById('tracksGrid');
-                tracksGrid.innerHTML = '';
-                
-                tracksData.tracks.forEach(track => {
-                    const trackCard = document.createElement('div');
-                    trackCard.className = 'track-card animate-on-scroll';
-                    trackCard.innerHTML = `
-                        <div class="track-icon">
-                            <i class="${track.icon}"></i>
-                        </div>
-                        <span class="track-badge">${track.badge}</span>
-                        <h3>${track.name}</h3>
-                        <p>${track.description}</p>
-                        <div style="margin-top: var(--space-md);">
-                            <span class="team-size">${track.teamSize}</span>
-                        </div>
-                        <div style="margin-top: var(--space-lg); font-size: 0.9rem; color: var(--text-tertiary);">
-                            <i class="fas fa-bullseye"></i> Focus: ${track.focus}
-                        </div>
-                    `;
-                    tracksGrid.appendChild(trackCard);
-                });
-                
-                // Update footer tracks
-                const footerTracks = document.getElementById('footerTracks');
-                footerTracks.innerHTML = '';
-                tracksData.tracks.forEach(track => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `<a href="#tracks">${track.name} Franchise</a>`;
-                    footerTracks.appendChild(li);
-                });
-            }
-            
-            function updateTeamStructure(teamData) {
-                document.getElementById('teamSubtitle').textContent = teamData.subtitle;
-                
-                const teamStructure = document.getElementById('teamStructure');
-                teamStructure.innerHTML = '';
-                
-                teamData.teams.forEach(team => {
-                    const teamCard = document.createElement('div');
-                    teamCard.className = 'team-card animate-on-scroll';
-                    
-                    let benefitsHTML = '';
-                    team.benefits.forEach(benefit => {
-                        benefitsHTML += `<li><i class="fas fa-check"></i> ${benefit}</li>`;
+                if (highlightsContainer && heroData.highlights) {
+                    highlightsContainer.innerHTML = '';
+                    heroData.highlights.forEach(highlight => {
+                        const highlightElement = document.createElement('div');
+                        highlightElement.className = 'highlight-item animate-on-scroll';
+                        highlightElement.innerHTML = `
+                            <i class="${highlight.icon}"></i>
+                            <span>${highlight.text}</span>
+                        `;
+                        highlightsContainer.appendChild(highlightElement);
                     });
-                    
-                    teamCard.innerHTML = `
-                        <div class="team-number">${team.number}</div>
-                        <h3>${team.title}</h3>
-                        <p>${team.description}</p>
-                        <ul class="benefit-list">
-                            ${benefitsHTML}
-                        </ul>
-                    `;
-                    teamStructure.appendChild(teamCard);
-                });
+                }
             }
             
-            function updateSchedule(scheduleData) {
-                document.getElementById('scheduleSubtitle').textContent = scheduleData.subtitle;
+            function updateProgramStructure(programData) {
+                if (!programData) return;
                 
-                const timeline = document.getElementById('timeline');
-                timeline.innerHTML = '';
+                // Update subtitle
+                const programSubtitle = document.getElementById('programSubtitle');
+                if (programSubtitle && programData.subtitle) {
+                    programSubtitle.textContent = programData.subtitle;
+                }
                 
-                scheduleData.months.forEach((month, index) => {
-                    const timelineItem = document.createElement('div');
-                    timelineItem.className = `timeline-item animate-on-scroll`;
-                    timelineItem.id = `month${index + 1}`;
-                    
-                    // Alternate layout for odd/even months
-                    if (index % 2 === 0) {
-                        // Even index (0, 2, 4) - month on left
-                        timelineItem.innerHTML = `
-                            <div class="timeline-month">${month.name}</div>
-                            <div class="timeline-content">
-                                <h4>${month.title}</h4>
-                                <p><strong>Focus:</strong> ${month.focus}</p>
-                                <p><strong>Team Work:</strong> ${month.teamWork}</p>
-                                <div class="project-focus">Project: ${month.project}</div>
-                            </div>
+                // Update program structure
+                const programStructure = document.getElementById('programStructure');
+                if (programStructure && programData.phases) {
+                    programStructure.innerHTML = '';
+                    programData.phases.forEach((phase, index) => {
+                        const phaseCard = document.createElement('div');
+                        phaseCard.className = 'program-card animate-on-scroll';
+                        phaseCard.dataset.delay = index * 100;
+                        
+                        let itemsHTML = '';
+                        if (phase.items && phase.items.length > 0) {
+                            itemsHTML = `
+                                <div class="phase-grid">
+                                    ${phase.items.map(item => `
+                                        <div class="phase-item">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>${item}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            `;
+                        }
+                        
+                        phaseCard.innerHTML = `
+                            <div class="program-phase">${phase.phase || `PHASE ${index + 1}`}</div>
+                            <h3>${phase.title || 'Program Phase'}</h3>
+                            <p>${phase.description || 'Program phase description'}</p>
+                            ${itemsHTML}
                         `;
-                    } else {
-                        // Odd index (1, 3) - month on right
-                        timelineItem.innerHTML = `
-                            <div class="timeline-content">
-                                <h4>${month.title}</h4>
-                                <p><strong>Focus:</strong> ${month.focus}</p>
-                                <p><strong>Team Work:</strong> ${month.teamWork}</p>
-                                <div class="project-focus">Project: ${month.project}</div>
-                            </div>
-                            <div class="timeline-month">${month.name}</div>
-                        `;
-                    }
-                    
-                    timeline.appendChild(timelineItem);
-                });
+                        programStructure.appendChild(phaseCard);
+                    });
+                }
             }
             
-            function updateApplicationForm(formData) {
-                document.getElementById('formSubtitle').textContent = formData.subtitle;
+            function updateWeeklySchedule(scheduleData) {
+                if (!scheduleData) return;
                 
-                // Update Google Form iframe
-                const iframe = document.getElementById('googleFormIframe');
-                iframe.src = formData.googleFormUrl;
+                // Update subtitle
+                const scheduleSubtitle = document.getElementById('scheduleSubtitle');
+                if (scheduleSubtitle && scheduleData.subtitle) {
+                    scheduleSubtitle.textContent = scheduleData.subtitle;
+                }
                 
-                // Update pricing in footer
-                document.getElementById('footerPricing').innerHTML = 
-                    `Special Pioneer Price: <span style="color: var(--primary-gold);">KSh 3,500</span> (Save KSh 21,500)`;
+                // Update weekly schedule
+                const weeklySchedule = document.getElementById('weeklySchedule');
+                if (weeklySchedule && scheduleData.weeks) {
+                    weeklySchedule.innerHTML = '';
+                    scheduleData.weeks.forEach((week, index) => {
+                        const weekElement = document.createElement('div');
+                        weekElement.className = 'timeline-week animate-on-scroll';
+                        weekElement.dataset.delay = index * 100;
+                        weekElement.id = `week${index + 1}`;
+                        
+                        let pointsHTML = '';
+                        if (week.points && week.points.length > 0) {
+                            pointsHTML = `
+                                <ul class="learning-points">
+                                    ${week.points.map(point => `
+                                        <li><i class="fas fa-check"></i> ${point}</li>
+                                    `).join('')}
+                                </ul>
+                            `;
+                        }
+                        
+                        weekElement.innerHTML = `
+                            <div class="week-number">${week.week || `Week ${index + 1}`}</div>
+                            <div class="week-content">
+                                <span class="week-tag">${week.tag || 'Learning Week'}</span>
+                                <h4>${week.title || 'Weekly Focus'}</h4>
+                                <p><strong>Focus:</strong> ${week.focus || 'Weekly learning focus'}</p>
+                                ${pointsHTML}
+                            </div>
+                        `;
+                        weeklySchedule.appendChild(weekElement);
+                    });
+                }
+            }
+            
+            function updateTeamSupport(supportData) {
+                if (!supportData) return;
+                
+                // Update subtitle
+                const teamSubtitle = document.getElementById('teamSubtitle');
+                if (teamSubtitle && supportData.subtitle) {
+                    teamSubtitle.textContent = supportData.subtitle;
+                }
+                
+                // Update team support
+                const teamSupport = document.getElementById('teamSupport');
+                if (teamSupport && supportData.supportTypes) {
+                    teamSupport.innerHTML = '';
+                    supportData.supportTypes.forEach((support, index) => {
+                        const supportCard = document.createElement('div');
+                        supportCard.className = 'support-card animate-on-scroll';
+                        supportCard.dataset.delay = index * 100;
+                        
+                        supportCard.innerHTML = `
+                            <div class="support-icon">
+                                <i class="${support.icon}"></i>
+                            </div>
+                            <h3>${support.title || 'Support Type'}</h3>
+                            <p>${support.description || 'Support description'}</p>
+                        `;
+                        teamSupport.appendChild(supportCard);
+                    });
+                }
+            }
+            
+            function updateApplicationProcess(applicationData) {
+                if (!applicationData) return;
+                
+                // Update subtitle
+                const applicationSubtitle = document.getElementById('applicationSubtitle');
+                if (applicationSubtitle && applicationData.subtitle) {
+                    applicationSubtitle.textContent = applicationData.subtitle;
+                }
+                
+                // Update application process
+                const applicationProcess = document.getElementById('applicationProcess');
+                if (applicationProcess && applicationData.steps) {
+                    applicationProcess.innerHTML = '';
+                    applicationData.steps.forEach((step, index) => {
+                        const stepElement = document.createElement('div');
+                        stepElement.className = 'process-step animate-on-scroll';
+                        stepElement.dataset.delay = index * 100;
+                        
+                        stepElement.innerHTML = `
+                            <div class="step-number">${step.step || index + 1}</div>
+                            <div>
+                                <h3>${step.title || 'Application Step'}</h3>
+                                <p>${step.description || 'Step description'}</p>
+                            </div>
+                        `;
+                        applicationProcess.appendChild(stepElement);
+                    });
+                }
+            }
+            
+            function updateBenefits(benefitsData) {
+                if (!benefitsData) return;
+                
+                // Update subtitle
+                const benefitsSubtitle = document.getElementById('benefitsSubtitle');
+                if (benefitsSubtitle && benefitsData.subtitle) {
+                    benefitsSubtitle.textContent = benefitsData.subtitle;
+                }
+                
+                // Update benefits
+                const bootcampBenefits = document.getElementById('bootcampBenefits');
+                if (bootcampBenefits && benefitsData.benefitsList) {
+                    bootcampBenefits.innerHTML = '';
+                    benefitsData.benefitsList.forEach((benefit, index) => {
+                        const benefitCard = document.createElement('div');
+                        benefitCard.className = 'benefit-card animate-on-scroll';
+                        benefitCard.dataset.delay = index * 100;
+                        
+                        benefitCard.innerHTML = `
+                            <div class="benefit-icon">
+                                <i class="${benefit.icon}"></i>
+                            </div>
+                            <h4>${benefit.title || 'Benefit'}</h4>
+                            <p>${benefit.description || 'Benefit description'}</p>
+                        `;
+                        bootcampBenefits.appendChild(benefitCard);
+                    });
+                }
+            }
+            
+            function updateCTA(ctaData) {
+                if (!ctaData) return;
+                
+                // Update CTA subtitle
+                const ctaSubtitle = document.getElementById('ctaSubtitle');
+                if (ctaSubtitle && ctaData.subtitle) {
+                    ctaSubtitle.textContent = ctaData.subtitle;
+                }
             }
             
             function updateFooter(data) {
-                // Update contact information in footer
-                const footerContact = document.getElementById('footerContact');
-                footerContact.innerHTML = `
-                    <li><i class="fas fa-phone"></i> +254 733 737 983</li>
-                    <li><i class="fas fa-envelope"></i> bootcamp@dsog.org</li>
-                    <li><i class="fab fa-whatsapp"></i> Bootcamp Application</li>
-                    <li><i class="fas fa-map-marker-alt"></i> Nairobi, Kenya</li>
-                    <li><i class="fas fa-users"></i> 12 Pioneers Only</li>
-                    <li><i class="fas fa-store"></i> 3 Franchise Tracks</li>
-                `;
+                // Update footer program links
+                const footerProgramLinks = document.getElementById('footerProgramLinks');
+                if (footerProgramLinks) {
+                    const links = [
+                        { text: "Program Structure", href: "#program" },
+                        { text: "Weekly Schedule", href: "#weekly-schedule" },
+                        { text: "Team Support", href: "#team-support" },
+                        { text: "Application Process", href: "#application" },
+                        { text: "Bootcamp Benefits", href: "#benefits" }
+                    ];
+                    
+                    footerProgramLinks.innerHTML = '';
+                    links.forEach(link => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `<a href="${link.href}">${link.text}</a>`;
+                        footerProgramLinks.appendChild(li);
+                    });
+                }
             }
             
             function initializeCountdown() {
-                // Get deadline from Firebase or use default
-                const deadline = new Date('February 2, 2026 23:59:59');
+                // Get deadline from data or use default
+                const deadline = new Date();
+                deadline.setDate(deadline.getDate() + 30); // 30 days from now
                 
                 function updateCountdown() {
                     const now = new Date();
@@ -2021,15 +2544,30 @@
                         const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
                         const seconds = Math.floor((difference % (1000 * 60)) / 1000);
                         
-                        document.getElementById('days').textContent = days.toString().padStart(2, '0');
-                        document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-                        document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-                        document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+                        const daysEl = document.getElementById('days');
+                        const hoursEl = document.getElementById('hours');
+                        const minutesEl = document.getElementById('minutes');
+                        const secondsEl = document.getElementById('seconds');
                         
-                        document.getElementById('countdownContainer').style.display = 'flex';
+                        if (daysEl) daysEl.textContent = days.toString().padStart(2, '0');
+                        if (hoursEl) hoursEl.textContent = hours.toString().padStart(2, '0');
+                        if (minutesEl) minutesEl.textContent = minutes.toString().padStart(2, '0');
+                        if (secondsEl) secondsEl.textContent = seconds.toString().padStart(2, '0');
+                        
+                        const countdownContainer = document.getElementById('countdownContainer');
+                        if (countdownContainer) {
+                            countdownContainer.style.display = 'flex';
+                        }
                     } else {
-                        document.getElementById('countdownContainer').style.display = 'none';
-                        document.getElementById('countdownMessage').textContent = 'Bootcamp applications are now closed';
+                        const countdownContainer = document.getElementById('countdownContainer');
+                        if (countdownContainer) {
+                            countdownContainer.style.display = 'none';
+                        }
+                        
+                        const countdownMessage = document.getElementById('countdownMessage');
+                        if (countdownMessage) {
+                            countdownMessage.textContent = 'Bootcamp registration is now closed';
+                        }
                     }
                 }
                 
@@ -2062,19 +2600,21 @@
                 document.documentElement.setAttribute('data-theme', initialTheme);
                 updateThemeIcon(initialTheme);
                 
-                themeToggle.addEventListener('click', () => {
-                    const currentTheme = document.documentElement.getAttribute('data-theme');
-                    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-                    
-                    document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
-                    document.documentElement.setAttribute('data-theme', newTheme);
-                    localStorage.setItem('theme', newTheme);
-                    updateThemeIcon(newTheme);
-                    
-                    setTimeout(() => {
-                        document.body.style.transition = '';
-                    }, 300);
-                });
+                if (themeToggle) {
+                    themeToggle.addEventListener('click', () => {
+                        const currentTheme = document.documentElement.getAttribute('data-theme');
+                        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                        
+                        document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+                        document.documentElement.setAttribute('data-theme', newTheme);
+                        localStorage.setItem('theme', newTheme);
+                        updateThemeIcon(newTheme);
+                        
+                        setTimeout(() => {
+                            document.body.style.transition = '';
+                        }, 300);
+                    });
+                }
                 
                 prefersDark.addEventListener('change', (e) => {
                     if (!localStorage.getItem('theme')) {
@@ -2148,13 +2688,15 @@
 
                 // Header scroll effect
                 const header = document.getElementById('header');
-                window.addEventListener('scroll', () => {
-                    if (window.scrollY > 50) {
-                        header.classList.add('scrolled');
-                    } else {
-                        header.classList.remove('scrolled');
-                    }
-                });
+                if (header) {
+                    window.addEventListener('scroll', () => {
+                        if (window.scrollY > 50) {
+                            header.classList.add('scrolled');
+                        } else {
+                            header.classList.remove('scrolled');
+                        }
+                    });
+                }
 
                 // Smooth scroll for anchor links
                 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -2168,8 +2710,8 @@
                             const targetElement = document.getElementById(targetId);
                             
                             if (targetElement) {
-                                const headerHeight = document.getElementById('header').offsetHeight + 60;
-                                const targetPosition = targetElement.offsetTop - headerHeight - 20;
+                                const headerHeight = document.getElementById('header')?.offsetHeight || 72;
+                                const targetPosition = targetElement.offsetTop - headerHeight - 60 - 20;
                                 
                                 window.scrollTo({
                                     top: targetPosition,
