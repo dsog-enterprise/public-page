@@ -769,8 +769,8 @@
             color: var(--primary-red);
         }
 
-        /* Deadline Countdown */
-        .deadline-countdown {
+        /* Real-time Countdown Timer */
+        .countdown-container {
             background: var(--bg-secondary);
             border-radius: var(--radius-md);
             padding: var(--space-sm) var(--space-md);
@@ -778,27 +778,63 @@
             border: 1px solid var(--border-color);
         }
 
-        .deadline-label {
+        .countdown-label {
             font-size: 0.85rem;
             color: var(--text-secondary);
             margin-bottom: var(--space-xs);
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
         }
 
-        .deadline-timer {
+        .countdown-label i {
+            color: var(--primary-red);
+        }
+
+        .realtime-countdown {
             display: flex;
             align-items: center;
             gap: var(--space-sm);
         }
 
-        .deadline-value {
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: var(--primary-red);
+        .countdown-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 40px;
         }
 
-        .deadline-unit {
-            font-size: 0.75rem;
+        .countdown-value {
+            font-family: var(--font-heading);
+            font-weight: 800;
+            font-size: 1.2rem;
+            line-height: 1;
+            color: var(--primary-red);
+            width: 100%;
+            text-align: center;
+        }
+
+        .countdown-unit {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.9;
+            font-weight: 600;
+            white-space: nowrap;
             color: var(--text-tertiary);
+        }
+
+        .countdown-separator {
+            color: var(--text-tertiary);
+            font-weight: 700;
+            margin: 0 2px;
+            font-size: 0.9rem;
+        }
+
+        .countdown-expired {
+            color: var(--primary-red);
+            font-weight: 700;
+            font-size: 0.9rem;
         }
 
         /* Ticket Pricing */
@@ -1051,6 +1087,18 @@
                 gap: var(--space-md);
                 padding: 0 var(--space-lg);
             }
+
+            .realtime-countdown {
+                gap: var(--space-xs);
+            }
+
+            .countdown-item {
+                min-width: 35px;
+            }
+
+            .countdown-value {
+                font-size: 1.1rem;
+            }
         }
 
         /* ===== RESPONSIVE DESIGN ===== */
@@ -1093,6 +1141,22 @@
             .hero-buttons .btn {
                 width: 100%;
                 max-width: 300px;
+            }
+
+            .realtime-countdown {
+                justify-content: center;
+            }
+
+            .countdown-item {
+                min-width: 30px;
+            }
+
+            .countdown-value {
+                font-size: 1rem;
+            }
+
+            .countdown-unit {
+                font-size: 0.65rem;
             }
         }
 
@@ -1141,6 +1205,27 @@
 
             .bootcamp-status {
                 right: var(--space-sm);
+            }
+
+            .realtime-countdown {
+                gap: 4px;
+            }
+
+            .countdown-item {
+                min-width: 28px;
+            }
+
+            .countdown-value {
+                font-size: 0.9rem;
+            }
+
+            .countdown-unit {
+                font-size: 0.6rem;
+            }
+
+            .countdown-separator {
+                font-size: 0.8rem;
+                margin: 0 1px;
             }
 
             .theme-toggle {
@@ -1362,6 +1447,10 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 DSOG Bootcamps Page - Loading from Firebase');
             
+            // Global variables
+            let bootcampsData = [];
+            let countdownIntervals = {};
+            
             // Initialize app
             initializeApp();
             
@@ -1403,16 +1492,19 @@
                             console.log('Events data loaded successfully from Firebase');
                             
                             // Filter for bootcamp events only
-                            const bootcampEvents = filterBootcampEvents(data);
+                            bootcampsData = filterBootcampEvents(data);
                             
                             // Update page with bootcamp events
-                            updateBootcampGrid(bootcampEvents);
+                            updateBootcampGrid(bootcampsData);
+                            
+                            // Initialize real-time countdowns
+                            initializeCountdowns();
                             
                             // Hide loading screen and show content
                             document.getElementById('loadingScreen').style.display = 'none';
                             document.getElementById('mainContent').style.display = 'block';
                             
-                            resolve(bootcampEvents);
+                            resolve(bootcampsData);
                         } else {
                             console.error('No events data found in Firebase');
                             showNoBootcampsMessage();
@@ -1494,7 +1586,9 @@
                 const card = document.createElement('div');
                 card.className = 'bootcamp-card animate-on-scroll';
                 card.dataset.delay = index * 100;
-                card.id = `bootcamp-${bootcamp.id || index}`;
+                const bootcampId = bootcamp.id || `bootcamp-${index}`;
+                card.id = bootcampId;
+                card.dataset.bootcampId = bootcampId;
                 
                 // Format date
                 let dateText = 'Date TBD';
@@ -1515,7 +1609,6 @@
                 
                 // Calculate deadline status
                 const deadlineStatus = calculateDeadlineStatus(bootcamp);
-                const deadlineCountdown = calculateDeadlineCountdown(bootcamp);
                 
                 // Get lowest ticket price
                 const lowestPrice = getLowestTicketPrice(bootcamp);
@@ -1523,6 +1616,9 @@
                 
                 // Default image for bootcamps
                 const defaultImage = 'https://i.postimg.cc/CxNLzQgt/Untitled-design-3.webp';
+                
+                // Create countdown container with unique ID
+                const countdownId = `countdown-${bootcampId}`;
                 
                 card.innerHTML = `
                     <div class="bootcamp-image-container">
@@ -1544,16 +1640,34 @@
                             ${bootcamp.subtitle ? `<p><strong>${bootcamp.subtitle}</strong></p>` : ''}
                             <p>${bootcamp.description || 'Join our intensive startup bootcamp program to launch your business idea.'}</p>
                             
-                            ${deadlineCountdown ? `
-                                <div class="deadline-countdown">
-                                    <div class="deadline-label">Application Deadline:</div>
-                                    <div class="deadline-timer">
-                                        <span class="deadline-value">${deadlineCountdown.value}</span>
-                                        <span class="deadline-unit">${deadlineCountdown.unit}</span>
-                                        ${deadlineCountdown.remaining ? `<span style="margin-left: auto; font-size: 0.8rem; color: var(--text-tertiary);">${deadlineCountdown.remaining} left</span>` : ''}
+                            <div class="countdown-container" id="${countdownId}">
+                                <div class="countdown-label">
+                                    <i class="fas fa-clock"></i>
+                                    <span>Application Deadline:</span>
+                                </div>
+                                <div class="realtime-countdown" id="${countdownId}-timer">
+                                    <!-- Countdown will be dynamically updated here -->
+                                    <div class="countdown-item">
+                                        <div class="countdown-value">00</div>
+                                        <div class="countdown-unit">Days</div>
+                                    </div>
+                                    <span class="countdown-separator">:</span>
+                                    <div class="countdown-item">
+                                        <div class="countdown-value">00</div>
+                                        <div class="countdown-unit">Hours</div>
+                                    </div>
+                                    <span class="countdown-separator">:</span>
+                                    <div class="countdown-item">
+                                        <div class="countdown-value">00</div>
+                                        <div class="countdown-unit">Mins</div>
+                                    </div>
+                                    <span class="countdown-separator">:</span>
+                                    <div class="countdown-item">
+                                        <div class="countdown-value">00</div>
+                                        <div class="countdown-unit">Secs</div>
                                     </div>
                                 </div>
-                            ` : ''}
+                            </div>
                             
                             ${lowestPrice > 0 ? `
                                 <div class="ticket-pricing">
@@ -1597,8 +1711,157 @@
                 return card;
             }
             
-            function calculateDeadlineStatus(bootcamp) {
+            function initializeCountdowns() {
+                console.log('Initializing real-time countdowns...');
+                
+                // Clear any existing intervals
+                Object.values(countdownIntervals).forEach(interval => {
+                    clearInterval(interval);
+                });
+                countdownIntervals = {};
+                
+                // Initialize countdown for each bootcamp
+                bootcampsData.forEach((bootcamp, index) => {
+                    const bootcampId = bootcamp.id || `bootcamp-${index}`;
+                    const countdownId = `countdown-${bootcampId}`;
+                    
+                    // Start the countdown timer
+                    startCountdown(bootcamp, countdownId);
+                });
+            }
+            
+            function startCountdown(bootcamp, countdownId) {
+                // Get deadline from bootcamp
+                const deadline = getBootcampDeadline(bootcamp);
+                
+                if (!deadline || isNaN(deadline.getTime())) {
+                    updateCountdownDisplay(countdownId, null, 'No deadline set');
+                    return;
+                }
+                
+                // Initial update
+                updateCountdown(bootcamp, countdownId, deadline);
+                
+                // Set interval to update every second
+                const intervalId = setInterval(() => {
+                    updateCountdown(bootcamp, countdownId, deadline);
+                }, 1000);
+                
+                // Store interval ID for cleanup
+                countdownIntervals[countdownId] = intervalId;
+            }
+            
+            function updateCountdown(bootcamp, countdownId, deadline) {
                 const now = new Date();
+                const timeDiff = deadline - now;
+                
+                // Get the timer element
+                const timerElement = document.getElementById(`${countdownId}-timer`);
+                const containerElement = document.getElementById(countdownId);
+                
+                if (!timerElement || !containerElement) return;
+                
+                if (timeDiff <= 0) {
+                    // Deadline has passed
+                    clearInterval(countdownIntervals[countdownId]);
+                    delete countdownIntervals[countdownId];
+                    
+                    timerElement.innerHTML = `
+                        <div class="countdown-expired">
+                            <i class="fas fa-times-circle"></i> Applications Closed
+                        </div>
+                    `;
+                    
+                    // Update status badge
+                    updateStatusBadge(bootcamp, containerElement, 'closed');
+                    return;
+                }
+                
+                // Calculate time units
+                const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+                
+                // Update the timer display
+                timerElement.innerHTML = `
+                    <div class="countdown-item">
+                        <div class="countdown-value">${days.toString().padStart(2, '0')}</div>
+                        <div class="countdown-unit">Days</div>
+                    </div>
+                    <span class="countdown-separator">:</span>
+                    <div class="countdown-item">
+                        <div class="countdown-value">${hours.toString().padStart(2, '0')}</div>
+                        <div class="countdown-unit">Hours</div>
+                    </div>
+                    <span class="countdown-separator">:</span>
+                    <div class="countdown-item">
+                        <div class="countdown-value">${minutes.toString().padStart(2, '0')}</div>
+                        <div class="countdown-unit">Mins</div>
+                    </div>
+                    <span class="countdown-separator">:</span>
+                    <div class="countdown-item">
+                        <div class="countdown-value">${seconds.toString().padStart(2, '0')}</div>
+                        <div class="countdown-unit">Secs</div>
+                    </div>
+                `;
+                
+                // Update status badge if approaching deadline
+                if (days <= 7) {
+                    updateStatusBadge(bootcamp, containerElement, 'closing');
+                }
+            }
+            
+            function updateCountdownDisplay(countdownId, timeData, message) {
+                const timerElement = document.getElementById(`${countdownId}-timer`);
+                if (!timerElement) return;
+                
+                if (message) {
+                    timerElement.innerHTML = `
+                        <div class="countdown-expired">
+                            <i class="fas fa-info-circle"></i> ${message}
+                        </div>
+                    `;
+                } else if (timeData) {
+                    timerElement.innerHTML = `
+                        <div class="countdown-item">
+                            <div class="countdown-value">${timeData.days}</div>
+                            <div class="countdown-unit">Days</div>
+                        </div>
+                        <span class="countdown-separator">:</span>
+                        <div class="countdown-item">
+                            <div class="countdown-value">${timeData.hours}</div>
+                            <div class="countdown-unit">Hours</div>
+                        </div>
+                        <span class="countdown-separator">:</span>
+                        <div class="countdown-item">
+                            <div class="countdown-value">${timeData.minutes}</div>
+                            <div class="countdown-unit">Mins</div>
+                        </div>
+                        <span class="countdown-separator">:</span>
+                        <div class="countdown-item">
+                            <div class="countdown-value">${timeData.seconds}</div>
+                            <div class="countdown-unit">Secs</div>
+                        </div>
+                    `;
+                }
+            }
+            
+            function updateStatusBadge(bootcamp, containerElement, status) {
+                // Find the status badge within the card
+                const statusElement = containerElement.closest('.bootcamp-card')?.querySelector('.bootcamp-status');
+                if (!statusElement) return;
+                
+                if (status === 'closed') {
+                    statusElement.className = 'bootcamp-status status-closed';
+                    statusElement.innerHTML = '<i class="fas fa-calendar-times"></i> Closed';
+                } else if (status === 'closing') {
+                    statusElement.className = 'bootcamp-status status-closing';
+                    statusElement.innerHTML = '<i class="fas fa-clock"></i> Closing Soon';
+                }
+            }
+            
+            function getBootcampDeadline(bootcamp) {
                 let deadline = null;
                 
                 // Try to get deadline from various possible fields
@@ -1615,10 +1878,17 @@
                     deadline.setDate(eventDate.getDate() - 7);
                 }
                 
+                return deadline;
+            }
+            
+            function calculateDeadlineStatus(bootcamp) {
+                const deadline = getBootcampDeadline(bootcamp);
+                
                 if (!deadline || isNaN(deadline.getTime())) {
                     return { class: 'status-open', icon: 'fas fa-calendar-plus', text: 'Open' };
                 }
                 
+                const now = new Date();
                 const timeDiff = deadline - now;
                 const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
                 
@@ -1628,59 +1898,6 @@
                     return { class: 'status-closing', icon: 'fas fa-clock', text: 'Closing Soon' };
                 } else {
                     return { class: 'status-open', icon: 'fas fa-calendar-check', text: 'Open' };
-                }
-            }
-            
-            function calculateDeadlineCountdown(bootcamp) {
-                const now = new Date();
-                let deadline = null;
-                
-                // Try to get deadline from various possible fields
-                if (bootcamp.deadline) {
-                    deadline = new Date(bootcamp.deadline);
-                } else if (bootcamp.applicationDeadline) {
-                    deadline = new Date(bootcamp.applicationDeadline);
-                } else if (bootcamp.registrationDeadline) {
-                    deadline = new Date(bootcamp.registrationDeadline);
-                } else if (bootcamp.date) {
-                    // If no deadline, use event date minus 7 days
-                    const eventDate = new Date(bootcamp.date);
-                    deadline = new Date(eventDate);
-                    deadline.setDate(eventDate.getDate() - 7);
-                }
-                
-                if (!deadline || isNaN(deadline.getTime())) {
-                    return null;
-                }
-                
-                const timeDiff = deadline - now;
-                
-                if (timeDiff <= 0) {
-                    return { value: 'Closed', unit: 'Applications', remaining: null };
-                }
-                
-                const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-                const hoursDiff = Math.ceil(timeDiff / (1000 * 60 * 60));
-                
-                if (daysDiff > 30) {
-                    const monthsDiff = Math.floor(daysDiff / 30);
-                    return { 
-                        value: monthsDiff, 
-                        unit: monthsDiff === 1 ? 'Month' : 'Months',
-                        remaining: `${daysDiff} days`
-                    };
-                } else if (daysDiff > 0) {
-                    return { 
-                        value: daysDiff, 
-                        unit: daysDiff === 1 ? 'Day' : 'Days',
-                        remaining: daysDiff <= 7 ? 'Final days' : null
-                    };
-                } else {
-                    return { 
-                        value: hoursDiff, 
-                        unit: hoursDiff === 1 ? 'Hour' : 'Hours',
-                        remaining: 'Final hours'
-                    };
                 }
             }
             
@@ -1919,6 +2136,13 @@
                     lastScroll = currentScroll;
                 });
             }
+            
+            // Clean up intervals on page unload
+            window.addEventListener('beforeunload', () => {
+                Object.values(countdownIntervals).forEach(interval => {
+                    clearInterval(interval);
+                });
+            });
             
             // Touch optimizations
             let lastTouchEnd = 0;
