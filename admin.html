@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DSOG Admin Panel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <style>
         :root {
             --primary: #4361ee;
@@ -40,7 +44,7 @@
         .admin-container {
             display: flex;
             min-height: 100vh;
-            zoom: 0.9; /* Slightly reduced zoom for professional appearance */
+            zoom: 0.9;
         }
 
         /* Sidebar Styles */
@@ -203,6 +207,11 @@
             padding: 24px;
             margin-bottom: 24px;
             box-shadow: var(--box-shadow);
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
         }
 
         .section-header {
@@ -574,6 +583,54 @@
             font-size: 1.2rem;
         }
 
+        /* Login Screen */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 20px;
+        }
+
+        .login-box {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: var(--box-shadow-lg);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h1 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            color: var(--gray);
+        }
+
+        /* Loading Spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         /* Mobile Responsive */
         @media (max-width: 992px) {
             .sidebar {
@@ -587,10 +644,6 @@
             
             .main-content {
                 margin-left: 0;
-            }
-            
-            .menu-toggle {
-                display: flex;
             }
         }
 
@@ -637,12 +690,40 @@
     </style>
 </head>
 <body>
-    <div class="admin-container">
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-box">
+            <div class="login-header">
+                <h1><i class="fas fa-cogs"></i> DSOG Admin</h1>
+                <p>Sign in to access the admin panel</p>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" class="form-control" placeholder="admin@dsog.org" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                    <span id="loginBtnText">Sign In</span>
+                    <span id="loginSpinner" class="loading" style="display: none;"></span>
+                </button>
+                <div id="loginError" style="color: var(--danger); margin-top: 15px; display: none; text-align: center;">
+                    Invalid credentials. Try admin@dsog.org / admin123
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Panel (Hidden until login) -->
+    <div id="adminPanel" class="admin-container" style="display: none;">
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <h2><i class="fas fa-cogs"></i> DSOG Admin</h2>
-                <p class="version" style="margin-top: 8px; font-size: 0.85rem; color: rgba(255,255,255,0.7);">Version 10.0.0</p>
+                <p class="version" style="margin-top: 8px; font-size: 0.85rem; color: rgba(255,255,255,0.7);" id="appVersion">Version 10.0.0</p>
             </div>
             <nav class="sidebar-nav">
                 <ul>
@@ -667,104 +748,76 @@
                 <h1>Admin Dashboard</h1>
                 <div class="header-actions">
                     <div class="status-indicator">
-                        <span class="status-dot"></span>
-                        <span>Connected to Firebase</span>
+                        <span class="status-dot" id="firebaseStatus"></span>
+                        <span id="connectionStatus">Connecting...</span>
                     </div>
-                    <button class="btn btn-secondary">
+                    <button class="btn btn-secondary" id="refreshBtn">
                         <i class="fas fa-sync-alt"></i> Refresh Data
                     </button>
-                    <button class="btn btn-primary" id="saveChangesBtn">
-                        <i class="fas fa-save"></i> Save Changes
+                    <button class="btn btn-primary" id="saveAllBtn">
+                        <i class="fas fa-save"></i> Save All
+                    </button>
+                    <button class="btn btn-danger" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
                     </button>
                 </div>
             </div>
 
             <!-- Dashboard -->
-            <section id="dashboard" class="content-section active-section">
+            <section id="dashboard" class="content-section active">
                 <div class="section-header">
                     <h2>Overview</h2>
-                    <p>Last updated: <span id="lastUpdated">2026-01-15</span></p>
+                    <p>Last updated: <span id="lastUpdated">Loading...</span></p>
                 </div>
                 
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-card-header">
                             <div>
-                                <div class="stat-card-value" id="eventsCount">4</div>
+                                <div class="stat-card-value" id="eventsCount">0</div>
                                 <div class="stat-card-label">Upcoming Events</div>
                             </div>
                             <div class="stat-card-icon events">
                                 <i class="fas fa-calendar-alt"></i>
                             </div>
                         </div>
-                        <div style="margin-top: 12px;">
-                            <a href="#events" class="tab-btn" style="padding: 0; border: none; color: var(--primary); font-size: 0.9rem;">Manage Events →</a>
-                        </div>
                     </div>
                     
                     <div class="stat-card">
                         <div class="stat-card-header">
                             <div>
-                                <div class="stat-card-value" id="trainingCount">3</div>
+                                <div class="stat-card-value" id="trainingCount">0</div>
                                 <div class="stat-card-label">Training Programs</div>
                             </div>
                             <div class="stat-card-icon training">
                                 <i class="fas fa-graduation-cap"></i>
                             </div>
                         </div>
-                        <div style="margin-top: 12px;">
-                            <a href="#training" class="tab-btn" style="padding: 0; border: none; color: var(--primary); font-size: 0.9rem;">Manage Training →</a>
-                        </div>
                     </div>
                     
                     <div class="stat-card">
                         <div class="stat-card-header">
                             <div>
-                                <div class="stat-card-value" id="teamCount">2</div>
+                                <div class="stat-card-value" id="teamCount">0</div>
                                 <div class="stat-card-label">Team Members</div>
                             </div>
                             <div class="stat-card-icon team">
                                 <i class="fas fa-users"></i>
                             </div>
                         </div>
-                        <div style="margin-top: 12px;">
-                            <a href="#team" class="tab-btn" style="padding: 0; border: none; color: var(--primary); font-size: 0.9rem;">Manage Team →</a>
-                        </div>
                     </div>
                     
                     <div class="stat-card">
                         <div class="stat-card-header">
                             <div>
-                                <div class="stat-card-value" id="faqCount">3</div>
+                                <div class="stat-card-value" id="faqCount">0</div>
                                 <div class="stat-card-label">FAQs</div>
                             </div>
                             <div class="stat-card-icon faq">
                                 <i class="fas fa-question-circle"></i>
                             </div>
                         </div>
-                        <div style="margin-top: 12px;">
-                            <a href="#faqs" class="tab-btn" style="padding: 0; border: none; color: var(--primary); font-size: 0.9rem;">Manage FAQs →</a>
-                        </div>
                     </div>
-                </div>
-                
-                <div class="section-header" style="margin-top: 30px;">
-                    <h2>Quick Actions</h2>
-                </div>
-                
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px;">
-                    <button class="btn btn-secondary" data-section="events">
-                        <i class="fas fa-plus-circle"></i> Add New Event
-                    </button>
-                    <button class="btn btn-secondary" data-section="training">
-                        <i class="fas fa-plus-circle"></i> Add Training Program
-                    </button>
-                    <button class="btn btn-secondary" data-section="team">
-                        <i class="fas fa-plus-circle"></i> Add Team Member
-                    </button>
-                    <button class="btn btn-secondary" data-section="faqs">
-                        <i class="fas fa-plus-circle"></i> Add FAQ
-                    </button>
                 </div>
             </section>
 
@@ -772,39 +825,39 @@
             <section id="settings" class="content-section">
                 <div class="section-header">
                     <h2>App Settings</h2>
-                    <button class="btn btn-secondary">
-                        <i class="fas fa-download"></i> Export Settings
+                    <button class="btn btn-success" id="saveSettingsBtn">
+                        <i class="fas fa-save"></i> Save Settings
                     </button>
                 </div>
                 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="contactEmail">Contact Email</label>
-                        <input type="email" id="contactEmail" class="form-control" value="office.dsog@gmail.com">
+                        <input type="email" id="contactEmail" class="form-control">
                     </div>
                     
                     <div class="form-group">
                         <label for="eventsEmail">Events Email</label>
-                        <input type="email" id="eventsEmail" class="form-control" value="events.dsog@gmail.com">
+                        <input type="email" id="eventsEmail" class="form-control">
                     </div>
                 </div>
                 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="phoneNumber">Phone Number</label>
-                        <input type="text" id="phoneNumber" class="form-control" value="+254 733 737 983">
+                        <input type="text" id="phoneNumber" class="form-control">
                     </div>
                     
                     <div class="form-group">
                         <label for="whatsappNumber">WhatsApp Number</label>
-                        <input type="text" id="whatsappNumber" class="form-control" value="254733737983">
+                        <input type="text" id="whatsappNumber" class="form-control">
                     </div>
                 </div>
                 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="version">App Version</label>
-                        <input type="text" id="version" class="form-control" value="10.0.0">
+                        <input type="text" id="version" class="form-control">
                     </div>
                     
                     <div class="form-group">
@@ -815,71 +868,6 @@
                                 <span class="slider"></span>
                             </label>
                         </label>
-                        <p style="margin-top: 8px; font-size: 0.9rem; color: var(--gray);">
-                            When enabled, the site will display a maintenance message to visitors.
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Home Page Content -->
-            <section id="homepage" class="content-section">
-                <div class="section-header">
-                    <h2>Home Page Content</h2>
-                </div>
-                
-                <div class="tab-nav">
-                    <button class="tab-btn active" data-tab="hero">Hero Section</button>
-                    <button class="tab-btn" data-tab="approach">Approach Section</button>
-                </div>
-                
-                <div id="hero-tab" class="tab-content active">
-                    <div class="form-group">
-                        <label for="heroMainTitle">Main Title</label>
-                        <input type="text" id="heroMainTitle" class="form-control" value="Become What You Believe!">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="heroMissionBadge">Mission Badge Text</label>
-                        <input type="text" id="heroMissionBadge" class="form-control" value="EMPOWERING BUSINESSES & ENTREPRENEURS">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="heroSubtitle">Subtitle</label>
-                        <textarea id="heroSubtitle" class="form-control">DSOG empowers businesses, startups, and young entrepreneurs through transformative training, impactful events, and real startup opportunities that turn learning into successful enterprises.</textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Category Tags (one per line)</label>
-                        <textarea id="heroCategoryTags" class="form-control">Business Training
-Entrepreneurship Events
-Startup Opportunities
-Professional Development
-Enterprise Growth
-Young Entrepreneurs</textarea>
-                    </div>
-                </div>
-                
-                <div id="approach-tab" class="tab-content">
-                    <div class="form-group">
-                        <label for="approachTitle">Section Title</label>
-                        <input type="text" id="approachTitle" class="form-control" value="How We Empower Entrepreneurs">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="approachSubtitle">Section Subtitle</label>
-                        <textarea id="approachSubtitle" class="form-control">We engage people through events aimed at shaping their business acuity, train professionals, and provide startup opportunities to practice what they've learned.</textarea>
-                    </div>
-                    
-                    <div class="section-header" style="margin-top: 30px;">
-                        <h3>Approach Cards</h3>
-                        <button class="btn btn-secondary" id="addCardBtn">
-                            <i class="fas fa-plus"></i> Add Card
-                        </button>
-                    </div>
-                    
-                    <div id="approachCards">
-                        <!-- Cards will be loaded here dynamically -->
                     </div>
                 </div>
             </section>
@@ -889,121 +877,56 @@ Young Entrepreneurs</textarea>
                 <div class="section-header">
                     <h2>Events Management</h2>
                     <button class="btn btn-primary" id="addEventBtn">
-                        <i class="fas fa-plus"></i> Add New Event
+                        <i class="fas fa-plus"></i> Add Event
                     </button>
                 </div>
                 
-                <div class="tab-nav">
-                    <button class="tab-btn active" data-tab="upcoming">Upcoming Events</button>
-                    <button class="tab-btn" data-tab="categories">Event Categories</button>
-                </div>
-                
-                <div id="upcoming-tab" class="tab-content active">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Date</th>
-                                <th>Category</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="eventsTable">
-                            <!-- Events will be loaded here dynamically -->
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div id="categories-tab" class="tab-content">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Frequency</th>
-                                <th>Active</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="categoriesTable">
-                            <!-- Categories will be loaded here dynamically -->
-                        </tbody>
-                    </table>
-                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Date</th>
+                            <th>Category</th>
+                            <th>Active</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="eventsTable">
+                        <tr><td colspan="5" style="text-align: center;">Loading events...</td></tr>
+                    </tbody>
+                </table>
             </section>
 
             <!-- Training Management -->
             <section id="training" class="content-section">
                 <div class="section-header">
-                    <h2>Training Management</h2>
-                    <div style="display: flex; gap: 12px;">
-                        <button class="btn btn-secondary">
-                            <i class="fas fa-calendar"></i> Manage Schedules
-                        </button>
-                        <button class="btn btn-primary">
-                            <i class="fas fa-plus"></i> Add Program
-                        </button>
-                    </div>
+                    <h2>Training Programs</h2>
+                    <button class="btn btn-primary" id="addTrainingBtn">
+                        <i class="fas fa-plus"></i> Add Program
+                    </button>
                 </div>
                 
-                <div class="tab-nav">
-                    <button class="tab-btn active" data-tab="programs">Training Programs</button>
-                    <button class="tab-btn" data-tab="trainingPage">Training Page Content</button>
-                </div>
-                
-                <div id="programs-tab" class="tab-content active">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Program Name</th>
-                                <th>Duration</th>
-                                <th>Description</th>
-                                <th>Active</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="trainingTable">
-                            <!-- Training programs will be loaded here dynamically -->
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div id="trainingPage-tab" class="tab-content">
-                    <div class="form-group">
-                        <label for="trainingHeroTitle">Hero Title</label>
-                        <input type="text" id="trainingHeroTitle" class="form-control" value="Master Your Business Skills with DSOG Training">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="trainingHeroBadge">Hero Badge</label>
-                        <input type="text" id="trainingHeroBadge" class="form-control" value="Structured Education For Your Business">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="trainingHeroSubtitle">Hero Subtitle</label>
-                        <textarea id="trainingHeroSubtitle" class="form-control">Comprehensive training programs with clear objectives, structured schedules, and measurable outcomes designed for sustainable business growth and professional development.</textarea>
-                    </div>
-                    
-                    <div class="section-header" style="margin-top: 30px;">
-                        <h3>Training Outcomes</h3>
-                        <button class="btn btn-secondary" id="addOutcomeBtn">
-                            <i class="fas fa-plus"></i> Add Outcome
-                        </button>
-                    </div>
-                    
-                    <div id="trainingOutcomes">
-                        <!-- Outcomes will be loaded here dynamically -->
-                    </div>
-                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Program Name</th>
+                            <th>Duration</th>
+                            <th>Active</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="trainingTable">
+                        <tr><td colspan="4" style="text-align: center;">Loading training programs...</td></tr>
+                    </tbody>
+                </table>
             </section>
 
             <!-- Team Management -->
             <section id="team" class="content-section">
                 <div class="section-header">
                     <h2>Team Management</h2>
-                    <button class="btn btn-primary" id="addTeamMemberBtn">
-                        <i class="fas fa-plus"></i> Add Team Member
+                    <button class="btn btn-primary" id="addTeamBtn">
+                        <i class="fas fa-plus"></i> Add Member
                     </button>
                 </div>
                 
@@ -1012,13 +935,12 @@ Young Entrepreneurs</textarea>
                         <tr>
                             <th>Name</th>
                             <th>Role</th>
-                            <th>Bio</th>
                             <th>Active</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody id="teamTable">
-                        <!-- Team members will be loaded here dynamically -->
+                        <tr><td colspan="4" style="text-align: center;">Loading team members...</td></tr>
                     </tbody>
                 </table>
             </section>
@@ -1036,7 +958,6 @@ Young Entrepreneurs</textarea>
                     <thead>
                         <tr>
                             <th>Question</th>
-                            <th>Answer</th>
                             <th>Category</th>
                             <th>Active</th>
                             <th>Order</th>
@@ -1044,7 +965,7 @@ Young Entrepreneurs</textarea>
                         </tr>
                     </thead>
                     <tbody id="faqsTable">
-                        <!-- FAQs will be loaded here dynamically -->
+                        <tr><td colspan="5" style="text-align: center;">Loading FAQs...</td></tr>
                     </tbody>
                 </table>
             </section>
@@ -1053,188 +974,46 @@ Young Entrepreneurs</textarea>
             <section id="stats" class="content-section">
                 <div class="section-header">
                     <h2>Statistics</h2>
-                    <p>Last updated: <span id="statsLastUpdated">2026-01-15</span></p>
+                    <button class="btn btn-success" id="saveStatsBtn">
+                        <i class="fas fa-save"></i> Save Stats
+                    </button>
                 </div>
                 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="entrepreneursTrained">Entrepreneurs Trained</label>
-                        <input type="number" id="entrepreneursTrained" class="form-control" value="120">
+                        <input type="number" id="entrepreneursTrained" class="form-control">
                     </div>
                     
                     <div class="form-group">
                         <label for="startupsSupported">Startups Supported</label>
-                        <input type="number" id="startupsSupported" class="form-control" value="55">
+                        <input type="number" id="startupsSupported" class="form-control">
                     </div>
                 </div>
                 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="eventsHosted">Events Hosted</label>
-                        <input type="number" id="eventsHosted" class="form-control" value="0">
+                        <input type="number" id="eventsHosted" class="form-control">
                     </div>
                     
                     <div class="form-group">
                         <label for="completionRate">Completion Rate (%)</label>
-                        <input type="number" id="completionRate" class="form-control" value="89" min="0" max="100">
+                        <input type="number" id="completionRate" class="form-control" min="0" max="100">
                     </div>
                 </div>
                 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="satisfactionRate">Satisfaction Rate (%)</label>
-                        <input type="number" id="satisfactionRate" class="form-control" value="90" min="0" max="100">
+                        <input type="number" id="satisfactionRate" class="form-control" min="0" max="100">
                     </div>
                     
                     <div class="form-group">
                         <label for="businessGrowthRate">Business Growth Rate (%)</label>
-                        <input type="number" id="businessGrowthRate" class="form-control" value="88" min="0" max="100">
+                        <input type="number" id="businessGrowthRate" class="form-control" min="0" max="100">
                     </div>
                 </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="careerAdvancement">Career Advancement (%)</label>
-                        <input type="number" id="careerAdvancement" class="form-control" value="89" min="0" max="100">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="statsLastUpdatedInput">Last Updated Date</label>
-                        <input type="date" id="statsLastUpdatedInput" class="form-control" value="2026-01-15">
-                    </div>
-                </div>
-            </section>
-
-            <!-- Bootcamp Content -->
-            <section id="bootcamp" class="content-section">
-                <div class="section-header">
-                    <h2>Bootcamp Content</h2>
-                </div>
-                
-                <div class="tab-nav">
-                    <button class="tab-btn active" data-tab="bootcampHero">Hero Section</button>
-                    <button class="tab-btn" data-tab="bootcampTracks">Franchise Tracks</button>
-                    <button class="tab-btn" data-tab="bootcampSchedule">Schedule</button>
-                </div>
-                
-                <div id="bootcampHero-tab" class="tab-content active">
-                    <div class="form-group">
-                        <label for="bootcampMainTitle">Main Title</label>
-                        <input type="text" id="bootcampMainTitle" class="form-control" value="From Scratch to Brand">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="bootcampMissionBadge">Mission Badge</label>
-                        <input type="text" id="bootcampMissionBadge" class="form-control" value="PIONEER COHORT 1 • LIMITED SPOTS">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="bootcampSubtitle">Subtitle</label>
-                        <textarea id="bootcampSubtitle" class="form-control">Join our 3-month intensive bootcamp designed specifically to prepare you to own and operate your first DSOG franchise store. Graduate ready to launch your business with our complete support system.</textarea>
-                    </div>
-                    
-                    <div class="section-header" style="margin-top: 30px;">
-                        <h3>Highlights</h3>
-                        <button class="btn btn-secondary" id="addHighlightBtn">
-                            <i class="fas fa-plus"></i> Add Highlight
-                        </button>
-                    </div>
-                    
-                    <div id="bootcampHighlights">
-                        <!-- Highlights will be loaded here dynamically -->
-                    </div>
-                </div>
-                
-                <div id="bootcampTracks-tab" class="tab-content">
-                    <div class="form-group">
-                        <label for="tracksTitle">Section Title</label>
-                        <input type="text" id="tracksTitle" class="form-control" value="Franchise Specialization Tracks">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="tracksSubtitle">Section Subtitle</label>
-                        <textarea id="tracksSubtitle" class="form-control">Choose your preferred franchise model. Each team of 4 will specialize in one track throughout the bootcamp.</textarea>
-                    </div>
-                    
-                    <div class="section-header" style="margin-top: 30px;">
-                        <h3>Franchise Tracks</h3>
-                        <button class="btn btn-secondary" id="addTrackBtn">
-                            <i class="fas fa-plus"></i> Add Track
-                        </button>
-                    </div>
-                    
-                    <div id="franchiseTracks">
-                        <!-- Tracks will be loaded here dynamically -->
-                    </div>
-                </div>
-                
-                <div id="bootcampSchedule-tab" class="tab-content">
-                    <div class="form-group">
-                        <label for="scheduleTitle">Schedule Title</label>
-                        <input type="text" id="scheduleTitle" class="form-control" value="3-Month Bootcamp Schedule">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="scheduleSubtitle">Schedule Subtitle</label>
-                        <textarea id="scheduleSubtitle" class="form-control">A carefully structured program that balances personal development, skill acquisition, and practical franchise project work.</textarea>
-                    </div>
-                    
-                    <div class="section-header" style="margin-top: 30px;">
-                        <h3>Monthly Schedule</h3>
-                        <button class="btn btn-secondary" id="addMonthBtn">
-                            <i class="fas fa-plus"></i> Add Month
-                        </button>
-                    </div>
-                    
-                    <div id="bootcampMonths">
-                        <!-- Months will be loaded here dynamically -->
-                    </div>
-                </div>
-            </section>
-
-            <!-- Backups -->
-            <section id="backups" class="content-section">
-                <div class="section-header">
-                    <h2>Backups</h2>
-                    <button class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Create Backup
-                    </button>
-                </div>
-                
-                <p style="margin-bottom: 20px; color: var(--gray);">
-                    Backups allow you to restore your site to a previous state. Create backups before making major changes.
-                </p>
-                
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Backup Name</th>
-                            <th>Date Created</th>
-                            <th>Size</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Backup 1/15/2026, 4:22:39 PM</td>
-                            <td>2026-01-15 13:22:39</td>
-                            <td>12.5 KB</td>
-                            <td>
-                                <div class="data-table-actions">
-                                    <button class="table-btn table-btn-edit">
-                                        <i class="fas fa-eye"></i> View
-                                    </button>
-                                    <button class="table-btn table-btn-edit">
-                                        <i class="fas fa-download"></i> Download
-                                    </button>
-                                    <button class="table-btn table-btn-edit">
-                                        <i class="fas fa-history"></i> Restore
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
             </section>
         </main>
     </div>
@@ -1254,13 +1033,13 @@ Young Entrepreneurs</textarea>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" id="cancelModalBtn">Cancel</button>
-                <button class="btn btn-primary" id="saveModalBtn">Save Changes</button>
+                <button class="btn btn-primary" id="saveModalBtn">Save</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Firebase configuration
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDb5ZFHbo7lGM8ph0oBxFVTHRF5C5C_DWU",
             authDomain: "dsog-events.firebaseapp.com",
@@ -1271,1132 +1050,995 @@ Young Entrepreneurs</textarea>
             appId: "1:1075977932287:web:b2bf4d1c0083d2dac8ebca"
         };
 
-        // Sample data structure (in a real app, this would come from Firebase)
-        const sampleData = {
-            appSettings: {
-                contactEmail: "office.dsog@gmail.com",
-                eventsEmail: "events.dsog@gmail.com",
-                maintenance: false,
-                phoneNumber: "+254 733 737 983",
-                version: "10.0.0",
-                whatsappNumber: "254733737983"
-            },
-            upcomingEvents: {
-                event_001: {
-                    active: true,
-                    category: "bootcamp",
-                    date: "2026-02-02",
-                    description: "An immersive buildathon for aspiring entrepreneurs...",
-                    duration: "1 Month Intensive Program",
-                    frequency: "one-time",
-                    id: "event_001",
-                    imageUrl: "https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp",
-                    lastUpdated: "2026-01-21T15:38:33.965Z",
-                    maxParticipants: 30,
-                    order: 1,
-                    registrationUrl: "https://dsog.vercel.app/events.html#bootcamp-details",
-                    subtitle: "For Startups & Established Business",
-                    title: "Enterprise Buildathon",
-                    venue: "Hybrid: Virtual & On-site"
-                },
-                event_1768921437009: {
-                    active: true,
-                    category: "inspiration",
-                    date: "2026-01-31",
-                    description: "This event ignites your inner fire...",
-                    duration: "1 Day Engaging Session",
-                    frequency: "monthly",
-                    id: "event_1768921437009",
-                    imageUrl: "https://i.postimg.cc/sgNRzKbd/20260114_1543_Image_Generation_simple_compose_01key8g91re75trpnnjn6j42z5_1.webp",
-                    lastUpdated: "2026-01-21T15:38:02.350Z",
-                    maxParticipants: 15,
-                    order: 2,
-                    registrationUrl: "https://dsog.vercel.app/events.html#inspiration-details",
-                    subtitle: "Igniting Fire From Within",
-                    title: "BWYB 001",
-                    venue: "Online: Google Meet"
-                }
-            },
-            eventCategories: {
-                bootcamp: {
-                    active: true,
-                    description: "A comprehensive 3-month intensive program designed to transform aspiring entrepreneurs into successful franchise business owners.",
-                    frequency: "Quarterly",
-                    icon: "fas fa-graduation-cap",
-                    id: "bootcamp",
-                    name: "Startup Bootcamp",
-                    order: 1
-                },
-                inspiration: {
-                    active: true,
-                    description: "An electrifying event designed to ignite the entrepreneurial fire within for new and established business leaders.",
-                    frequency: "Monthly",
-                    icon: "fas fa-fire",
-                    id: "inspiration",
-                    name: "Become What You Believe",
-                    order: 2
-                },
-                spiritual: {
-                    active: true,
-                    description: "A God-based discussion workshop designed to help individuals discover and understand their divine purpose.",
-                    frequency: "Monthly",
-                    icon: "fas fa-hands-praying",
-                    id: "spiritual",
-                    name: "The Making of an Icon",
-                    order: 3
-                }
-            },
-            trainingPrograms: {
-                program_002: {
-                    active: true,
-                    description: "Advanced techniques for growing your business reach, scaling operations, and capturing new market opportunities.",
-                    duration: "6 WEEKS",
-                    icon: "fas fa-expand-arrows-alt",
-                    id: "program_002",
-                    longTermResults: "Businesses achieve sustainable growth, increased market share, and develop systematic expansion capabilities.",
-                    name: "Market Expansion Strategies",
-                    objectives: [
-                        "Master market research methodologies",
-                        "Develop effective expansion strategies",
-                        "Learn customer acquisition techniques",
-                        "Understand scaling challenges and solutions"
-                    ],
-                    order: 2
-                },
-                program_003: {
-                    active: true,
-                    description: "Master the art of building strong client relationships, delivering exceptional service, and maximizing customer lifetime value.",
-                    duration: "4 WEEKS",
-                    icon: "fas fa-users",
-                    id: "program_003",
-                    longTermResults: "Improved customer loyalty, increased repeat business, and enhanced brand reputation through superior client relationships.",
-                    name: "Client Engagement Excellence",
-                    objectives: [
-                        "Develop effective communication skills",
-                        "Learn customer retention strategies",
-                        "Master conflict resolution techniques",
-                        "Understand customer psychology"
-                    ],
-                    order: 3
-                }
-            },
-            teamMembers: {
-                member_001: {
-                    active: true,
-                    bio: "Entrepreneurship expert with 15+ years experience in business development and training.",
-                    id: "member_001",
-                    imageUrl: "https://randomuser.me/api/portraits/women/68.jpg",
-                    lastUpdated: "2026-01-15T13:28:56.265Z",
-                    name: "Moses Mugera",
-                    order: 1,
-                    role: "Founder & CEO",
-                    social: {
-                        linkedin: "https://linkedin.com/in/mosesmugera"
-                    }
-                },
-                member_002: {
-                    active: true,
-                    bio: "Specializes in business strategy and market expansion with 10+ years of corporate experience.",
-                    id: "member_002",
-                    imageUrl: "https://randomuser.me/api/portraits/men/86.jpg",
-                    lastUpdated: "2026-01-15T13:29:05.354Z",
-                    name: "Robert Johnson",
-                    order: 2,
-                    role: "Head of Training",
-                    social: {
-                        linkedin: "https://linkedin.com/in/robertjohnson"
-                    }
-                }
-            },
-            faqs: {
-                faq_001: {
-                    active: true,
-                    answer: "You can register by clicking the 'Register Now' button on any event, contacting us via WhatsApp at 0733 737 983, or emailing events.dsog@gmail.com",
-                    category: "registration",
-                    id: "faq_001",
-                    lastUpdated: "2026-01-15T15:24:26.525Z",
-                    order: 1,
-                    question: "How do I register for an event?"
-                },
-                faq_002: {
-                    active: true,
-                    answer: "The DSOG Franchise Bootcamp is a comprehensive 3-month intensive program with flexible scheduling options.",
-                    category: "bootcamp",
-                    id: "faq_002",
-                    order: 2,
-                    question: "What is the duration of the bootcamp?"
-                },
-                faq_003: {
-                    active: true,
-                    answer: "Yes, all our training programs include a certificate of completion and achievement.",
-                    category: "training",
-                    id: "faq_003",
-                    order: 3,
-                    question: "Are the training programs certified?"
-                }
-            },
-            stats: {
-                businessGrowthRate: 88,
-                careerAdvancement: 89,
-                completionRate: 89,
-                entrepreneursTrained: 120,
-                eventsHosted: 0,
-                lastUpdated: "2026-01-15",
-                satisfactionRate: 90,
-                startupsSupported: 55
-            }
-        };
+        // Initialize Firebase
+        let app, db, auth;
+        let currentUser = null;
+        let currentData = {};
+        let currentEditItem = null;
+        let currentEditType = null;
 
-        // Initialize the admin panel
+        // Initialize Firebase when page loads
         document.addEventListener('DOMContentLoaded', function() {
-            // Navigation
-            setupNavigation();
-            
-            // Tab functionality
-            setupTabs();
-            
-            // Load initial data
-            loadDashboardData();
-            loadEventsData();
-            loadTrainingData();
-            loadTeamData();
-            loadFAQsData();
-            
-            // Set up event listeners
-            setupEventListeners();
-            
-            // Show toast notification on load
-            showToast('Admin panel loaded successfully. Connected to Firebase.', 'success');
+            try {
+                app = firebase.initializeApp(firebaseConfig);
+                db = firebase.database();
+                auth = firebase.auth();
+                
+                updateConnectionStatus('Connecting to Firebase...', 'warning');
+                
+                // Check if user is already logged in
+                auth.onAuthStateChanged(function(user) {
+                    if (user) {
+                        // User is signed in
+                        currentUser = user;
+                        showAdminPanel();
+                        loadAllData();
+                    } else {
+                        // No user is signed in
+                        showLoginScreen();
+                    }
+                });
+                
+                // Setup event listeners for login
+                document.getElementById('loginForm').addEventListener('submit', handleLogin);
+                document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+                
+            } catch (error) {
+                console.error('Firebase initialization error:', error);
+                updateConnectionStatus('Firebase Error', 'offline');
+                showToast('Failed to initialize Firebase. Please check your configuration.', 'error');
+            }
         });
 
-        function setupNavigation() {
-            const navLinks = document.querySelectorAll('.sidebar-nav a');
-            const sections = document.querySelectorAll('.content-section');
+        function handleLogin(e) {
+            e.preventDefault();
             
-            navLinks.forEach(link => {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const loginBtnText = document.getElementById('loginBtnText');
+            const loginSpinner = document.getElementById('loginSpinner');
+            
+            // Show loading state
+            loginBtnText.style.display = 'none';
+            loginSpinner.style.display = 'inline-block';
+            
+            // For demo purposes - you should set up Firebase Authentication properly
+            // In a real app, you would use: auth.signInWithEmailAndPassword(email, password)
+            
+            // Demo login (remove this in production)
+            setTimeout(() => {
+                if (email === 'admin@dsog.org' && password === 'admin123') {
+                    // Create a mock user object
+                    currentUser = {
+                        uid: 'demo-admin-001',
+                        email: email,
+                        displayName: 'Admin User'
+                    };
+                    
+                    showAdminPanel();
+                    loadAllData();
+                    showToast('Logged in successfully!', 'success');
+                } else {
+                    // Show error
+                    document.getElementById('loginError').style.display = 'block';
+                    loginBtnText.style.display = 'inline';
+                    loginSpinner.style.display = 'none';
+                }
+            }, 1000);
+        }
+
+        function handleLogout() {
+            currentUser = null;
+            showLoginScreen();
+            showToast('Logged out successfully', 'success');
+        }
+
+        function showLoginScreen() {
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('loginError').style.display = 'none';
+            document.getElementById('loginBtnText').style.display = 'inline';
+            document.getElementById('loginSpinner').style.display = 'none';
+        }
+
+        function showAdminPanel() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'flex';
+            
+            // Setup admin panel event listeners
+            setupAdminPanel();
+        }
+
+        function setupAdminPanel() {
+            // Navigation
+            document.querySelectorAll('.sidebar-nav a').forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     
-                    // Get target section
-                    const targetId = this.getAttribute('href').substring(1);
-                    const targetSection = document.getElementById(targetId);
-                    
                     // Update active states
-                    navLinks.forEach(l => l.classList.remove('active'));
+                    document.querySelectorAll('.sidebar-nav a').forEach(l => l.classList.remove('active'));
                     this.classList.add('active');
                     
-                    sections.forEach(section => {
-                        section.classList.remove('active-section');
+                    // Show corresponding section
+                    const targetId = this.getAttribute('href').substring(1);
+                    document.querySelectorAll('.content-section').forEach(section => {
+                        section.classList.remove('active');
                     });
+                    document.getElementById(targetId).classList.add('active');
                     
-                    if (targetSection) {
-                        targetSection.classList.add('active-section');
-                    }
-                    
-                    // Update header title
-                    const headerTitle = document.querySelector('.header h1');
-                    headerTitle.textContent = this.textContent.trim();
+                    // Update header
+                    document.querySelector('.header h1').textContent = this.textContent.trim();
                 });
             });
+
+            // Refresh button
+            document.getElementById('refreshBtn').addEventListener('click', loadAllData);
+
+            // Save all button
+            document.getElementById('saveAllBtn').addEventListener('click', saveAllChanges);
+
+            // Save buttons for individual sections
+            document.getElementById('saveSettingsBtn').addEventListener('click', saveAppSettings);
+            document.getElementById('saveStatsBtn').addEventListener('click', saveStatistics);
+
+            // Add buttons
+            document.getElementById('addEventBtn').addEventListener('click', () => openAddModal('event'));
+            document.getElementById('addTrainingBtn').addEventListener('click', () => openAddModal('training'));
+            document.getElementById('addTeamBtn').addEventListener('click', () => openAddModal('team'));
+            document.getElementById('addFaqBtn').addEventListener('click', () => openAddModal('faq'));
+
+            // Modal buttons
+            document.getElementById('closeModal').addEventListener('click', closeModal);
+            document.getElementById('cancelModalBtn').addEventListener('click', closeModal);
+            document.getElementById('saveModalBtn').addEventListener('click', saveModalItem);
+
+            // Load initial data
+            loadAllData();
         }
 
-        function setupTabs() {
-            const tabBtns = document.querySelectorAll('.tab-btn');
+        function loadAllData() {
+            showToast('Loading data from Firebase...', 'success');
             
-            tabBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const tabContainer = this.closest('.content-section');
-                    const tabId = this.getAttribute('data-tab');
-                    
-                    // Update active tab button
-                    tabContainer.querySelectorAll('.tab-btn').forEach(tb => {
-                        tb.classList.remove('active');
-                    });
-                    this.classList.add('active');
-                    
-                    // Show corresponding tab content
-                    tabContainer.querySelectorAll('.tab-content').forEach(content => {
-                        content.classList.remove('active');
-                    });
-                    
-                    const targetTab = tabContainer.querySelector(`#${tabId}-tab`);
-                    if (targetTab) {
-                        targetTab.classList.add('active');
-                    }
+            // Load all data from Firebase
+            const promises = [
+                loadAppSettings(),
+                loadEvents(),
+                loadTrainingPrograms(),
+                loadTeamMembers(),
+                loadFAQs(),
+                loadStatistics()
+            ];
+            
+            Promise.all(promises)
+                .then(() => {
+                    updateDashboardStats();
+                    showToast('Data loaded successfully!', 'success');
+                })
+                .catch(error => {
+                    console.error('Error loading data:', error);
+                    showToast('Error loading data from Firebase', 'error');
                 });
+        }
+
+        function loadAppSettings() {
+            return new Promise((resolve, reject) => {
+                db.ref('appSettings').once('value')
+                    .then(snapshot => {
+                        const settings = snapshot.val();
+                        currentData.appSettings = settings || {};
+                        
+                        // Update form fields
+                        if (settings) {
+                            document.getElementById('contactEmail').value = settings.contactEmail || '';
+                            document.getElementById('eventsEmail').value = settings.eventsEmail || '';
+                            document.getElementById('phoneNumber').value = settings.phoneNumber || '';
+                            document.getElementById('whatsappNumber').value = settings.whatsappNumber || '';
+                            document.getElementById('version').value = settings.version || '';
+                            document.getElementById('appVersion').textContent = `Version ${settings.version || '10.0.0'}`;
+                            document.getElementById('maintenanceMode').checked = settings.maintenance || false;
+                        }
+                        resolve();
+                    })
+                    .catch(error => {
+                        console.error('Error loading app settings:', error);
+                        reject(error);
+                    });
             });
         }
 
-        function loadDashboardData() {
-            // Update stats
-            document.getElementById('eventsCount').textContent = Object.keys(sampleData.upcomingEvents).length;
-            document.getElementById('trainingCount').textContent = Object.keys(sampleData.trainingPrograms).length;
-            document.getElementById('teamCount').textContent = Object.keys(sampleData.teamMembers).length;
-            document.getElementById('faqCount').textContent = Object.keys(sampleData.faqs).length;
-            document.getElementById('lastUpdated').textContent = sampleData.stats.lastUpdated;
-            
-            // Load approach cards
-            loadApproachCards();
-            
-            // Load training outcomes
-            loadTrainingOutcomes();
-            
-            // Load bootcamp content
-            loadBootcampContent();
-        }
-
-        function loadEventsData() {
-            const eventsTable = document.getElementById('eventsTable');
-            const categoriesTable = document.getElementById('categoriesTable');
-            
-            // Clear existing rows
-            eventsTable.innerHTML = '';
-            categoriesTable.innerHTML = '';
-            
-            // Load events
-            Object.values(sampleData.upcomingEvents).forEach(event => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${event.title}</td>
-                    <td>${event.date}</td>
-                    <td>${event.category}</td>
-                    <td>
-                        <label class="switch">
-                            <input type="checkbox" ${event.active ? 'checked' : ''}>
-                            <span class="slider"></span>
-                        </label>
-                    </td>
-                    <td>
-                        <div class="data-table-actions">
-                            <button class="table-btn table-btn-edit">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
-                            <button class="table-btn table-btn-delete">
-                                <i class="fas fa-trash"></i> Delete
-                            </button>
-                        </div>
-                    </td>
-                `;
-                eventsTable.appendChild(row);
-            });
-            
-            // Load categories
-            Object.values(sampleData.eventCategories).forEach(category => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${category.name}</td>
-                    <td>${category.description.substring(0, 60)}...</td>
-                    <td>${category.frequency}</td>
-                    <td>
-                        <label class="switch">
-                            <input type="checkbox" ${category.active ? 'checked' : ''}>
-                            <span class="slider"></span>
-                        </label>
-                    </td>
-                    <td>
-                        <div class="data-table-actions">
-                            <button class="table-btn table-btn-edit">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
-                        </div>
-                    </td>
-                `;
-                categoriesTable.appendChild(row);
+        function loadEvents() {
+            return new Promise((resolve, reject) => {
+                db.ref('upcomingEvents').once('value')
+                    .then(snapshot => {
+                        const events = snapshot.val();
+                        currentData.events = events || {};
+                        renderEventsTable();
+                        resolve();
+                    })
+                    .catch(error => {
+                        console.error('Error loading events:', error);
+                        reject(error);
+                    });
             });
         }
 
-        function loadTrainingData() {
-            const trainingTable = document.getElementById('trainingTable');
-            
-            // Clear existing rows
-            trainingTable.innerHTML = '';
-            
-            // Load training programs
-            Object.values(sampleData.trainingPrograms).forEach(program => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${program.name}</td>
-                    <td>${program.duration}</td>
-                    <td>${program.description.substring(0, 60)}...</td>
-                    <td>
-                        <label class="switch">
-                            <input type="checkbox" ${program.active ? 'checked' : ''}>
-                            <span class="slider"></span>
-                        </label>
-                    </td>
-                    <td>
-                        <div class="data-table-actions">
-                            <button class="table-btn table-btn-edit">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
-                            <button class="table-btn table-btn-delete">
-                                <i class="fas fa-trash"></i> Delete
-                            </button>
-                        </div>
-                    </td>
-                `;
-                trainingTable.appendChild(row);
+        function loadTrainingPrograms() {
+            return new Promise((resolve, reject) => {
+                db.ref('trainingPrograms').once('value')
+                    .then(snapshot => {
+                        const programs = snapshot.val();
+                        currentData.trainingPrograms = programs || {};
+                        renderTrainingTable();
+                        resolve();
+                    })
+                    .catch(error => {
+                        console.error('Error loading training programs:', error);
+                        reject(error);
+                    });
             });
         }
 
-        function loadTeamData() {
-            const teamTable = document.getElementById('teamTable');
-            
-            // Clear existing rows
-            teamTable.innerHTML = '';
-            
-            // Load team members
-            Object.values(sampleData.teamMembers).forEach(member => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${member.name}</td>
-                    <td>${member.role}</td>
-                    <td>${member.bio.substring(0, 60)}...</td>
-                    <td>
-                        <label class="switch">
-                            <input type="checkbox" ${member.active ? 'checked' : ''}>
-                            <span class="slider"></span>
-                        </label>
-                    </td>
-                    <td>
-                        <div class="data-table-actions">
-                            <button class="table-btn table-btn-edit">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
-                            <button class="table-btn table-btn-delete">
-                                <i class="fas fa-trash"></i> Delete
-                            </button>
-                        </div>
-                    </td>
-                `;
-                teamTable.appendChild(row);
+        function loadTeamMembers() {
+            return new Promise((resolve, reject) => {
+                db.ref('teamMembers').once('value')
+                    .then(snapshot => {
+                        const members = snapshot.val();
+                        currentData.teamMembers = members || {};
+                        renderTeamTable();
+                        resolve();
+                    })
+                    .catch(error => {
+                        console.error('Error loading team members:', error);
+                        reject(error);
+                    });
             });
         }
 
-        function loadFAQsData() {
-            const faqsTable = document.getElementById('faqsTable');
-            
-            // Clear existing rows
-            faqsTable.innerHTML = '';
-            
-            // Load FAQs
-            Object.values(sampleData.faqs).forEach(faq => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${faq.question}</td>
-                    <td>${faq.answer.substring(0, 60)}...</td>
-                    <td>${faq.category}</td>
-                    <td>
-                        <label class="switch">
-                            <input type="checkbox" ${faq.active ? 'checked' : ''}>
-                            <span class="slider"></span>
-                        </label>
-                    </td>
-                    <td>${faq.order}</td>
-                    <td>
-                        <div class="data-table-actions">
-                            <button class="table-btn table-btn-edit">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
-                            <button class="table-btn table-btn-delete">
-                                <i class="fas fa-trash"></i> Delete
-                            </button>
-                        </div>
-                    </td>
-                `;
-                faqsTable.appendChild(row);
+        function loadFAQs() {
+            return new Promise((resolve, reject) => {
+                db.ref('faqs').once('value')
+                    .then(snapshot => {
+                        const faqs = snapshot.val();
+                        currentData.faqs = faqs || {};
+                        renderFAQsTable();
+                        resolve();
+                    })
+                    .catch(error => {
+                        console.error('Error loading FAQs:', error);
+                        reject(error);
+                    });
             });
         }
 
-        function loadApproachCards() {
-            const approachCardsContainer = document.getElementById('approachCards');
-            approachCardsContainer.innerHTML = '';
-            
-            // Sample approach cards data
-            const approachCards = [
-                {
-                    title: "Transformative Events",
-                    description: "We organize impactful events that engage entrepreneurs in hands-on experiences, networking opportunities, and practical business challenges that shape their business acuity.",
-                    icon: "fas fa-users",
-                    tag: "ENGAGEMENT"
-                },
-                {
-                    title: "Professional Training",
-                    description: "Comprehensive training programs designed to equip professionals and entrepreneurs with the skills needed to thrive in today's competitive business landscape.",
-                    icon: "fas fa-graduation-cap",
-                    tag: "DEVELOPMENT"
-                },
-                {
-                    title: "Startup Incubation",
-                    description: "We provide real startup opportunities where entrepreneurs can practice what they've learned, turning theory into practice and ideas into successful enterprises.",
-                    icon: "fas fa-rocket",
-                    tag: "OPPORTUNITY"
-                }
-            ];
-            
-            approachCards.forEach((card, index) => {
-                const cardElement = document.createElement('div');
-                cardElement.className = 'form-group';
-                cardElement.style.border = '1px solid var(--gray-light)';
-                cardElement.style.padding = '20px';
-                cardElement.style.borderRadius = 'var(--border-radius)';
-                cardElement.style.marginBottom = '20px';
-                
-                cardElement.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
-                        <h4 style="margin: 0;">Card ${index + 1}</h4>
-                        <button class="btn btn-secondary btn-sm" style="padding: 6px 12px; font-size: 0.9rem;">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Title</label>
-                            <input type="text" class="form-control" value="${card.title}">
-                        </div>
-                        <div class="form-group">
-                            <label>Tag</label>
-                            <input type="text" class="form-control" value="${card.tag}">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea class="form-control" rows="3">${card.description}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Icon (FontAwesome class)</label>
-                        <input type="text" class="form-control" value="${card.icon}">
-                    </div>
-                `;
-                
-                approachCardsContainer.appendChild(cardElement);
+        function loadStatistics() {
+            return new Promise((resolve, reject) => {
+                db.ref('stats').once('value')
+                    .then(snapshot => {
+                        const stats = snapshot.val();
+                        currentData.stats = stats || {};
+                        
+                        // Update form fields
+                        if (stats) {
+                            document.getElementById('entrepreneursTrained').value = stats.entrepreneursTrained || 0;
+                            document.getElementById('startupsSupported').value = stats.startupsSupported || 0;
+                            document.getElementById('eventsHosted').value = stats.eventsHosted || 0;
+                            document.getElementById('completionRate').value = stats.completionRate || 0;
+                            document.getElementById('satisfactionRate').value = stats.satisfactionRate || 0;
+                            document.getElementById('businessGrowthRate').value = stats.businessGrowthRate || 0;
+                            document.getElementById('lastUpdated').textContent = stats.lastUpdated || 'Never';
+                        }
+                        resolve();
+                    })
+                    .catch(error => {
+                        console.error('Error loading statistics:', error);
+                        reject(error);
+                    });
             });
         }
 
-        function loadTrainingOutcomes() {
-            const outcomesContainer = document.getElementById('trainingOutcomes');
-            outcomesContainer.innerHTML = '';
+        function renderEventsTable() {
+            const table = document.getElementById('eventsTable');
+            const events = currentData.events;
             
-            // Sample outcomes data
-            const outcomes = [
-                { title: "Completion Rate", percentage: 95, description: "High program completion rates indicating engaging, valuable, and well-structured content." },
-                { title: "Business Growth", percentage: 85, description: "Participants report measurable business growth and improvement within 6 months of program completion." },
-                { title: "Satisfaction Rate", percentage: 90, description: "Consistently high satisfaction scores from program participants across all training modules." },
-                { title: "Career Advancement", percentage: 70, description: "Participants experience career advancement or business expansion within one year of training." }
-            ];
+            if (!events || Object.keys(events).length === 0) {
+                table.innerHTML = '<tr><td colspan="5" style="text-align: center;">No events found</td></tr>';
+                return;
+            }
             
-            outcomes.forEach((outcome, index) => {
-                const outcomeElement = document.createElement('div');
-                outcomeElement.className = 'form-group';
-                outcomeElement.style.border = '1px solid var(--gray-light)';
-                outcomeElement.style.padding = '20px';
-                outcomeElement.style.borderRadius = 'var(--border-radius)';
-                outcomeElement.style.marginBottom = '20px';
-                
-                outcomeElement.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
-                        <h4 style="margin: 0;">Outcome ${index + 1}</h4>
-                        <button class="btn btn-secondary btn-sm" style="padding: 6px 12px; font-size: 0.9rem;">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Title</label>
-                            <input type="text" class="form-control" value="${outcome.title}">
-                        </div>
-                        <div class="form-group">
-                            <label>Percentage</label>
-                            <input type="number" class="form-control" value="${outcome.percentage}" min="0" max="100">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea class="form-control" rows="3">${outcome.description}</textarea>
-                    </div>
+            let html = '';
+            Object.entries(events).forEach(([id, event]) => {
+                html += `
+                    <tr data-id="${id}">
+                        <td>${event.title || 'Untitled Event'}</td>
+                        <td>${event.date || 'No date'}</td>
+                        <td>${event.category || 'General'}</td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" ${event.active ? 'checked' : ''} 
+                                       onchange="updateEventField('${id}', 'active', this.checked)">
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                        <td>
+                            <div class="data-table-actions">
+                                <button class="table-btn table-btn-edit" onclick="openEditModal('event', '${id}')">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="table-btn table-btn-delete" onclick="deleteItem('event', '${id}')">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
                 `;
-                
-                outcomesContainer.appendChild(outcomeElement);
             });
+            
+            table.innerHTML = html;
         }
 
-        function loadBootcampContent() {
-            // Load bootcamp highlights
-            const highlightsContainer = document.getElementById('bootcampHighlights');
-            highlightsContainer.innerHTML = '';
+        function renderTrainingTable() {
+            const table = document.getElementById('trainingTable');
+            const programs = currentData.trainingPrograms;
             
-            const highlights = [
-                { icon: "fas fa-store", text: "Own Your DSOG Franchise" },
-                { icon: "fas fa-users", text: "Team of 4 Per Franchise" },
-                { icon: "fas fa-project-diagram", text: "Real Franchise Projects" },
-                { icon: "fas fa-network-wired", text: "Supplier & Network Access" }
-            ];
+            if (!programs || Object.keys(programs).length === 0) {
+                table.innerHTML = '<tr><td colspan="4" style="text-align: center;">No training programs found</td></tr>';
+                return;
+            }
             
-            highlights.forEach((highlight, index) => {
-                const highlightElement = document.createElement('div');
-                highlightElement.className = 'form-group';
-                highlightElement.style.border = '1px solid var(--gray-light)';
-                highlightElement.style.padding = '20px';
-                highlightElement.style.borderRadius = 'var(--border-radius)';
-                highlightElement.style.marginBottom = '20px';
-                
-                highlightElement.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
-                        <h4 style="margin: 0;">Highlight ${index + 1}</h4>
-                        <button class="btn btn-secondary btn-sm" style="padding: 6px 12px; font-size: 0.9rem;">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Icon (FontAwesome class)</label>
-                            <input type="text" class="form-control" value="${highlight.icon}">
-                        </div>
-                        <div class="form-group">
-                            <label>Text</label>
-                            <input type="text" class="form-control" value="${highlight.text}">
-                        </div>
-                    </div>
+            let html = '';
+            Object.entries(programs).forEach(([id, program]) => {
+                html += `
+                    <tr data-id="${id}">
+                        <td>${program.name || 'Untitled Program'}</td>
+                        <td>${program.duration || 'N/A'}</td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" ${program.active ? 'checked' : ''} 
+                                       onchange="updateTrainingField('${id}', 'active', this.checked)">
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                        <td>
+                            <div class="data-table-actions">
+                                <button class="table-btn table-btn-edit" onclick="openEditModal('training', '${id}')">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="table-btn table-btn-delete" onclick="deleteItem('training', '${id}')">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
                 `;
-                
-                highlightsContainer.appendChild(highlightElement);
             });
             
-            // Load franchise tracks
-            const tracksContainer = document.getElementById('franchiseTracks');
-            tracksContainer.innerHTML = '';
-            
-            const tracks = [
-                {
-                    name: "Fashion & Accessories",
-                    description: "Complete fashion retail franchise with clothing, jewelry, and accessories from multiple suppliers. Learn inventory management, visual merchandising, and fashion retail operations.",
-                    icon: "fas fa-tshirt",
-                    badge: "Supplier Discounts: 30-40%",
-                    focus: "Store layout design, inventory systems, supplier negotiation",
-                    teamSize: "Team of 4 Required"
-                },
-                {
-                    name: "Food & Grocery",
-                    description: "Essential retail franchise with fresh produce, packaged foods, and household groceries. Master food safety, inventory rotation, supply chain management, and customer service.",
-                    icon: "fas fa-utensils",
-                    badge: "Supplier Discounts: 25-35%",
-                    focus: "Supply chain optimization, quality control, customer retention",
-                    teamSize: "Team of 4 Required"
-                },
-                {
-                    name: "Courier & Logistics",
-                    description: "Delivery and logistics franchise leveraging established networks and technology. Learn route optimization, fleet management, customer service, and digital operations.",
-                    icon: "fas fa-shipping-fast",
-                    badge: "Technology & Network Support",
-                    focus: "Delivery optimization, customer tracking systems, partnership management",
-                    teamSize: "Team of 4 Required"
-                }
-            ];
-            
-            tracks.forEach((track, index) => {
-                const trackElement = document.createElement('div');
-                trackElement.className = 'form-group';
-                trackElement.style.border = '1px solid var(--gray-light)';
-                trackElement.style.padding = '20px';
-                trackElement.style.borderRadius = 'var(--border-radius)';
-                trackElement.style.marginBottom = '20px';
-                
-                trackElement.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
-                        <h4 style="margin: 0;">Track ${index + 1}: ${track.name}</h4>
-                        <button class="btn btn-secondary btn-sm" style="padding: 6px 12px; font-size: 0.9rem;">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Track Name</label>
-                            <input type="text" class="form-control" value="${track.name}">
-                        </div>
-                        <div class="form-group">
-                            <label>Icon</label>
-                            <input type="text" class="form-control" value="${track.icon}">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Badge Text</label>
-                            <input type="text" class="form-control" value="${track.badge}">
-                        </div>
-                        <div class="form-group">
-                            <label>Team Size</label>
-                            <input type="text" class="form-control" value="${track.teamSize}">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea class="form-control" rows="3">${track.description}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Focus Areas</label>
-                        <textarea class="form-control" rows="2">${track.focus}</textarea>
-                    </div>
-                `;
-                
-                tracksContainer.appendChild(trackElement);
-            });
-            
-            // Load bootcamp months
-            const monthsContainer = document.getElementById('bootcampMonths');
-            monthsContainer.innerHTML = '';
-            
-            const months = [
-                {
-                    name: "MONTH 1",
-                    title: "The Foundation Phase",
-                    focus: "Personal identity, entrepreneurial mindset, team formation, and franchise track selection.",
-                    project: "Franchise Viability Analysis",
-                    teamWork: "Form your team of 4 and begin initial franchise market research."
-                },
-                {
-                    name: "MONTH 2",
-                    title: "The Build Phase",
-                    focus: "Franchise operations, supplier management, inventory systems, and customer service.",
-                    project: "Complete Franchise Business Plan",
-                    teamWork: "Develop complete franchise business plan and operational manual."
-                },
-                {
-                    name: "MONTH 3",
-                    title: "The Launch Phase",
-                    focus: "Store setup, marketing launch, supplier negotiations, and grand opening planning.",
-                    project: "Franchise Launch Presentation",
-                    teamWork: "Present franchise plan to DSOG leadership and prepare for actual store launch."
-                }
-            ];
-            
-            months.forEach((month, index) => {
-                const monthElement = document.createElement('div');
-                monthElement.className = 'form-group';
-                monthElement.style.border = '1px solid var(--gray-light)';
-                monthElement.style.padding = '20px';
-                monthElement.style.borderRadius = 'var(--border-radius)';
-                monthElement.style.marginBottom = '20px';
-                
-                monthElement.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
-                        <h4 style="margin: 0;">${month.name}: ${month.title}</h4>
-                        <button class="btn btn-secondary btn-sm" style="padding: 6px 12px; font-size: 0.9rem;">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Month Name</label>
-                            <input type="text" class="form-control" value="${month.name}">
-                        </div>
-                        <div class="form-group">
-                            <label>Title</label>
-                            <input type="text" class="form-control" value="${month.title}">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Focus</label>
-                        <textarea class="form-control" rows="2">${month.focus}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Project</label>
-                        <input type="text" class="form-control" value="${month.project}">
-                    </div>
-                    <div class="form-group">
-                        <label>Team Work</label>
-                        <textarea class="form-control" rows="2">${month.teamWork}</textarea>
-                    </div>
-                `;
-                
-                monthsContainer.appendChild(monthElement);
-            });
+            table.innerHTML = html;
         }
 
-        function setupEventListeners() {
-            // Save changes button
-            document.getElementById('saveChangesBtn').addEventListener('click', function() {
-                showToast('All changes have been saved successfully.', 'success');
+        function renderTeamTable() {
+            const table = document.getElementById('teamTable');
+            const members = currentData.teamMembers;
+            
+            if (!members || Object.keys(members).length === 0) {
+                table.innerHTML = '<tr><td colspan="4" style="text-align: center;">No team members found</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            Object.entries(members).forEach(([id, member]) => {
+                html += `
+                    <tr data-id="${id}">
+                        <td>${member.name || 'Unnamed Member'}</td>
+                        <td>${member.role || 'No role'}</td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" ${member.active ? 'checked' : ''} 
+                                       onchange="updateTeamField('${id}', 'active', this.checked)">
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                        <td>
+                            <div class="data-table-actions">
+                                <button class="table-btn table-btn-edit" onclick="openEditModal('team', '${id}')">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="table-btn table-btn-delete" onclick="deleteItem('team', '${id}')">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
             });
             
-            // Quick action buttons
-            document.querySelectorAll('.btn[data-section]').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const section = this.getAttribute('data-section');
-                    
-                    // Navigate to the section
-                    document.querySelector(`a[href="#${section}"]`).click();
-                    
-                    // Show toast
-                    showToast(`Navigated to ${section} management`, 'success');
-                });
-            });
-            
-            // Modal close button
-            document.getElementById('closeModal').addEventListener('click', function() {
-                document.getElementById('editModal').classList.remove('active');
-            });
-            
-            document.getElementById('cancelModalBtn').addEventListener('click', function() {
-                document.getElementById('editModal').classList.remove('active');
-            });
-            
-            // Add item buttons
-            document.getElementById('addEventBtn')?.addEventListener('click', function() {
-                openModal('Add New Event', getEventForm());
-            });
-            
-            document.getElementById('addTeamMemberBtn')?.addEventListener('click', function() {
-                openModal('Add Team Member', getTeamMemberForm());
-            });
-            
-            document.getElementById('addFaqBtn')?.addEventListener('click', function() {
-                openModal('Add FAQ', getFAQForm());
-            });
-            
-            // Add card buttons
-            document.getElementById('addCardBtn')?.addEventListener('click', function() {
-                addApproachCard();
-            });
-            
-            document.getElementById('addOutcomeBtn')?.addEventListener('click', function() {
-                addTrainingOutcome();
-            });
-            
-            document.getElementById('addHighlightBtn')?.addEventListener('click', function() {
-                addBootcampHighlight();
-            });
-            
-            document.getElementById('addTrackBtn')?.addEventListener('click', function() {
-                addFranchiseTrack();
-            });
-            
-            document.getElementById('addMonthBtn')?.addEventListener('click', function() {
-                addBootcampMonth();
-            });
+            table.innerHTML = html;
         }
 
-        function openModal(title, content) {
+        function renderFAQsTable() {
+            const table = document.getElementById('faqsTable');
+            const faqs = currentData.faqs;
+            
+            if (!faqs || Object.keys(faqs).length === 0) {
+                table.innerHTML = '<tr><td colspan="5" style="text-align: center;">No FAQs found</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            Object.entries(faqs).forEach(([id, faq]) => {
+                html += `
+                    <tr data-id="${id}">
+                        <td>${faq.question || 'No question'}</td>
+                        <td>${faq.category || 'General'}</td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" ${faq.active ? 'checked' : ''} 
+                                       onchange="updateFaqField('${id}', 'active', this.checked)">
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                        <td>${faq.order || 0}</td>
+                        <td>
+                            <div class="data-table-actions">
+                                <button class="table-btn table-btn-edit" onclick="openEditModal('faq', '${id}')">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="table-btn table-btn-delete" onclick="deleteItem('faq', '${id}')">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            table.innerHTML = html;
+        }
+
+        function updateDashboardStats() {
+            document.getElementById('eventsCount').textContent = Object.keys(currentData.events || {}).length;
+            document.getElementById('trainingCount').textContent = Object.keys(currentData.trainingPrograms || {}).length;
+            document.getElementById('teamCount').textContent = Object.keys(currentData.teamMembers || {}).length;
+            document.getElementById('faqCount').textContent = Object.keys(currentData.faqs || {}).length;
+        }
+
+        function openAddModal(type) {
+            currentEditType = type;
+            currentEditItem = null;
+            
+            let title = '';
+            let formHtml = '';
+            
+            switch(type) {
+                case 'event':
+                    title = 'Add New Event';
+                    formHtml = getEventForm();
+                    break;
+                case 'training':
+                    title = 'Add Training Program';
+                    formHtml = getTrainingForm();
+                    break;
+                case 'team':
+                    title = 'Add Team Member';
+                    formHtml = getTeamForm();
+                    break;
+                case 'faq':
+                    title = 'Add FAQ';
+                    formHtml = getFAQForm();
+                    break;
+            }
+            
             document.getElementById('modalTitle').textContent = title;
-            document.getElementById('modalBody').innerHTML = content;
+            document.getElementById('modalBody').innerHTML = formHtml;
             document.getElementById('editModal').classList.add('active');
         }
 
-        function getEventForm() {
+        function openEditModal(type, id) {
+            currentEditType = type;
+            currentEditItem = id;
+            
+            let title = '';
+            let formHtml = '';
+            let item = {};
+            
+            switch(type) {
+                case 'event':
+                    title = 'Edit Event';
+                    item = currentData.events[id] || {};
+                    formHtml = getEventForm(item);
+                    break;
+                case 'training':
+                    title = 'Edit Training Program';
+                    item = currentData.trainingPrograms[id] || {};
+                    formHtml = getTrainingForm(item);
+                    break;
+                case 'team':
+                    title = 'Edit Team Member';
+                    item = currentData.teamMembers[id] || {};
+                    formHtml = getTeamForm(item);
+                    break;
+                case 'faq':
+                    title = 'Edit FAQ';
+                    item = currentData.faqs[id] || {};
+                    formHtml = getFAQForm(item);
+                    break;
+            }
+            
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').innerHTML = formHtml;
+            document.getElementById('editModal').classList.add('active');
+        }
+
+        function getEventForm(data = {}) {
             return `
                 <div class="form-group">
-                    <label for="eventTitle">Event Title</label>
-                    <input type="text" id="eventTitle" class="form-control">
+                    <label for="eventTitle">Event Title *</label>
+                    <input type="text" id="eventTitle" class="form-control" value="${data.title || ''}" required>
                 </div>
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="eventDate">Date</label>
-                        <input type="date" id="eventDate" class="form-control">
+                        <label for="eventDate">Date *</label>
+                        <input type="date" id="eventDate" class="form-control" value="${data.date || ''}" required>
                     </div>
                     
                     <div class="form-group">
-                        <label for="eventCategory">Category</label>
-                        <select id="eventCategory" class="form-control">
-                            <option value="bootcamp">Startup Bootcamp</option>
-                            <option value="inspiration">Become What You Believe</option>
-                            <option value="spiritual">The Making of an Icon</option>
+                        <label for="eventCategory">Category *</label>
+                        <select id="eventCategory" class="form-control" required>
+                            <option value="bootcamp" ${data.category === 'bootcamp' ? 'selected' : ''}>Startup Bootcamp</option>
+                            <option value="inspiration" ${data.category === 'inspiration' ? 'selected' : ''}>Become What You Believe</option>
+                            <option value="spiritual" ${data.category === 'spiritual' ? 'selected' : ''}>The Making of an Icon</option>
                         </select>
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label for="eventDescription">Description</label>
-                    <textarea id="eventDescription" class="form-control" rows="4"></textarea>
+                    <label for="eventDescription">Description *</label>
+                    <textarea id="eventDescription" class="form-control" rows="4" required>${data.description || ''}</textarea>
                 </div>
                 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="eventVenue">Venue</label>
-                        <input type="text" id="eventVenue" class="form-control" placeholder="e.g., Hybrid: Virtual & On-site">
+                        <input type="text" id="eventVenue" class="form-control" value="${data.venue || 'Hybrid: Virtual & On-site'}">
                     </div>
                     
+                    <div class="form-group">
+                        <label for="eventDuration">Duration</label>
+                        <input type="text" id="eventDuration" class="form-control" value="${data.duration || '1 Day'}">
+                    </div>
+                </div>
+                
+                <div class="form-row">
                     <div class="form-group">
                         <label for="eventMaxParticipants">Max Participants</label>
-                        <input type="number" id="eventMaxParticipants" class="form-control" value="30">
+                        <input type="number" id="eventMaxParticipants" class="form-control" value="${data.maxParticipants || 30}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventRegistrationUrl">Registration URL</label>
+                        <input type="url" id="eventRegistrationUrl" class="form-control" value="${data.registrationUrl || ''}">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="eventImageUrl">Image URL</label>
+                        <input type="url" id="eventImageUrl" class="form-control" value="${data.imageUrl || ''}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventOrder">Display Order</label>
+                        <input type="number" id="eventOrder" class="form-control" value="${data.order || 0}">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 12px;">
+                        <span>Active</span>
+                        <label class="switch">
+                            <input type="checkbox" id="eventActive" ${data.active !== false ? 'checked' : ''}>
+                            <span class="slider"></span>
+                        </label>
+                    </label>
+                </div>
+            `;
+        }
+
+        function getTrainingForm(data = {}) {
+            return `
+                <div class="form-group">
+                    <label for="trainingName">Program Name *</label>
+                    <input type="text" id="trainingName" class="form-control" value="${data.name || ''}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="trainingDescription">Description *</label>
+                    <textarea id="trainingDescription" class="form-control" rows="3" required>${data.description || ''}</textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="trainingDuration">Duration</label>
+                        <input type="text" id="trainingDuration" class="form-control" value="${data.duration || '4 WEEKS'}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="trainingIcon">Icon (FontAwesome)</label>
+                        <input type="text" id="trainingIcon" class="form-control" value="${data.icon || 'fas fa-briefcase'}">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="trainingObjectives">Objectives (one per line)</label>
+                    <textarea id="trainingObjectives" class="form-control" rows="3">${(data.objectives || []).join('\n')}</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="trainingResults">Long-term Results</label>
+                    <textarea id="trainingResults" class="form-control" rows="2">${data.longTermResults || ''}</textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="trainingOrder">Display Order</label>
+                        <input type="number" id="trainingOrder" class="form-control" value="${data.order || 0}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 12px;">
+                            <span>Active</span>
+                            <label class="switch">
+                                <input type="checkbox" id="trainingActive" ${data.active !== false ? 'checked' : ''}>
+                                <span class="slider"></span>
+                            </label>
+                        </label>
                     </div>
                 </div>
             `;
         }
 
-        function getTeamMemberForm() {
+        function getTeamForm(data = {}) {
             return `
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="memberName">Full Name</label>
-                        <input type="text" id="memberName" class="form-control">
+                        <label for="teamName">Full Name *</label>
+                        <input type="text" id="teamName" class="form-control" value="${data.name || ''}" required>
                     </div>
                     
                     <div class="form-group">
-                        <label for="memberRole">Role</label>
-                        <input type="text" id="memberRole" class="form-control" placeholder="e.g., Founder & CEO">
+                        <label for="teamRole">Role *</label>
+                        <input type="text" id="teamRole" class="form-control" value="${data.role || ''}" required>
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label for="memberBio">Bio</label>
-                    <textarea id="memberBio" class="form-control" rows="3"></textarea>
+                    <label for="teamBio">Bio *</label>
+                    <textarea id="teamBio" class="form-control" rows="3" required>${data.bio || ''}</textarea>
                 </div>
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="memberImageUrl">Image URL</label>
-                        <input type="text" id="memberImageUrl" class="form-control" placeholder="https://example.com/image.jpg">
+                        <label for="teamImageUrl">Image URL</label>
+                        <input type="url" id="teamImageUrl" class="form-control" value="${data.imageUrl || ''}">
                     </div>
                     
                     <div class="form-group">
-                        <label for="memberLinkedin">LinkedIn Profile</label>
-                        <input type="text" id="memberLinkedin" class="form-control" placeholder="https://linkedin.com/in/username">
+                        <label for="teamLinkedin">LinkedIn Profile</label>
+                        <input type="url" id="teamLinkedin" class="form-control" value="${(data.social || {}).linkedin || ''}">
                     </div>
                 </div>
                 
-                <div class="form-group">
-                    <label for="memberOrder">Display Order</label>
-                    <input type="number" id="memberOrder" class="form-control" value="1">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="teamOrder">Display Order</label>
+                        <input type="number" id="teamOrder" class="form-control" value="${data.order || 0}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 12px;">
+                            <span>Active</span>
+                            <label class="switch">
+                                <input type="checkbox" id="teamActive" ${data.active !== false ? 'checked' : ''}>
+                                <span class="slider"></span>
+                            </label>
+                        </label>
+                    </div>
                 </div>
             `;
         }
 
-        function getFAQForm() {
+        function getFAQForm(data = {}) {
             return `
                 <div class="form-group">
-                    <label for="faqQuestion">Question</label>
-                    <input type="text" id="faqQuestion" class="form-control">
+                    <label for="faqQuestion">Question *</label>
+                    <input type="text" id="faqQuestion" class="form-control" value="${data.question || ''}" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="faqAnswer">Answer</label>
-                    <textarea id="faqAnswer" class="form-control" rows="3"></textarea>
+                    <label for="faqAnswer">Answer *</label>
+                    <textarea id="faqAnswer" class="form-control" rows="3" required>${data.answer || ''}</textarea>
                 </div>
                 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="faqCategory">Category</label>
                         <select id="faqCategory" class="form-control">
-                            <option value="registration">Registration</option>
-                            <option value="bootcamp">Bootcamp</option>
-                            <option value="training">Training</option>
-                            <option value="general">General</option>
+                            <option value="registration" ${data.category === 'registration' ? 'selected' : ''}>Registration</option>
+                            <option value="bootcamp" ${data.category === 'bootcamp' ? 'selected' : ''}>Bootcamp</option>
+                            <option value="training" ${data.category === 'training' ? 'selected' : ''}>Training</option>
+                            <option value="general" ${data.category === 'general' ? 'selected' : ''}>General</option>
                         </select>
                     </div>
                     
                     <div class="form-group">
                         <label for="faqOrder">Display Order</label>
-                        <input type="number" id="faqOrder" class="form-control" value="1">
+                        <input type="number" id="faqOrder" class="form-control" value="${data.order || 0}">
                     </div>
+                </div>
+                
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 12px;">
+                        <span>Active</span>
+                        <label class="switch">
+                            <input type="checkbox" id="faqActive" ${data.active !== false ? 'checked' : ''}>
+                            <span class="slider"></span>
+                        </label>
+                    </label>
                 </div>
             `;
         }
 
-        function addApproachCard() {
-            const approachCardsContainer = document.getElementById('approachCards');
+        function saveModalItem() {
+            let data = {};
+            let refPath = '';
+            let itemId = currentEditItem;
             
-            const cardElement = document.createElement('div');
-            cardElement.className = 'form-group';
-            cardElement.style.border = '1px solid var(--gray-light)';
-            cardElement.style.padding = '20px';
-            cardElement.style.borderRadius = 'var(--border-radius)';
-            cardElement.style.marginBottom = '20px';
+            switch(currentEditType) {
+                case 'event':
+                    data = {
+                        title: document.getElementById('eventTitle').value,
+                        date: document.getElementById('eventDate').value,
+                        category: document.getElementById('eventCategory').value,
+                        description: document.getElementById('eventDescription').value,
+                        venue: document.getElementById('eventVenue').value,
+                        duration: document.getElementById('eventDuration').value,
+                        maxParticipants: parseInt(document.getElementById('eventMaxParticipants').value) || 30,
+                        registrationUrl: document.getElementById('eventRegistrationUrl').value,
+                        imageUrl: document.getElementById('eventImageUrl').value,
+                        order: parseInt(document.getElementById('eventOrder').value) || 0,
+                        active: document.getElementById('eventActive').checked,
+                        lastUpdated: new Date().toISOString()
+                    };
+                    refPath = `upcomingEvents/${itemId || 'event_' + Date.now()}`;
+                    break;
+                    
+                case 'training':
+                    const objectivesText = document.getElementById('trainingObjectives').value;
+                    data = {
+                        name: document.getElementById('trainingName').value,
+                        description: document.getElementById('trainingDescription').value,
+                        duration: document.getElementById('trainingDuration').value,
+                        icon: document.getElementById('trainingIcon').value,
+                        objectives: objectivesText ? objectivesText.split('\n').filter(obj => obj.trim()) : [],
+                        longTermResults: document.getElementById('trainingResults').value,
+                        order: parseInt(document.getElementById('trainingOrder').value) || 0,
+                        active: document.getElementById('trainingActive').checked,
+                        lastUpdated: new Date().toISOString()
+                    };
+                    refPath = `trainingPrograms/${itemId || 'program_' + Date.now()}`;
+                    break;
+                    
+                case 'team':
+                    data = {
+                        name: document.getElementById('teamName').value,
+                        role: document.getElementById('teamRole').value,
+                        bio: document.getElementById('teamBio').value,
+                        imageUrl: document.getElementById('teamImageUrl').value,
+                        order: parseInt(document.getElementById('teamOrder').value) || 0,
+                        active: document.getElementById('teamActive').checked,
+                        lastUpdated: new Date().toISOString(),
+                        social: {
+                            linkedin: document.getElementById('teamLinkedin').value
+                        }
+                    };
+                    refPath = `teamMembers/${itemId || 'member_' + Date.now()}`;
+                    break;
+                    
+                case 'faq':
+                    data = {
+                        question: document.getElementById('faqQuestion').value,
+                        answer: document.getElementById('faqAnswer').value,
+                        category: document.getElementById('faqCategory').value,
+                        order: parseInt(document.getElementById('faqOrder').value) || 0,
+                        active: document.getElementById('faqActive').checked,
+                        lastUpdated: new Date().toISOString()
+                    };
+                    refPath = `faqs/${itemId || 'faq_' + Date.now()}`;
+                    break;
+            }
             
-            cardElement.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
-                    <h4 style="margin: 0;">New Card</h4>
-                    <button class="btn btn-secondary btn-sm" style="padding: 6px 12px; font-size: 0.9rem;" onclick="this.closest('.form-group').remove()">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Title</label>
-                        <input type="text" class="form-control" placeholder="Enter card title">
-                    </div>
-                    <div class="form-group">
-                        <label>Tag</label>
-                        <input type="text" class="form-control" placeholder="e.g., ENGAGEMENT">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea class="form-control" rows="3" placeholder="Enter card description"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Icon (FontAwesome class)</label>
-                    <input type="text" class="form-control" placeholder="fas fa-icon-name">
-                </div>
-            `;
+            // Validate required fields
+            if (!validateForm(data, currentEditType)) {
+                showToast('Please fill in all required fields', 'error');
+                return;
+            }
             
-            approachCardsContainer.appendChild(cardElement);
-            showToast('New approach card added', 'success');
+            // Save to Firebase
+            db.ref(refPath).set(data)
+                .then(() => {
+                    closeModal();
+                    showToast(`${currentEditType} saved successfully!`, 'success');
+                    
+                    // Reload the relevant data
+                    switch(currentEditType) {
+                        case 'event': loadEvents(); break;
+                        case 'training': loadTrainingPrograms(); break;
+                        case 'team': loadTeamMembers(); break;
+                        case 'faq': loadFAQs(); break;
+                    }
+                    
+                    updateDashboardStats();
+                })
+                .catch(error => {
+                    console.error('Error saving item:', error);
+                    showToast('Error saving item to Firebase', 'error');
+                });
         }
 
-        function addTrainingOutcome() {
-            const outcomesContainer = document.getElementById('trainingOutcomes');
-            
-            const outcomeElement = document.createElement('div');
-            outcomeElement.className = 'form-group';
-            outcomeElement.style.border = '1px solid var(--gray-light)';
-            outcomeElement.style.padding = '20px';
-            outcomeElement.style.borderRadius = 'var(--border-radius)';
-            outcomeElement.style.marginBottom = '20px';
-            
-            outcomeElement.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
-                    <h4 style="margin: 0;">New Outcome</h4>
-                    <button class="btn btn-secondary btn-sm" style="padding: 6px 12px; font-size: 0.9rem;" onclick="this.closest('.form-group').remove()">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Title</label>
-                        <input type="text" class="form-control" placeholder="Enter outcome title">
-                    </div>
-                    <div class="form-group">
-                        <label>Percentage</label>
-                        <input type="number" class="form-control" value="0" min="0" max="100">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea class="form-control" rows="3" placeholder="Enter outcome description"></textarea>
-                </div>
-            `;
-            
-            outcomesContainer.appendChild(outcomeElement);
-            showToast('New training outcome added', 'success');
+        function validateForm(data, type) {
+            switch(type) {
+                case 'event':
+                    return data.title && data.date && data.description;
+                case 'training':
+                    return data.name && data.description;
+                case 'team':
+                    return data.name && data.role && data.bio;
+                case 'faq':
+                    return data.question && data.answer;
+                default:
+                    return true;
+            }
         }
 
-        function addBootcampHighlight() {
-            const highlightsContainer = document.getElementById('bootcampHighlights');
-            
-            const highlightElement = document.createElement('div');
-            highlightElement.className = 'form-group';
-            highlightElement.style.border = '1px solid var(--gray-light)';
-            highlightElement.style.padding = '20px';
-            highlightElement.style.borderRadius = 'var(--border-radius)';
-            highlightElement.style.marginBottom = '20px';
-            
-            highlightElement.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
-                    <h4 style="margin: 0;">New Highlight</h4>
-                    <button class="btn btn-secondary btn-sm" style="padding: 6px 12px; font-size: 0.9rem;" onclick="this.closest('.form-group').remove()">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Icon (FontAwesome class)</label>
-                        <input type="text" class="form-control" placeholder="fas fa-icon-name">
-                    </div>
-                    <div class="form-group">
-                        <label>Text</label>
-                        <input type="text" class="form-control" placeholder="Enter highlight text">
-                    </div>
-                </div>
-            `;
-            
-            highlightsContainer.appendChild(highlightElement);
-            showToast('New bootcamp highlight added', 'success');
+        function closeModal() {
+            document.getElementById('editModal').classList.remove('active');
+            currentEditItem = null;
+            currentEditType = null;
         }
 
-        function addFranchiseTrack() {
-            const tracksContainer = document.getElementById('franchiseTracks');
+        function deleteItem(type, id) {
+            if (!confirm(`Are you sure you want to delete this ${type}?`)) return;
             
-            const trackElement = document.createElement('div');
-            trackElement.className = 'form-group';
-            trackElement.style.border = '1px solid var(--gray-light)';
-            trackElement.style.padding = '20px';
-            trackElement.style.borderRadius = 'var(--border-radius)';
-            trackElement.style.marginBottom = '20px';
+            let refPath = '';
+            switch(type) {
+                case 'event': refPath = `upcomingEvents/${id}`; break;
+                case 'training': refPath = `trainingPrograms/${id}`; break;
+                case 'team': refPath = `teamMembers/${id}`; break;
+                case 'faq': refPath = `faqs/${id}`; break;
+            }
             
-            trackElement.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
-                    <h4 style="margin: 0;">New Track</h4>
-                    <button class="btn btn-secondary btn-sm" style="padding: 6px 12px; font-size: 0.9rem;" onclick="this.closest('.form-group').remove()">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Track Name</label>
-                        <input type="text" class="form-control" placeholder="Enter track name">
-                    </div>
-                    <div class="form-group">
-                        <label>Icon</label>
-                        <input type="text" class="form-control" placeholder="fas fa-icon-name">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Badge Text</label>
-                        <input type="text" class="form-control" placeholder="e.g., Supplier Discounts: 30-40%">
-                    </div>
-                    <div class="form-group">
-                        <label>Team Size</label>
-                        <input type="text" class="form-control" placeholder="e.g., Team of 4 Required">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea class="form-control" rows="3" placeholder="Enter track description"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Focus Areas</label>
-                    <textarea class="form-control" rows="2" placeholder="Enter focus areas"></textarea>
-                </div>
-            `;
-            
-            tracksContainer.appendChild(trackElement);
-            showToast('New franchise track added', 'success');
+            db.ref(refPath).remove()
+                .then(() => {
+                    showToast(`${type} deleted successfully!`, 'success');
+                    
+                    // Reload data
+                    switch(type) {
+                        case 'event': loadEvents(); break;
+                        case 'training': loadTrainingPrograms(); break;
+                        case 'team': loadTeamMembers(); break;
+                        case 'faq': loadFAQs(); break;
+                    }
+                    
+                    updateDashboardStats();
+                })
+                .catch(error => {
+                    console.error('Error deleting item:', error);
+                    showToast('Error deleting item from Firebase', 'error');
+                });
         }
 
-        function addBootcampMonth() {
-            const monthsContainer = document.getElementById('bootcampMonths');
+        // Field update functions for inline editing
+        window.updateEventField = function(id, field, value) {
+            db.ref(`upcomingEvents/${id}/${field}`).set(value)
+                .then(() => showToast('Event updated', 'success'))
+                .catch(error => {
+                    console.error('Error updating event:', error);
+                    showToast('Error updating event', 'error');
+                });
+        };
+
+        window.updateTrainingField = function(id, field, value) {
+            db.ref(`trainingPrograms/${id}/${field}`).set(value)
+                .then(() => showToast('Training program updated', 'success'))
+                .catch(error => {
+                    console.error('Error updating training:', error);
+                    showToast('Error updating training program', 'error');
+                });
+        };
+
+        window.updateTeamField = function(id, field, value) {
+            db.ref(`teamMembers/${id}/${field}`).set(value)
+                .then(() => showToast('Team member updated', 'success'))
+                .catch(error => {
+                    console.error('Error updating team:', error);
+                    showToast('Error updating team member', 'error');
+                });
+        };
+
+        window.updateFaqField = function(id, field, value) {
+            db.ref(`faqs/${id}/${field}`).set(value)
+                .then(() => showToast('FAQ updated', 'success'))
+                .catch(error => {
+                    console.error('Error updating FAQ:', error);
+                    showToast('Error updating FAQ', 'error');
+                });
+        };
+
+        function saveAppSettings() {
+            const settings = {
+                contactEmail: document.getElementById('contactEmail').value,
+                eventsEmail: document.getElementById('eventsEmail').value,
+                phoneNumber: document.getElementById('phoneNumber').value,
+                whatsappNumber: document.getElementById('whatsappNumber').value,
+                version: document.getElementById('version').value,
+                maintenance: document.getElementById('maintenanceMode').checked,
+                lastUpdated: new Date().toISOString()
+            };
             
-            const monthElement = document.createElement('div');
-            monthElement.className = 'form-group';
-            monthElement.style.border = '1px solid var(--gray-light)';
-            monthElement.style.padding = '20px';
-            monthElement.style.borderRadius = 'var(--border-radius)';
-            monthElement.style.marginBottom = '20px';
+            db.ref('appSettings').set(settings)
+                .then(() => {
+                    showToast('App settings saved successfully!', 'success');
+                    document.getElementById('appVersion').textContent = `Version ${settings.version}`;
+                })
+                .catch(error => {
+                    console.error('Error saving app settings:', error);
+                    showToast('Error saving app settings', 'error');
+                });
+        }
+
+        function saveStatistics() {
+            const stats = {
+                entrepreneursTrained: parseInt(document.getElementById('entrepreneursTrained').value) || 0,
+                startupsSupported: parseInt(document.getElementById('startupsSupported').value) || 0,
+                eventsHosted: parseInt(document.getElementById('eventsHosted').value) || 0,
+                completionRate: parseInt(document.getElementById('completionRate').value) || 0,
+                satisfactionRate: parseInt(document.getElementById('satisfactionRate').value) || 0,
+                businessGrowthRate: parseInt(document.getElementById('businessGrowthRate').value) || 0,
+                lastUpdated: new Date().toISOString().split('T')[0] // YYYY-MM-DD format
+            };
             
-            monthElement.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
-                    <h4 style="margin: 0;">New Month</h4>
-                    <button class="btn btn-secondary btn-sm" style="padding: 6px 12px; font-size: 0.9rem;" onclick="this.closest('.form-group').remove()">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Month Name</label>
-                        <input type="text" class="form-control" placeholder="e.g., MONTH 1">
-                    </div>
-                    <div class="form-group">
-                        <label>Title</label>
-                        <input type="text" class="form-control" placeholder="e.g., The Foundation Phase">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Focus</label>
-                    <textarea class="form-control" rows="2" placeholder="Enter month focus"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Project</label>
-                    <input type="text" class="form-control" placeholder="Enter project name">
-                </div>
-                <div class="form-group">
-                    <label>Team Work</label>
-                    <textarea class="form-control" rows="2" placeholder="Enter team work description"></textarea>
-                </div>
-            `;
+            db.ref('stats').set(stats)
+                .then(() => {
+                    showToast('Statistics saved successfully!', 'success');
+                    document.getElementById('lastUpdated').textContent = stats.lastUpdated;
+                })
+                .catch(error => {
+                    console.error('Error saving statistics:', error);
+                    showToast('Error saving statistics', 'error');
+                });
+        }
+
+        function saveAllChanges() {
+            saveAppSettings();
+            saveStatistics();
+            showToast('All changes saved successfully!', 'success');
+        }
+
+        function updateConnectionStatus(message, status = 'online') {
+            const statusEl = document.getElementById('connectionStatus');
+            const dotEl = document.getElementById('firebaseStatus');
             
-            monthsContainer.appendChild(monthElement);
-            showToast('New bootcamp month added', 'success');
+            statusEl.textContent = message;
+            dotEl.className = 'status-dot';
+            
+            if (status === 'online') {
+                dotEl.style.backgroundColor = 'var(--success)';
+            } else if (status === 'warning') {
+                dotEl.style.backgroundColor = 'var(--warning)';
+            } else {
+                dotEl.style.backgroundColor = 'var(--danger)';
+                dotEl.classList.add('offline');
+            }
         }
 
         function showToast(message, type = 'success') {
@@ -2444,12 +2086,14 @@ Young Entrepreneurs</textarea>
             }, 5000);
         }
 
-        // Make functions globally available for inline onclick handlers
-        window.addApproachCard = addApproachCard;
-        window.addTrainingOutcome = addTrainingOutcome;
-        window.addBootcampHighlight = addBootcampHighlight;
-        window.addFranchiseTrack = addFranchiseTrack;
-        window.addBootcampMonth = addBootcampMonth;
+        // Firebase connection monitoring
+        db.ref('.info/connected').on('value', function(snapshot) {
+            if (snapshot.val() === true) {
+                updateConnectionStatus('Connected to Firebase', 'online');
+            } else {
+                updateConnectionStatus('Disconnected from Firebase', 'offline');
+            }
+        });
     </script>
 </body>
 </html>
