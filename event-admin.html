@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DSOG Events & Training Management</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <style>
         :root {
             --primary: #2c3e50;
@@ -34,7 +30,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
 
         body {
@@ -61,8 +57,6 @@
             color: white;
             padding: 0;
             position: relative;
-            z-index: 100;
-            transition: var(--transition);
         }
 
         .sidebar-header {
@@ -107,6 +101,7 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
+            font-size: 1.2rem;
         }
 
         .user-details h4 {
@@ -175,7 +170,6 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            max-height: calc(100vh - 40px);
         }
 
         .header {
@@ -221,13 +215,6 @@
             height: 12px;
             border-radius: 50%;
             background-color: var(--success);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
         }
 
         .btn {
@@ -287,16 +274,16 @@
             margin-bottom: 30px;
             box-shadow: var(--box-shadow);
             display: none;
+        }
+
+        .content-section.active {
+            display: block;
             animation: fadeIn 0.5s ease;
         }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
-        }
-
-        .content-section.active {
-            display: block;
         }
 
         .section-header {
@@ -485,7 +472,6 @@
             background-color: white;
             transition: var(--transition);
             border-radius: 50%;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
         input:checked + .slider {
@@ -502,9 +488,6 @@
             border-bottom: 2px solid var(--light);
             margin-bottom: 30px;
             overflow-x: auto;
-            background: white;
-            border-radius: var(--border-radius) var(--border-radius) 0 0;
-            padding: 0 5px;
         }
 
         .tab-btn {
@@ -517,7 +500,6 @@
             transition: var(--transition);
             border-bottom: 3px solid transparent;
             white-space: nowrap;
-            position: relative;
         }
 
         .tab-btn:hover {
@@ -531,11 +513,11 @@
 
         .tab-content {
             display: none;
-            animation: fadeIn 0.3s ease;
         }
 
         .tab-content.active {
             display: block;
+            animation: fadeIn 0.3s ease;
         }
 
         /* Stats Cards */
@@ -619,7 +601,6 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
-            animation: fadeIn 0.3s ease;
         }
 
         .modal-overlay.active {
@@ -680,7 +661,6 @@
             color: rgba(255, 255, 255, 0.8);
             cursor: pointer;
             line-height: 1;
-            transition: var(--transition);
         }
 
         .close-modal:hover {
@@ -706,7 +686,7 @@
             gap: 15px;
             min-width: 350px;
             transform: translateX(400px);
-            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            transition: transform 0.4s ease;
             border-left: 4px solid var(--success);
         }
 
@@ -764,7 +744,6 @@
             align-items: center;
             justify-content: center;
             border-radius: 4px;
-            transition: var(--transition);
         }
 
         .toast-close:hover {
@@ -781,7 +760,7 @@
             height: 100%;
             background: rgba(255, 255, 255, 0.9);
             z-index: 4000;
-            display: flex;
+            display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -804,7 +783,7 @@
 
         /* Login Screen */
         .login-container {
-            display: flex;
+            display: none;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
@@ -818,7 +797,6 @@
             width: 100%;
             max-width: 450px;
             box-shadow: var(--box-shadow-lg);
-            animation: slideUp 0.5s ease;
         }
 
         .login-header {
@@ -847,8 +825,6 @@
             border-radius: 20px;
             font-size: 0.8rem;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .badge-success {
@@ -866,10 +842,33 @@
             color: var(--danger);
         }
 
-        /* Custom Scrollbar */
+        .badge-info {
+            background: rgba(52, 152, 219, 0.1);
+            color: var(--accent);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--gray-light);
+        }
+
+        .empty-state h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        /* Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
-            height: 8px;
         }
 
         ::-webkit-scrollbar-track {
@@ -886,7 +885,7 @@
             background: var(--primary);
         }
 
-        /* Mobile Responsive */
+        /* Responsive */
         @media (max-width: 1200px) {
             .admin-container {
                 flex-direction: column;
@@ -894,18 +893,11 @@
             
             .sidebar {
                 width: 100%;
-                position: static;
-                height: auto;
-            }
-            
-            .main-content {
-                margin-left: 0;
             }
             
             .sidebar-nav ul {
                 display: flex;
                 flex-wrap: wrap;
-                gap: 5px;
             }
             
             .sidebar-nav a {
@@ -922,7 +914,6 @@
         @media (max-width: 768px) {
             .header {
                 flex-direction: column;
-                align-items: flex-start;
                 gap: 20px;
             }
             
@@ -944,210 +935,17 @@
                 overflow-x: auto;
             }
         }
-
-        /* Advanced Components */
-        .array-item {
-            background: var(--light);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            margin-bottom: 15px;
-            border: 1px solid var(--gray-lighter);
-        }
-
-        .array-item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--gray-lighter);
-        }
-
-        .array-item-title {
-            font-weight: 600;
-            color: var(--primary);
-        }
-
-        .image-preview {
-            width: 100px;
-            height: 100px;
-            border-radius: var(--border-radius);
-            object-fit: cover;
-            border: 2px solid var(--gray-lighter);
-            margin-bottom: 10px;
-        }
-
-        .icon-preview {
-            font-size: 1.5rem;
-            color: var(--secondary);
-            margin-bottom: 10px;
-        }
-
-        .chip {
-            display: inline-block;
-            padding: 6px 12px;
-            background: var(--light);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            margin: 2px;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--gray);
-        }
-
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            color: var(--gray-light);
-        }
-
-        .empty-state h3 {
-            font-size: 1.4rem;
-            margin-bottom: 10px;
-            color: var(--primary);
-        }
-
-        .search-box {
-            position: relative;
-            max-width: 300px;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 12px 45px 12px 18px;
-            border: 2px solid var(--gray-lighter);
-            border-radius: var(--border-radius);
-            font-size: 0.95rem;
-        }
-
-        .search-box i {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--gray);
-        }
-
-        /* Ticket Styles */
-        .ticket-item {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 20px;
-            margin-bottom: 15px;
-            border: 2px solid var(--light);
-            transition: var(--transition);
-        }
-
-        .ticket-item:hover {
-            border-color: var(--secondary);
-            box-shadow: 0 5px 15px rgba(26, 188, 156, 0.1);
-        }
-
-        .ticket-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--gray-lighter);
-        }
-
-        .ticket-type {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .ticket-badge {
-            background: var(--warning);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .ticket-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .ticket-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid var(--gray-lighter);
-        }
-
-        .ticket-stat {
-            text-align: center;
-        }
-
-        .ticket-stat-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .ticket-stat-label {
-            font-size: 0.85rem;
-            color: var(--gray);
-        }
-
-        /* Ticket Modal */
-        .ticket-modal {
-            max-width: 500px;
-        }
-
-        .ticket-modal .modal-body {
-            max-height: 70vh;
-        }
     </style>
 </head>
 <body>
     <!-- Loading Overlay -->
     <div id="loadingOverlay" class="loading-overlay">
         <div class="spinner"></div>
-        <p id="loadingText">Initializing Admin Panel...</p>
+        <p id="loadingText">Loading...</p>
     </div>
 
-    <!-- Login Screen -->
-    <div id="loginScreen" class="login-container" style="display: none;">
-        <div class="login-box">
-            <div class="login-header">
-                <h1><i class="fas fa-cogs"></i> DSOG Events Admin</h1>
-                <p>Sign in with your admin credentials</p>
-            </div>
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="loginEmail">Email Address</label>
-                    <input type="email" id="loginEmail" class="form-control" placeholder="admin@dsog.org" required>
-                </div>
-                <div class="form-group">
-                    <label for="loginPassword">Password</label>
-                    <input type="password" id="loginPassword" class="form-control" placeholder="Enter password" required>
-                </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px; padding: 15px;">
-                    <span id="loginBtnText">Sign In</span>
-                    <span id="loginSpinner" style="display: none;"><i class="fas fa-spinner fa-spin"></i></span>
-                </button>
-                <div id="loginError" style="color: var(--danger); margin-top: 20px; text-align: center; display: none;">
-                    <i class="fas fa-exclamation-circle"></i> Invalid credentials. Please try again.
-                </div>
-                <div style="text-align: center; margin-top: 20px; color: var(--gray); font-size: 0.9rem;">
-                    <p>Demo credentials: admin@dsog.org / admin123</p>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Admin Panel -->
-    <div id="adminPanel" class="admin-container" style="display: none;">
+    <!-- Admin Panel (immediately shown) -->
+    <div id="adminPanel" class="admin-container">
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
@@ -1163,8 +961,8 @@
             <nav class="sidebar-nav">
                 <ul>
                     <li><a href="#dashboard" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                    <li><a href="#events"><i class="fas fa-calendar-alt"></i> Events <span class="nav-count" id="eventsCountBadge">0</span></a></li>
-                    <li><a href="#training"><i class="fas fa-graduation-cap"></i> Training <span class="nav-count" id="trainingCountBadge">0</span></a></li>
+                    <li><a href="#events"><i class="fas fa-calendar-alt"></i> Events <span class="nav-count" id="eventsCountBadge">2</span></a></li>
+                    <li><a href="#training"><i class="fas fa-graduation-cap"></i> Training <span class="nav-count" id="trainingCountBadge">2</span></a></li>
                     <li><a href="#schedules"><i class="fas fa-clock"></i> Schedules</a></li>
                     <li><a href="#categories"><i class="fas fa-tags"></i> Categories</a></li>
                     <li><a href="#settings"><i class="fas fa-cog"></i> Settings</a></li>
@@ -1182,8 +980,8 @@
                 </div>
                 <div class="header-actions">
                     <div class="status-indicator">
-                        <span class="status-dot" id="firebaseStatus"></span>
-                        <span id="connectionStatus">Connecting...</span>
+                        <span class="status-dot" style="background: var(--success);"></span>
+                        <span>Demo Mode</span>
                     </div>
                     <button class="btn btn-secondary" id="refreshBtn">
                         <i class="fas fa-sync-alt"></i> Refresh
@@ -1200,9 +998,8 @@
                 <section id="dashboard" class="content-section active">
                     <div class="section-header">
                         <h2><i class="fas fa-tachometer-alt"></i> Dashboard Overview</h2>
-                        <div class="search-box">
-                            <input type="text" id="globalSearch" placeholder="Search events & training...">
-                            <i class="fas fa-search"></i>
+                        <div style="display: flex; gap: 15px;">
+                            <input type="text" id="globalSearch" class="form-control" style="max-width: 300px;" placeholder="Search events & training...">
                         </div>
                     </div>
                     
@@ -1210,7 +1007,7 @@
                         <div class="stat-card">
                             <div class="stat-card-header">
                                 <div>
-                                    <div class="stat-card-value" id="totalEvents">0</div>
+                                    <div class="stat-card-value" id="totalEvents">2</div>
                                     <div class="stat-card-label">Active Events</div>
                                 </div>
                                 <div class="stat-card-icon">
@@ -1225,7 +1022,7 @@
                         <div class="stat-card">
                             <div class="stat-card-header">
                                 <div>
-                                    <div class="stat-card-value" id="totalTraining">0</div>
+                                    <div class="stat-card-value" id="totalTraining">2</div>
                                     <div class="stat-card-label">Training Programs</div>
                                 </div>
                                 <div class="stat-card-icon">
@@ -1240,7 +1037,7 @@
                         <div class="stat-card">
                             <div class="stat-card-header">
                                 <div>
-                                    <div class="stat-card-value" id="totalSchedules">0</div>
+                                    <div class="stat-card-value" id="totalSchedules">3</div>
                                     <div class="stat-card-label">Schedules</div>
                                 </div>
                                 <div class="stat-card-icon">
@@ -1255,7 +1052,7 @@
                         <div class="stat-card">
                             <div class="stat-card-header">
                                 <div>
-                                    <div class="stat-card-value" id="totalCategories">0</div>
+                                    <div class="stat-card-value" id="totalCategories">3</div>
                                     <div class="stat-card-label">Categories</div>
                                 </div>
                                 <div class="stat-card-icon">
@@ -1272,7 +1069,7 @@
                         <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
                     </div>
                     
-                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
                         <button class="btn btn-primary" onclick="navigateTo('events'); openAddModal('event')">
                             <i class="fas fa-plus-circle"></i> Add Event
                         </button>
@@ -1287,7 +1084,7 @@
                         </button>
                     </div>
 
-                    <div class="section-header" style="margin-top: 40px;">
+                    <div class="section-header">
                         <h2><i class="fas fa-calendar-check"></i> Upcoming Events</h2>
                     </div>
                     
@@ -1303,7 +1100,7 @@
                                 </tr>
                             </thead>
                             <tbody id="upcomingEventsTable">
-                                <tr><td colspan="5" class="empty-state">Loading events...</td></tr>
+                                <!-- Will be populated by JavaScript -->
                             </tbody>
                         </table>
                     </div>
@@ -1338,7 +1135,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="eventsTable">
-                                    <tr><td colspan="6" class="empty-state">Loading events...</td></tr>
+                                    <!-- Will be populated by JavaScript -->
                                 </tbody>
                             </table>
                         </div>
@@ -1374,7 +1171,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="bootcampTable">
-                                    <tr><td colspan="5" class="empty-state">Loading bootcamp events...</td></tr>
+                                    <!-- Will be populated by JavaScript -->
                                 </tbody>
                             </table>
                         </div>
@@ -1394,7 +1191,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="ticketsTable">
-                                    <tr><td colspan="6" class="empty-state">Loading tickets...</td></tr>
+                                    <!-- Will be populated by JavaScript -->
                                 </tbody>
                             </table>
                         </div>
@@ -1428,7 +1225,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="trainingTable">
-                                    <tr><td colspan="5" class="empty-state">Loading training programs...</td></tr>
+                                    <!-- Will be populated by JavaScript -->
                                 </tbody>
                             </table>
                         </div>
@@ -1507,7 +1304,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="schedulesQ1Table">
-                                    <tr><td colspan="5" class="empty-state">Loading Quarter 1 schedules...</td></tr>
+                                    <!-- Will be populated by JavaScript -->
                                 </tbody>
                             </table>
                         </div>
@@ -1526,7 +1323,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="schedulesQ2Table">
-                                    <tr><td colspan="5" class="empty-state">Loading Quarter 2 schedules...</td></tr>
+                                    <!-- Will be populated by JavaScript -->
                                 </tbody>
                             </table>
                         </div>
@@ -1545,7 +1342,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="schedulesQ3Table">
-                                    <tr><td colspan="5" class="empty-state">Loading Quarter 3 schedules...</td></tr>
+                                    <!-- Will be populated by JavaScript -->
                                 </tbody>
                             </table>
                         </div>
@@ -1564,7 +1361,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="schedulesQ4Table">
-                                    <tr><td colspan="5" class="empty-state">Loading Quarter 4 schedules...</td></tr>
+                                    <!-- Will be populated by JavaScript -->
                                 </tbody>
                             </table>
                         </div>
@@ -1583,7 +1380,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="schedulesOnlineTable">
-                                    <tr><td colspan="5" class="empty-state">Loading online schedules...</td></tr>
+                                    <!-- Will be populated by JavaScript -->
                                 </tbody>
                             </table>
                         </div>
@@ -1612,7 +1409,7 @@
                                 </tr>
                             </thead>
                             <tbody id="categoriesTable">
-                                <tr><td colspan="6" class="empty-state">Loading categories...</td></tr>
+                                <!-- Will be populated by JavaScript -->
                             </tbody>
                         </table>
                     </div>
@@ -1693,493 +1490,258 @@
     </div>
 
     <script>
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyDb5ZFHbo7lGM8ph0oBxFVTHRF5C5C_DWU",
-            authDomain: "dsog-events.firebaseapp.com",
-            databaseURL: "https://dsog-events-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "dsog-events",
-            storageBucket: "dsog-events.firebasestorage.app",
-            messagingSenderId: "1075977932287",
-            appId: "1:1075977932287:web:b2bf4d1c0083d2dac8ebca"
-        };
-        
-        // Global variables
-        let app, db, auth;
-        let currentUser = null;
+        // Demo data matching your structure
         let allData = {
-            appSettings: {},
-            upcomingEvents: {},
-            eventCategories: {},
-            trainingPrograms: {},
-            trainingSchedules: {},
-            stats: {}
+            appSettings: {
+                contactEmail: "office.dsog@gmail.com",
+                eventsEmail: "events.dsog@gmail.com",
+                phoneNumber: "+254 733 737 983",
+                whatsappNumber: "254733737983",
+                version: "10.0.0",
+                maintenance: false
+            },
+            upcomingEvents: {
+                event_001: {
+                    id: "event_001",
+                    title: "Franchise Bootcamp",
+                    date: "2026-02-02",
+                    deadline: "2026-02-02",
+                    description: "A comprehensive 3-month intensive program designed to transform aspiring entrepreneurs into successful franchise business owners.",
+                    duration: "3 Months Intensive Program",
+                    frequency: "one-time",
+                    category: "bootcamp",
+                    venue: "Hybrid: Virtual & On-site",
+                    maxParticipants: 30,
+                    registrationUrl: "https://forms.gle/ozixnymuxdBg2drC9",
+                    imageUrl: "https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp",
+                    subtitle: "For Startups & Established Business Leaders",
+                    active: true,
+                    order: 1,
+                    pricing: {
+                        pioneerPrice: 3500,
+                        futurePrice: 25000,
+                        currency: "KES"
+                    },
+                    tickets: {
+                        early_bird: {
+                            name: "Early Bird Bootcamp Ticket",
+                            price: 500,
+                            quantityAvailable: 10,
+                            quantitySold: 3,
+                            currency: "KES",
+                            description: "Limited time discounted rate for early registration.",
+                            includes: "Full bootcamp access + Materials + Mentorship",
+                            type: "Early Bird"
+                        },
+                        standard: {
+                            name: "Standard Bootcamp Ticket",
+                            price: 750,
+                            quantityAvailable: 20,
+                            quantitySold: 7,
+                            currency: "KES",
+                            description: "Standard access to the full 3-month bootcamp program.",
+                            includes: "Full bootcamp access + Materials + Mentorship + Community",
+                            type: "Standard"
+                        },
+                        vip: {
+                            name: "VIP Bootcamp Package",
+                            price: 1200,
+                            quantityAvailable: 5,
+                            quantitySold: 1,
+                            currency: "KES",
+                            description: "VIP package includes one-on-one coaching sessions, priority support, networking dinner, and additional resources.",
+                            includes: "VIP + 1-on-1 Coaching + Priority Support + Networking Dinner",
+                            type: "VIP"
+                        }
+                    }
+                },
+                event_002: {
+                    id: "event_002",
+                    title: "Become What You Believe",
+                    date: "2026-01-31",
+                    description: "Become What You Believe: Your Monthly Spark. Find your light. Own your light.",
+                    duration: "1 Day",
+                    frequency: "monthly",
+                    category: "inspiration",
+                    venue: "Hybrid Event",
+                    maxParticipants: 50,
+                    registrationUrl: "https://wa.me/254733737983?text=I'm%20interested%20in%20Become%20What%20You%20Believe%20Event",
+                    imageUrl: "https://i.postimg.cc/sgNRzKbd/20260114_1543_Image_Generation_simple_compose_01key8g91re75trpnnjn6j42z5_1.webp",
+                    subtitle: "For Startups & Established Business Leaders",
+                    active: true,
+                    order: 2
+                },
+                event_003: {
+                    id: "event_003",
+                    title: "The Making of an Icon",
+                    date: "2026-02-09",
+                    description: "A God-based discussion workshop designed to help individuals discover and understand their divine purpose.",
+                    duration: "1 Day",
+                    frequency: "monthly",
+                    category: "spiritual",
+                    venue: "TBD",
+                    maxParticipants: 40,
+                    registrationUrl: "https://docs.google.com/forms/d/e/1FAIpQLScRGyj7M3r9SpOCe-ScJoCvPnovgYojJvcLmaOkLicY44AUGg/viewform",
+                    imageUrl: "https://i.postimg.cc/kXw6d695/20260114-1617-Image-Generation-simple-compose-01keyad7jyf15rcfk3tz16wdbq-1.webp",
+                    subtitle: "Discover Your Divine Purpose",
+                    active: true,
+                    order: 3
+                }
+            },
+            eventCategories: {
+                bootcamp: {
+                    id: "bootcamp",
+                    name: "Startup Bootcamp",
+                    description: "A comprehensive 3-month intensive program designed to transform aspiring entrepreneurs into successful franchise business owners.",
+                    frequency: "Quarterly",
+                    icon: "fas fa-graduation-cap",
+                    active: true,
+                    order: 1
+                },
+                inspiration: {
+                    id: "inspiration",
+                    name: "Become What You Believe",
+                    description: "An electrifying event designed to ignite the entrepreneurial fire within for new and established business leaders.",
+                    frequency: "Monthly",
+                    icon: "fas fa-fire",
+                    active: true,
+                    order: 2
+                },
+                spiritual: {
+                    id: "spiritual",
+                    name: "The Making of an Icon",
+                    description: "A God-based discussion workshop designed to help individuals discover and understand their divine purpose.",
+                    frequency: "Monthly",
+                    icon: "fas fa-hands-praying",
+                    active: true,
+                    order: 3
+                }
+            },
+            trainingPrograms: {
+                program_002: {
+                    id: "program_002",
+                    name: "Market Expansion Strategies",
+                    description: "Advanced techniques for growing your business reach, scaling operations, and capturing new market opportunities.",
+                    duration: "6 WEEKS",
+                    icon: "fas fa-expand-arrows-alt",
+                    longTermResults: "Businesses achieve sustainable growth, increased market share, and develop systematic expansion capabilities.",
+                    objectives: [
+                        "Master market research methodologies",
+                        "Develop effective expansion strategies",
+                        "Learn customer acquisition techniques",
+                        "Understand scaling challenges and solutions"
+                    ],
+                    active: true,
+                    order: 2
+                },
+                program_003: {
+                    id: "program_003",
+                    name: "Client Engagement Excellence",
+                    description: "Master the art of building strong client relationships, delivering exceptional service, and maximizing customer lifetime value.",
+                    duration: "4 WEEKS",
+                    icon: "fas fa-users",
+                    longTermResults: "Improved customer loyalty, increased repeat business, and enhanced brand reputation through superior client relationships.",
+                    objectives: [
+                        "Develop effective communication skills",
+                        "Learn customer retention strategies",
+                        "Master conflict resolution techniques",
+                        "Understand customer psychology"
+                    ],
+                    active: true,
+                    order: 3
+                }
+            },
+            trainingSchedules: {
+                q1: {
+                    name: "Q1 (Jan-Mar)",
+                    active: true,
+                    quarter: "q1",
+                    programs: {
+                        schedule_001: {
+                            id: "schedule_001",
+                            programName: "All Sellers Training",
+                            startDate: "2026-01-21",
+                            schedule: "Wed and Fri",
+                            duration: "4 Weeks",
+                            active: true,
+                            order: 1
+                        }
+                    }
+                },
+                q2: {
+                    name: "Quarter 2 (Apr-Jun)",
+                    active: true,
+                    quarter: "q2",
+                    programs: {
+                        schedule_004: {
+                            id: "schedule_004",
+                            programName: "Business Fundamentals",
+                            startDate: "2024-04-08",
+                            schedule: "Mon & Wed, 6-8 PM",
+                            duration: "8 Weeks",
+                            enrollmentUrl: "https://wa.me/254733737983?text=I'm%20interested%20in%20Business%20Fundamentals%20Training",
+                            active: true,
+                            order: 1
+                        }
+                    }
+                },
+                online: {
+                    name: "Online Programs",
+                    active: true,
+                    quarter: "online",
+                    programs: {
+                        schedule_010: {
+                            id: "schedule_010",
+                            programName: "Business Fundamentals (Online)",
+                            startDate: "Rolling Admission",
+                            schedule: "Self-paced with weekly live sessions",
+                            duration: "8 Weeks",
+                            enrollmentUrl: "https://wa.me/254733737983?text=I'm%20interested%20in%20Business%20Fundamentals%20Online%20Training",
+                            active: true,
+                            order: 1
+                        }
+                    }
+                }
+            },
+            stats: {
+                entrepreneursTrained: 120,
+                startupsSupported: 55,
+                completionRate: 89,
+                satisfactionRate: 90,
+                businessGrowthRate: 88,
+                careerAdvancement: 89,
+                lastUpdated: "2026-01-15"
+            }
         };
+
+        // Global variables
         let currentEditItem = null;
         let currentEditType = null;
-        let currentEditPath = null;
         let currentQuarter = 'q1';
-        
-        // Initialize Firebase
+
+        // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM loaded, initializing application...');
-            showLoading('Initializing Admin Panel...');
+            console.log('Admin panel loaded successfully');
             
-            // Set a timeout to show login if Firebase fails
-            const initTimeout = setTimeout(() => {
-                console.log('Firebase initialization timeout - showing login screen');
-                hideLoading();
-                showLoginScreen();
-            }, 5000);
+            // Hide loading immediately
+            document.getElementById('loadingOverlay').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'flex';
             
-            try {
-                console.log('Attempting Firebase initialization...');
-                
-                // Initialize Firebase
-                if (typeof firebase === 'undefined') {
-                    throw new Error('Firebase SDK not loaded. Please check internet connection.');
-                }
-                
-                // Check if Firebase app is already initialized
-                if (firebase.apps.length === 0) {
-                    app = firebase.initializeApp(firebaseConfig);
-                    console.log('Firebase initialized successfully');
-                } else {
-                    app = firebase.app();
-                    console.log('Using existing Firebase app');
-                }
-                
-                // Get Firebase services
-                db = firebase.database();
-                auth = firebase.auth();
-                
-                console.log('Firebase services initialized');
-                
-                // Clear the timeout since Firebase initialized successfully
-                clearTimeout(initTimeout);
-                
-                // Setup Firebase connection monitoring
-                setupFirebaseMonitoring();
-                
-                // Check authentication state
-                const unsubscribe = auth.onAuthStateChanged(function(user) {
-                    console.log('Auth state changed:', user ? 'User logged in' : 'No user');
-                    
-                    if (user) {
-                        currentUser = user;
-                        console.log('User authenticated:', user.email);
-                        showAdminPanel();
-                        loadAllData();
-                    } else {
-                        currentUser = null;
-                        console.log('No user authenticated');
-                        showLoginScreen();
-                        hideLoading();
-                    }
-                    
-                    // Unsubscribe after first auth state change
-                    unsubscribe();
-                });
-                
-                // Setup login form
-                const loginForm = document.getElementById('loginForm');
-                if (loginForm) {
-                    loginForm.addEventListener('submit', handleLogin);
-                }
-                
-            } catch (error) {
-                console.error('Firebase initialization error:', error);
-                clearTimeout(initTimeout);
-                hideLoading();
-                showLoginScreen();
-                showToast('Firebase initialization failed. Using demo mode.', 'warning');
-                
-                // Initialize demo data for testing
-                initializeDemoData();
-            }
-        });
-        
-        // Firebase Monitoring
-        function setupFirebaseMonitoring() {
-            try {
-                const connectedRef = db.ref('.info/connected');
-                connectedRef.on('value', function(snapshot) {
-                    if (snapshot.val() === true) {
-                        console.log('Firebase connected');
-                        updateConnectionStatus('Connected to Firebase', 'online');
-                    } else {
-                        console.log('Firebase disconnected');
-                        updateConnectionStatus('Disconnected from Firebase', 'offline');
-                    }
-                });
-            } catch (error) {
-                console.error('Firebase monitoring setup error:', error);
-                updateConnectionStatus('Connection monitoring error', 'offline');
-            }
-        }
-        
-        // Demo data initialization for testing
-        function initializeDemoData() {
-            console.log('Initializing demo data for testing...');
+            // Setup all event listeners
+            setupEventListeners();
             
-            // Sample demo data matching your structure
-            allData = {
-                appSettings: {
-                    contactEmail: "office.dsog@gmail.com",
-                    eventsEmail: "events.dsog@gmail.com",
-                    phoneNumber: "+254 733 737 983",
-                    whatsappNumber: "254733737983",
-                    version: "10.0.0",
-                    maintenance: false
-                },
-                upcomingEvents: {
-                    event_001: {
-                        active: true,
-                        category: "bootcamp",
-                        date: "2026-02-02",
-                        deadline: "2026-02-02",
-                        description: "A comprehensive 3-month intensive program designed to transform aspiring entrepreneurs into successful franchise business owners.",
-                        duration: "3 Months Intensive Program",
-                        frequency: "one-time",
-                        id: "event_001",
-                        imageUrl: "https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp",
-                        maxParticipants: 30,
-                        order: 1,
-                        registrationUrl: "https://forms.gle/ozixnymuxdBg2drC9",
-                        subtitle: "For Startups & Established Business Leaders",
-                        title: "Franchise Bootcamp",
-                        venue: "Hybrid: Virtual & On-site",
-                        pricing: {
-                            pioneerPrice: 3500,
-                            futurePrice: 25000,
-                            currency: "KES"
-                        },
-                        tickets: {
-                            early_bird: {
-                                currency: "KES",
-                                description: "Limited time discounted rate for early registration.",
-                                includes: "Full bootcamp access + Materials + Mentorship",
-                                name: "Early Bird Bootcamp Ticket",
-                                price: 500,
-                                quantityAvailable: 10,
-                                quantitySold: 3,
-                                type: "Early Bird"
-                            },
-                            standard: {
-                                currency: "KES",
-                                description: "Standard access to the full 3-month bootcamp program.",
-                                includes: "Full bootcamp access + Materials + Mentorship + Community",
-                                name: "Standard Bootcamp Ticket",
-                                price: 750,
-                                quantityAvailable: 20,
-                                quantitySold: 7,
-                                type: "Standard"
-                            }
-                        }
-                    },
-                    event_002: {
-                        active: true,
-                        category: "inspiration",
-                        date: "2026-01-31",
-                        description: "Become What You Believe: Your Monthly Spark. Find your light. Own your light.",
-                        duration: "1 Day",
-                        frequency: "monthly",
-                        id: "event_002",
-                        imageUrl: "https://i.postimg.cc/sgNRzKbd/20260114_1543_Image_Generation_simple_compose_01key8g91re75trpnnjn6j42z5_1.webp",
-                        maxParticipants: 50,
-                        order: 2,
-                        registrationUrl: "https://wa.me/254733737983?text=I'm%20interested%20in%20Become%20What%20You%20Believe%20Event",
-                        subtitle: "For Startups & Established Business Leaders",
-                        title: "Become What You Believe",
-                        venue: "Hybrid Event"
-                    }
-                },
-                eventCategories: {
-                    bootcamp: {
-                        active: true,
-                        description: "A comprehensive 3-month intensive program designed to transform aspiring entrepreneurs into successful franchise business owners.",
-                        frequency: "Quarterly",
-                        icon: "fas fa-graduation-cap",
-                        id: "bootcamp",
-                        name: "Startup Bootcamp",
-                        order: 1
-                    },
-                    inspiration: {
-                        active: true,
-                        description: "An electrifying event designed to ignite the entrepreneurial fire within for new and established business leaders.",
-                        frequency: "Monthly",
-                        icon: "fas fa-fire",
-                        id: "inspiration",
-                        name: "Become What You Believe",
-                        order: 2
-                    },
-                    spiritual: {
-                        active: true,
-                        description: "A God-based discussion workshop designed to help individuals discover and understand their divine purpose.",
-                        frequency: "Monthly",
-                        icon: "fas fa-hands-praying",
-                        id: "spiritual",
-                        name: "The Making of an Icon",
-                        order: 3
-                    }
-                },
-                trainingPrograms: {
-                    program_002: {
-                        active: true,
-                        description: "Advanced techniques for growing your business reach, scaling operations, and capturing new market opportunities.",
-                        duration: "6 WEEKS",
-                        icon: "fas fa-expand-arrows-alt",
-                        id: "program_002",
-                        longTermResults: "Businesses achieve sustainable growth, increased market share, and develop systematic expansion capabilities.",
-                        name: "Market Expansion Strategies",
-                        objectives: [
-                            "Master market research methodologies",
-                            "Develop effective expansion strategies",
-                            "Learn customer acquisition techniques",
-                            "Understand scaling challenges and solutions"
-                        ],
-                        order: 2
-                    },
-                    program_003: {
-                        active: true,
-                        description: "Master the art of building strong client relationships, delivering exceptional service, and maximizing customer lifetime value.",
-                        duration: "4 WEEKS",
-                        icon: "fas fa-users",
-                        id: "program_003",
-                        longTermResults: "Improved customer loyalty, increased repeat business, and enhanced brand reputation through superior client relationships.",
-                        name: "Client Engagement Excellence",
-                        objectives: [
-                            "Develop effective communication skills",
-                            "Learn customer retention strategies",
-                            "Master conflict resolution techniques",
-                            "Understand customer psychology"
-                        ],
-                        order: 3
-                    }
-                },
-                trainingSchedules: {
-                    q1: {
-                        active: true,
-                        name: "Q1 (Jan-Mar)",
-                        quarter: "q1",
-                        programs: {
-                            schedule_001: {
-                                active: true,
-                                duration: "4 Weeks",
-                                id: "schedule_001",
-                                order: 1,
-                                programName: "All Sellers Training",
-                                schedule: "Wed and Fri",
-                                startDate: "2026-01-21"
-                            }
-                        }
-                    },
-                    q2: {
-                        active: true,
-                        name: "Quarter 2 (Apr-Jun)",
-                        quarter: "q2",
-                        programs: {
-                            schedule_004: {
-                                active: true,
-                                duration: "8 Weeks",
-                                enrollmentUrl: "https://wa.me/254733737983?text=I'm%20interested%20in%20Business%20Fundamentals%20Training",
-                                id: "schedule_004",
-                                order: 1,
-                                programId: "program_001",
-                                programName: "Business Fundamentals",
-                                schedule: "Mon & Wed, 6-8 PM",
-                                startDate: "2024-04-08"
-                            }
-                        }
-                    },
-                    online: {
-                        active: true,
-                        name: "Online Programs",
-                        quarter: "online",
-                        programs: {
-                            schedule_010: {
-                                active: true,
-                                duration: "8 Weeks",
-                                enrollmentUrl: "https://wa.me/254733737983?text=I'm%20interested%20in%20Business%20Fundamentals%20Online%20Training",
-                                id: "schedule_010",
-                                order: 1,
-                                programId: "program_001",
-                                programName: "Business Fundamentals (Online)",
-                                schedule: "Self-paced with weekly live sessions",
-                                startDate: "Rolling Admission"
-                            }
-                        }
-                    }
-                },
-                stats: {
-                    entrepreneursTrained: 120,
-                    startupsSupported: 55,
-                    eventsHosted: 0,
-                    completionRate: 89,
-                    satisfactionRate: 90,
-                    businessGrowthRate: 88,
-                    careerAdvancement: 89,
-                    lastUpdated: "2026-01-15"
-                }
-            };
-            
-            // Update UI with demo data
+            // Load initial data
             updateAllTables();
             updateAllForms();
-            updateDashboardStats();
             
-            console.log('Demo data initialized successfully');
-        }
-        
-        // Authentication Functions
-        function handleLogin(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            const loginBtnText = document.getElementById('loginBtnText');
-            const loginSpinner = document.getElementById('loginSpinner');
-            const loginError = document.getElementById('loginError');
-            
-            if (!email || !password) {
-                loginError.textContent = 'Please enter both email and password';
-                loginError.style.display = 'block';
-                return;
-            }
-            
-            // Show loading state
-            loginBtnText.style.display = 'none';
-            loginSpinner.style.display = 'inline-block';
-            loginError.style.display = 'none';
-            
-            console.log('Attempting login for:', email);
-            
-            // For demo purposes, accept any credentials
-            if (email && password) {
-                console.log('Demo login successful');
-                
-                // Create demo user object
-                currentUser = {
-                    email: email,
-                    displayName: 'Administrator',
-                    uid: 'demo_user_' + Date.now()
-                };
-                
-                // Show admin panel after short delay
-                setTimeout(() => {
-                    loginBtnText.style.display = 'inline';
-                    loginSpinner.style.display = 'none';
-                    showAdminPanel();
-                    showToast('Logged in successfully! (Demo Mode)', 'success');
-                }, 1000);
-                
-                return;
-            }
-            
-            // If Firebase auth is available, use it
-            if (auth) {
-                auth.signInWithEmailAndPassword(email, password)
-                    .then((userCredential) => {
-                        console.log('Login successful for:', email);
-                        currentUser = userCredential.user;
-                        showAdminPanel();
-                        loadAllData();
-                        showToast('Logged in successfully!', 'success');
-                    })
-                    .catch((error) => {
-                        console.error('Login error:', error);
-                        loginError.style.display = 'block';
-                        loginBtnText.style.display = 'inline';
-                        loginSpinner.style.display = 'none';
-                        
-                        let errorMessage = 'Login failed. Please try again.';
-                        switch(error.code) {
-                            case 'auth/invalid-credential':
-                            case 'auth/wrong-password':
-                                errorMessage = 'Invalid email or password';
-                                break;
-                            case 'auth/user-not-found':
-                                errorMessage = 'User not found';
-                                break;
-                            case 'auth/user-disabled':
-                                errorMessage = 'Account disabled';
-                                break;
-                            case 'auth/too-many-requests':
-                                errorMessage = 'Too many attempts. Try again later';
-                                break;
-                            default:
-                                errorMessage = error.message;
-                        }
-                        
-                        loginError.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${errorMessage}`;
-                        showToast(errorMessage, 'error');
-                    });
-            }
-        }
-        
-        function handleLogout() {
-            if (confirm('Are you sure you want to logout?')) {
-                if (auth) {
-                    auth.signOut()
-                        .then(() => {
-                            console.log('Logout successful');
-                            currentUser = null;
-                            showLoginScreen();
-                            showToast('Logged out successfully', 'success');
-                        })
-                        .catch((error) => {
-                            console.error('Logout error:', error);
-                            showToast('Error logging out', 'error');
-                        });
-                } else {
-                    // Demo mode logout
-                    currentUser = null;
-                    showLoginScreen();
-                    showToast('Logged out successfully', 'success');
-                }
-            }
-        }
-        
-        // UI Management Functions
-        function showLoginScreen() {
-            console.log('Showing login screen');
-            document.getElementById('loginScreen').style.display = 'flex';
-            document.getElementById('adminPanel').style.display = 'none';
-            document.getElementById('loadingOverlay').style.display = 'none';
-            
-            // Reset login form
-            const loginError = document.getElementById('loginError');
-            const loginBtnText = document.getElementById('loginBtnText');
-            const loginSpinner = document.getElementById('loginSpinner');
-            
-            if (loginError) loginError.style.display = 'none';
-            if (loginBtnText) loginBtnText.style.display = 'inline';
-            if (loginSpinner) loginSpinner.style.display = 'none';
-            
-            // Set default credentials for testing
-            document.getElementById('loginEmail').value = 'admin@dsog.org';
-            document.getElementById('loginPassword').value = 'admin123';
-        }
-        
-        function showAdminPanel() {
-            console.log('Showing admin panel');
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('adminPanel').style.display = 'flex';
-            hideLoading();
-            
-            if (currentUser) {
-                document.getElementById('userName').textContent = currentUser.displayName || 'Administrator';
-                document.getElementById('userEmail').textContent = currentUser.email;
-                document.getElementById('userAvatar').textContent = currentUser.email.charAt(0).toUpperCase();
-            }
-            
-            setupAdminPanel();
-        }
-        
-        function setupAdminPanel() {
-            console.log('Setting up admin panel');
-            
+            // Show welcome toast
+            setTimeout(() => {
+                showToast('Welcome to DSOG Events & Training Admin!', 'success');
+            }, 500);
+        });
+
+        // Setup event listeners
+        function setupEventListeners() {
             // Navigation
             document.querySelectorAll('.sidebar-nav a').forEach(link => {
                 link.addEventListener('click', function(e) {
@@ -2200,25 +1762,27 @@
                     }
                 });
             });
-        
+
             // Buttons
-            const refreshBtn = document.getElementById('refreshBtn');
-            const saveSettingsBtn = document.getElementById('saveSettingsBtn');
-            const logoutBtn = document.getElementById('logoutBtn');
-            
-            if (refreshBtn) refreshBtn.addEventListener('click', loadAllData);
-            if (saveSettingsBtn) saveSettingsBtn.addEventListener('click', saveAppSettings);
-            if (logoutBtn) logoutBtn.addEventListener('click', handleLogout);
-        
+            document.getElementById('refreshBtn').addEventListener('click', function() {
+                updateAllTables();
+                showToast('Data refreshed successfully!', 'success');
+            });
+
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                if (confirm('Are you sure you want to logout?')) {
+                    showToast('Logged out successfully!', 'success');
+                    // In a real app, you would redirect to login page
+                }
+            });
+
+            document.getElementById('saveSettingsBtn').addEventListener('click', saveAppSettings);
+
             // Modal
-            const closeModal = document.getElementById('closeModal');
-            const cancelModalBtn = document.getElementById('cancelModalBtn');
-            const saveModalBtn = document.getElementById('saveModalBtn');
-            
-            if (closeModal) closeModal.addEventListener('click', closeModalFunc);
-            if (cancelModalBtn) cancelModalBtn.addEventListener('click', closeModalFunc);
-            if (saveModalBtn) saveModalBtn.addEventListener('click', saveModalItem);
-        
+            document.getElementById('closeModal').addEventListener('click', closeModal);
+            document.getElementById('cancelModalBtn').addEventListener('click', closeModal);
+            document.getElementById('saveModalBtn').addEventListener('click', saveModalItem);
+
             // Tabs
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
@@ -2236,143 +1800,73 @@
                     if (targetTab) targetTab.classList.add('active');
                 });
             });
-        
+
             // Search
-            const globalSearch = document.getElementById('globalSearch');
-            if (globalSearch) {
-                globalSearch.addEventListener('input', function(e) {
-                    performGlobalSearch(e.target.value);
-                });
-            }
-            
-            // Load initial data
-            loadAllData();
-        }
-        
-        // Data Loading Functions
-        function loadAllData() {
-            showLoading('Loading data...');
-            console.log('Loading all data...');
-            
-            // If Firebase is not available, use demo data
-            if (!db) {
-                console.log('Firebase not available, using demo data');
-                hideLoading();
-                updateAllTables();
-                updateAllForms();
-                updateDashboardStats();
-                showToast('Using demo data (Firebase not connected)', 'warning');
-                return;
-            }
-            
-            const dataPaths = [
-                'appSettings',
-                'upcomingEvents',
-                'eventCategories',
-                'trainingPrograms',
-                'trainingSchedules',
-                'stats'
-            ];
-            
-            const promises = dataPaths.map(path => loadData(path));
-            
-            Promise.all(promises)
-                .then(() => {
-                    console.log('All data loaded successfully');
-                    updateAllTables();
-                    updateAllForms();
-                    updateDashboardStats();
-                    hideLoading();
-                    showToast('All data loaded successfully!', 'success');
-                })
-                .catch(error => {
-                    console.error('Error loading data:', error);
-                    hideLoading();
-                    showToast('Error loading data from Firebase', 'error');
-                });
-        }
-        
-        function loadData(path) {
-            return new Promise((resolve, reject) => {
-                console.log(`Loading data from path: ${path}`);
-                if (!db) {
-                    console.log(`Firebase not available for path: ${path}`);
-                    resolve();
-                    return;
-                }
-                
-                db.ref(path).once('value')
-                    .then(snapshot => {
-                        const data = snapshot.val() || {};
-                        allData[path] = data;
-                        console.log(`Loaded ${path}:`, Object.keys(data).length, 'items');
-                        resolve();
-                    })
-                    .catch(error => {
-                        console.error(`Error loading ${path}:`, error);
-                        allData[path] = {};
-                        resolve(); // Resolve anyway to continue
-                    });
+            document.getElementById('globalSearch').addEventListener('input', function(e) {
+                performGlobalSearch(e.target.value);
             });
         }
-        
-        // Table Rendering Functions
+
+        // Table rendering functions
         function renderEventsTable() {
             const table = document.getElementById('eventsTable');
             if (!table) return;
             
-            const events = allData.upcomingEvents || {};
+            const events = Object.values(allData.upcomingEvents || {});
             
-            if (Object.keys(events).length === 0) {
-                table.innerHTML = '<tr><td colspan="6" class="empty-state"><i class="fas fa-calendar-times"></i><h3>No Events Found</h3><p>Click "Add Event" to create your first event</p></td></tr>';
+            if (events.length === 0) {
+                table.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <i class="fas fa-calendar-times"></i>
+                            <h3>No Events Found</h3>
+                            <p>Click "Add Event" to create your first event</p>
+                        </td>
+                    </tr>
+                `;
                 return;
             }
             
             let html = '';
-            Object.entries(events).forEach(([id, event]) => {
-                const isActive = event.active !== false;
+            events.forEach(event => {
                 const category = allData.eventCategories?.[event.category] || {};
-                const tickets = event.tickets || {};
-                const ticketTypes = Object.keys(tickets).length;
+                const isActive = event.active !== false;
                 
                 html += `
-                    <tr data-id="${id}">
+                    <tr data-id="${event.id}">
                         <td>
                             <strong>${event.title || 'Untitled Event'}</strong>
-                            <div style="font-size: 0.85rem; color: var(--gray); margin-top: 5px;">
-                                ${event.subtitle || ''}
-                            </div>
+                            ${event.subtitle ? `<div style="font-size: 0.85rem; color: var(--gray); margin-top: 5px;">${event.subtitle}</div>` : ''}
                         </td>
                         <td>
                             <div>${event.date || 'No date'}</div>
                             <div style="font-size: 0.85rem; color: var(--gray);">${event.duration || ''}</div>
                         </td>
                         <td>
-                            <span class="badge badge-success">
+                            <span class="badge badge-info">
                                 <i class="${category.icon || 'fas fa-tag'}"></i> ${category.name || 'Uncategorized'}
                             </span>
                         </td>
                         <td>${event.venue || 'TBD'}</td>
                         <td>
                             <label class="switch">
-                                <input type="checkbox" ${isActive ? 'checked' : ''} 
-                                       onchange="updateField('upcomingEvents/${id}', 'active', this.checked)">
+                                <input type="checkbox" ${isActive ? 'checked' : ''} onchange="toggleActive('event', '${event.id}', this.checked)">
                                 <span class="slider"></span>
                             </label>
                         </td>
                         <td>
                             <div class="data-table-actions">
-                                <button class="table-btn table-btn-edit" onclick="openEditModal('event', '${id}')">
+                                <button class="table-btn table-btn-edit" onclick="openEditModal('event', '${event.id}')">
                                     <i class="fas fa-edit"></i> Edit
                                 </button>
-                                ${ticketTypes > 0 ? 
-                                    `<button class="table-btn table-btn-view" onclick="viewEventTickets('${id}')">
-                                        <i class="fas fa-ticket-alt"></i> Tickets (${ticketTypes})
-                                    </button>` : ''
-                                }
-                                <button class="table-btn table-btn-delete" onclick="deleteItem('upcomingEvents/${id}')">
+                                <button class="table-btn table-btn-delete" onclick="deleteItem('event', '${event.id}')">
                                     <i class="fas fa-trash"></i> Delete
                                 </button>
+                                ${event.category === 'bootcamp' ? 
+                                    `<button class="table-btn table-btn-view" onclick="viewEventTickets('${event.id}')">
+                                        <i class="fas fa-ticket-alt"></i> Tickets
+                                    </button>` : ''
+                                }
                             </div>
                         </td>
                     </tr>
@@ -2381,96 +1875,50 @@
             
             table.innerHTML = html;
         }
-        
-        function renderBootcampTable() {
-            const table = document.getElementById('bootcampTable');
-            if (!table) return;
-            
-            const events = allData.upcomingEvents || {};
-            const bootcampEvents = Object.entries(events).filter(([id, event]) => event.category === 'bootcamp');
-            
-            if (bootcampEvents.length === 0) {
-                table.innerHTML = '<tr><td colspan="5" class="empty-state"><i class="fas fa-campground"></i><h3>No Bootcamp Events</h3><p>No bootcamp events found</p></td></tr>';
-                return;
-            }
-            
-            let html = '';
-            bootcampEvents.forEach(([id, event]) => {
-                const tickets = event.tickets || {};
-                const totalTicketsSold = Object.values(tickets).reduce((sum, ticket) => sum + (ticket.quantitySold || 0), 0);
-                const totalTicketsAvailable = Object.values(tickets).reduce((sum, ticket) => sum + (ticket.quantityAvailable || 0), 0);
-                
-                html += `
-                    <tr data-id="${id}">
-                        <td>
-                            <strong>${event.title || 'Untitled Bootcamp'}</strong>
-                            <div style="font-size: 0.85rem; color: var(--gray); margin-top: 5px;">
-                                ${event.pricing?.pioneerPrice ? `Pioneer: KSh ${event.pricing.pioneerPrice}` : ''}
-                            </div>
-                        </td>
-                        <td>
-                            <div>${event.date || 'No date'}</div>
-                            <div style="font-size: 0.85rem; color: var(--danger);">Deadline: ${event.deadline || 'No deadline'}</div>
-                        </td>
-                        <td>${event.maxParticipants || 0}</td>
-                        <td>
-                            <div>${totalTicketsSold} sold</div>
-                            <div style="font-size: 0.85rem; color: var(--gray);">${totalTicketsAvailable} available</div>
-                        </td>
-                        <td>
-                            <div class="data-table-actions">
-                                <button class="table-btn table-btn-edit" onclick="openEditModal('event', '${id}')">
-                                    <i class="fas fa-edit"></i> Edit
-                                </button>
-                                <button class="table-btn table-btn-view" onclick="viewEventTickets('${id}')">
-                                    <i class="fas fa-ticket-alt"></i> Tickets
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-            });
-            
-            table.innerHTML = html;
-        }
-        
+
         function renderUpcomingEventsTable() {
             const table = document.getElementById('upcomingEventsTable');
             if (!table) return;
             
-            const events = allData.upcomingEvents || {};
+            const events = Object.values(allData.upcomingEvents || {});
             const today = new Date().toISOString().split('T')[0];
-            const upcomingEvents = Object.entries(events)
-                .filter(([id, event]) => event.date >= today && event.active !== false)
-                .sort((a, b) => new Date(a[1].date) - new Date(b[1].date))
-                .slice(0, 5); // Show only 5 upcoming events
+            const upcomingEvents = events
+                .filter(event => event.date >= today && event.active !== false)
+                .sort((a, b) => new Date(a.date) - new Date(b.date))
+                .slice(0, 5);
             
             if (upcomingEvents.length === 0) {
-                table.innerHTML = '<tr><td colspan="5" class="empty-state"><i class="fas fa-calendar"></i><h3>No Upcoming Events</h3><p>No upcoming events scheduled</p></td></tr>';
+                table.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="empty-state">
+                            <i class="fas fa-calendar"></i>
+                            <h3>No Upcoming Events</h3>
+                            <p>No upcoming events scheduled</p>
+                        </td>
+                    </tr>
+                `;
                 return;
             }
             
             let html = '';
-            upcomingEvents.forEach(([id, event]) => {
+            upcomingEvents.forEach(event => {
                 const category = allData.eventCategories?.[event.category] || {};
                 const daysUntil = Math.ceil((new Date(event.date) - new Date()) / (1000 * 60 * 60 * 24));
                 
                 html += `
-                    <tr data-id="${id}">
+                    <tr data-id="${event.id}">
                         <td>
                             <strong>${event.title || 'Untitled Event'}</strong>
-                            <div style="font-size: 0.85rem; color: var(--gray); margin-top: 5px;">
-                                ${event.subtitle || ''}
-                            </div>
+                            ${event.subtitle ? `<div style="font-size: 0.85rem; color: var(--gray); margin-top: 5px;">${event.subtitle}</div>` : ''}
                         </td>
                         <td>
                             <div>${event.date || 'No date'}</div>
-                            <div style="font-size: 0.85rem; color: var(--${daysUntil <= 7 ? 'danger' : 'warning'});">
+                            <div style="font-size: 0.85rem; color: ${daysUntil <= 7 ? 'var(--danger)' : 'var(--warning)'};">
                                 ${daysUntil} day${daysUntil !== 1 ? 's' : ''} to go
                             </div>
                         </td>
                         <td>
-                            <span class="badge badge-success">
+                            <span class="badge badge-info">
                                 <i class="${category.icon || 'fas fa-tag'}"></i> ${category.name || 'Uncategorized'}
                             </span>
                         </td>
@@ -2481,10 +1929,10 @@
                         </td>
                         <td>
                             <div class="data-table-actions">
-                                <button class="table-btn table-btn-edit" onclick="openEditModal('event', '${id}')">
+                                <button class="table-btn table-btn-edit" onclick="openEditModal('event', '${event.id}')">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="table-btn table-btn-view" onclick="viewEventDetails('${id}')">
+                                <button class="table-btn table-btn-view" onclick="viewEventDetails('${event.id}')">
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>
@@ -2495,34 +1943,102 @@
             
             table.innerHTML = html;
         }
-        
+
+        function renderBootcampTable() {
+            const table = document.getElementById('bootcampTable');
+            if (!table) return;
+            
+            const bootcampEvents = Object.values(allData.upcomingEvents || {}).filter(event => event.category === 'bootcamp');
+            
+            if (bootcampEvents.length === 0) {
+                table.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="empty-state">
+                            <i class="fas fa-campground"></i>
+                            <h3>No Bootcamp Events</h3>
+                            <p>No bootcamp events found</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            let html = '';
+            bootcampEvents.forEach(event => {
+                const tickets = event.tickets || {};
+                const totalSold = Object.values(tickets).reduce((sum, ticket) => sum + (ticket.quantitySold || 0), 0);
+                const totalAvailable = Object.values(tickets).reduce((sum, ticket) => sum + (ticket.quantityAvailable || 0), 0);
+                
+                html += `
+                    <tr data-id="${event.id}">
+                        <td>
+                            <strong>${event.title || 'Untitled Bootcamp'}</strong>
+                            ${event.pricing?.pioneerPrice ? 
+                                `<div style="font-size: 0.85rem; color: var(--gray); margin-top: 5px;">
+                                    Pioneer Price: KSh ${event.pricing.pioneerPrice}
+                                </div>` : ''
+                            }
+                        </td>
+                        <td>
+                            <div>${event.date || 'No date'}</div>
+                            <div style="font-size: 0.85rem; color: var(--danger);">Deadline: ${event.deadline || 'No deadline'}</div>
+                        </td>
+                        <td>${event.maxParticipants || 0}</td>
+                        <td>
+                            <div>${totalSold} sold</div>
+                            <div style="font-size: 0.85rem; color: var(--gray);">${totalAvailable} available</div>
+                        </td>
+                        <td>
+                            <div class="data-table-actions">
+                                <button class="table-btn table-btn-edit" onclick="openEditModal('event', '${event.id}')">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="table-btn table-btn-view" onclick="viewEventTickets('${event.id}')">
+                                    <i class="fas fa-ticket-alt"></i> Tickets
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            table.innerHTML = html;
+        }
+
         function renderTicketsTable() {
             const table = document.getElementById('ticketsTable');
             if (!table) return;
             
-            const events = allData.upcomingEvents || {};
+            const events = Object.values(allData.upcomingEvents || {});
             let allTickets = [];
             
-            // Collect all tickets from all events
-            Object.entries(events).forEach(([eventId, event]) => {
+            events.forEach(event => {
                 const tickets = event.tickets || {};
-                Object.entries(tickets).forEach(([ticketType, ticket]) => {
+                Object.entries(tickets).forEach(([type, ticket]) => {
                     allTickets.push({
-                        eventId,
+                        eventId: event.id,
                         eventTitle: event.title,
-                        ticketType,
+                        ticketType: type,
                         ...ticket
                     });
                 });
             });
             
             if (allTickets.length === 0) {
-                table.innerHTML = '<tr><td colspan="6" class="empty-state"><i class="fas fa-ticket-alt"></i><h3>No Tickets Found</h3><p>No tickets have been created yet</p></td></tr>';
+                table.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <i class="fas fa-ticket-alt"></i>
+                            <h3>No Tickets Found</h3>
+                            <p>No tickets have been created yet</p>
+                        </td>
+                    </tr>
+                `;
                 return;
             }
             
             let html = '';
-            allTickets.forEach((ticket, index) => {
+            allTickets.forEach(ticket => {
                 const sold = ticket.quantitySold || 0;
                 const available = ticket.quantityAvailable || 0;
                 const total = sold + available;
@@ -2561,24 +2077,32 @@
             
             table.innerHTML = html;
         }
-        
+
         function renderTrainingTable() {
             const table = document.getElementById('trainingTable');
             if (!table) return;
             
-            const programs = allData.trainingPrograms || {};
+            const programs = Object.values(allData.trainingPrograms || {});
             
-            if (Object.keys(programs).length === 0) {
-                table.innerHTML = '<tr><td colspan="5" class="empty-state"><i class="fas fa-graduation-cap"></i><h3>No Training Programs</h3><p>Click "Add Program" to create your first training program</p></td></tr>';
+            if (programs.length === 0) {
+                table.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="empty-state">
+                            <i class="fas fa-graduation-cap"></i>
+                            <h3>No Training Programs</h3>
+                            <p>Click "Add Program" to create your first training program</p>
+                        </td>
+                    </tr>
+                `;
                 return;
             }
             
             let html = '';
-            Object.entries(programs).forEach(([id, program]) => {
+            programs.forEach(program => {
                 const isActive = program.active !== false;
                 
                 html += `
-                    <tr data-id="${id}">
+                    <tr data-id="${program.id}">
                         <td>
                             <div style="display: flex; align-items: center; gap: 10px;">
                                 <i class="${program.icon || 'fas fa-book'}"></i>
@@ -2593,18 +2117,17 @@
                         <td><span class="badge badge-success">${program.duration || 'N/A'}</span></td>
                         <td>
                             <label class="switch">
-                                <input type="checkbox" ${isActive ? 'checked' : ''} 
-                                       onchange="updateField('trainingPrograms/${id}', 'active', this.checked)">
+                                <input type="checkbox" ${isActive ? 'checked' : ''} onchange="toggleActive('training', '${program.id}', this.checked)">
                                 <span class="slider"></span>
                             </label>
                         </td>
                         <td><span class="badge badge-warning">${program.order || 0}</span></td>
                         <td>
                             <div class="data-table-actions">
-                                <button class="table-btn table-btn-edit" onclick="openEditModal('training', '${id}')">
+                                <button class="table-btn table-btn-edit" onclick="openEditModal('training', '${program.id}')">
                                     <i class="fas fa-edit"></i> Edit
                                 </button>
-                                <button class="table-btn table-btn-delete" onclick="deleteItem('trainingPrograms/${id}')">
+                                <button class="table-btn table-btn-delete" onclick="deleteItem('training', '${program.id}')">
                                     <i class="fas fa-trash"></i> Delete
                                 </button>
                             </div>
@@ -2615,26 +2138,33 @@
             
             table.innerHTML = html;
         }
-        
+
         function renderCategoriesTable() {
             const table = document.getElementById('categoriesTable');
             if (!table) return;
             
-            const categories = allData.eventCategories || {};
+            const categories = Object.values(allData.eventCategories || {});
             
-            if (Object.keys(categories).length === 0) {
-                table.innerHTML = '<tr><td colspan="6" class="empty-state"><i class="fas fa-tags"></i><h3>No Categories Found</h3><p>Click "Add Category" to create your first category</p></td></tr>';
+            if (categories.length === 0) {
+                table.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <i class="fas fa-tags"></i>
+                            <h3>No Categories Found</h3>
+                            <p>Click "Add Category" to create your first category</p>
+                        </td>
+                    </tr>
+                `;
                 return;
             }
             
             let html = '';
-            Object.entries(categories).forEach(([id, category]) => {
+            categories.forEach(category => {
                 const isActive = category.active !== false;
-                const events = allData.upcomingEvents || {};
-                const eventCount = Object.values(events).filter(event => event.category === id).length;
+                const eventCount = Object.values(allData.upcomingEvents || {}).filter(event => event.category === category.id).length;
                 
                 html += `
-                    <tr data-id="${id}">
+                    <tr data-id="${category.id}">
                         <td>
                             <div style="display: flex; align-items: center; gap: 10px;">
                                 <i class="${category.icon || 'fas fa-tag'}"></i>
@@ -2645,18 +2175,17 @@
                         <td><span class="badge badge-warning">${category.frequency || 'N/A'}</span></td>
                         <td>
                             <label class="switch">
-                                <input type="checkbox" ${isActive ? 'checked' : ''} 
-                                       onchange="updateField('eventCategories/${id}', 'active', this.checked)">
+                                <input type="checkbox" ${isActive ? 'checked' : ''} onchange="toggleActive('category', '${category.id}', this.checked)">
                                 <span class="slider"></span>
                             </label>
                         </td>
                         <td><span class="badge badge-warning">${category.order || 0}</span></td>
                         <td>
                             <div class="data-table-actions">
-                                <button class="table-btn table-btn-edit" onclick="openEditModal('category', '${id}')">
+                                <button class="table-btn table-btn-edit" onclick="openEditModal('category', '${category.id}')">
                                     <i class="fas fa-edit"></i> Edit
                                 </button>
-                                <button class="table-btn table-btn-delete" onclick="deleteItem('eventCategories/${id}')">
+                                <button class="table-btn table-btn-delete" onclick="deleteItem('category', '${category.id}')">
                                     <i class="fas fa-trash"></i> Delete
                                 </button>
                             </div>
@@ -2667,35 +2196,43 @@
             
             table.innerHTML = html;
         }
-        
-        function renderSchedulesTable(quarterId, tableId) {
+
+        function renderSchedulesTable(quarter, tableId) {
             const table = document.getElementById(tableId);
             if (!table) return;
             
-            const quarter = allData.trainingSchedules?.[quarterId] || {};
-            const programs = quarter.programs || {};
+            const quarterData = allData.trainingSchedules?.[quarter];
+            const schedules = quarterData ? Object.values(quarterData.programs || {}) : [];
             
-            if (Object.keys(programs).length === 0) {
-                table.innerHTML = '<tr><td colspan="5" class="empty-state"><i class="fas fa-clock"></i><h3>No Schedules</h3><p>No schedules found for this quarter</p></td></tr>';
+            if (schedules.length === 0) {
+                table.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="empty-state">
+                            <i class="fas fa-clock"></i>
+                            <h3>No Schedules</h3>
+                            <p>No schedules found for this quarter</p>
+                        </td>
+                    </tr>
+                `;
                 return;
             }
             
             let html = '';
-            Object.entries(programs).forEach(([id, schedule]) => {
+            schedules.forEach(schedule => {
                 const isActive = schedule.active !== false;
                 
                 html += `
-                    <tr data-id="${id}">
+                    <tr data-id="${schedule.id}">
                         <td>${schedule.programName || 'Unnamed Program'}</td>
                         <td>${schedule.startDate || 'TBD'}</td>
                         <td>${schedule.schedule || 'Not specified'}</td>
                         <td>${schedule.duration || 'N/A'}</td>
                         <td>
                             <div class="data-table-actions">
-                                <button class="table-btn table-btn-edit" onclick="openEditModal('schedule', '${id}', '${quarterId}')">
+                                <button class="table-btn table-btn-edit" onclick="openEditModal('schedule', '${schedule.id}', '${quarter}')">
                                     <i class="fas fa-edit"></i> Edit
                                 </button>
-                                <button class="table-btn table-btn-delete" onclick="deleteSchedule('${quarterId}', '${id}')">
+                                <button class="table-btn table-btn-delete" onclick="deleteSchedule('${quarter}', '${schedule.id}')">
                                     <i class="fas fa-trash"></i> Delete
                                 </button>
                             </div>
@@ -2706,40 +2243,11 @@
             
             table.innerHTML = html;
         }
-        
-        // Form Update Functions
-        function updateAllForms() {
-            // App Settings
-            const settings = allData.appSettings || {};
-            if (document.getElementById('contactEmail')) document.getElementById('contactEmail').value = settings.contactEmail || '';
-            if (document.getElementById('eventsEmail')) document.getElementById('eventsEmail').value = settings.eventsEmail || '';
-            if (document.getElementById('phoneNumber')) document.getElementById('phoneNumber').value = settings.phoneNumber || '';
-            if (document.getElementById('whatsappNumber')) document.getElementById('whatsappNumber').value = settings.whatsappNumber || '';
-            if (document.getElementById('version')) document.getElementById('version').value = settings.version || '10.0.0';
-            if (document.getElementById('maintenanceMode')) document.getElementById('maintenanceMode').checked = settings.maintenance || false;
-            
-            // Training Statistics
-            const stats = allData.stats || {};
-            if (document.getElementById('completionRate')) document.getElementById('completionRate').value = stats.completionRate || 0;
-            if (document.getElementById('satisfactionRate')) document.getElementById('satisfactionRate').value = stats.satisfactionRate || 0;
-            if (document.getElementById('businessGrowthRate')) document.getElementById('businessGrowthRate').value = stats.businessGrowthRate || 0;
-            if (document.getElementById('careerAdvancement')) document.getElementById('careerAdvancement').value = stats.careerAdvancement || 0;
-            if (document.getElementById('entrepreneursTrained')) document.getElementById('entrepreneursTrained').value = stats.entrepreneursTrained || 0;
-            if (document.getElementById('startupsSupported')) document.getElementById('startupsSupported').value = stats.startupsSupported || 0;
-            
-            // Bootcamp Pricing
-            const bootcampEvents = Object.values(allData.upcomingEvents || {}).filter(e => e.category === 'bootcamp');
-            if (bootcampEvents.length > 0) {
-                const bootcamp = bootcampEvents[0];
-                if (document.getElementById('bootcampPioneerPrice')) document.getElementById('bootcampPioneerPrice').value = bootcamp.pricing?.pioneerPrice || 3500;
-                if (document.getElementById('bootcampFuturePrice')) document.getElementById('bootcampFuturePrice').value = bootcamp.pricing?.futurePrice || 25000;
-            }
-        }
-        
+
         function updateAllTables() {
             renderEventsTable();
-            renderBootcampTable();
             renderUpcomingEventsTable();
+            renderBootcampTable();
             renderTicketsTable();
             renderTrainingTable();
             renderCategoriesTable();
@@ -2749,103 +2257,35 @@
             renderSchedulesTable('q4', 'schedulesQ4Table');
             renderSchedulesTable('online', 'schedulesOnlineTable');
         }
-        
-        // Data Saving Functions
-        function saveAppSettings() {
-            const settings = {
-                contactEmail: document.getElementById('contactEmail').value,
-                eventsEmail: document.getElementById('eventsEmail').value,
-                phoneNumber: document.getElementById('phoneNumber').value,
-                whatsappNumber: document.getElementById('whatsappNumber').value,
-                version: document.getElementById('version').value,
-                maintenance: document.getElementById('maintenanceMode').checked,
-                lastUpdated: new Date().toISOString()
-            };
+
+        function updateAllForms() {
+            // Settings form
+            const settings = allData.appSettings || {};
+            document.getElementById('contactEmail').value = settings.contactEmail || '';
+            document.getElementById('eventsEmail').value = settings.eventsEmail || '';
+            document.getElementById('phoneNumber').value = settings.phoneNumber || '';
+            document.getElementById('whatsappNumber').value = settings.whatsappNumber || '';
+            document.getElementById('version').value = settings.version || '1.0.0';
+            document.getElementById('maintenanceMode').checked = settings.maintenance || false;
             
-            if (db) {
-                db.ref('appSettings').set(settings)
-                    .then(() => {
-                        allData.appSettings = settings;
-                        showToast('App settings saved successfully!', 'success');
-                    })
-                    .catch(error => {
-                        console.error('Error saving app settings:', error);
-                        showToast('Error saving app settings', 'error');
-                    });
-            } else {
-                // Demo mode save
-                allData.appSettings = settings;
-                showToast('App settings saved (Demo Mode)', 'success');
-            }
+            // Training stats
+            const stats = allData.stats || {};
+            document.getElementById('completionRate').value = stats.completionRate || 0;
+            document.getElementById('satisfactionRate').value = stats.satisfactionRate || 0;
+            document.getElementById('businessGrowthRate').value = stats.businessGrowthRate || 0;
+            document.getElementById('careerAdvancement').value = stats.careerAdvancement || 0;
+            document.getElementById('entrepreneursTrained').value = stats.entrepreneursTrained || 0;
+            document.getElementById('startupsSupported').value = stats.startupsSupported || 0;
+            
+            // Update dashboard counts
+            updateDashboardStats();
         }
-        
-        function saveTrainingStats() {
-            const stats = {
-                completionRate: parseInt(document.getElementById('completionRate').value) || 0,
-                satisfactionRate: parseInt(document.getElementById('satisfactionRate').value) || 0,
-                businessGrowthRate: parseInt(document.getElementById('businessGrowthRate').value) || 0,
-                careerAdvancement: parseInt(document.getElementById('careerAdvancement').value) || 0,
-                entrepreneursTrained: parseInt(document.getElementById('entrepreneursTrained').value) || 0,
-                startupsSupported: parseInt(document.getElementById('startupsSupported').value) || 0,
-                lastUpdated: new Date().toISOString().split('T')[0]
-            };
-            
-            if (db) {
-                db.ref('stats').set(stats)
-                    .then(() => {
-                        allData.stats = stats;
-                        showToast('Training statistics saved successfully!', 'success');
-                    })
-                    .catch(error => {
-                        console.error('Error saving statistics:', error);
-                        showToast('Error saving statistics', 'error');
-                    });
-            } else {
-                // Demo mode save
-                allData.stats = stats;
-                showToast('Training statistics saved (Demo Mode)', 'success');
-            }
-        }
-        
-        function saveBootcampPricing() {
-            const pioneerPrice = parseInt(document.getElementById('bootcampPioneerPrice').value) || 3500;
-            const futurePrice = parseInt(document.getElementById('bootcampFuturePrice').value) || 25000;
-            
-            // Find bootcamp events
-            const bootcampEvents = Object.entries(allData.upcomingEvents || {}).filter(([id, event]) => event.category === 'bootcamp');
-            
-            if (bootcampEvents.length === 0) {
-                showToast('No bootcamp events found', 'warning');
-                return;
-            }
-            
-            bootcampEvents.forEach(([id, event]) => {
-                if (!event.pricing) event.pricing = {};
-                event.pricing.pioneerPrice = pioneerPrice;
-                event.pricing.futurePrice = futurePrice;
-                event.pricing.currency = "KES";
-                
-                if (db) {
-                    db.ref(`upcomingEvents/${id}/pricing`).set(event.pricing)
-                        .then(() => {
-                            showToast('Bootcamp pricing saved successfully!', 'success');
-                        })
-                        .catch(error => {
-                            console.error('Error saving bootcamp pricing:', error);
-                            showToast('Error saving bootcamp pricing', 'error');
-                        });
-                } else {
-                    // Demo mode save
-                    showToast('Bootcamp pricing saved (Demo Mode)', 'success');
-                }
-            });
-        }
-        
-        // Modal Functions
+
+        // Modal functions
         function openAddModal(type, quarter = null) {
             currentEditType = type;
             currentEditItem = null;
-            currentQuarter = quarter;
+            currentQuarter = quarter || 'q1';
             
             let title = '';
             let formHtml = '';
@@ -2865,22 +2305,19 @@
                     break;
                 case 'schedule':
                     title = 'Add Training Schedule';
-                    formHtml = getScheduleForm(null, quarter);
+                    formHtml = getScheduleForm();
                     break;
-                default:
-                    title = 'Add Item';
-                    formHtml = '<p>Select a valid item type.</p>';
             }
             
             document.getElementById('modalTitle').innerHTML = `<i class="fas fa-plus"></i> ${title}`;
             document.getElementById('modalBody').innerHTML = formHtml;
             document.getElementById('editModal').classList.add('active');
         }
-        
+
         function openEditModal(type, id, quarter = null) {
             currentEditType = type;
             currentEditItem = id;
-            currentQuarter = quarter;
+            currentQuarter = quarter || 'q1';
             
             let title = '';
             let formHtml = '';
@@ -2889,55 +2326,46 @@
             switch(type) {
                 case 'event':
                     title = 'Edit Event';
-                    item = allData.upcomingEvents?.[id] || {};
+                    item = allData.upcomingEvents[id] || {};
                     formHtml = getEventForm(item);
-                    currentEditPath = `upcomingEvents/${id}`;
                     break;
                 case 'category':
                     title = 'Edit Event Category';
-                    item = allData.eventCategories?.[id] || {};
+                    item = allData.eventCategories[id] || {};
                     formHtml = getCategoryForm(item);
-                    currentEditPath = `eventCategories/${id}`;
                     break;
                 case 'training':
                     title = 'Edit Training Program';
-                    item = allData.trainingPrograms?.[id] || {};
+                    item = allData.trainingPrograms[id] || {};
                     formHtml = getTrainingForm(item);
-                    currentEditPath = `trainingPrograms/${id}`;
                     break;
                 case 'schedule':
                     title = 'Edit Training Schedule';
-                    const quarterData = allData.trainingSchedules?.[quarter] || {};
-                    item = quarterData.programs?.[id] || {};
+                    const quarterData = allData.trainingSchedules[quarter];
+                    item = quarterData?.programs?.[id] || {};
                     formHtml = getScheduleForm(item, quarter);
-                    currentEditPath = `trainingSchedules/${quarter}/programs/${id}`;
                     break;
-                default:
-                    title = 'Edit Item';
-                    formHtml = '<p>Select a valid item type.</p>';
             }
             
             document.getElementById('modalTitle').innerHTML = `<i class="fas fa-edit"></i> ${title}`;
             document.getElementById('modalBody').innerHTML = formHtml;
             document.getElementById('editModal').classList.add('active');
         }
-        
-        function closeModalFunc() {
+
+        function closeModal() {
             document.getElementById('editModal').classList.remove('active');
             currentEditItem = null;
             currentEditType = null;
-            currentEditPath = null;
             currentQuarter = 'q1';
         }
-        
+
         function saveModalItem() {
             let data = {};
-            let refPath = currentEditPath;
-            let isNew = !currentEditItem;
             
             switch(currentEditType) {
                 case 'event':
                     data = {
+                        id: currentEditItem || 'event_' + Date.now(),
                         title: document.getElementById('eventTitle').value,
                         date: document.getElementById('eventDate').value,
                         deadline: document.getElementById('eventDeadline').value || document.getElementById('eventDate').value,
@@ -2951,11 +2379,9 @@
                         subtitle: document.getElementById('eventSubtitle').value,
                         frequency: document.getElementById('eventFrequency').value,
                         active: document.getElementById('eventActive').checked,
-                        order: parseInt(document.getElementById('eventOrder').value) || 1,
-                        lastUpdated: new Date().toISOString()
+                        order: parseInt(document.getElementById('eventOrder').value) || 1
                     };
                     
-                    // Add pricing if it's a bootcamp
                     if (data.category === 'bootcamp') {
                         data.pricing = {
                             pioneerPrice: parseInt(document.getElementById('eventPioneerPrice').value) || 3500,
@@ -2964,15 +2390,17 @@
                         };
                     }
                     
-                    if (isNew) {
-                        const newId = 'event_' + Date.now();
-                        refPath = `upcomingEvents/${newId}`;
-                        data.id = newId;
+                    if (!allData.upcomingEvents[data.id]) {
+                        allData.upcomingEvents[data.id] = data;
+                    } else {
+                        Object.assign(allData.upcomingEvents[data.id], data);
                     }
                     break;
                     
                 case 'category':
+                    const categoryId = currentEditItem || document.getElementById('categoryId').value.toLowerCase().replace(/\s+/g, '_');
                     data = {
+                        id: categoryId,
                         name: document.getElementById('categoryName').value,
                         description: document.getElementById('categoryDescription').value,
                         icon: document.getElementById('categoryIcon').value,
@@ -2980,15 +2408,17 @@
                         active: document.getElementById('categoryActive').checked,
                         order: parseInt(document.getElementById('categoryOrder').value) || 0
                     };
-                    if (isNew) {
-                        const newId = document.getElementById('categoryId').value.toLowerCase().replace(/\s+/g, '_');
-                        refPath = `eventCategories/${newId}`;
-                        data.id = newId;
+                    
+                    if (!allData.eventCategories[data.id]) {
+                        allData.eventCategories[data.id] = data;
+                    } else {
+                        Object.assign(allData.eventCategories[data.id], data);
                     }
                     break;
                     
                 case 'training':
                     data = {
+                        id: currentEditItem || 'program_' + Date.now(),
                         name: document.getElementById('trainingName').value,
                         description: document.getElementById('trainingDescription').value,
                         duration: document.getElementById('trainingDuration').value,
@@ -2996,18 +2426,19 @@
                         longTermResults: document.getElementById('trainingLongTermResults').value,
                         objectives: document.getElementById('trainingObjectives').value.split('\n').filter(o => o.trim()),
                         active: document.getElementById('trainingActive').checked,
-                        order: parseInt(document.getElementById('trainingOrder').value) || 0,
-                        lastUpdated: new Date().toISOString()
+                        order: parseInt(document.getElementById('trainingOrder').value) || 0
                     };
-                    if (isNew) {
-                        const newId = 'program_' + Date.now();
-                        refPath = `trainingPrograms/${newId}`;
-                        data.id = newId;
+                    
+                    if (!allData.trainingPrograms[data.id]) {
+                        allData.trainingPrograms[data.id] = data;
+                    } else {
+                        Object.assign(allData.trainingPrograms[data.id], data);
                     }
                     break;
                     
                 case 'schedule':
                     data = {
+                        id: currentEditItem || 'schedule_' + Date.now(),
                         programName: document.getElementById('scheduleProgramName').value,
                         startDate: document.getElementById('scheduleStartDate').value,
                         schedule: document.getElementById('scheduleTiming').value,
@@ -3017,80 +2448,29 @@
                         order: parseInt(document.getElementById('scheduleOrder').value) || 0
                     };
                     
-                    if (isNew) {
-                        const newId = 'schedule_' + Date.now();
-                        const quarter = currentQuarter || 'q1';
-                        refPath = `trainingSchedules/${quarter}/programs/${newId}`;
-                        data.id = newId;
-                        
-                        // Ensure quarter exists
-                        if (!allData.trainingSchedules[quarter]) {
-                            allData.trainingSchedules[quarter] = {
-                                active: true,
-                                name: getQuarterName(quarter),
-                                quarter: quarter,
-                                programs: {}
-                            };
-                        }
+                    if (!allData.trainingSchedules[currentQuarter]) {
+                        allData.trainingSchedules[currentQuarter] = {
+                            name: getQuarterName(currentQuarter),
+                            active: true,
+                            quarter: currentQuarter,
+                            programs: {}
+                        };
+                    }
+                    
+                    if (!allData.trainingSchedules[currentQuarter].programs[data.id]) {
+                        allData.trainingSchedules[currentQuarter].programs[data.id] = data;
+                    } else {
+                        Object.assign(allData.trainingSchedules[currentQuarter].programs[data.id], data);
                     }
                     break;
             }
             
-            // Validate required fields
-            if (!validateForm(data, currentEditType)) {
-                showToast('Please fill in all required fields', 'error');
-                return;
-            }
-            
-            if (db) {
-                db.ref(refPath).set(data)
-                    .then(() => {
-                        closeModalFunc();
-                        showToast(`${currentEditType} ${isNew ? 'added' : 'updated'} successfully!`, 'success');
-                        loadAllData();
-                    })
-                    .catch(error => {
-                        console.error('Error saving item:', error);
-                        showToast('Error saving item to Firebase', 'error');
-                    });
-            } else {
-                // Demo mode save
-                if (currentEditType === 'schedule') {
-                    const quarter = currentQuarter || 'q1';
-                    if (!allData.trainingSchedules[quarter]) {
-                        allData.trainingSchedules[quarter] = {
-                            active: true,
-                            name: getQuarterName(quarter),
-                            quarter: quarter,
-                            programs: {}
-                        };
-                    }
-                    if (isNew) {
-                        const newId = 'schedule_' + Date.now();
-                        allData.trainingSchedules[quarter].programs[newId] = { ...data, id: newId };
-                    } else {
-                        allData.trainingSchedules[quarter].programs[currentEditItem] = data;
-                    }
-                } else {
-                    const dataKey = currentEditType === 'event' ? 'upcomingEvents' : 
-                                  currentEditType === 'category' ? 'eventCategories' : 
-                                  currentEditType === 'training' ? 'trainingPrograms' : '';
-                    
-                    if (isNew) {
-                        const newId = currentEditType + '_' + Date.now();
-                        allData[dataKey][newId] = { ...data, id: newId };
-                    } else {
-                        allData[dataKey][currentEditItem] = data;
-                    }
-                }
-                
-                closeModalFunc();
-                showToast(`${currentEditType} ${isNew ? 'added' : 'updated'} successfully! (Demo Mode)`, 'success');
-                loadAllData();
-            }
+            closeModal();
+            updateAllTables();
+            showToast(`${currentEditType.charAt(0).toUpperCase() + currentEditType.slice(1)} saved successfully!`, 'success');
         }
-        
-        // Form Template Functions
+
+        // Form templates
         function getEventForm(data = {}) {
             const categories = Object.values(allData.eventCategories || {});
             const isBootcamp = data.category === 'bootcamp';
@@ -3145,7 +2525,7 @@
                     </select>
                 </div>
                 
-                ${isBootcamp ? `
+                ${isBootcamp || data.category === 'bootcamp' ? `
                 <div class="form-row" id="bootcampPricingFields">
                     <div class="form-group">
                         <label for="eventPioneerPrice">Pioneer Price (KES)</label>
@@ -3203,19 +2583,9 @@
                         </label>
                     </div>
                 </div>
-                
-                <script>
-                    function toggleBootcampFields() {
-                        const category = document.getElementById('eventCategory').value;
-                        const pricingFields = document.getElementById('bootcampPricingFields');
-                        if (pricingFields) {
-                            pricingFields.style.display = category === 'bootcamp' ? 'block' : 'none';
-                        }
-                    }
-                </script>
             `;
         }
-        
+
         function getCategoryForm(data = {}) {
             return `
                 ${!currentEditItem ? `
@@ -3273,7 +2643,7 @@
                 </div>
             `;
         }
-        
+
         function getTrainingForm(data = {}) {
             return `
                 <div class="form-group">
@@ -3326,21 +2696,19 @@
                 </div>
             `;
         }
-        
+
         function getScheduleForm(data = {}, quarter = 'q1') {
-            const trainingPrograms = Object.values(allData.trainingPrograms || {});
+            const programs = Object.values(allData.trainingPrograms || {});
             
             return `
                 <div class="form-group">
                     <label for="scheduleProgramName">Program Name *</label>
                     <select id="scheduleProgramName" class="form-control" required>
                         <option value="">Select Program</option>
-                        ${trainingPrograms.map(program => 
+                        ${programs.map(program => 
                             `<option value="${program.name}" ${data.programName === program.name ? 'selected' : ''}>${program.name}</option>`
                         ).join('')}
-                        <option value="_custom">Custom Program</option>
                     </select>
-                    <input type="text" id="scheduleCustomProgram" class="form-control" style="margin-top: 10px; display: none;" placeholder="Enter custom program name">
                 </div>
                 
                 <div class="form-row">
@@ -3383,27 +2751,220 @@
                 </div>
                 
                 <input type="hidden" id="scheduleQuarter" value="${quarter}">
-                
-                <script>
-                    document.getElementById('scheduleProgramName').addEventListener('change', function() {
-                        const customField = document.getElementById('scheduleCustomProgram');
-                        customField.style.display = this.value === '_custom' ? 'block' : 'none';
-                        if (this.value !== '_custom') {
-                            customField.value = '';
-                        }
-                    });
-                    
-                    // Trigger change event on load if needed
-                    if (document.getElementById('scheduleProgramName').value === '_custom') {
-                        document.getElementById('scheduleCustomProgram').style.display = 'block';
-                    }
-                </script>
             `;
         }
-        
-        // Event Ticket Management
+
+        // Utility functions
+        function updateDashboardStats() {
+            const events = Object.values(allData.upcomingEvents || {}).filter(e => e.active !== false).length;
+            const training = Object.values(allData.trainingPrograms || {}).length;
+            const categories = Object.values(allData.eventCategories || {}).length;
+            
+            // Count schedules
+            let schedules = 0;
+            Object.values(allData.trainingSchedules || {}).forEach(quarter => {
+                schedules += Object.values(quarter.programs || {}).length;
+            });
+            
+            document.getElementById('totalEvents').textContent = events;
+            document.getElementById('totalTraining').textContent = training;
+            document.getElementById('totalSchedules').textContent = schedules;
+            document.getElementById('totalCategories').textContent = categories;
+            
+            document.getElementById('eventsCountBadge').textContent = events;
+            document.getElementById('trainingCountBadge').textContent = training;
+        }
+
+        function toggleActive(type, id, active) {
+            switch(type) {
+                case 'event':
+                    if (allData.upcomingEvents[id]) {
+                        allData.upcomingEvents[id].active = active;
+                    }
+                    break;
+                case 'training':
+                    if (allData.trainingPrograms[id]) {
+                        allData.trainingPrograms[id].active = active;
+                    }
+                    break;
+                case 'category':
+                    if (allData.eventCategories[id]) {
+                        allData.eventCategories[id].active = active;
+                    }
+                    break;
+            }
+            
+            updateAllTables();
+            showToast(`${type.charAt(0).toUpperCase() + type.slice(1)} ${active ? 'activated' : 'deactivated'}`, 'success');
+        }
+
+        function deleteItem(type, id) {
+            if (!confirm(`Are you sure you want to delete this ${type}?`)) return;
+            
+            switch(type) {
+                case 'event':
+                    delete allData.upcomingEvents[id];
+                    break;
+                case 'training':
+                    delete allData.trainingPrograms[id];
+                    break;
+                case 'category':
+                    // Check if category is being used by any events
+                    const eventsUsingCategory = Object.values(allData.upcomingEvents || {}).filter(event => event.category === id);
+                    if (eventsUsingCategory.length > 0) {
+                        showToast(`Cannot delete category. It is being used by ${eventsUsingCategory.length} event(s).`, 'error');
+                        return;
+                    }
+                    delete allData.eventCategories[id];
+                    break;
+            }
+            
+            updateAllTables();
+            showToast(`${type.charAt(0).toUpperCase() + type.slice(1)} deleted successfully!`, 'success');
+        }
+
+        function deleteSchedule(quarter, scheduleId) {
+            if (!confirm('Are you sure you want to delete this schedule?')) return;
+            
+            if (allData.trainingSchedules[quarter]?.programs) {
+                delete allData.trainingSchedules[quarter].programs[scheduleId];
+                updateAllTables();
+                showToast('Schedule deleted successfully!', 'success');
+            }
+        }
+
+        function saveAppSettings() {
+            allData.appSettings = {
+                contactEmail: document.getElementById('contactEmail').value,
+                eventsEmail: document.getElementById('eventsEmail').value,
+                phoneNumber: document.getElementById('phoneNumber').value,
+                whatsappNumber: document.getElementById('whatsappNumber').value,
+                version: document.getElementById('version').value,
+                maintenance: document.getElementById('maintenanceMode').checked
+            };
+            
+            showToast('Settings saved successfully!', 'success');
+        }
+
+        function saveTrainingStats() {
+            allData.stats = {
+                completionRate: parseInt(document.getElementById('completionRate').value) || 0,
+                satisfactionRate: parseInt(document.getElementById('satisfactionRate').value) || 0,
+                businessGrowthRate: parseInt(document.getElementById('businessGrowthRate').value) || 0,
+                careerAdvancement: parseInt(document.getElementById('careerAdvancement').value) || 0,
+                entrepreneursTrained: parseInt(document.getElementById('entrepreneursTrained').value) || 0,
+                startupsSupported: parseInt(document.getElementById('startupsSupported').value) || 0,
+                lastUpdated: new Date().toISOString().split('T')[0]
+            };
+            
+            showToast('Training statistics saved successfully!', 'success');
+        }
+
+        function saveBootcampPricing() {
+            const pioneerPrice = parseInt(document.getElementById('bootcampPioneerPrice').value) || 3500;
+            const futurePrice = parseInt(document.getElementById('bootcampFuturePrice').value) || 25000;
+            
+            // Update all bootcamp events
+            Object.values(allData.upcomingEvents).forEach(event => {
+                if (event.category === 'bootcamp') {
+                    if (!event.pricing) event.pricing = {};
+                    event.pricing.pioneerPrice = pioneerPrice;
+                    event.pricing.futurePrice = futurePrice;
+                    event.pricing.currency = "KES";
+                }
+            });
+            
+            updateAllTables();
+            showToast('Bootcamp pricing saved successfully!', 'success');
+        }
+
+        function getQuarterName(quarter) {
+            const names = {
+                'q1': 'Q1 (Jan-Mar)',
+                'q2': 'Quarter 2 (Apr-Jun)',
+                'q3': 'Quarter 3 (Jul-Sep)',
+                'q4': 'Quarter 4 (Oct-Dec)',
+                'online': 'Online Programs'
+            };
+            return names[quarter] || quarter;
+        }
+
+        function updatePageTitle(title) {
+            document.getElementById('pageTitle').textContent = title;
+            
+            const descriptions = {
+                'dashboard': 'Overview of DSOG Events & Training Programs',
+                'events': 'Manage upcoming events, bootcamps, and tickets',
+                'training': 'Manage training programs and objectives',
+                'schedules': 'View and manage training schedules by quarter',
+                'categories': 'Manage event categories and types',
+                'settings': 'Configure application settings and contact information'
+            };
+            
+            const section = title.toLowerCase();
+            if (descriptions[section]) {
+                document.getElementById('pageDescription').textContent = descriptions[section];
+            }
+        }
+
+        function navigateTo(section) {
+            const link = document.querySelector(`a[href="#${section}"]`);
+            if (link) link.click();
+        }
+
+        function showToast(message, type = 'success') {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const iconClass = type;
+            const icon = type === 'success' ? 'fas fa-check' : 
+                        type === 'error' ? 'fas fa-exclamation-triangle' : 
+                        'fas fa-info-circle';
+            
+            toast.innerHTML = `
+                <div class="toast-icon ${iconClass}">
+                    <i class="${icon}"></i>
+                </div>
+                <div class="toast-message">${message}</div>
+                <button class="toast-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            setTimeout(() => toast.classList.add('show'), 10);
+            
+            toast.querySelector('.toast-close').addEventListener('click', function() {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            });
+            
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 300);
+                }
+            }, 5000);
+        }
+
+        function performGlobalSearch(query) {
+            console.log('Searching for:', query);
+            // Search implementation would go here
+        }
+
+        function toggleBootcampFields() {
+            const category = document.getElementById('eventCategory')?.value;
+            const pricingFields = document.getElementById('bootcampPricingFields');
+            if (pricingFields) {
+                pricingFields.style.display = category === 'bootcamp' ? 'grid' : 'none';
+            }
+        }
+
+        // Event ticket management functions
         function viewEventTickets(eventId) {
-            const event = allData.upcomingEvents?.[eventId];
+            const event = allData.upcomingEvents[eventId];
             if (!event) {
                 showToast('Event not found', 'error');
                 return;
@@ -3417,26 +2978,26 @@
                 <div style="margin-bottom: 20px;">
                     <h4 style="margin-bottom: 15px;">Current Tickets (${Object.keys(tickets).length})</h4>
                     ${Object.keys(tickets).length === 0 ? 
-                        '<p class="empty-state">No tickets found for this event</p>' :
+                        '<p style="text-align: center; color: var(--gray); padding: 20px;">No tickets found for this event</p>' :
                         Object.entries(tickets).map(([type, ticket]) => `
-                            <div class="ticket-item">
-                                <div class="ticket-header">
-                                    <div class="ticket-type">
-                                        <span class="ticket-badge">${ticket.type || type.toUpperCase()}</span>
+                            <div style="background: var(--light); padding: 15px; border-radius: var(--border-radius); margin-bottom: 10px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                    <div>
                                         <strong>${ticket.name}</strong>
+                                        <div style="font-size: 0.85rem; color: var(--gray);">${ticket.type}</div>
                                     </div>
-                                    <div class="ticket-actions">
+                                    <div style="display: flex; gap: 5px;">
                                         <button class="table-btn table-btn-edit" onclick="editEventTicket('${eventId}', '${type}')">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                     </div>
                                 </div>
                                 <div>
-                                    <p><strong>Price:</strong> ${ticket.currency} ${ticket.price}</p>
-                                    <p><strong>Available:</strong> ${ticket.quantityAvailable || 0} seats</p>
-                                    <p><strong>Sold:</strong> ${ticket.quantitySold || 0} seats</p>
-                                    <p><strong>Description:</strong> ${ticket.description || ''}</p>
-                                    <p><strong>Includes:</strong> ${ticket.includes || ''}</p>
+                                    <div><strong>Price:</strong> ${ticket.currency} ${ticket.price}</div>
+                                    <div><strong>Available:</strong> ${ticket.quantityAvailable || 0} seats</div>
+                                    <div><strong>Sold:</strong> ${ticket.quantitySold || 0} seats</div>
+                                    ${ticket.description ? `<div><strong>Description:</strong> ${ticket.description}</div>` : ''}
+                                    ${ticket.includes ? `<div><strong>Includes:</strong> ${ticket.includes}</div>` : ''}
                                 </div>
                             </div>
                         `).join('')
@@ -3468,15 +3029,15 @@
             
             document.getElementById('editModal').classList.add('active');
         }
-        
+
         function getTicketForm(eventId) {
             return `
                 <input type="hidden" id="ticketEventId" value="${eventId}">
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="ticketType">Ticket Type *</label>
-                        <select id="ticketType" class="form-control" required>
+                        <label for="newTicketType">Ticket Type *</label>
+                        <select id="newTicketType" class="form-control" required>
                             <option value="early_bird">Early Bird</option>
                             <option value="standard">Standard</option>
                             <option value="vip">VIP</option>
@@ -3485,79 +3046,69 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="ticketName">Ticket Name *</label>
-                        <input type="text" id="ticketName" class="form-control" placeholder="e.g., Early Bird Bootcamp Ticket" required>
+                        <label for="newTicketName">Ticket Name *</label>
+                        <input type="text" id="newTicketName" class="form-control" placeholder="e.g., Early Bird Bootcamp Ticket" required>
                     </div>
                 </div>
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="ticketPrice">Price (KES) *</label>
-                        <input type="number" id="ticketPrice" class="form-control" step="0.01" required>
+                        <label for="newTicketPrice">Price (KES) *</label>
+                        <input type="number" id="newTicketPrice" class="form-control" step="0.01" required>
                     </div>
                     
                     <div class="form-group">
-                        <label for="ticketQuantity">Quantity Available *</label>
-                        <input type="number" id="ticketQuantity" class="form-control" required>
+                        <label for="newTicketQuantity">Quantity Available *</label>
+                        <input type="number" id="newTicketQuantity" class="form-control" required>
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label for="ticketDescription">Description *</label>
-                    <textarea id="ticketDescription" class="form-control" rows="2" required></textarea>
+                    <label for="newTicketDescription">Description *</label>
+                    <textarea id="newTicketDescription" class="form-control" rows="2" required></textarea>
                 </div>
                 
                 <div class="form-group">
-                    <label for="ticketIncludes">What's Included</label>
-                    <textarea id="ticketIncludes" class="form-control" rows="2" placeholder="e.g., Full bootcamp access + Materials + Mentorship"></textarea>
+                    <label for="newTicketIncludes">What's Included</label>
+                    <textarea id="newTicketIncludes" class="form-control" rows="2" placeholder="e.g., Full bootcamp access + Materials + Mentorship"></textarea>
                 </div>
             `;
         }
-        
+
         function addTicketForEvent(eventId) {
-            const data = {
-                type: document.getElementById('ticketType').value,
-                name: document.getElementById('ticketName').value,
-                price: parseFloat(document.getElementById('ticketPrice').value) || 0,
-                quantityAvailable: parseInt(document.getElementById('ticketQuantity').value) || 0,
-                quantitySold: 0,
-                currency: "KES",
-                description: document.getElementById('ticketDescription').value,
-                includes: document.getElementById('ticketIncludes').value
-            };
+            const ticketType = document.getElementById('newTicketType').value;
+            const ticketName = document.getElementById('newTicketName').value;
+            const ticketPrice = parseFloat(document.getElementById('newTicketPrice').value) || 0;
+            const ticketQuantity = parseInt(document.getElementById('newTicketQuantity').value) || 0;
+            const ticketDescription = document.getElementById('newTicketDescription').value;
+            const ticketIncludes = document.getElementById('newTicketIncludes').value;
             
-            if (!data.name || !data.price || !data.quantityAvailable || !data.description) {
+            if (!ticketName || !ticketPrice || !ticketQuantity || !ticketDescription) {
                 showToast('Please fill in all required fields', 'error');
                 return;
             }
             
-            const ticketType = data.type;
-            const event = allData.upcomingEvents?.[eventId];
-            
+            const event = allData.upcomingEvents[eventId];
             if (!event.tickets) event.tickets = {};
-            event.tickets[ticketType] = data;
             
-            if (db) {
-                db.ref(`upcomingEvents/${eventId}/tickets/${ticketType}`).set(data)
-                    .then(() => {
-                        showToast('Ticket added successfully!', 'success');
-                        closeModalFunc();
-                        loadAllData();
-                    })
-                    .catch(error => {
-                        console.error('Error adding ticket:', error);
-                        showToast('Error adding ticket', 'error');
-                    });
-            } else {
-                // Demo mode save
-                showToast('Ticket added successfully! (Demo Mode)', 'success');
-                closeModalFunc();
-                loadAllData();
-            }
+            event.tickets[ticketType] = {
+                name: ticketName,
+                price: ticketPrice,
+                quantityAvailable: ticketQuantity,
+                quantitySold: 0,
+                currency: "KES",
+                description: ticketDescription,
+                includes: ticketIncludes,
+                type: ticketType.charAt(0).toUpperCase() + ticketType.slice(1).replace('_', ' ')
+            };
+            
+            closeModal();
+            updateAllTables();
+            showToast('Ticket added successfully!', 'success');
         }
-        
+
         function editEventTicket(eventId, ticketType) {
-            const event = allData.upcomingEvents?.[eventId];
+            const event = allData.upcomingEvents[eventId];
             const ticket = event?.tickets?.[ticketType];
             
             if (!ticket) {
@@ -3626,49 +3177,29 @@
             
             document.getElementById('editModal').classList.add('active');
         }
-        
+
         function updateEventTicket(eventId, ticketType) {
-            const data = {
-                type: ticketType,
-                name: document.getElementById('editTicketName').value,
-                price: parseFloat(document.getElementById('editTicketPrice').value) || 0,
-                quantityAvailable: parseInt(document.getElementById('editTicketQuantityAvailable').value) || 0,
-                quantitySold: parseInt(document.getElementById('editTicketQuantitySold').value) || 0,
-                currency: document.getElementById('editTicketCurrency').value,
-                description: document.getElementById('editTicketDescription').value,
-                includes: document.getElementById('editTicketIncludes').value
-            };
-            
-            if (!data.name || !data.price || !data.quantityAvailable || !data.description) {
-                showToast('Please fill in all required fields', 'error');
+            const event = allData.upcomingEvents[eventId];
+            if (!event || !event.tickets || !event.tickets[ticketType]) {
+                showToast('Ticket not found', 'error');
                 return;
             }
             
-            if (db) {
-                db.ref(`upcomingEvents/${eventId}/tickets/${ticketType}`).set(data)
-                    .then(() => {
-                        showToast('Ticket updated successfully!', 'success');
-                        closeModalFunc();
-                        loadAllData();
-                    })
-                    .catch(error => {
-                        console.error('Error updating ticket:', error);
-                        showToast('Error updating ticket', 'error');
-                    });
-            } else {
-                // Demo mode save
-                const event = allData.upcomingEvents?.[eventId];
-                if (event && event.tickets) {
-                    event.tickets[ticketType] = data;
-                }
-                showToast('Ticket updated successfully! (Demo Mode)', 'success');
-                closeModalFunc();
-                loadAllData();
-            }
+            const ticket = event.tickets[ticketType];
+            ticket.name = document.getElementById('editTicketName').value;
+            ticket.price = parseFloat(document.getElementById('editTicketPrice').value) || 0;
+            ticket.quantityAvailable = parseInt(document.getElementById('editTicketQuantityAvailable').value) || 0;
+            ticket.quantitySold = parseInt(document.getElementById('editTicketQuantitySold').value) || 0;
+            ticket.description = document.getElementById('editTicketDescription').value;
+            ticket.includes = document.getElementById('editTicketIncludes').value;
+            
+            closeModal();
+            updateAllTables();
+            showToast('Ticket updated successfully!', 'success');
         }
-        
+
         function viewEventDetails(eventId) {
-            const event = allData.upcomingEvents?.[eventId];
+            const event = allData.upcomingEvents[eventId];
             if (!event) {
                 showToast('Event not found', 'error');
                 return;
@@ -3733,248 +3264,11 @@
             
             document.getElementById('editModal').classList.add('active');
         }
-        
-        // Utility Functions
-        function updateDashboardStats() {
-            try {
-                const events = allData.upcomingEvents || {};
-                const training = allData.trainingPrograms || {};
-                const categories = allData.eventCategories || {};
-                
-                const activeEvents = Object.values(events).filter(e => e.active !== false).length;
-                const trainingCount = Object.keys(training).length;
-                const categoriesCount = Object.keys(categories).length;
-                
-                // Count total schedules
-                let schedulesCount = 0;
-                Object.values(allData.trainingSchedules || {}).forEach(quarter => {
-                    schedulesCount += Object.keys(quarter.programs || {}).length;
-                });
-                
-                // Update dashboard numbers
-                if (document.getElementById('totalEvents')) document.getElementById('totalEvents').textContent = activeEvents;
-                if (document.getElementById('totalTraining')) document.getElementById('totalTraining').textContent = trainingCount;
-                if (document.getElementById('totalSchedules')) document.getElementById('totalSchedules').textContent = schedulesCount;
-                if (document.getElementById('totalCategories')) document.getElementById('totalCategories').textContent = categoriesCount;
-                
-                // Update sidebar badges
-                if (document.getElementById('eventsCountBadge')) document.getElementById('eventsCountBadge').textContent = activeEvents;
-                if (document.getElementById('trainingCountBadge')) document.getElementById('trainingCountBadge').textContent = trainingCount;
-                
-                // Update connection status
-                const connectionStatus = document.getElementById('connectionStatus');
-                if (connectionStatus) {
-                    if (db) {
-                        connectionStatus.textContent = `Connected - ${activeEvents} Events, ${trainingCount} Training`;
-                    } else {
-                        connectionStatus.textContent = `Demo Mode - ${activeEvents} Events, ${trainingCount} Training`;
-                    }
-                }
-                
-            } catch (error) {
-                console.error('Error updating dashboard stats:', error);
-            }
-        }
-        
-        function validateForm(data, type) {
-            const requiredFields = {
-                'event': ['title', 'date', 'duration', 'category', 'venue', 'registrationUrl', 'description'],
-                'category': ['name', 'description', 'icon'],
-                'training': ['name', 'description', 'duration', 'icon', 'objectives'],
-                'schedule': ['programName', 'startDate', 'duration', 'schedule']
-            };
-            
-            const fields = requiredFields[type] || [];
-            for (const field of fields) {
-                if (!data[field] || (typeof data[field] === 'string' && !data[field].trim())) {
-                    return false;
-                }
-                if (field === 'objectives' && (!Array.isArray(data[field]) || data[field].length === 0)) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        
-        function updateField(path, field, value) {
-            if (db) {
-                db.ref(`${path}/${field}`).set(value)
-                    .then(() => showToast('Field updated successfully', 'success'))
-                    .catch(error => {
-                        console.error('Error updating field:', error);
-                        showToast('Error updating field', 'error');
-                    });
-            } else {
-                // Demo mode update
-                const pathParts = path.split('/');
-                let current = allData;
-                for (let i = 0; i < pathParts.length - 1; i++) {
-                    current = current[pathParts[i]] || {};
-                }
-                current[pathParts[pathParts.length - 1]] = value;
-                showToast('Field updated (Demo Mode)', 'success');
-                loadAllData();
-            }
-        }
-        
-        function deleteItem(path) {
-            if (!confirm('Are you sure you want to delete this item?')) return;
-            
-            if (db) {
-                db.ref(path).remove()
-                    .then(() => {
-                        showToast('Item deleted successfully!', 'success');
-                        loadAllData();
-                    })
-                    .catch(error => {
-                        console.error('Error deleting item:', error);
-                        showToast('Error deleting item', 'error');
-                    });
-            } else {
-                // Demo mode delete
-                const pathParts = path.split('/');
-                let current = allData;
-                for (let i = 0; i < pathParts.length - 1; i++) {
-                    current = current[pathParts[i]] || {};
-                }
-                delete current[pathParts[pathParts.length - 1]];
-                showToast('Item deleted (Demo Mode)', 'success');
-                loadAllData();
-            }
-        }
-        
-        function deleteSchedule(quarter, scheduleId) {
-            if (!confirm('Are you sure you want to delete this schedule?')) return;
-            
-            const path = `trainingSchedules/${quarter}/programs/${scheduleId}`;
-            deleteItem(path);
-        }
-        
-        function updatePageTitle(title) {
-            const pageTitle = document.getElementById('pageTitle');
-            const pageDescription = document.getElementById('pageDescription');
-            
-            if (pageTitle) pageTitle.textContent = title;
-            
-            const descriptions = {
-                'dashboard': 'Overview of DSOG Events & Training Programs',
-                'events': 'Manage upcoming events, bootcamps, and tickets',
-                'training': 'Manage training programs and objectives',
-                'schedules': 'View and manage training schedules by quarter',
-                'categories': 'Manage event categories and types',
-                'settings': 'Configure application settings and contact information'
-            };
-            
-            const section = title.toLowerCase();
-            if (pageDescription && descriptions[section]) {
-                pageDescription.textContent = descriptions[section];
-            }
-        }
-        
-        function navigateTo(section) {
-            const link = document.querySelector(`a[href="#${section}"]`);
-            if (link) {
-                link.click();
-            }
-        }
-        
-        function getQuarterName(quarter) {
-            const names = {
-                'q1': 'Quarter 1 (Jan-Mar)',
-                'q2': 'Quarter 2 (Apr-Jun)',
-                'q3': 'Quarter 3 (Jul-Sep)',
-                'q4': 'Quarter 4 (Oct-Dec)',
-                'online': 'Online Programs'
-            };
-            return names[quarter] || quarter;
-        }
-        
-        function showLoading(message = 'Loading...') {
-            const loadingOverlay = document.getElementById('loadingOverlay');
-            const loadingText = document.getElementById('loadingText');
-            
-            if (loadingOverlay) loadingOverlay.style.display = 'flex';
-            if (loadingText) loadingText.textContent = message;
-        }
-        
-        function hideLoading() {
-            const loadingOverlay = document.getElementById('loadingOverlay');
-            if (loadingOverlay) loadingOverlay.style.display = 'none';
-        }
-        
-        function updateConnectionStatus(message, status = 'online') {
-            const statusEl = document.getElementById('connectionStatus');
-            const dotEl = document.getElementById('firebaseStatus');
-            
-            if (statusEl) statusEl.textContent = message;
-            if (dotEl) {
-                dotEl.className = 'status-dot';
-                
-                if (status === 'online') {
-                    dotEl.style.backgroundColor = 'var(--success)';
-                } else if (status === 'warning') {
-                    dotEl.style.backgroundColor = 'var(--warning)';
-                } else {
-                    dotEl.style.backgroundColor = 'var(--danger)';
-                }
-            }
-        }
-        
-        function showToast(message, type = 'success') {
-            const toastContainer = document.getElementById('toastContainer');
-            if (!toastContainer) return;
-            
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            
-            const iconClass = type;
-            const icon = type === 'success' ? 'fas fa-check' : 
-                        type === 'error' ? 'fas fa-exclamation-triangle' : 
-                        'fas fa-info-circle';
-            
-            toast.innerHTML = `
-                <div class="toast-icon ${iconClass}">
-                    <i class="${icon}"></i>
-                </div>
-                <div class="toast-message">${message}</div>
-                <button class="toast-close">
-                    <i class="fas fa-times"></i>
-                </button>
-            `;
-            
-            toastContainer.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.classList.add('show');
-            }, 10);
-            
-            toast.querySelector('.toast-close').addEventListener('click', function() {
-                toast.classList.remove('show');
-                setTimeout(() => {
-                    toast.remove();
-                }, 300);
-            });
-            
-            setTimeout(() => {
-                if (toast.parentNode) {
-                    toast.classList.remove('show');
-                    setTimeout(() => {
-                        toast.remove();
-                    }, 300);
-                }
-            }, 5000);
-        }
-        
-        function performGlobalSearch(query) {
-            // Simplified search function
-            console.log('Searching for:', query);
-            // Implement search logic here
-        }
-        
-        // Make functions globally available
+
+        // Make functions available globally
         window.openAddModal = openAddModal;
         window.openEditModal = openEditModal;
-        window.updateField = updateField;
+        window.toggleActive = toggleActive;
         window.deleteItem = deleteItem;
         window.deleteSchedule = deleteSchedule;
         window.navigateTo = navigateTo;
@@ -3983,8 +3277,11 @@
         window.editEventTicket = editEventTicket;
         window.saveBootcampPricing = saveBootcampPricing;
         window.saveTrainingStats = saveTrainingStats;
-        
-        console.log('Events & Training admin panel script loaded successfully');
+        window.toggleBootcampFields = toggleBootcampFields;
+        window.updateEventTicket = updateEventTicket;
+        window.addTicketForEvent = addTicketForEvent;
+
+        console.log('DSOG Events & Training Admin loaded successfully!');
     </script>
 </body>
 </html>
