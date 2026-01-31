@@ -1,0 +1,3990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSOG Events & Training Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --primary-light: #34495e;
+            --secondary: #1abc9c;
+            --secondary-dark: #16a085;
+            --accent: #3498db;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --gray: #95a5a6;
+            --gray-light: #bdc3c7;
+            --gray-lighter: #ecf0f1;
+            --border-radius: 10px;
+            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            --box-shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.12);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .admin-container {
+            display: flex;
+            min-height: calc(100vh - 40px);
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow-lg);
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 280px;
+            background: var(--primary);
+            color: white;
+            padding: 0;
+            position: relative;
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        .sidebar-header {
+            padding: 30px 25px;
+            background: var(--primary-light);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header h2 {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .sidebar-header h2 i {
+            color: var(--secondary);
+            background: rgba(26, 188, 156, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-info {
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .user-details h4 {
+            font-size: 0.95rem;
+            margin-bottom: 3px;
+        }
+
+        .user-details p {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .sidebar-nav {
+            padding: 20px 0;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 2px;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 25px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar-nav a:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            padding-left: 30px;
+        }
+
+        .sidebar-nav a.active {
+            background: rgba(26, 188, 156, 0.1);
+            color: white;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .sidebar-nav a i {
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .nav-count {
+            background: var(--secondary);
+            color: white;
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 20px;
+            margin-left: auto;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-height: calc(100vh - 40px);
+        }
+
+        .header {
+            padding: 25px 30px;
+            background: white;
+            border-bottom: 1px solid var(--gray-lighter);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .header-left p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            background: var(--gray-lighter);
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--dark);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        /* Content Sections */
+        .content-wrapper {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+        }
+
+        .content-section {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--box-shadow);
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .section-header h2 {
+            font-size: 1.6rem;
+            color: var(--primary);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-header h2 i {
+            color: var(--secondary);
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 0.95rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid var(--gray-light);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.1);
+        }
+
+        textarea.form-control {
+            min-height: 140px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%232c3e50' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 18px center;
+            background-size: 12px;
+        }
+
+        /* Data Tables */
+        .data-table-wrapper {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            border: 1px solid var(--gray-lighter);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table thead {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        }
+
+        .data-table th {
+            padding: 18px 20px;
+            text-align: left;
+            font-weight: 600;
+            color: white;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table td {
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--gray-lighter);
+            vertical-align: middle;
+        }
+
+        .data-table tbody tr {
+            transition: var(--transition);
+        }
+
+        .data-table tbody tr:hover {
+            background: var(--light);
+        }
+
+        .data-table-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .table-btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .table-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .table-btn-edit {
+            background: rgba(52, 152, 219, 0.1);
+            color: var(--accent);
+        }
+
+        .table-btn-delete {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--danger);
+        }
+
+        .table-btn-view {
+            background: rgba(46, 204, 113, 0.1);
+            color: var(--success);
+        }
+
+        /* Switch Toggle */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--gray-light);
+            transition: var(--transition);
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: var(--transition);
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        input:checked + .slider {
+            background-color: var(--success);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(30px);
+        }
+
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex;
+            border-bottom: 2px solid var(--light);
+            margin-bottom: 30px;
+            overflow-x: auto;
+            background: white;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            padding: 0 5px;
+        }
+
+        .tab-btn {
+            padding: 15px 30px;
+            background: none;
+            border: none;
+            font-weight: 600;
+            color: var(--gray);
+            cursor: pointer;
+            transition: var(--transition);
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary);
+        }
+
+        .tab-btn.active {
+            color: var(--secondary);
+            border-bottom: 3px solid var(--secondary);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--secondary);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--box-shadow-lg);
+            border-color: var(--secondary);
+        }
+
+        .stat-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .stat-card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            background: rgba(26, 188, 156, 0.1);
+            color: var(--secondary);
+        }
+
+        .stat-card-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 5px;
+            line-height: 1;
+        }
+
+        .stat-card-label {
+            color: var(--gray);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--border-radius);
+            width: 100%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow: hidden;
+            box-shadow: var(--box-shadow-lg);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            padding: 25px 30px;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .modal-body {
+            padding: 30px;
+            overflow-y: auto;
+            max-height: calc(90vh - 150px);
+        }
+
+        .modal-footer {
+            padding: 20px 30px;
+            border-top: 1px solid var(--gray-lighter);
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            line-height: 1;
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            color: white;
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            z-index: 3000;
+        }
+
+        .toast {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: var(--box-shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            min-width: 350px;
+            transform: translateX(400px);
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            border-left: 4px solid var(--success);
+        }
+
+        .toast.error {
+            border-left-color: var(--danger);
+        }
+
+        .toast.warning {
+            border-left-color: var(--warning);
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .toast-icon.success {
+            background: var(--success);
+        }
+
+        .toast-icon.error {
+            background: var(--danger);
+        }
+
+        .toast-icon.warning {
+            background: var(--warning);
+        }
+
+        .toast-message {
+            flex: 1;
+            font-size: 0.95rem;
+            color: var(--dark);
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .toast-close:hover {
+            background: var(--light);
+            color: var(--dark);
+        }
+
+        /* Loading Spinner */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 4000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid var(--light);
+            border-top: 4px solid var(--secondary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Login Screen */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-box {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 50px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: var(--box-shadow-lg);
+            animation: slideUp 0.5s ease;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .login-header h1 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .login-header p {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-success {
+            background: rgba(46, 204, 113, 0.1);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background: rgba(243, 156, 18, 0.1);
+            color: var(--warning);
+        }
+
+        .badge-danger {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--danger);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gray);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 1200px) {
+            .admin-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                position: static;
+                height: auto;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .sidebar-nav ul {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+            
+            .sidebar-nav a {
+                border-left: none;
+                border-bottom: 3px solid transparent;
+            }
+            
+            .sidebar-nav a.active {
+                border-left: none;
+                border-bottom: 3px solid var(--secondary);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+            
+            .header-actions {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .data-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+
+        /* Advanced Components */
+        .array-item {
+            background: var(--light);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid var(--gray-lighter);
+        }
+
+        .array-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--gray-lighter);
+        }
+
+        .array-item-title {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .image-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: var(--border-radius);
+            object-fit: cover;
+            border: 2px solid var(--gray-lighter);
+            margin-bottom: 10px;
+        }
+
+        .icon-preview {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+
+        .chip {
+            display: inline-block;
+            padding: 6px 12px;
+            background: var(--light);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin: 2px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--gray-light);
+        }
+
+        .empty-state h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .search-box {
+            position: relative;
+            max-width: 300px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 45px 12px 18px;
+            border: 2px solid var(--gray-lighter);
+            border-radius: var(--border-radius);
+            font-size: 0.95rem;
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        /* Ticket Styles */
+        .ticket-item {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 2px solid var(--light);
+            transition: var(--transition);
+        }
+
+        .ticket-item:hover {
+            border-color: var(--secondary);
+            box-shadow: 0 5px 15px rgba(26, 188, 156, 0.1);
+        }
+
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--gray-lighter);
+        }
+
+        .ticket-type {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ticket-badge {
+            background: var(--warning);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .ticket-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .ticket-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--gray-lighter);
+        }
+
+        .ticket-stat {
+            text-align: center;
+        }
+
+        .ticket-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .ticket-stat-label {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        /* Ticket Modal */
+        .ticket-modal {
+            max-width: 500px;
+        }
+
+        .ticket-modal .modal-body {
+            max-height: 70vh;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <p id="loadingText">Initializing Admin Panel...</p>
+    </div>
+
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container" style="display: none;">
+        <div class="login-box">
+            <div class="login-header">
+                <h1><i class="fas fa-cogs"></i> DSOG Events Admin</h1>
+                <p>Sign in with your admin credentials</p>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email Address</label>
+                    <input type="email" id="loginEmail" class="form-control" placeholder="admin@dsog.org" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" class="form-control" placeholder="Enter password" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px; padding: 15px;">
+                    <span id="loginBtnText">Sign In</span>
+                    <span id="loginSpinner" style="display: none;"><i class="fas fa-spinner fa-spin"></i></span>
+                </button>
+                <div id="loginError" style="color: var(--danger); margin-top: 20px; text-align: center; display: none;">
+                    <i class="fas fa-exclamation-circle"></i> Invalid credentials. Please try again.
+                </div>
+                <div style="text-align: center; margin-top: 20px; color: var(--gray); font-size: 0.9rem;">
+                    <p>Demo credentials: admin@dsog.org / admin123</p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="adminPanel" class="admin-container" style="display: none;">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-cogs"></i> DSOG Admin</h2>
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">A</div>
+                    <div class="user-details">
+                        <h4 id="userName">Administrator</h4>
+                        <p id="userEmail">admin@dsog.org</p>
+                    </div>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#dashboard" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="#events"><i class="fas fa-calendar-alt"></i> Events <span class="nav-count" id="eventsCountBadge">0</span></a></li>
+                    <li><a href="#training"><i class="fas fa-graduation-cap"></i> Training <span class="nav-count" id="trainingCountBadge">0</span></a></li>
+                    <li><a href="#schedules"><i class="fas fa-clock"></i> Schedules</a></li>
+                    <li><a href="#categories"><i class="fas fa-tags"></i> Categories</a></li>
+                    <li><a href="#settings"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-left">
+                    <h1 id="pageTitle">Dashboard</h1>
+                    <p id="pageDescription">Manage DSOG Events & Training</p>
+                </div>
+                <div class="header-actions">
+                    <div class="status-indicator">
+                        <span class="status-dot" id="firebaseStatus"></span>
+                        <span id="connectionStatus">Connecting...</span>
+                    </div>
+                    <button class="btn btn-secondary" id="refreshBtn">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                    <button class="btn btn-danger" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+
+            <!-- Content Wrapper -->
+            <div class="content-wrapper">
+                <!-- Dashboard -->
+                <section id="dashboard" class="content-section active">
+                    <div class="section-header">
+                        <h2><i class="fas fa-tachometer-alt"></i> Dashboard Overview</h2>
+                        <div class="search-box">
+                            <input type="text" id="globalSearch" placeholder="Search events & training...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div>
+                                    <div class="stat-card-value" id="totalEvents">0</div>
+                                    <div class="stat-card-label">Active Events</div>
+                                </div>
+                                <div class="stat-card-icon">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary" style="width: 100%; margin-top: 15px;" onclick="navigateTo('events')">
+                                Manage Events
+                            </button>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div>
+                                    <div class="stat-card-value" id="totalTraining">0</div>
+                                    <div class="stat-card-label">Training Programs</div>
+                                </div>
+                                <div class="stat-card-icon">
+                                    <i class="fas fa-graduation-cap"></i>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary" style="width: 100%; margin-top: 15px;" onclick="navigateTo('training')">
+                                Manage Training
+                            </button>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div>
+                                    <div class="stat-card-value" id="totalSchedules">0</div>
+                                    <div class="stat-card-label">Schedules</div>
+                                </div>
+                                <div class="stat-card-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary" style="width: 100%; margin-top: 15px;" onclick="navigateTo('schedules')">
+                                View Schedules
+                            </button>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div>
+                                    <div class="stat-card-value" id="totalCategories">0</div>
+                                    <div class="stat-card-label">Categories</div>
+                                </div>
+                                <div class="stat-card-icon">
+                                    <i class="fas fa-tags"></i>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary" style="width: 100%; margin-top: 15px;" onclick="navigateTo('categories')">
+                                Manage Categories
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="section-header" style="margin-top: 40px;">
+                        <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
+                        <button class="btn btn-primary" onclick="navigateTo('events'); openAddModal('event')">
+                            <i class="fas fa-plus-circle"></i> Add Event
+                        </button>
+                        <button class="btn btn-primary" onclick="navigateTo('training'); openAddModal('training')">
+                            <i class="fas fa-plus-circle"></i> Add Training
+                        </button>
+                        <button class="btn btn-primary" onclick="navigateTo('schedules'); openAddModal('schedule')">
+                            <i class="fas fa-plus-circle"></i> Add Schedule
+                        </button>
+                        <button class="btn btn-primary" onclick="navigateTo('categories'); openAddModal('category')">
+                            <i class="fas fa-plus-circle"></i> Add Category
+                        </button>
+                    </div>
+
+                    <div class="section-header" style="margin-top: 40px;">
+                        <h2><i class="fas fa-calendar-check"></i> Upcoming Events</h2>
+                    </div>
+                    
+                    <div class="data-table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Event</th>
+                                    <th>Date</th>
+                                    <th>Category</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="upcomingEventsTable">
+                                <tr><td colspan="5" class="empty-state">Loading events...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Events Management -->
+                <section id="events" class="content-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-calendar-alt"></i> Events Management</h2>
+                        <button class="btn btn-primary" onclick="openAddModal('event')">
+                            <i class="fas fa-plus"></i> Add Event
+                        </button>
+                    </div>
+                    
+                    <div class="tab-nav">
+                        <button class="tab-btn active" data-tab="upcomingEvents">All Events</button>
+                        <button class="tab-btn" data-tab="bootcampEvents">Bootcamp Events</button>
+                        <button class="tab-btn" data-tab="eventTickets">Event Tickets</button>
+                    </div>
+                    
+                    <div id="upcomingEvents-tab" class="tab-content active">
+                        <div class="data-table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Date</th>
+                                        <th>Category</th>
+                                        <th>Venue</th>
+                                        <th>Active</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="eventsTable">
+                                    <tr><td colspan="6" class="empty-state">Loading events...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div id="bootcampEvents-tab" class="tab-content">
+                        <div style="background: var(--light); padding: 20px; border-radius: var(--border-radius); margin-bottom: 20px;">
+                            <h3>Bootcamp Pricing</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="bootcampPioneerPrice">Pioneer Price (KES)</label>
+                                    <input type="number" id="bootcampPioneerPrice" class="form-control" value="3500">
+                                </div>
+                                <div class="form-group">
+                                    <label for="bootcampFuturePrice">Future Price (KES)</label>
+                                    <input type="number" id="bootcampFuturePrice" class="form-control" value="25000">
+                                </div>
+                            </div>
+                            <button class="btn btn-success" onclick="saveBootcampPricing()">
+                                <i class="fas fa-save"></i> Save Pricing
+                            </button>
+                        </div>
+                        
+                        <div class="data-table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Deadline</th>
+                                        <th>Max Participants</th>
+                                        <th>Tickets Sold</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bootcampTable">
+                                    <tr><td colspan="5" class="empty-state">Loading bootcamp events...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div id="eventTickets-tab" class="tab-content">
+                        <div class="data-table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Event</th>
+                                        <th>Ticket Type</th>
+                                        <th>Price (KES)</th>
+                                        <th>Available</th>
+                                        <th>Sold</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ticketsTable">
+                                    <tr><td colspan="6" class="empty-state">Loading tickets...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Training Management -->
+                <section id="training" class="content-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-graduation-cap"></i> Training Management</h2>
+                        <button class="btn btn-primary" onclick="openAddModal('training')">
+                            <i class="fas fa-plus"></i> Add Program
+                        </button>
+                    </div>
+                    
+                    <div class="tab-nav">
+                        <button class="tab-btn active" data-tab="trainingPrograms">Training Programs</button>
+                        <button class="tab-btn" data-tab="trainingStats">Training Statistics</button>
+                    </div>
+                    
+                    <div id="trainingPrograms-tab" class="tab-content active">
+                        <div class="data-table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Program Name</th>
+                                        <th>Duration</th>
+                                        <th>Active</th>
+                                        <th>Order</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="trainingTable">
+                                    <tr><td colspan="5" class="empty-state">Loading training programs...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div id="trainingStats-tab" class="tab-content">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="completionRate">Completion Rate (%)</label>
+                                <input type="number" id="completionRate" class="form-control" min="0" max="100" value="89">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="satisfactionRate">Satisfaction Rate (%)</label>
+                                <input type="number" id="satisfactionRate" class="form-control" min="0" max="100" value="90">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="businessGrowthRate">Business Growth Rate (%)</label>
+                                <input type="number" id="businessGrowthRate" class="form-control" min="0" max="100" value="88">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="careerAdvancement">Career Advancement (%)</label>
+                                <input type="number" id="careerAdvancement" class="form-control" min="0" max="100" value="89">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="entrepreneursTrained">Entrepreneurs Trained</label>
+                                <input type="number" id="entrepreneursTrained" class="form-control" value="120">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="startupsSupported">Startups Supported</label>
+                                <input type="number" id="startupsSupported" class="form-control" value="55">
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-success" onclick="saveTrainingStats()">
+                            <i class="fas fa-save"></i> Save Statistics
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Training Schedules -->
+                <section id="schedules" class="content-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-clock"></i> Training Schedules</h2>
+                        <button class="btn btn-primary" onclick="openAddModal('schedule')">
+                            <i class="fas fa-plus"></i> Add Schedule
+                        </button>
+                    </div>
+                    
+                    <div class="tab-nav">
+                        <button class="tab-btn active" data-tab="q1">Quarter 1</button>
+                        <button class="tab-btn" data-tab="q2">Quarter 2</button>
+                        <button class="tab-btn" data-tab="q3">Quarter 3</button>
+                        <button class="tab-btn" data-tab="q4">Quarter 4</button>
+                        <button class="tab-btn" data-tab="online">Online</button>
+                    </div>
+                    
+                    <div id="q1-tab" class="tab-content active">
+                        <div class="data-table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Program Name</th>
+                                        <th>Start Date</th>
+                                        <th>Schedule</th>
+                                        <th>Duration</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="schedulesQ1Table">
+                                    <tr><td colspan="5" class="empty-state">Loading Quarter 1 schedules...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div id="q2-tab" class="tab-content">
+                        <div class="data-table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Program Name</th>
+                                        <th>Start Date</th>
+                                        <th>Schedule</th>
+                                        <th>Duration</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="schedulesQ2Table">
+                                    <tr><td colspan="5" class="empty-state">Loading Quarter 2 schedules...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div id="q3-tab" class="tab-content">
+                        <div class="data-table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Program Name</th>
+                                        <th>Start Date</th>
+                                        <th>Schedule</th>
+                                        <th>Duration</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="schedulesQ3Table">
+                                    <tr><td colspan="5" class="empty-state">Loading Quarter 3 schedules...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div id="q4-tab" class="tab-content">
+                        <div class="data-table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Program Name</th>
+                                        <th>Start Date</th>
+                                        <th>Schedule</th>
+                                        <th>Duration</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="schedulesQ4Table">
+                                    <tr><td colspan="5" class="empty-state">Loading Quarter 4 schedules...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div id="online-tab" class="tab-content">
+                        <div class="data-table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Program Name</th>
+                                        <th>Schedule Type</th>
+                                        <th>Duration</th>
+                                        <th>Enrollment</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="schedulesOnlineTable">
+                                    <tr><td colspan="5" class="empty-state">Loading online schedules...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Categories Management -->
+                <section id="categories" class="content-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-tags"></i> Categories Management</h2>
+                        <button class="btn btn-primary" onclick="openAddModal('category')">
+                            <i class="fas fa-plus"></i> Add Category
+                        </button>
+                    </div>
+                    
+                    <div class="data-table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Category Name</th>
+                                    <th>Description</th>
+                                    <th>Frequency</th>
+                                    <th>Active</th>
+                                    <th>Order</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="categoriesTable">
+                                <tr><td colspan="6" class="empty-state">Loading categories...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Settings -->
+                <section id="settings" class="content-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-cog"></i> Settings</h2>
+                        <button class="btn btn-success" id="saveSettingsBtn">
+                            <i class="fas fa-save"></i> Save Settings
+                        </button>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="contactEmail">Contact Email</label>
+                            <input type="email" id="contactEmail" class="form-control" value="office.dsog@gmail.com">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="eventsEmail">Events Email</label>
+                            <input type="email" id="eventsEmail" class="form-control" value="events.dsog@gmail.com">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phoneNumber">Phone Number</label>
+                            <input type="text" id="phoneNumber" class="form-control" value="+254 733 737 983">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="whatsappNumber">WhatsApp Number</label>
+                            <input type="text" id="whatsappNumber" class="form-control" value="254733737983">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="version">App Version</label>
+                            <input type="text" id="version" class="form-control" value="10.0.0">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label style="display: flex; align-items: center; gap: 15px; cursor: pointer;">
+                                <span style="font-weight: 600;">Maintenance Mode</span>
+                                <label class="switch">
+                                    <input type="checkbox" id="maintenanceMode">
+                                    <span class="slider"></span>
+                                </label>
+                            </label>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Modal for Adding/Editing Items -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal-content" id="modalContent">
+            <div class="modal-header">
+                <h3 id="modalTitle"><i class="fas fa-edit"></i> Edit Item</h3>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Modal content will be loaded here dynamically -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelModalBtn">Cancel</button>
+                <button class="btn btn-primary" id="saveModalBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDb5ZFHbo7lGM8ph0oBxFVTHRF5C5C_DWU",
+            authDomain: "dsog-events.firebaseapp.com",
+            databaseURL: "https://dsog-events-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "dsog-events",
+            storageBucket: "dsog-events.firebasestorage.app",
+            messagingSenderId: "1075977932287",
+            appId: "1:1075977932287:web:b2bf4d1c0083d2dac8ebca"
+        };
+        
+        // Global variables
+        let app, db, auth;
+        let currentUser = null;
+        let allData = {
+            appSettings: {},
+            upcomingEvents: {},
+            eventCategories: {},
+            trainingPrograms: {},
+            trainingSchedules: {},
+            stats: {}
+        };
+        let currentEditItem = null;
+        let currentEditType = null;
+        let currentEditPath = null;
+        let currentQuarter = 'q1';
+        
+        // Initialize Firebase
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing application...');
+            showLoading('Initializing Admin Panel...');
+            
+            // Set a timeout to show login if Firebase fails
+            const initTimeout = setTimeout(() => {
+                console.log('Firebase initialization timeout - showing login screen');
+                hideLoading();
+                showLoginScreen();
+            }, 5000);
+            
+            try {
+                console.log('Attempting Firebase initialization...');
+                
+                // Initialize Firebase
+                if (typeof firebase === 'undefined') {
+                    throw new Error('Firebase SDK not loaded. Please check internet connection.');
+                }
+                
+                // Check if Firebase app is already initialized
+                if (firebase.apps.length === 0) {
+                    app = firebase.initializeApp(firebaseConfig);
+                    console.log('Firebase initialized successfully');
+                } else {
+                    app = firebase.app();
+                    console.log('Using existing Firebase app');
+                }
+                
+                // Get Firebase services
+                db = firebase.database();
+                auth = firebase.auth();
+                
+                console.log('Firebase services initialized');
+                
+                // Clear the timeout since Firebase initialized successfully
+                clearTimeout(initTimeout);
+                
+                // Setup Firebase connection monitoring
+                setupFirebaseMonitoring();
+                
+                // Check authentication state
+                const unsubscribe = auth.onAuthStateChanged(function(user) {
+                    console.log('Auth state changed:', user ? 'User logged in' : 'No user');
+                    
+                    if (user) {
+                        currentUser = user;
+                        console.log('User authenticated:', user.email);
+                        showAdminPanel();
+                        loadAllData();
+                    } else {
+                        currentUser = null;
+                        console.log('No user authenticated');
+                        showLoginScreen();
+                        hideLoading();
+                    }
+                    
+                    // Unsubscribe after first auth state change
+                    unsubscribe();
+                });
+                
+                // Setup login form
+                const loginForm = document.getElementById('loginForm');
+                if (loginForm) {
+                    loginForm.addEventListener('submit', handleLogin);
+                }
+                
+            } catch (error) {
+                console.error('Firebase initialization error:', error);
+                clearTimeout(initTimeout);
+                hideLoading();
+                showLoginScreen();
+                showToast('Firebase initialization failed. Using demo mode.', 'warning');
+                
+                // Initialize demo data for testing
+                initializeDemoData();
+            }
+        });
+        
+        // Firebase Monitoring
+        function setupFirebaseMonitoring() {
+            try {
+                const connectedRef = db.ref('.info/connected');
+                connectedRef.on('value', function(snapshot) {
+                    if (snapshot.val() === true) {
+                        console.log('Firebase connected');
+                        updateConnectionStatus('Connected to Firebase', 'online');
+                    } else {
+                        console.log('Firebase disconnected');
+                        updateConnectionStatus('Disconnected from Firebase', 'offline');
+                    }
+                });
+            } catch (error) {
+                console.error('Firebase monitoring setup error:', error);
+                updateConnectionStatus('Connection monitoring error', 'offline');
+            }
+        }
+        
+        // Demo data initialization for testing
+        function initializeDemoData() {
+            console.log('Initializing demo data for testing...');
+            
+            // Sample demo data matching your structure
+            allData = {
+                appSettings: {
+                    contactEmail: "office.dsog@gmail.com",
+                    eventsEmail: "events.dsog@gmail.com",
+                    phoneNumber: "+254 733 737 983",
+                    whatsappNumber: "254733737983",
+                    version: "10.0.0",
+                    maintenance: false
+                },
+                upcomingEvents: {
+                    event_001: {
+                        active: true,
+                        category: "bootcamp",
+                        date: "2026-02-02",
+                        deadline: "2026-02-02",
+                        description: "A comprehensive 3-month intensive program designed to transform aspiring entrepreneurs into successful franchise business owners.",
+                        duration: "3 Months Intensive Program",
+                        frequency: "one-time",
+                        id: "event_001",
+                        imageUrl: "https://i.postimg.cc/tJxsdYP5/20260114-1505-Image-Generation-simple-compose-01key6a7x9ff0r23ew4psp722c-2-1.webp",
+                        maxParticipants: 30,
+                        order: 1,
+                        registrationUrl: "https://forms.gle/ozixnymuxdBg2drC9",
+                        subtitle: "For Startups & Established Business Leaders",
+                        title: "Franchise Bootcamp",
+                        venue: "Hybrid: Virtual & On-site",
+                        pricing: {
+                            pioneerPrice: 3500,
+                            futurePrice: 25000,
+                            currency: "KES"
+                        },
+                        tickets: {
+                            early_bird: {
+                                currency: "KES",
+                                description: "Limited time discounted rate for early registration.",
+                                includes: "Full bootcamp access + Materials + Mentorship",
+                                name: "Early Bird Bootcamp Ticket",
+                                price: 500,
+                                quantityAvailable: 10,
+                                quantitySold: 3,
+                                type: "Early Bird"
+                            },
+                            standard: {
+                                currency: "KES",
+                                description: "Standard access to the full 3-month bootcamp program.",
+                                includes: "Full bootcamp access + Materials + Mentorship + Community",
+                                name: "Standard Bootcamp Ticket",
+                                price: 750,
+                                quantityAvailable: 20,
+                                quantitySold: 7,
+                                type: "Standard"
+                            }
+                        }
+                    },
+                    event_002: {
+                        active: true,
+                        category: "inspiration",
+                        date: "2026-01-31",
+                        description: "Become What You Believe: Your Monthly Spark. Find your light. Own your light.",
+                        duration: "1 Day",
+                        frequency: "monthly",
+                        id: "event_002",
+                        imageUrl: "https://i.postimg.cc/sgNRzKbd/20260114_1543_Image_Generation_simple_compose_01key8g91re75trpnnjn6j42z5_1.webp",
+                        maxParticipants: 50,
+                        order: 2,
+                        registrationUrl: "https://wa.me/254733737983?text=I'm%20interested%20in%20Become%20What%20You%20Believe%20Event",
+                        subtitle: "For Startups & Established Business Leaders",
+                        title: "Become What You Believe",
+                        venue: "Hybrid Event"
+                    }
+                },
+                eventCategories: {
+                    bootcamp: {
+                        active: true,
+                        description: "A comprehensive 3-month intensive program designed to transform aspiring entrepreneurs into successful franchise business owners.",
+                        frequency: "Quarterly",
+                        icon: "fas fa-graduation-cap",
+                        id: "bootcamp",
+                        name: "Startup Bootcamp",
+                        order: 1
+                    },
+                    inspiration: {
+                        active: true,
+                        description: "An electrifying event designed to ignite the entrepreneurial fire within for new and established business leaders.",
+                        frequency: "Monthly",
+                        icon: "fas fa-fire",
+                        id: "inspiration",
+                        name: "Become What You Believe",
+                        order: 2
+                    },
+                    spiritual: {
+                        active: true,
+                        description: "A God-based discussion workshop designed to help individuals discover and understand their divine purpose.",
+                        frequency: "Monthly",
+                        icon: "fas fa-hands-praying",
+                        id: "spiritual",
+                        name: "The Making of an Icon",
+                        order: 3
+                    }
+                },
+                trainingPrograms: {
+                    program_002: {
+                        active: true,
+                        description: "Advanced techniques for growing your business reach, scaling operations, and capturing new market opportunities.",
+                        duration: "6 WEEKS",
+                        icon: "fas fa-expand-arrows-alt",
+                        id: "program_002",
+                        longTermResults: "Businesses achieve sustainable growth, increased market share, and develop systematic expansion capabilities.",
+                        name: "Market Expansion Strategies",
+                        objectives: [
+                            "Master market research methodologies",
+                            "Develop effective expansion strategies",
+                            "Learn customer acquisition techniques",
+                            "Understand scaling challenges and solutions"
+                        ],
+                        order: 2
+                    },
+                    program_003: {
+                        active: true,
+                        description: "Master the art of building strong client relationships, delivering exceptional service, and maximizing customer lifetime value.",
+                        duration: "4 WEEKS",
+                        icon: "fas fa-users",
+                        id: "program_003",
+                        longTermResults: "Improved customer loyalty, increased repeat business, and enhanced brand reputation through superior client relationships.",
+                        name: "Client Engagement Excellence",
+                        objectives: [
+                            "Develop effective communication skills",
+                            "Learn customer retention strategies",
+                            "Master conflict resolution techniques",
+                            "Understand customer psychology"
+                        ],
+                        order: 3
+                    }
+                },
+                trainingSchedules: {
+                    q1: {
+                        active: true,
+                        name: "Q1 (Jan-Mar)",
+                        quarter: "q1",
+                        programs: {
+                            schedule_001: {
+                                active: true,
+                                duration: "4 Weeks",
+                                id: "schedule_001",
+                                order: 1,
+                                programName: "All Sellers Training",
+                                schedule: "Wed and Fri",
+                                startDate: "2026-01-21"
+                            }
+                        }
+                    },
+                    q2: {
+                        active: true,
+                        name: "Quarter 2 (Apr-Jun)",
+                        quarter: "q2",
+                        programs: {
+                            schedule_004: {
+                                active: true,
+                                duration: "8 Weeks",
+                                enrollmentUrl: "https://wa.me/254733737983?text=I'm%20interested%20in%20Business%20Fundamentals%20Training",
+                                id: "schedule_004",
+                                order: 1,
+                                programId: "program_001",
+                                programName: "Business Fundamentals",
+                                schedule: "Mon & Wed, 6-8 PM",
+                                startDate: "2024-04-08"
+                            }
+                        }
+                    },
+                    online: {
+                        active: true,
+                        name: "Online Programs",
+                        quarter: "online",
+                        programs: {
+                            schedule_010: {
+                                active: true,
+                                duration: "8 Weeks",
+                                enrollmentUrl: "https://wa.me/254733737983?text=I'm%20interested%20in%20Business%20Fundamentals%20Online%20Training",
+                                id: "schedule_010",
+                                order: 1,
+                                programId: "program_001",
+                                programName: "Business Fundamentals (Online)",
+                                schedule: "Self-paced with weekly live sessions",
+                                startDate: "Rolling Admission"
+                            }
+                        }
+                    }
+                },
+                stats: {
+                    entrepreneursTrained: 120,
+                    startupsSupported: 55,
+                    eventsHosted: 0,
+                    completionRate: 89,
+                    satisfactionRate: 90,
+                    businessGrowthRate: 88,
+                    careerAdvancement: 89,
+                    lastUpdated: "2026-01-15"
+                }
+            };
+            
+            // Update UI with demo data
+            updateAllTables();
+            updateAllForms();
+            updateDashboardStats();
+            
+            console.log('Demo data initialized successfully');
+        }
+        
+        // Authentication Functions
+        function handleLogin(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const loginBtnText = document.getElementById('loginBtnText');
+            const loginSpinner = document.getElementById('loginSpinner');
+            const loginError = document.getElementById('loginError');
+            
+            if (!email || !password) {
+                loginError.textContent = 'Please enter both email and password';
+                loginError.style.display = 'block';
+                return;
+            }
+            
+            // Show loading state
+            loginBtnText.style.display = 'none';
+            loginSpinner.style.display = 'inline-block';
+            loginError.style.display = 'none';
+            
+            console.log('Attempting login for:', email);
+            
+            // For demo purposes, accept any credentials
+            if (email && password) {
+                console.log('Demo login successful');
+                
+                // Create demo user object
+                currentUser = {
+                    email: email,
+                    displayName: 'Administrator',
+                    uid: 'demo_user_' + Date.now()
+                };
+                
+                // Show admin panel after short delay
+                setTimeout(() => {
+                    loginBtnText.style.display = 'inline';
+                    loginSpinner.style.display = 'none';
+                    showAdminPanel();
+                    showToast('Logged in successfully! (Demo Mode)', 'success');
+                }, 1000);
+                
+                return;
+            }
+            
+            // If Firebase auth is available, use it
+            if (auth) {
+                auth.signInWithEmailAndPassword(email, password)
+                    .then((userCredential) => {
+                        console.log('Login successful for:', email);
+                        currentUser = userCredential.user;
+                        showAdminPanel();
+                        loadAllData();
+                        showToast('Logged in successfully!', 'success');
+                    })
+                    .catch((error) => {
+                        console.error('Login error:', error);
+                        loginError.style.display = 'block';
+                        loginBtnText.style.display = 'inline';
+                        loginSpinner.style.display = 'none';
+                        
+                        let errorMessage = 'Login failed. Please try again.';
+                        switch(error.code) {
+                            case 'auth/invalid-credential':
+                            case 'auth/wrong-password':
+                                errorMessage = 'Invalid email or password';
+                                break;
+                            case 'auth/user-not-found':
+                                errorMessage = 'User not found';
+                                break;
+                            case 'auth/user-disabled':
+                                errorMessage = 'Account disabled';
+                                break;
+                            case 'auth/too-many-requests':
+                                errorMessage = 'Too many attempts. Try again later';
+                                break;
+                            default:
+                                errorMessage = error.message;
+                        }
+                        
+                        loginError.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${errorMessage}`;
+                        showToast(errorMessage, 'error');
+                    });
+            }
+        }
+        
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                if (auth) {
+                    auth.signOut()
+                        .then(() => {
+                            console.log('Logout successful');
+                            currentUser = null;
+                            showLoginScreen();
+                            showToast('Logged out successfully', 'success');
+                        })
+                        .catch((error) => {
+                            console.error('Logout error:', error);
+                            showToast('Error logging out', 'error');
+                        });
+                } else {
+                    // Demo mode logout
+                    currentUser = null;
+                    showLoginScreen();
+                    showToast('Logged out successfully', 'success');
+                }
+            }
+        }
+        
+        // UI Management Functions
+        function showLoginScreen() {
+            console.log('Showing login screen');
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('loadingOverlay').style.display = 'none';
+            
+            // Reset login form
+            const loginError = document.getElementById('loginError');
+            const loginBtnText = document.getElementById('loginBtnText');
+            const loginSpinner = document.getElementById('loginSpinner');
+            
+            if (loginError) loginError.style.display = 'none';
+            if (loginBtnText) loginBtnText.style.display = 'inline';
+            if (loginSpinner) loginSpinner.style.display = 'none';
+            
+            // Set default credentials for testing
+            document.getElementById('loginEmail').value = 'admin@dsog.org';
+            document.getElementById('loginPassword').value = 'admin123';
+        }
+        
+        function showAdminPanel() {
+            console.log('Showing admin panel');
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'flex';
+            hideLoading();
+            
+            if (currentUser) {
+                document.getElementById('userName').textContent = currentUser.displayName || 'Administrator';
+                document.getElementById('userEmail').textContent = currentUser.email;
+                document.getElementById('userAvatar').textContent = currentUser.email.charAt(0).toUpperCase();
+            }
+            
+            setupAdminPanel();
+        }
+        
+        function setupAdminPanel() {
+            console.log('Setting up admin panel');
+            
+            // Navigation
+            document.querySelectorAll('.sidebar-nav a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    document.querySelectorAll('.sidebar-nav a').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const targetId = this.getAttribute('href').substring(1);
+                    document.querySelectorAll('.content-section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                        updatePageTitle(this.textContent.trim());
+                    }
+                });
+            });
+        
+            // Buttons
+            const refreshBtn = document.getElementById('refreshBtn');
+            const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            
+            if (refreshBtn) refreshBtn.addEventListener('click', loadAllData);
+            if (saveSettingsBtn) saveSettingsBtn.addEventListener('click', saveAppSettings);
+            if (logoutBtn) logoutBtn.addEventListener('click', handleLogout);
+        
+            // Modal
+            const closeModal = document.getElementById('closeModal');
+            const cancelModalBtn = document.getElementById('cancelModalBtn');
+            const saveModalBtn = document.getElementById('saveModalBtn');
+            
+            if (closeModal) closeModal.addEventListener('click', closeModalFunc);
+            if (cancelModalBtn) cancelModalBtn.addEventListener('click', closeModalFunc);
+            if (saveModalBtn) saveModalBtn.addEventListener('click', saveModalItem);
+        
+            // Tabs
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const tabContainer = this.closest('.content-section');
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    tabContainer.querySelectorAll('.tab-btn').forEach(tb => tb.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    tabContainer.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    const targetTab = tabContainer.querySelector(`#${tabId}-tab`);
+                    if (targetTab) targetTab.classList.add('active');
+                });
+            });
+        
+            // Search
+            const globalSearch = document.getElementById('globalSearch');
+            if (globalSearch) {
+                globalSearch.addEventListener('input', function(e) {
+                    performGlobalSearch(e.target.value);
+                });
+            }
+            
+            // Load initial data
+            loadAllData();
+        }
+        
+        // Data Loading Functions
+        function loadAllData() {
+            showLoading('Loading data...');
+            console.log('Loading all data...');
+            
+            // If Firebase is not available, use demo data
+            if (!db) {
+                console.log('Firebase not available, using demo data');
+                hideLoading();
+                updateAllTables();
+                updateAllForms();
+                updateDashboardStats();
+                showToast('Using demo data (Firebase not connected)', 'warning');
+                return;
+            }
+            
+            const dataPaths = [
+                'appSettings',
+                'upcomingEvents',
+                'eventCategories',
+                'trainingPrograms',
+                'trainingSchedules',
+                'stats'
+            ];
+            
+            const promises = dataPaths.map(path => loadData(path));
+            
+            Promise.all(promises)
+                .then(() => {
+                    console.log('All data loaded successfully');
+                    updateAllTables();
+                    updateAllForms();
+                    updateDashboardStats();
+                    hideLoading();
+                    showToast('All data loaded successfully!', 'success');
+                })
+                .catch(error => {
+                    console.error('Error loading data:', error);
+                    hideLoading();
+                    showToast('Error loading data from Firebase', 'error');
+                });
+        }
+        
+        function loadData(path) {
+            return new Promise((resolve, reject) => {
+                console.log(`Loading data from path: ${path}`);
+                if (!db) {
+                    console.log(`Firebase not available for path: ${path}`);
+                    resolve();
+                    return;
+                }
+                
+                db.ref(path).once('value')
+                    .then(snapshot => {
+                        const data = snapshot.val() || {};
+                        allData[path] = data;
+                        console.log(`Loaded ${path}:`, Object.keys(data).length, 'items');
+                        resolve();
+                    })
+                    .catch(error => {
+                        console.error(`Error loading ${path}:`, error);
+                        allData[path] = {};
+                        resolve(); // Resolve anyway to continue
+                    });
+            });
+        }
+        
+        // Table Rendering Functions
+        function renderEventsTable() {
+            const table = document.getElementById('eventsTable');
+            if (!table) return;
+            
+            const events = allData.upcomingEvents || {};
+            
+            if (Object.keys(events).length === 0) {
+                table.innerHTML = '<tr><td colspan="6" class="empty-state"><i class="fas fa-calendar-times"></i><h3>No Events Found</h3><p>Click "Add Event" to create your first event</p></td></tr>';
+                return;
+            }
+            
+            let html = '';
+            Object.entries(events).forEach(([id, event]) => {
+                const isActive = event.active !== false;
+                const category = allData.eventCategories?.[event.category] || {};
+                const tickets = event.tickets || {};
+                const ticketTypes = Object.keys(tickets).length;
+                
+                html += `
+                    <tr data-id="${id}">
+                        <td>
+                            <strong>${event.title || 'Untitled Event'}</strong>
+                            <div style="font-size: 0.85rem; color: var(--gray); margin-top: 5px;">
+                                ${event.subtitle || ''}
+                            </div>
+                        </td>
+                        <td>
+                            <div>${event.date || 'No date'}</div>
+                            <div style="font-size: 0.85rem; color: var(--gray);">${event.duration || ''}</div>
+                        </td>
+                        <td>
+                            <span class="badge badge-success">
+                                <i class="${category.icon || 'fas fa-tag'}"></i> ${category.name || 'Uncategorized'}
+                            </span>
+                        </td>
+                        <td>${event.venue || 'TBD'}</td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" ${isActive ? 'checked' : ''} 
+                                       onchange="updateField('upcomingEvents/${id}', 'active', this.checked)">
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                        <td>
+                            <div class="data-table-actions">
+                                <button class="table-btn table-btn-edit" onclick="openEditModal('event', '${id}')">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                ${ticketTypes > 0 ? 
+                                    `<button class="table-btn table-btn-view" onclick="viewEventTickets('${id}')">
+                                        <i class="fas fa-ticket-alt"></i> Tickets (${ticketTypes})
+                                    </button>` : ''
+                                }
+                                <button class="table-btn table-btn-delete" onclick="deleteItem('upcomingEvents/${id}')">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            table.innerHTML = html;
+        }
+        
+        function renderBootcampTable() {
+            const table = document.getElementById('bootcampTable');
+            if (!table) return;
+            
+            const events = allData.upcomingEvents || {};
+            const bootcampEvents = Object.entries(events).filter(([id, event]) => event.category === 'bootcamp');
+            
+            if (bootcampEvents.length === 0) {
+                table.innerHTML = '<tr><td colspan="5" class="empty-state"><i class="fas fa-campground"></i><h3>No Bootcamp Events</h3><p>No bootcamp events found</p></td></tr>';
+                return;
+            }
+            
+            let html = '';
+            bootcampEvents.forEach(([id, event]) => {
+                const tickets = event.tickets || {};
+                const totalTicketsSold = Object.values(tickets).reduce((sum, ticket) => sum + (ticket.quantitySold || 0), 0);
+                const totalTicketsAvailable = Object.values(tickets).reduce((sum, ticket) => sum + (ticket.quantityAvailable || 0), 0);
+                
+                html += `
+                    <tr data-id="${id}">
+                        <td>
+                            <strong>${event.title || 'Untitled Bootcamp'}</strong>
+                            <div style="font-size: 0.85rem; color: var(--gray); margin-top: 5px;">
+                                ${event.pricing?.pioneerPrice ? `Pioneer: KSh ${event.pricing.pioneerPrice}` : ''}
+                            </div>
+                        </td>
+                        <td>
+                            <div>${event.date || 'No date'}</div>
+                            <div style="font-size: 0.85rem; color: var(--danger);">Deadline: ${event.deadline || 'No deadline'}</div>
+                        </td>
+                        <td>${event.maxParticipants || 0}</td>
+                        <td>
+                            <div>${totalTicketsSold} sold</div>
+                            <div style="font-size: 0.85rem; color: var(--gray);">${totalTicketsAvailable} available</div>
+                        </td>
+                        <td>
+                            <div class="data-table-actions">
+                                <button class="table-btn table-btn-edit" onclick="openEditModal('event', '${id}')">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="table-btn table-btn-view" onclick="viewEventTickets('${id}')">
+                                    <i class="fas fa-ticket-alt"></i> Tickets
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            table.innerHTML = html;
+        }
+        
+        function renderUpcomingEventsTable() {
+            const table = document.getElementById('upcomingEventsTable');
+            if (!table) return;
+            
+            const events = allData.upcomingEvents || {};
+            const today = new Date().toISOString().split('T')[0];
+            const upcomingEvents = Object.entries(events)
+                .filter(([id, event]) => event.date >= today && event.active !== false)
+                .sort((a, b) => new Date(a[1].date) - new Date(b[1].date))
+                .slice(0, 5); // Show only 5 upcoming events
+            
+            if (upcomingEvents.length === 0) {
+                table.innerHTML = '<tr><td colspan="5" class="empty-state"><i class="fas fa-calendar"></i><h3>No Upcoming Events</h3><p>No upcoming events scheduled</p></td></tr>';
+                return;
+            }
+            
+            let html = '';
+            upcomingEvents.forEach(([id, event]) => {
+                const category = allData.eventCategories?.[event.category] || {};
+                const daysUntil = Math.ceil((new Date(event.date) - new Date()) / (1000 * 60 * 60 * 24));
+                
+                html += `
+                    <tr data-id="${id}">
+                        <td>
+                            <strong>${event.title || 'Untitled Event'}</strong>
+                            <div style="font-size: 0.85rem; color: var(--gray); margin-top: 5px;">
+                                ${event.subtitle || ''}
+                            </div>
+                        </td>
+                        <td>
+                            <div>${event.date || 'No date'}</div>
+                            <div style="font-size: 0.85rem; color: var(--${daysUntil <= 7 ? 'danger' : 'warning'});">
+                                ${daysUntil} day${daysUntil !== 1 ? 's' : ''} to go
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge badge-success">
+                                <i class="${category.icon || 'fas fa-tag'}"></i> ${category.name || 'Uncategorized'}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge ${event.active ? 'badge-success' : 'badge-danger'}">
+                                ${event.active ? 'Active' : 'Inactive'}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="data-table-actions">
+                                <button class="table-btn table-btn-edit" onclick="openEditModal('event', '${id}')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="table-btn table-btn-view" onclick="viewEventDetails('${id}')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            table.innerHTML = html;
+        }
+        
+        function renderTicketsTable() {
+            const table = document.getElementById('ticketsTable');
+            if (!table) return;
+            
+            const events = allData.upcomingEvents || {};
+            let allTickets = [];
+            
+            // Collect all tickets from all events
+            Object.entries(events).forEach(([eventId, event]) => {
+                const tickets = event.tickets || {};
+                Object.entries(tickets).forEach(([ticketType, ticket]) => {
+                    allTickets.push({
+                        eventId,
+                        eventTitle: event.title,
+                        ticketType,
+                        ...ticket
+                    });
+                });
+            });
+            
+            if (allTickets.length === 0) {
+                table.innerHTML = '<tr><td colspan="6" class="empty-state"><i class="fas fa-ticket-alt"></i><h3>No Tickets Found</h3><p>No tickets have been created yet</p></td></tr>';
+                return;
+            }
+            
+            let html = '';
+            allTickets.forEach((ticket, index) => {
+                const sold = ticket.quantitySold || 0;
+                const available = ticket.quantityAvailable || 0;
+                const total = sold + available;
+                const percentage = total > 0 ? Math.round((sold / total) * 100) : 0;
+                
+                html += `
+                    <tr>
+                        <td>${ticket.eventTitle || 'Unknown Event'}</td>
+                        <td>
+                            <span class="badge badge-warning">${ticket.type || 'Standard'}</span>
+                            <div style="font-size: 0.85rem; margin-top: 5px;">${ticket.name || ''}</div>
+                        </td>
+                        <td><strong>KSh ${ticket.price || '0'}</strong></td>
+                        <td><span class="badge badge-success">${available}</span></td>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span class="badge ${percentage > 80 ? 'badge-danger' : percentage > 50 ? 'badge-warning' : 'badge-success'}">
+                                    ${sold} sold
+                                </span>
+                                <small>(${percentage}%)</small>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="data-table-actions">
+                                <button class="table-btn table-btn-edit" onclick="editEventTicket('${ticket.eventId}', '${ticket.ticketType}')">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="table-btn table-btn-view" onclick="viewEventTickets('${ticket.eventId}')">
+                                    <i class="fas fa-eye"></i> View
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            table.innerHTML = html;
+        }
+        
+        function renderTrainingTable() {
+            const table = document.getElementById('trainingTable');
+            if (!table) return;
+            
+            const programs = allData.trainingPrograms || {};
+            
+            if (Object.keys(programs).length === 0) {
+                table.innerHTML = '<tr><td colspan="5" class="empty-state"><i class="fas fa-graduation-cap"></i><h3>No Training Programs</h3><p>Click "Add Program" to create your first training program</p></td></tr>';
+                return;
+            }
+            
+            let html = '';
+            Object.entries(programs).forEach(([id, program]) => {
+                const isActive = program.active !== false;
+                
+                html += `
+                    <tr data-id="${id}">
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <i class="${program.icon || 'fas fa-book'}"></i>
+                                <div>
+                                    <strong>${program.name || 'Unnamed Program'}</strong>
+                                    <div style="font-size: 0.85rem; color: var(--gray); margin-top: 5px;">
+                                        ${(program.description || '').substring(0, 60)}...
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge badge-success">${program.duration || 'N/A'}</span></td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" ${isActive ? 'checked' : ''} 
+                                       onchange="updateField('trainingPrograms/${id}', 'active', this.checked)">
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                        <td><span class="badge badge-warning">${program.order || 0}</span></td>
+                        <td>
+                            <div class="data-table-actions">
+                                <button class="table-btn table-btn-edit" onclick="openEditModal('training', '${id}')">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="table-btn table-btn-delete" onclick="deleteItem('trainingPrograms/${id}')">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            table.innerHTML = html;
+        }
+        
+        function renderCategoriesTable() {
+            const table = document.getElementById('categoriesTable');
+            if (!table) return;
+            
+            const categories = allData.eventCategories || {};
+            
+            if (Object.keys(categories).length === 0) {
+                table.innerHTML = '<tr><td colspan="6" class="empty-state"><i class="fas fa-tags"></i><h3>No Categories Found</h3><p>Click "Add Category" to create your first category</p></td></tr>';
+                return;
+            }
+            
+            let html = '';
+            Object.entries(categories).forEach(([id, category]) => {
+                const isActive = category.active !== false;
+                const events = allData.upcomingEvents || {};
+                const eventCount = Object.values(events).filter(event => event.category === id).length;
+                
+                html += `
+                    <tr data-id="${id}">
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <i class="${category.icon || 'fas fa-tag'}"></i>
+                                <strong>${category.name || 'Unnamed Category'}</strong>
+                            </div>
+                        </td>
+                        <td>${(category.description || '').substring(0, 80)}...</td>
+                        <td><span class="badge badge-warning">${category.frequency || 'N/A'}</span></td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" ${isActive ? 'checked' : ''} 
+                                       onchange="updateField('eventCategories/${id}', 'active', this.checked)">
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                        <td><span class="badge badge-warning">${category.order || 0}</span></td>
+                        <td>
+                            <div class="data-table-actions">
+                                <button class="table-btn table-btn-edit" onclick="openEditModal('category', '${id}')">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="table-btn table-btn-delete" onclick="deleteItem('eventCategories/${id}')">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            table.innerHTML = html;
+        }
+        
+        function renderSchedulesTable(quarterId, tableId) {
+            const table = document.getElementById(tableId);
+            if (!table) return;
+            
+            const quarter = allData.trainingSchedules?.[quarterId] || {};
+            const programs = quarter.programs || {};
+            
+            if (Object.keys(programs).length === 0) {
+                table.innerHTML = '<tr><td colspan="5" class="empty-state"><i class="fas fa-clock"></i><h3>No Schedules</h3><p>No schedules found for this quarter</p></td></tr>';
+                return;
+            }
+            
+            let html = '';
+            Object.entries(programs).forEach(([id, schedule]) => {
+                const isActive = schedule.active !== false;
+                
+                html += `
+                    <tr data-id="${id}">
+                        <td>${schedule.programName || 'Unnamed Program'}</td>
+                        <td>${schedule.startDate || 'TBD'}</td>
+                        <td>${schedule.schedule || 'Not specified'}</td>
+                        <td>${schedule.duration || 'N/A'}</td>
+                        <td>
+                            <div class="data-table-actions">
+                                <button class="table-btn table-btn-edit" onclick="openEditModal('schedule', '${id}', '${quarterId}')">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="table-btn table-btn-delete" onclick="deleteSchedule('${quarterId}', '${id}')">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            table.innerHTML = html;
+        }
+        
+        // Form Update Functions
+        function updateAllForms() {
+            // App Settings
+            const settings = allData.appSettings || {};
+            if (document.getElementById('contactEmail')) document.getElementById('contactEmail').value = settings.contactEmail || '';
+            if (document.getElementById('eventsEmail')) document.getElementById('eventsEmail').value = settings.eventsEmail || '';
+            if (document.getElementById('phoneNumber')) document.getElementById('phoneNumber').value = settings.phoneNumber || '';
+            if (document.getElementById('whatsappNumber')) document.getElementById('whatsappNumber').value = settings.whatsappNumber || '';
+            if (document.getElementById('version')) document.getElementById('version').value = settings.version || '10.0.0';
+            if (document.getElementById('maintenanceMode')) document.getElementById('maintenanceMode').checked = settings.maintenance || false;
+            
+            // Training Statistics
+            const stats = allData.stats || {};
+            if (document.getElementById('completionRate')) document.getElementById('completionRate').value = stats.completionRate || 0;
+            if (document.getElementById('satisfactionRate')) document.getElementById('satisfactionRate').value = stats.satisfactionRate || 0;
+            if (document.getElementById('businessGrowthRate')) document.getElementById('businessGrowthRate').value = stats.businessGrowthRate || 0;
+            if (document.getElementById('careerAdvancement')) document.getElementById('careerAdvancement').value = stats.careerAdvancement || 0;
+            if (document.getElementById('entrepreneursTrained')) document.getElementById('entrepreneursTrained').value = stats.entrepreneursTrained || 0;
+            if (document.getElementById('startupsSupported')) document.getElementById('startupsSupported').value = stats.startupsSupported || 0;
+            
+            // Bootcamp Pricing
+            const bootcampEvents = Object.values(allData.upcomingEvents || {}).filter(e => e.category === 'bootcamp');
+            if (bootcampEvents.length > 0) {
+                const bootcamp = bootcampEvents[0];
+                if (document.getElementById('bootcampPioneerPrice')) document.getElementById('bootcampPioneerPrice').value = bootcamp.pricing?.pioneerPrice || 3500;
+                if (document.getElementById('bootcampFuturePrice')) document.getElementById('bootcampFuturePrice').value = bootcamp.pricing?.futurePrice || 25000;
+            }
+        }
+        
+        function updateAllTables() {
+            renderEventsTable();
+            renderBootcampTable();
+            renderUpcomingEventsTable();
+            renderTicketsTable();
+            renderTrainingTable();
+            renderCategoriesTable();
+            renderSchedulesTable('q1', 'schedulesQ1Table');
+            renderSchedulesTable('q2', 'schedulesQ2Table');
+            renderSchedulesTable('q3', 'schedulesQ3Table');
+            renderSchedulesTable('q4', 'schedulesQ4Table');
+            renderSchedulesTable('online', 'schedulesOnlineTable');
+        }
+        
+        // Data Saving Functions
+        function saveAppSettings() {
+            const settings = {
+                contactEmail: document.getElementById('contactEmail').value,
+                eventsEmail: document.getElementById('eventsEmail').value,
+                phoneNumber: document.getElementById('phoneNumber').value,
+                whatsappNumber: document.getElementById('whatsappNumber').value,
+                version: document.getElementById('version').value,
+                maintenance: document.getElementById('maintenanceMode').checked,
+                lastUpdated: new Date().toISOString()
+            };
+            
+            if (db) {
+                db.ref('appSettings').set(settings)
+                    .then(() => {
+                        allData.appSettings = settings;
+                        showToast('App settings saved successfully!', 'success');
+                    })
+                    .catch(error => {
+                        console.error('Error saving app settings:', error);
+                        showToast('Error saving app settings', 'error');
+                    });
+            } else {
+                // Demo mode save
+                allData.appSettings = settings;
+                showToast('App settings saved (Demo Mode)', 'success');
+            }
+        }
+        
+        function saveTrainingStats() {
+            const stats = {
+                completionRate: parseInt(document.getElementById('completionRate').value) || 0,
+                satisfactionRate: parseInt(document.getElementById('satisfactionRate').value) || 0,
+                businessGrowthRate: parseInt(document.getElementById('businessGrowthRate').value) || 0,
+                careerAdvancement: parseInt(document.getElementById('careerAdvancement').value) || 0,
+                entrepreneursTrained: parseInt(document.getElementById('entrepreneursTrained').value) || 0,
+                startupsSupported: parseInt(document.getElementById('startupsSupported').value) || 0,
+                lastUpdated: new Date().toISOString().split('T')[0]
+            };
+            
+            if (db) {
+                db.ref('stats').set(stats)
+                    .then(() => {
+                        allData.stats = stats;
+                        showToast('Training statistics saved successfully!', 'success');
+                    })
+                    .catch(error => {
+                        console.error('Error saving statistics:', error);
+                        showToast('Error saving statistics', 'error');
+                    });
+            } else {
+                // Demo mode save
+                allData.stats = stats;
+                showToast('Training statistics saved (Demo Mode)', 'success');
+            }
+        }
+        
+        function saveBootcampPricing() {
+            const pioneerPrice = parseInt(document.getElementById('bootcampPioneerPrice').value) || 3500;
+            const futurePrice = parseInt(document.getElementById('bootcampFuturePrice').value) || 25000;
+            
+            // Find bootcamp events
+            const bootcampEvents = Object.entries(allData.upcomingEvents || {}).filter(([id, event]) => event.category === 'bootcamp');
+            
+            if (bootcampEvents.length === 0) {
+                showToast('No bootcamp events found', 'warning');
+                return;
+            }
+            
+            bootcampEvents.forEach(([id, event]) => {
+                if (!event.pricing) event.pricing = {};
+                event.pricing.pioneerPrice = pioneerPrice;
+                event.pricing.futurePrice = futurePrice;
+                event.pricing.currency = "KES";
+                
+                if (db) {
+                    db.ref(`upcomingEvents/${id}/pricing`).set(event.pricing)
+                        .then(() => {
+                            showToast('Bootcamp pricing saved successfully!', 'success');
+                        })
+                        .catch(error => {
+                            console.error('Error saving bootcamp pricing:', error);
+                            showToast('Error saving bootcamp pricing', 'error');
+                        });
+                } else {
+                    // Demo mode save
+                    showToast('Bootcamp pricing saved (Demo Mode)', 'success');
+                }
+            });
+        }
+        
+        // Modal Functions
+        function openAddModal(type, quarter = null) {
+            currentEditType = type;
+            currentEditItem = null;
+            currentQuarter = quarter;
+            
+            let title = '';
+            let formHtml = '';
+            
+            switch(type) {
+                case 'event':
+                    title = 'Add New Event';
+                    formHtml = getEventForm();
+                    break;
+                case 'category':
+                    title = 'Add Event Category';
+                    formHtml = getCategoryForm();
+                    break;
+                case 'training':
+                    title = 'Add Training Program';
+                    formHtml = getTrainingForm();
+                    break;
+                case 'schedule':
+                    title = 'Add Training Schedule';
+                    formHtml = getScheduleForm(null, quarter);
+                    break;
+                default:
+                    title = 'Add Item';
+                    formHtml = '<p>Select a valid item type.</p>';
+            }
+            
+            document.getElementById('modalTitle').innerHTML = `<i class="fas fa-plus"></i> ${title}`;
+            document.getElementById('modalBody').innerHTML = formHtml;
+            document.getElementById('editModal').classList.add('active');
+        }
+        
+        function openEditModal(type, id, quarter = null) {
+            currentEditType = type;
+            currentEditItem = id;
+            currentQuarter = quarter;
+            
+            let title = '';
+            let formHtml = '';
+            let item = {};
+            
+            switch(type) {
+                case 'event':
+                    title = 'Edit Event';
+                    item = allData.upcomingEvents?.[id] || {};
+                    formHtml = getEventForm(item);
+                    currentEditPath = `upcomingEvents/${id}`;
+                    break;
+                case 'category':
+                    title = 'Edit Event Category';
+                    item = allData.eventCategories?.[id] || {};
+                    formHtml = getCategoryForm(item);
+                    currentEditPath = `eventCategories/${id}`;
+                    break;
+                case 'training':
+                    title = 'Edit Training Program';
+                    item = allData.trainingPrograms?.[id] || {};
+                    formHtml = getTrainingForm(item);
+                    currentEditPath = `trainingPrograms/${id}`;
+                    break;
+                case 'schedule':
+                    title = 'Edit Training Schedule';
+                    const quarterData = allData.trainingSchedules?.[quarter] || {};
+                    item = quarterData.programs?.[id] || {};
+                    formHtml = getScheduleForm(item, quarter);
+                    currentEditPath = `trainingSchedules/${quarter}/programs/${id}`;
+                    break;
+                default:
+                    title = 'Edit Item';
+                    formHtml = '<p>Select a valid item type.</p>';
+            }
+            
+            document.getElementById('modalTitle').innerHTML = `<i class="fas fa-edit"></i> ${title}`;
+            document.getElementById('modalBody').innerHTML = formHtml;
+            document.getElementById('editModal').classList.add('active');
+        }
+        
+        function closeModalFunc() {
+            document.getElementById('editModal').classList.remove('active');
+            currentEditItem = null;
+            currentEditType = null;
+            currentEditPath = null;
+            currentQuarter = 'q1';
+        }
+        
+        function saveModalItem() {
+            let data = {};
+            let refPath = currentEditPath;
+            let isNew = !currentEditItem;
+            
+            switch(currentEditType) {
+                case 'event':
+                    data = {
+                        title: document.getElementById('eventTitle').value,
+                        date: document.getElementById('eventDate').value,
+                        deadline: document.getElementById('eventDeadline').value || document.getElementById('eventDate').value,
+                        description: document.getElementById('eventDescription').value,
+                        duration: document.getElementById('eventDuration').value,
+                        category: document.getElementById('eventCategory').value,
+                        venue: document.getElementById('eventVenue').value,
+                        maxParticipants: parseInt(document.getElementById('eventMaxParticipants').value) || 0,
+                        registrationUrl: document.getElementById('eventRegistrationUrl').value,
+                        imageUrl: document.getElementById('eventImageUrl').value,
+                        subtitle: document.getElementById('eventSubtitle').value,
+                        frequency: document.getElementById('eventFrequency').value,
+                        active: document.getElementById('eventActive').checked,
+                        order: parseInt(document.getElementById('eventOrder').value) || 1,
+                        lastUpdated: new Date().toISOString()
+                    };
+                    
+                    // Add pricing if it's a bootcamp
+                    if (data.category === 'bootcamp') {
+                        data.pricing = {
+                            pioneerPrice: parseInt(document.getElementById('eventPioneerPrice').value) || 3500,
+                            futurePrice: parseInt(document.getElementById('eventFuturePrice').value) || 25000,
+                            currency: "KES"
+                        };
+                    }
+                    
+                    if (isNew) {
+                        const newId = 'event_' + Date.now();
+                        refPath = `upcomingEvents/${newId}`;
+                        data.id = newId;
+                    }
+                    break;
+                    
+                case 'category':
+                    data = {
+                        name: document.getElementById('categoryName').value,
+                        description: document.getElementById('categoryDescription').value,
+                        icon: document.getElementById('categoryIcon').value,
+                        frequency: document.getElementById('categoryFrequency').value,
+                        active: document.getElementById('categoryActive').checked,
+                        order: parseInt(document.getElementById('categoryOrder').value) || 0
+                    };
+                    if (isNew) {
+                        const newId = document.getElementById('categoryId').value.toLowerCase().replace(/\s+/g, '_');
+                        refPath = `eventCategories/${newId}`;
+                        data.id = newId;
+                    }
+                    break;
+                    
+                case 'training':
+                    data = {
+                        name: document.getElementById('trainingName').value,
+                        description: document.getElementById('trainingDescription').value,
+                        duration: document.getElementById('trainingDuration').value,
+                        icon: document.getElementById('trainingIcon').value,
+                        longTermResults: document.getElementById('trainingLongTermResults').value,
+                        objectives: document.getElementById('trainingObjectives').value.split('\n').filter(o => o.trim()),
+                        active: document.getElementById('trainingActive').checked,
+                        order: parseInt(document.getElementById('trainingOrder').value) || 0,
+                        lastUpdated: new Date().toISOString()
+                    };
+                    if (isNew) {
+                        const newId = 'program_' + Date.now();
+                        refPath = `trainingPrograms/${newId}`;
+                        data.id = newId;
+                    }
+                    break;
+                    
+                case 'schedule':
+                    data = {
+                        programName: document.getElementById('scheduleProgramName').value,
+                        startDate: document.getElementById('scheduleStartDate').value,
+                        schedule: document.getElementById('scheduleTiming').value,
+                        duration: document.getElementById('scheduleDuration').value,
+                        enrollmentUrl: document.getElementById('scheduleEnrollmentUrl').value,
+                        active: document.getElementById('scheduleActive').checked,
+                        order: parseInt(document.getElementById('scheduleOrder').value) || 0
+                    };
+                    
+                    if (isNew) {
+                        const newId = 'schedule_' + Date.now();
+                        const quarter = currentQuarter || 'q1';
+                        refPath = `trainingSchedules/${quarter}/programs/${newId}`;
+                        data.id = newId;
+                        
+                        // Ensure quarter exists
+                        if (!allData.trainingSchedules[quarter]) {
+                            allData.trainingSchedules[quarter] = {
+                                active: true,
+                                name: getQuarterName(quarter),
+                                quarter: quarter,
+                                programs: {}
+                            };
+                        }
+                    }
+                    break;
+            }
+            
+            // Validate required fields
+            if (!validateForm(data, currentEditType)) {
+                showToast('Please fill in all required fields', 'error');
+                return;
+            }
+            
+            if (db) {
+                db.ref(refPath).set(data)
+                    .then(() => {
+                        closeModalFunc();
+                        showToast(`${currentEditType} ${isNew ? 'added' : 'updated'} successfully!`, 'success');
+                        loadAllData();
+                    })
+                    .catch(error => {
+                        console.error('Error saving item:', error);
+                        showToast('Error saving item to Firebase', 'error');
+                    });
+            } else {
+                // Demo mode save
+                if (currentEditType === 'schedule') {
+                    const quarter = currentQuarter || 'q1';
+                    if (!allData.trainingSchedules[quarter]) {
+                        allData.trainingSchedules[quarter] = {
+                            active: true,
+                            name: getQuarterName(quarter),
+                            quarter: quarter,
+                            programs: {}
+                        };
+                    }
+                    if (isNew) {
+                        const newId = 'schedule_' + Date.now();
+                        allData.trainingSchedules[quarter].programs[newId] = { ...data, id: newId };
+                    } else {
+                        allData.trainingSchedules[quarter].programs[currentEditItem] = data;
+                    }
+                } else {
+                    const dataKey = currentEditType === 'event' ? 'upcomingEvents' : 
+                                  currentEditType === 'category' ? 'eventCategories' : 
+                                  currentEditType === 'training' ? 'trainingPrograms' : '';
+                    
+                    if (isNew) {
+                        const newId = currentEditType + '_' + Date.now();
+                        allData[dataKey][newId] = { ...data, id: newId };
+                    } else {
+                        allData[dataKey][currentEditItem] = data;
+                    }
+                }
+                
+                closeModalFunc();
+                showToast(`${currentEditType} ${isNew ? 'added' : 'updated'} successfully! (Demo Mode)`, 'success');
+                loadAllData();
+            }
+        }
+        
+        // Form Template Functions
+        function getEventForm(data = {}) {
+            const categories = Object.values(allData.eventCategories || {});
+            const isBootcamp = data.category === 'bootcamp';
+            
+            return `
+                <div class="form-group">
+                    <label for="eventTitle">Event Title *</label>
+                    <input type="text" id="eventTitle" class="form-control" value="${data.title || ''}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="eventSubtitle">Subtitle</label>
+                    <input type="text" id="eventSubtitle" class="form-control" value="${data.subtitle || ''}">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="eventDate">Date *</label>
+                        <input type="date" id="eventDate" class="form-control" value="${data.date || ''}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventDeadline">Registration Deadline</label>
+                        <input type="date" id="eventDeadline" class="form-control" value="${data.deadline || data.date || ''}">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="eventDuration">Duration *</label>
+                        <input type="text" id="eventDuration" class="form-control" value="${data.duration || ''}" placeholder="e.g., 1 Day, 3 Months" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventFrequency">Frequency</label>
+                        <select id="eventFrequency" class="form-control">
+                            <option value="one-time" ${data.frequency === 'one-time' ? 'selected' : ''}>One-time</option>
+                            <option value="monthly" ${data.frequency === 'monthly' ? 'selected' : ''}>Monthly</option>
+                            <option value="quarterly" ${data.frequency === 'quarterly' ? 'selected' : ''}>Quarterly</option>
+                            <option value="yearly" ${data.frequency === 'yearly' ? 'selected' : ''}>Yearly</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="eventCategory">Category *</label>
+                    <select id="eventCategory" class="form-control" required onchange="toggleBootcampFields()">
+                        <option value="">Select Category</option>
+                        ${categories.map(cat => 
+                            `<option value="${cat.id}" ${data.category === cat.id ? 'selected' : ''}>${cat.name}</option>`
+                        ).join('')}
+                    </select>
+                </div>
+                
+                ${isBootcamp ? `
+                <div class="form-row" id="bootcampPricingFields">
+                    <div class="form-group">
+                        <label for="eventPioneerPrice">Pioneer Price (KES)</label>
+                        <input type="number" id="eventPioneerPrice" class="form-control" value="${data.pricing?.pioneerPrice || 3500}">
+                    </div>
+                    <div class="form-group">
+                        <label for="eventFuturePrice">Future Price (KES)</label>
+                        <input type="number" id="eventFuturePrice" class="form-control" value="${data.pricing?.futurePrice || 25000}">
+                    </div>
+                </div>
+                ` : ''}
+                
+                <div class="form-group">
+                    <label for="eventDescription">Description *</label>
+                    <textarea id="eventDescription" class="form-control" rows="4" required>${data.description || ''}</textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="eventVenue">Venue/Location *</label>
+                        <input type="text" id="eventVenue" class="form-control" value="${data.venue || ''}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventMaxParticipants">Max Participants</label>
+                        <input type="number" id="eventMaxParticipants" class="form-control" value="${data.maxParticipants || 0}">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="eventRegistrationUrl">Registration URL *</label>
+                        <input type="url" id="eventRegistrationUrl" class="form-control" value="${data.registrationUrl || ''}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventImageUrl">Image URL</label>
+                        <input type="url" id="eventImageUrl" class="form-control" value="${data.imageUrl || ''}">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="eventOrder">Display Order</label>
+                        <input type="number" id="eventOrder" class="form-control" value="${data.order || 0}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                            <span>Active</span>
+                            <label class="switch">
+                                <input type="checkbox" id="eventActive" ${data.active !== false ? 'checked' : ''}>
+                                <span class="slider"></span>
+                            </label>
+                        </label>
+                    </div>
+                </div>
+                
+                <script>
+                    function toggleBootcampFields() {
+                        const category = document.getElementById('eventCategory').value;
+                        const pricingFields = document.getElementById('bootcampPricingFields');
+                        if (pricingFields) {
+                            pricingFields.style.display = category === 'bootcamp' ? 'block' : 'none';
+                        }
+                    }
+                </script>
+            `;
+        }
+        
+        function getCategoryForm(data = {}) {
+            return `
+                ${!currentEditItem ? `
+                <div class="form-group">
+                    <label for="categoryId">Category ID (no spaces, lowercase) *</label>
+                    <input type="text" id="categoryId" class="form-control" placeholder="e.g., bootcamp, inspiration" required>
+                </div>
+                ` : ''}
+                
+                <div class="form-group">
+                    <label for="categoryName">Category Name *</label>
+                    <input type="text" id="categoryName" class="form-control" value="${data.name || ''}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="categoryDescription">Description *</label>
+                    <textarea id="categoryDescription" class="form-control" rows="3" required>${data.description || ''}</textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="categoryIcon">Icon (FontAwesome) *</label>
+                        <input type="text" id="categoryIcon" class="form-control" value="${data.icon || 'fas fa-tag'}" required>
+                        <small style="color: var(--gray); margin-top: 5px; display: block;">
+                            Use FontAwesome class names like: fas fa-calendar, fas fa-graduation-cap, fas fa-fire
+                        </small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="categoryFrequency">Frequency</label>
+                        <select id="categoryFrequency" class="form-control">
+                            <option value="monthly" ${data.frequency === 'monthly' ? 'selected' : ''}>Monthly</option>
+                            <option value="quarterly" ${data.frequency === 'quarterly' ? 'selected' : ''}>Quarterly</option>
+                            <option value="yearly" ${data.frequency === 'yearly' ? 'selected' : ''}>Yearly</option>
+                            <option value="one-time" ${data.frequency === 'one-time' ? 'selected' : ''}>One-time</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="categoryOrder">Display Order</label>
+                        <input type="number" id="categoryOrder" class="form-control" value="${data.order || 0}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                            <span>Active</span>
+                            <label class="switch">
+                                <input type="checkbox" id="categoryActive" ${data.active !== false ? 'checked' : ''}>
+                                <span class="slider"></span>
+                            </label>
+                        </label>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function getTrainingForm(data = {}) {
+            return `
+                <div class="form-group">
+                    <label for="trainingName">Program Name *</label>
+                    <input type="text" id="trainingName" class="form-control" value="${data.name || ''}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="trainingDescription">Description *</label>
+                    <textarea id="trainingDescription" class="form-control" rows="3" required>${data.description || ''}</textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="trainingDuration">Duration *</label>
+                        <input type="text" id="trainingDuration" class="form-control" value="${data.duration || ''}" placeholder="e.g., 4 WEEKS, 6 WEEKS" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="trainingIcon">Icon (FontAwesome) *</label>
+                        <input type="text" id="trainingIcon" class="form-control" value="${data.icon || 'fas fa-book'}" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="trainingLongTermResults">Long Term Results</label>
+                    <textarea id="trainingLongTermResults" class="form-control" rows="2">${data.longTermResults || ''}</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="trainingObjectives">Objectives (one per line) *</label>
+                    <textarea id="trainingObjectives" class="form-control" rows="4" required>${(data.objectives || []).join('\n')}</textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="trainingOrder">Display Order</label>
+                        <input type="number" id="trainingOrder" class="form-control" value="${data.order || 0}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                            <span>Active</span>
+                            <label class="switch">
+                                <input type="checkbox" id="trainingActive" ${data.active !== false ? 'checked' : ''}>
+                                <span class="slider"></span>
+                            </label>
+                        </label>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function getScheduleForm(data = {}, quarter = 'q1') {
+            const trainingPrograms = Object.values(allData.trainingPrograms || {});
+            
+            return `
+                <div class="form-group">
+                    <label for="scheduleProgramName">Program Name *</label>
+                    <select id="scheduleProgramName" class="form-control" required>
+                        <option value="">Select Program</option>
+                        ${trainingPrograms.map(program => 
+                            `<option value="${program.name}" ${data.programName === program.name ? 'selected' : ''}>${program.name}</option>`
+                        ).join('')}
+                        <option value="_custom">Custom Program</option>
+                    </select>
+                    <input type="text" id="scheduleCustomProgram" class="form-control" style="margin-top: 10px; display: none;" placeholder="Enter custom program name">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="scheduleStartDate">Start Date *</label>
+                        <input type="date" id="scheduleStartDate" class="form-control" value="${data.startDate || ''}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="scheduleDuration">Duration *</label>
+                        <input type="text" id="scheduleDuration" class="form-control" value="${data.duration || ''}" placeholder="e.g., 4 Weeks, 8 Weeks" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="scheduleTiming">Schedule/Timing *</label>
+                    <input type="text" id="scheduleTiming" class="form-control" value="${data.schedule || ''}" placeholder="e.g., Mon & Wed, 6-8 PM" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="scheduleEnrollmentUrl">Enrollment URL</label>
+                    <input type="url" id="scheduleEnrollmentUrl" class="form-control" value="${data.enrollmentUrl || ''}" placeholder="https://wa.me/...">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="scheduleOrder">Display Order</label>
+                        <input type="number" id="scheduleOrder" class="form-control" value="${data.order || 0}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                            <span>Active</span>
+                            <label class="switch">
+                                <input type="checkbox" id="scheduleActive" ${data.active !== false ? 'checked' : ''}>
+                                <span class="slider"></span>
+                            </label>
+                        </label>
+                    </div>
+                </div>
+                
+                <input type="hidden" id="scheduleQuarter" value="${quarter}">
+                
+                <script>
+                    document.getElementById('scheduleProgramName').addEventListener('change', function() {
+                        const customField = document.getElementById('scheduleCustomProgram');
+                        customField.style.display = this.value === '_custom' ? 'block' : 'none';
+                        if (this.value !== '_custom') {
+                            customField.value = '';
+                        }
+                    });
+                    
+                    // Trigger change event on load if needed
+                    if (document.getElementById('scheduleProgramName').value === '_custom') {
+                        document.getElementById('scheduleCustomProgram').style.display = 'block';
+                    }
+                </script>
+            `;
+        }
+        
+        // Event Ticket Management
+        function viewEventTickets(eventId) {
+            const event = allData.upcomingEvents?.[eventId];
+            if (!event) {
+                showToast('Event not found', 'error');
+                return;
+            }
+            
+            const tickets = event.tickets || {};
+            
+            document.getElementById('modalTitle').innerHTML = `<i class="fas fa-ticket-alt"></i> Tickets for: ${event.title}`;
+            
+            let html = `
+                <div style="margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 15px;">Current Tickets (${Object.keys(tickets).length})</h4>
+                    ${Object.keys(tickets).length === 0 ? 
+                        '<p class="empty-state">No tickets found for this event</p>' :
+                        Object.entries(tickets).map(([type, ticket]) => `
+                            <div class="ticket-item">
+                                <div class="ticket-header">
+                                    <div class="ticket-type">
+                                        <span class="ticket-badge">${ticket.type || type.toUpperCase()}</span>
+                                        <strong>${ticket.name}</strong>
+                                    </div>
+                                    <div class="ticket-actions">
+                                        <button class="table-btn table-btn-edit" onclick="editEventTicket('${eventId}', '${type}')">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p><strong>Price:</strong> ${ticket.currency} ${ticket.price}</p>
+                                    <p><strong>Available:</strong> ${ticket.quantityAvailable || 0} seats</p>
+                                    <p><strong>Sold:</strong> ${ticket.quantitySold || 0} seats</p>
+                                    <p><strong>Description:</strong> ${ticket.description || ''}</p>
+                                    <p><strong>Includes:</strong> ${ticket.includes || ''}</p>
+                                </div>
+                            </div>
+                        `).join('')
+                    }
+                </div>
+                
+                <div style="border-top: 2px solid var(--light); padding-top: 20px;">
+                    <h4 style="margin-bottom: 15px;">Add New Ticket</h4>
+                    <div id="newTicketForm"></div>
+                </div>
+            `;
+            
+            document.getElementById('modalBody').innerHTML = html;
+            
+            // Load new ticket form
+            setTimeout(() => {
+                const newTicketForm = document.getElementById('newTicketForm');
+                if (newTicketForm) {
+                    newTicketForm.innerHTML = getTicketForm(eventId);
+                }
+            }, 100);
+            
+            // Update save button to add ticket
+            const saveBtn = document.getElementById('saveModalBtn');
+            saveBtn.textContent = 'Add Ticket';
+            saveBtn.onclick = function() {
+                addTicketForEvent(eventId);
+            };
+            
+            document.getElementById('editModal').classList.add('active');
+        }
+        
+        function getTicketForm(eventId) {
+            return `
+                <input type="hidden" id="ticketEventId" value="${eventId}">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ticketType">Ticket Type *</label>
+                        <select id="ticketType" class="form-control" required>
+                            <option value="early_bird">Early Bird</option>
+                            <option value="standard">Standard</option>
+                            <option value="vip">VIP</option>
+                            <option value="group">Group</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ticketName">Ticket Name *</label>
+                        <input type="text" id="ticketName" class="form-control" placeholder="e.g., Early Bird Bootcamp Ticket" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ticketPrice">Price (KES) *</label>
+                        <input type="number" id="ticketPrice" class="form-control" step="0.01" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ticketQuantity">Quantity Available *</label>
+                        <input type="number" id="ticketQuantity" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="ticketDescription">Description *</label>
+                    <textarea id="ticketDescription" class="form-control" rows="2" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="ticketIncludes">What's Included</label>
+                    <textarea id="ticketIncludes" class="form-control" rows="2" placeholder="e.g., Full bootcamp access + Materials + Mentorship"></textarea>
+                </div>
+            `;
+        }
+        
+        function addTicketForEvent(eventId) {
+            const data = {
+                type: document.getElementById('ticketType').value,
+                name: document.getElementById('ticketName').value,
+                price: parseFloat(document.getElementById('ticketPrice').value) || 0,
+                quantityAvailable: parseInt(document.getElementById('ticketQuantity').value) || 0,
+                quantitySold: 0,
+                currency: "KES",
+                description: document.getElementById('ticketDescription').value,
+                includes: document.getElementById('ticketIncludes').value
+            };
+            
+            if (!data.name || !data.price || !data.quantityAvailable || !data.description) {
+                showToast('Please fill in all required fields', 'error');
+                return;
+            }
+            
+            const ticketType = data.type;
+            const event = allData.upcomingEvents?.[eventId];
+            
+            if (!event.tickets) event.tickets = {};
+            event.tickets[ticketType] = data;
+            
+            if (db) {
+                db.ref(`upcomingEvents/${eventId}/tickets/${ticketType}`).set(data)
+                    .then(() => {
+                        showToast('Ticket added successfully!', 'success');
+                        closeModalFunc();
+                        loadAllData();
+                    })
+                    .catch(error => {
+                        console.error('Error adding ticket:', error);
+                        showToast('Error adding ticket', 'error');
+                    });
+            } else {
+                // Demo mode save
+                showToast('Ticket added successfully! (Demo Mode)', 'success');
+                closeModalFunc();
+                loadAllData();
+            }
+        }
+        
+        function editEventTicket(eventId, ticketType) {
+            const event = allData.upcomingEvents?.[eventId];
+            const ticket = event?.tickets?.[ticketType];
+            
+            if (!ticket) {
+                showToast('Ticket not found', 'error');
+                return;
+            }
+            
+            document.getElementById('modalTitle').innerHTML = `<i class="fas fa-edit"></i> Edit Ticket: ${ticket.name}`;
+            
+            let html = `
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editTicketType">Ticket Type</label>
+                        <input type="text" id="editTicketType" class="form-control" value="${ticketType}" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editTicketName">Ticket Name *</label>
+                        <input type="text" id="editTicketName" class="form-control" value="${ticket.name}" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editTicketPrice">Price (KES) *</label>
+                        <input type="number" id="editTicketPrice" class="form-control" value="${ticket.price}" step="0.01" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editTicketQuantityAvailable">Quantity Available *</label>
+                        <input type="number" id="editTicketQuantityAvailable" class="form-control" value="${ticket.quantityAvailable || 0}" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editTicketQuantitySold">Quantity Sold</label>
+                        <input type="number" id="editTicketQuantitySold" class="form-control" value="${ticket.quantitySold || 0}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editTicketCurrency">Currency</label>
+                        <input type="text" id="editTicketCurrency" class="form-control" value="${ticket.currency || 'KES'}" readonly>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editTicketDescription">Description *</label>
+                    <textarea id="editTicketDescription" class="form-control" rows="2" required>${ticket.description || ''}</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editTicketIncludes">What's Included</label>
+                    <textarea id="editTicketIncludes" class="form-control" rows="2">${ticket.includes || ''}</textarea>
+                </div>
+            `;
+            
+            document.getElementById('modalBody').innerHTML = html;
+            
+            // Update save button
+            const saveBtn = document.getElementById('saveModalBtn');
+            saveBtn.textContent = 'Update Ticket';
+            saveBtn.onclick = function() {
+                updateEventTicket(eventId, ticketType);
+            };
+            
+            document.getElementById('editModal').classList.add('active');
+        }
+        
+        function updateEventTicket(eventId, ticketType) {
+            const data = {
+                type: ticketType,
+                name: document.getElementById('editTicketName').value,
+                price: parseFloat(document.getElementById('editTicketPrice').value) || 0,
+                quantityAvailable: parseInt(document.getElementById('editTicketQuantityAvailable').value) || 0,
+                quantitySold: parseInt(document.getElementById('editTicketQuantitySold').value) || 0,
+                currency: document.getElementById('editTicketCurrency').value,
+                description: document.getElementById('editTicketDescription').value,
+                includes: document.getElementById('editTicketIncludes').value
+            };
+            
+            if (!data.name || !data.price || !data.quantityAvailable || !data.description) {
+                showToast('Please fill in all required fields', 'error');
+                return;
+            }
+            
+            if (db) {
+                db.ref(`upcomingEvents/${eventId}/tickets/${ticketType}`).set(data)
+                    .then(() => {
+                        showToast('Ticket updated successfully!', 'success');
+                        closeModalFunc();
+                        loadAllData();
+                    })
+                    .catch(error => {
+                        console.error('Error updating ticket:', error);
+                        showToast('Error updating ticket', 'error');
+                    });
+            } else {
+                // Demo mode save
+                const event = allData.upcomingEvents?.[eventId];
+                if (event && event.tickets) {
+                    event.tickets[ticketType] = data;
+                }
+                showToast('Ticket updated successfully! (Demo Mode)', 'success');
+                closeModalFunc();
+                loadAllData();
+            }
+        }
+        
+        function viewEventDetails(eventId) {
+            const event = allData.upcomingEvents?.[eventId];
+            if (!event) {
+                showToast('Event not found', 'error');
+                return;
+            }
+            
+            const category = allData.eventCategories?.[event.category] || {};
+            
+            document.getElementById('modalTitle').innerHTML = `<i class="fas fa-eye"></i> Event Details: ${event.title}`;
+            
+            let html = `
+                <div style="margin-bottom: 20px;">
+                    ${event.imageUrl ? `<img src="${event.imageUrl}" style="width: 100%; height: 200px; object-fit: cover; border-radius: var(--border-radius); margin-bottom: 20px;">` : ''}
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Event Title</label>
+                            <input type="text" class="form-control" value="${event.title || ''}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="text" class="form-control" value="${event.date || ''}" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Category</label>
+                            <input type="text" class="form-control" value="${category.name || ''}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Venue</label>
+                            <input type="text" class="form-control" value="${event.venue || ''}" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea class="form-control" rows="4" readonly>${event.description || ''}</textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Registration URL</label>
+                            <input type="text" class="form-control" value="${event.registrationUrl || ''}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Status</label>
+                            <input type="text" class="form-control" value="${event.active !== false ? 'Active' : 'Inactive'}" readonly>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('modalBody').innerHTML = html;
+            
+            // Update footer buttons
+            const saveBtn = document.getElementById('saveModalBtn');
+            saveBtn.style.display = 'none';
+            
+            const cancelBtn = document.getElementById('cancelModalBtn');
+            cancelBtn.textContent = 'Close';
+            
+            document.getElementById('editModal').classList.add('active');
+        }
+        
+        // Utility Functions
+        function updateDashboardStats() {
+            try {
+                const events = allData.upcomingEvents || {};
+                const training = allData.trainingPrograms || {};
+                const categories = allData.eventCategories || {};
+                
+                const activeEvents = Object.values(events).filter(e => e.active !== false).length;
+                const trainingCount = Object.keys(training).length;
+                const categoriesCount = Object.keys(categories).length;
+                
+                // Count total schedules
+                let schedulesCount = 0;
+                Object.values(allData.trainingSchedules || {}).forEach(quarter => {
+                    schedulesCount += Object.keys(quarter.programs || {}).length;
+                });
+                
+                // Update dashboard numbers
+                if (document.getElementById('totalEvents')) document.getElementById('totalEvents').textContent = activeEvents;
+                if (document.getElementById('totalTraining')) document.getElementById('totalTraining').textContent = trainingCount;
+                if (document.getElementById('totalSchedules')) document.getElementById('totalSchedules').textContent = schedulesCount;
+                if (document.getElementById('totalCategories')) document.getElementById('totalCategories').textContent = categoriesCount;
+                
+                // Update sidebar badges
+                if (document.getElementById('eventsCountBadge')) document.getElementById('eventsCountBadge').textContent = activeEvents;
+                if (document.getElementById('trainingCountBadge')) document.getElementById('trainingCountBadge').textContent = trainingCount;
+                
+                // Update connection status
+                const connectionStatus = document.getElementById('connectionStatus');
+                if (connectionStatus) {
+                    if (db) {
+                        connectionStatus.textContent = `Connected - ${activeEvents} Events, ${trainingCount} Training`;
+                    } else {
+                        connectionStatus.textContent = `Demo Mode - ${activeEvents} Events, ${trainingCount} Training`;
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Error updating dashboard stats:', error);
+            }
+        }
+        
+        function validateForm(data, type) {
+            const requiredFields = {
+                'event': ['title', 'date', 'duration', 'category', 'venue', 'registrationUrl', 'description'],
+                'category': ['name', 'description', 'icon'],
+                'training': ['name', 'description', 'duration', 'icon', 'objectives'],
+                'schedule': ['programName', 'startDate', 'duration', 'schedule']
+            };
+            
+            const fields = requiredFields[type] || [];
+            for (const field of fields) {
+                if (!data[field] || (typeof data[field] === 'string' && !data[field].trim())) {
+                    return false;
+                }
+                if (field === 'objectives' && (!Array.isArray(data[field]) || data[field].length === 0)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        
+        function updateField(path, field, value) {
+            if (db) {
+                db.ref(`${path}/${field}`).set(value)
+                    .then(() => showToast('Field updated successfully', 'success'))
+                    .catch(error => {
+                        console.error('Error updating field:', error);
+                        showToast('Error updating field', 'error');
+                    });
+            } else {
+                // Demo mode update
+                const pathParts = path.split('/');
+                let current = allData;
+                for (let i = 0; i < pathParts.length - 1; i++) {
+                    current = current[pathParts[i]] || {};
+                }
+                current[pathParts[pathParts.length - 1]] = value;
+                showToast('Field updated (Demo Mode)', 'success');
+                loadAllData();
+            }
+        }
+        
+        function deleteItem(path) {
+            if (!confirm('Are you sure you want to delete this item?')) return;
+            
+            if (db) {
+                db.ref(path).remove()
+                    .then(() => {
+                        showToast('Item deleted successfully!', 'success');
+                        loadAllData();
+                    })
+                    .catch(error => {
+                        console.error('Error deleting item:', error);
+                        showToast('Error deleting item', 'error');
+                    });
+            } else {
+                // Demo mode delete
+                const pathParts = path.split('/');
+                let current = allData;
+                for (let i = 0; i < pathParts.length - 1; i++) {
+                    current = current[pathParts[i]] || {};
+                }
+                delete current[pathParts[pathParts.length - 1]];
+                showToast('Item deleted (Demo Mode)', 'success');
+                loadAllData();
+            }
+        }
+        
+        function deleteSchedule(quarter, scheduleId) {
+            if (!confirm('Are you sure you want to delete this schedule?')) return;
+            
+            const path = `trainingSchedules/${quarter}/programs/${scheduleId}`;
+            deleteItem(path);
+        }
+        
+        function updatePageTitle(title) {
+            const pageTitle = document.getElementById('pageTitle');
+            const pageDescription = document.getElementById('pageDescription');
+            
+            if (pageTitle) pageTitle.textContent = title;
+            
+            const descriptions = {
+                'dashboard': 'Overview of DSOG Events & Training Programs',
+                'events': 'Manage upcoming events, bootcamps, and tickets',
+                'training': 'Manage training programs and objectives',
+                'schedules': 'View and manage training schedules by quarter',
+                'categories': 'Manage event categories and types',
+                'settings': 'Configure application settings and contact information'
+            };
+            
+            const section = title.toLowerCase();
+            if (pageDescription && descriptions[section]) {
+                pageDescription.textContent = descriptions[section];
+            }
+        }
+        
+        function navigateTo(section) {
+            const link = document.querySelector(`a[href="#${section}"]`);
+            if (link) {
+                link.click();
+            }
+        }
+        
+        function getQuarterName(quarter) {
+            const names = {
+                'q1': 'Quarter 1 (Jan-Mar)',
+                'q2': 'Quarter 2 (Apr-Jun)',
+                'q3': 'Quarter 3 (Jul-Sep)',
+                'q4': 'Quarter 4 (Oct-Dec)',
+                'online': 'Online Programs'
+            };
+            return names[quarter] || quarter;
+        }
+        
+        function showLoading(message = 'Loading...') {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const loadingText = document.getElementById('loadingText');
+            
+            if (loadingOverlay) loadingOverlay.style.display = 'flex';
+            if (loadingText) loadingText.textContent = message;
+        }
+        
+        function hideLoading() {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            if (loadingOverlay) loadingOverlay.style.display = 'none';
+        }
+        
+        function updateConnectionStatus(message, status = 'online') {
+            const statusEl = document.getElementById('connectionStatus');
+            const dotEl = document.getElementById('firebaseStatus');
+            
+            if (statusEl) statusEl.textContent = message;
+            if (dotEl) {
+                dotEl.className = 'status-dot';
+                
+                if (status === 'online') {
+                    dotEl.style.backgroundColor = 'var(--success)';
+                } else if (status === 'warning') {
+                    dotEl.style.backgroundColor = 'var(--warning)';
+                } else {
+                    dotEl.style.backgroundColor = 'var(--danger)';
+                }
+            }
+        }
+        
+        function showToast(message, type = 'success') {
+            const toastContainer = document.getElementById('toastContainer');
+            if (!toastContainer) return;
+            
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const iconClass = type;
+            const icon = type === 'success' ? 'fas fa-check' : 
+                        type === 'error' ? 'fas fa-exclamation-triangle' : 
+                        'fas fa-info-circle';
+            
+            toast.innerHTML = `
+                <div class="toast-icon ${iconClass}">
+                    <i class="${icon}"></i>
+                </div>
+                <div class="toast-message">${message}</div>
+                <button class="toast-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 10);
+            
+            toast.querySelector('.toast-close').addEventListener('click', function() {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            });
+            
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.classList.remove('show');
+                    setTimeout(() => {
+                        toast.remove();
+                    }, 300);
+                }
+            }, 5000);
+        }
+        
+        function performGlobalSearch(query) {
+            // Simplified search function
+            console.log('Searching for:', query);
+            // Implement search logic here
+        }
+        
+        // Make functions globally available
+        window.openAddModal = openAddModal;
+        window.openEditModal = openEditModal;
+        window.updateField = updateField;
+        window.deleteItem = deleteItem;
+        window.deleteSchedule = deleteSchedule;
+        window.navigateTo = navigateTo;
+        window.viewEventTickets = viewEventTickets;
+        window.viewEventDetails = viewEventDetails;
+        window.editEventTicket = editEventTicket;
+        window.saveBootcampPricing = saveBootcampPricing;
+        window.saveTrainingStats = saveTrainingStats;
+        
+        console.log('Events & Training admin panel script loaded successfully');
+    </script>
+</body>
+</html>
